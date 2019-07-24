@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		06699DAC6A91810F1FAA21B0 /* Pods_Steel_Sections_Catalogues.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 330ED84E4B7CFDF17C74BA57 /* Pods_Steel_Sections_Catalogues.framework */; };
+		CF0CB86322E8F3C800257A91 /* CataloguesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0CB86222E8F3C800257A91 /* CataloguesVC.swift */; };
+		CF0CB86522E8F43B00257A91 /* CustomCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0CB86422E8F43B00257A91 /* CustomCollectionView.swift */; };
+		CF0CB86722E8F4A700257A91 /* CustomCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0CB86622E8F4A700257A91 /* CustomCollectionViewCell.swift */; };
 		CF4C734722E3BEB700923B4C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4C734622E3BEB700923B4C /* AppDelegate.swift */; };
 		CF4C734922E3BEB700923B4C /* CustomUIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4C734822E3BEB700923B4C /* CustomUIButton.swift */; };
 		CF4C734C22E3BEB700923B4C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF4C734A22E3BEB700923B4C /* Main.storyboard */; };
@@ -24,6 +27,9 @@
 		330ED84E4B7CFDF17C74BA57 /* Pods_Steel_Sections_Catalogues.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Steel_Sections_Catalogues.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		429D476114C979D468DC1846 /* Pods-Steel Sections Catalogues.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Steel Sections Catalogues.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Steel Sections Catalogues/Pods-Steel Sections Catalogues.debug.xcconfig"; sourceTree = "<group>"; };
 		603849ACBFC18C601234F57C /* Pods-Steel Sections Catalogues.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Steel Sections Catalogues.release.xcconfig"; path = "Pods/Target Support Files/Pods-Steel Sections Catalogues/Pods-Steel Sections Catalogues.release.xcconfig"; sourceTree = "<group>"; };
+		CF0CB86222E8F3C800257A91 /* CataloguesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CataloguesVC.swift; sourceTree = "<group>"; };
+		CF0CB86422E8F43B00257A91 /* CustomCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionView.swift; sourceTree = "<group>"; };
+		CF0CB86622E8F4A700257A91 /* CustomCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewCell.swift; sourceTree = "<group>"; };
 		CF4C734322E3BEB700923B4C /* Steel Sections Catalogues.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Steel Sections Catalogues.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF4C734622E3BEB700923B4C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CF4C734822E3BEB700923B4C /* CustomUIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomUIButton.swift; sourceTree = "<group>"; };
@@ -106,6 +112,8 @@
 				CF69CC6F22E4A35400381F68 /* DropdownUIView.swift */,
 				CF4C734822E3BEB700923B4C /* CustomUIButton.swift */,
 				CF71D78B22E47FF3000FDDE9 /* CustomUINavigationBar.swift */,
+				CF0CB86422E8F43B00257A91 /* CustomCollectionView.swift */,
+				CF0CB86622E8F4A700257A91 /* CustomCollectionViewCell.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -114,6 +122,7 @@
 			isa = PBXGroup;
 			children = (
 				CF4C735C22E3BF7200923B4C /* MainScreenVC.swift */,
+				CF0CB86222E8F3C800257A91 /* CataloguesVC.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -249,12 +258,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CF0CB86522E8F43B00257A91 /* CustomCollectionView.swift in Sources */,
+				CF0CB86722E8F4A700257A91 /* CustomCollectionViewCell.swift in Sources */,
 				CF69CC7222E4E8BD00381F68 /* DropdownUIButton.swift in Sources */,
 				CF4C734922E3BEB700923B4C /* CustomUIButton.swift in Sources */,
 				CF71D78C22E47FF3000FDDE9 /* CustomUINavigationBar.swift in Sources */,
 				CF69CC7022E4A35400381F68 /* DropdownUIView.swift in Sources */,
 				CF4C734722E3BEB700923B4C /* AppDelegate.swift in Sources */,
 				CF4C734F22E3BEB700923B4C /* Steel_Sections_Catalogues.xcdatamodeld in Sources */,
+				CF0CB86322E8F3C800257A91 /* CataloguesVC.swift in Sources */,
 				CF4C735D22E3BF7200923B4C /* MainScreenVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

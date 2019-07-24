@@ -20,9 +20,9 @@ class MainScreenVC: UIViewController, UINavigationBarDelegate {
     
     @IBOutlet weak var backgroundImage: UIImageView!
     
-    lazy var sectionsCataloguesButton: UIButton = CustomUIButton(normalStateButtonTitleHexColourCode: "#FCE9CC", highlightedStateButtonTitleHexColourCode: "#FF625E", buttonTitleFontName: buttonTitleFontName, buttonTitleFontSize: buttonTitleFontSize, normalStateButtonTitleText: "Steel Profiles Catalogues", buttonBackgroundColourHexCode: "#123638", buttonBackgroundColourAlphaValue: 0.5, buttonCornerRadius: 2, buttonBorderWidth: 1, buttonBorderHexColourCode: "#FFCDAC", highlightButtonWhenTapped: true, buttonContentHorizontalAlignment: .left, buttonContentVerticalAlignment: .center, buttonTagValue: 1, buttonTarget: self, buttonSelector: #selector(buttonPressed(_:)), normalStateButtonImage: "catalogueButton")
+    lazy var sectionsCataloguesButton: UIButton = CustomUIButton(normalStateButtonTitleHexColourCode: "#FCE9CC", highlightedStateButtonTitleHexColourCode: "#FF625E", buttonTitleFontName: buttonTitleFontName, buttonTitleFontSize: buttonTitleFontSize, normalStateButtonTitleText: "Steel Profiles Catalogues", buttonBackgroundColourHexCode: "#123638", buttonBackgroundColourAlphaValue: 0.5, buttonCornerRadius: 2, buttonBorderWidth: 1, buttonBorderHexColourCode: "#FFCDAC", highlightButtonWhenTapped: true, buttonContentHorizontalAlignment: .left, buttonContentVerticalAlignment: .center, buttonTagValue: 1, buttonTarget: self, buttonSelector: #selector(buttonPressed(sender:)), normalStateButtonImage: "catalogueButton")
     
-    lazy var contactUsButton: UIButton = CustomUIButton(normalStateButtonTitleHexColourCode: "#FCE9CC", highlightedStateButtonTitleHexColourCode: "#FF625E", buttonTitleFontName: buttonTitleFontName, buttonTitleFontSize: buttonTitleFontSize, normalStateButtonTitleText: "Contact Us", buttonBackgroundColourHexCode: "#123638", buttonBackgroundColourAlphaValue: 0.5, buttonCornerRadius: 2, buttonBorderWidth: 1, buttonBorderHexColourCode: "#FFCDAC", highlightButtonWhenTapped: true, buttonContentHorizontalAlignment: .left, buttonContentVerticalAlignment: .center, buttonTagValue: 1, buttonTarget: self, buttonSelector: #selector(buttonPressed(_:)), normalStateButtonImage: "contactUsButton")
+    lazy var contactUsButton: UIButton = CustomUIButton(normalStateButtonTitleHexColourCode: "#FCE9CC", highlightedStateButtonTitleHexColourCode: "#FF625E", buttonTitleFontName: buttonTitleFontName, buttonTitleFontSize: buttonTitleFontSize, normalStateButtonTitleText: "Contact Us", buttonBackgroundColourHexCode: "#123638", buttonBackgroundColourAlphaValue: 0.5, buttonCornerRadius: 2, buttonBorderWidth: 1, buttonBorderHexColourCode: "#FFCDAC", highlightButtonWhenTapped: true, buttonContentHorizontalAlignment: .left, buttonContentVerticalAlignment: .center, buttonTagValue: 2, buttonTarget: self, buttonSelector: #selector(buttonPressed(sender:)), normalStateButtonImage: "contactUsButton")
     
     lazy var navigationBar = CustomUINavigationBar(labelTitleText: "Steel Sections Catalogues", titleLabelFontHexColourCode: "#FFFFFF", labelTitleFontSize: 18, labelTitleFontType: "AppleSDGothicNeo-Medium", isNavBarTranslucent: false, navBarBackgroundColourHexCode: "#000000", navBarBackgroundColourAlphaValue: 1.0, navBarStyle: .black, preferLargeTitles: false, navBarDelegate: self, navBarItemsHexColourCode: "#FF4F40")
     
@@ -41,7 +41,7 @@ class MainScreenVC: UIViewController, UINavigationBarDelegate {
         view.addSubview(navigationBar)
         
         setupConstraints()
-
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -75,12 +75,12 @@ class MainScreenVC: UIViewController, UINavigationBarDelegate {
         verticalSpacingsBetweenButtons = (viewControllerSafeAreaHeight - sectionsCataloguesButton.frame.size.height - contactUsButton.frame.size.height)/3
         
         NSLayoutConstraint.activate([
-        
+            
             sectionsCataloguesButton.topAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: (verticalSpacingsBetweenButtons)),
             
             contactUsButton.topAnchor.constraint(equalTo: sectionsCataloguesButton.bottomAnchor, constant: (verticalSpacingsBetweenButtons))
             
-        ])
+            ])
         
         print("Catalogue Button height \(sectionsCataloguesButton.frame.size.height)")
         
@@ -108,9 +108,25 @@ class MainScreenVC: UIViewController, UINavigationBarDelegate {
         
     }
     
-    @objc func buttonPressed(_ :UIButton) {
+    @objc func buttonPressed(sender: UIButton) {
         
-        
+        if sender.tag == 1 {
+            
+            guard let nextViewControllerToGoTo = storyboard?.instantiateViewController(withIdentifier: "CataloguesVC") else {
+                
+                print("CataloguesVC could not be presented")
+                
+                return
+                
+            }
+            
+            present(nextViewControllerToGoTo, animated: true, completion: nil)
+            
+        } else if sender.tag == 2 {
+            
+            
+            
+        }
         
     }
     

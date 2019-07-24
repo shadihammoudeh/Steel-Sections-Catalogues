@@ -34,6 +34,21 @@
             </objects>
             <point key="canvasLocation" x="137.68115942028987" y="137.94642857142856"/>
         </scene>
+        <!--CataloguesVC-->
+        <scene sceneID="d85-JY-1gd">
+            <objects>
+                <viewController restorationIdentifier="CataloguesVC" storyboardIdentifier="CataloguesVC" id="wZy-7X-74h" customClass="CataloguesVC" customModule="Steel_Sections_Catalogues" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="mXq-AO-H7q">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="3lA-4v-EP5"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LTQ-ux-zmg" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="922" y="138"/>
+        </scene>
     </scenes>
     <resources>
         <image name="backgroundImage" width="1597" height="3456"/>
