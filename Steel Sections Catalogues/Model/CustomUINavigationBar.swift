@@ -67,11 +67,11 @@ class CustomUINavigationBar: UINavigationBar {
     
     // The below initialise a custom Navigation Bar with a Right and Left Button as well as a title with a UILabel in the middle:
     
-    convenience init(isNavBarTranslucent: Bool, navBarBackgroundColourHexCode: String, navBarBackgroundColourAlphaValue: CGFloat, navBarStyle: UIBarStyle, preferLargeTitles: Bool, navBarDelegate: UINavigationBarDelegate, navBarItemsHexColourCode: String, normalStateNavBarLeftButtonImage: String, highlightedStateNavBarLeftButtonImage: String, navBarLeftButtonTarget: Any?, navBarLeftButtonSelector: Selector, labelTitleText: String, titleLabelFontHexColourCode: String, labelTitleFontSize: CGFloat, labelTitleFontType: String) {
+    convenience init(dropDownButtonTarget: Any?, dropDownButtonSelector: Selector, isNavBarTranslucent: Bool, navBarBackgroundColourHexCode: String, navBarBackgroundColourAlphaValue: CGFloat, navBarStyle: UIBarStyle, preferLargeTitles: Bool, navBarDelegate: UINavigationBarDelegate, navBarItemsHexColourCode: String, normalStateNavBarLeftButtonImage: String, highlightedStateNavBarLeftButtonImage: String, navBarLeftButtonTarget: Any?, navBarLeftButtonSelector: Selector, labelTitleText: String, titleLabelFontHexColourCode: String, labelTitleFontSize: CGFloat, labelTitleFontType: String) {
         
         self.init()
         
-        addNavBarRightButton()
+        addNavBarRightButton(dropDownButtonTarget: dropDownButtonTarget, dropDownButtonSelector: dropDownButtonSelector)
         
         addNavBarLeftButton(normalStateNavBarLeftButtonImage: normalStateNavBarLeftButtonImage, highlightedStateNavBarLeftButtonImage: highlightedStateNavBarLeftButtonImage, navBarLeftButtonTarget: navBarLeftButtonTarget, navBarLeftButtonSelector: navBarLeftButtonSelector)
 
@@ -168,9 +168,9 @@ class CustomUINavigationBar: UINavigationBar {
         
     }
     
-    func addNavBarRightButton() {
+    func addNavBarRightButton(dropDownButtonTarget: Any?, dropDownButtonSelector: Selector) {
         
-        let button = DropdownUIButton()
+        let button = TrialButtonDropDown(dropDownButtonTarget: dropDownButtonTarget, dropDownButtonSelector: dropDownButtonSelector)
         
         let navigationBarRightButtonView: UIView = {
             
@@ -211,7 +211,6 @@ class CustomUINavigationBar: UINavigationBar {
         headerImageView.contentMode = .scaleAspectFit
         
         customNavigationBarItem.titleView = headerImageView
-        
         
     }
     

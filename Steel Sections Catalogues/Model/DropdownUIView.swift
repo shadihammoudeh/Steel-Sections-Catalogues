@@ -9,8 +9,10 @@
 import UIKit
 
 class DropdownUIView: UIView, UITableViewDelegate, UITableViewDataSource {
+    
+    var dropdownTableSections = ["Ascending Order","Descending Order"]
 
-    var dropdownItemsArray = ["First", "Second", "Third"]
+    var ascendingAndDescendingOrderSetionItmes = ["Section Designaion","Depth, h","Width, b","Area of Section, A"]
     
     var dropdownTableView = UITableView()
     
@@ -23,6 +25,8 @@ class DropdownUIView: UIView, UITableViewDelegate, UITableViewDataSource {
         dropdownTableView.dataSource = self
         
         self.addSubview(dropdownTableView)
+        
+        dropdownTableView.backgroundColor = .black
         
         dropdownTableView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -54,7 +58,7 @@ class DropdownUIView: UIView, UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return dropdownItemsArray.count
+        return 3
         
     }
     
@@ -62,7 +66,7 @@ class DropdownUIView: UIView, UITableViewDelegate, UITableViewDataSource {
         
         let cell = UITableViewCell()
         
-        cell.textLabel?.text = dropdownItemsArray[indexPath.row]
+        cell.textLabel?.text = ascendingAndDescendingOrderSetionItmes[indexPath.row]
         
         return cell
         
@@ -70,7 +74,7 @@ class DropdownUIView: UIView, UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        print(dropdownItemsArray[indexPath.row])
+        print(ascendingAndDescendingOrderSetionItmes[indexPath.row])
         
     }
 

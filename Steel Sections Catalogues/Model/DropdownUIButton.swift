@@ -15,7 +15,7 @@ class DropdownUIButton: UIButton {
     var dropdownViewHeight = NSLayoutConstraint()
     
     var isOpen = false
-
+    
     override init(frame: CGRect) {
         
         super.init(frame: frame)
@@ -28,22 +28,58 @@ class DropdownUIButton: UIButton {
         
         dropdownView.translatesAutoresizingMaskIntoConstraints = false
         
-        self.setTitle("Sort by: ", for: .normal)
+        self.setTitle("Sort by:", for: .normal)
+        
+        self.setTitle("Pressed", for: .highlighted)
         
     }
     
+    override func willMove(toSuperview newSuperview: UIView?) {
+        
+        print("DropdownUIButton willMoveToSuperView()")
+        
+        // I tried this and it did not work.
+        
+    }
+    
+    override func didAddSubview(_ subview: UIView) {
+        
+        // I tried this and it did not work.
+        
+        
+    }
+    
+    override func willMove(toWindow newWindow: UIWindow?) {
+        
+        print("DropdownUIButton willMoveToWindow()")
+        
+        // I tried this and it did not work.
+        
+    }
+    
+    override func didMoveToWindow() {
+        
+        print("DropdownUIButton didMoveToWindow()")
+        
+        // I tried this and it did not work.
+        
+    }
+    
+    
     override func didMoveToSuperview() {
         
+        print("DropdownUIButton didMoveToSuperView()")
+        
         self.superview?.addSubview(dropdownView)
-        
+
         self.superview?.bringSubviewToFront(dropdownView)
-        
+
         dropdownView.topAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-        
+
         dropdownView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        
+
         dropdownView.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
-        
+
         dropdownViewHeight = dropdownView.heightAnchor.constraint(equalToConstant: 0)
         
     }
@@ -51,44 +87,45 @@ class DropdownUIButton: UIButton {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         if isOpen == false {
-            
+
+            print("isOpen is equal to Flase")
+
             isOpen = true
-            
+
             NSLayoutConstraint.deactivate([self.dropdownViewHeight])
-            
-            self.dropdownViewHeight.constant = 150
-            
+
+            self.dropdownViewHeight.constant = 300
+
             NSLayoutConstraint.activate([self.dropdownViewHeight])
-            
+
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.5, options: .curveEaseIn, animations: {
-                
+
                 self.dropdownView.layoutIfNeeded()
-                
+
                 self.dropdownView.center.y += self.dropdownView.frame.height / 2
-                
+
             }, completion: nil)
-            
+
         } else {
-            
+
             isOpen = false
-            
+
+            print("isOpen is equal to True")
+
             NSLayoutConstraint.deactivate([self.dropdownViewHeight])
-            
+
             self.dropdownViewHeight.constant = 0
-            
+
             NSLayoutConstraint.activate([self.dropdownViewHeight])
-            
+
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.5, options: .curveEaseIn, animations: {
-                
+
                 self.dropdownView.center.y -= self.dropdownView.frame.height / 2
 
-                
                 self.dropdownView.layoutIfNeeded()
-                
 
-                
             }, completion: nil)
-            
+
         }
         
     }
@@ -98,7 +135,5 @@ class DropdownUIButton: UIButton {
         fatalError("init(coder:) has not been implemented")
         
     }
-    
-    
     
 }
