@@ -12,6 +12,10 @@ import ChameleonFramework
 
 class CustomUINavigationBar: UINavigationBar {
     
+    let navigationBarRightButtonView = UIView()
+    
+    let rightNavigationBarDropDownButton = UIButton()
+    
     override init(frame: CGRect) {
         
         super.init(frame: frame)
@@ -60,21 +64,21 @@ class CustomUINavigationBar: UINavigationBar {
         addTitleImageToNavBar(navBarTitleImage: navBarTitleImage)
         
         addNavBarLeftButton(normalStateNavBarLeftButtonImage: normalStateNavBarLeftButtonImage, highlightedStateNavBarLeftButtonImage: highlightedStateNavBarLeftButtonImage, navBarLeftButtonTarget: navBarLeftButtonTarget, navBarLeftButtonSelector: navBarLeftButtonSelector)
-
+        
         setupNavigationBarEssentials(isNavBarTranslucent: isNavBarTranslucent, navBarBackgroundColourHexCode: navBarBackgroundColourHexCode, navBarBackgroundColourAlphaValue: navBarBackgroundColourAlphaValue, navBarStyle: navBarStyle, preferLargeTitles: preferLargeTitles, navBarDelegate: navBarDelegate, navBarItemsHexColourCode: navBarItemsHexColourCode)
         
     }
     
     // The below initialise a custom Navigation Bar with a Right and Left Button as well as a title with a UILabel in the middle:
     
-    convenience init(dropDownButtonTarget: Any?, dropDownButtonSelector: Selector, isNavBarTranslucent: Bool, navBarBackgroundColourHexCode: String, navBarBackgroundColourAlphaValue: CGFloat, navBarStyle: UIBarStyle, preferLargeTitles: Bool, navBarDelegate: UINavigationBarDelegate, navBarItemsHexColourCode: String, normalStateNavBarLeftButtonImage: String, highlightedStateNavBarLeftButtonImage: String, navBarLeftButtonTarget: Any?, navBarLeftButtonSelector: Selector, labelTitleText: String, titleLabelFontHexColourCode: String, labelTitleFontSize: CGFloat, labelTitleFontType: String) {
+    convenience init(rightNavBarButtonTitleForNormalState: String, rightNavBarButtonImageForNormalState: String, rightNavBarButtonImageForHighlightedState: String, rightNavBarButtonTarget: Any?, rightNavBarButtonSelector: Selector, isNavBarTranslucent: Bool, navBarBackgroundColourHexCode: String, navBarBackgroundColourAlphaValue: CGFloat, navBarStyle: UIBarStyle, preferLargeTitles: Bool, navBarDelegate: UINavigationBarDelegate, navBarItemsHexColourCode: String, normalStateNavBarLeftButtonImage: String, highlightedStateNavBarLeftButtonImage: String, navBarLeftButtonTarget: Any?, navBarLeftButtonSelector: Selector, labelTitleText: String, titleLabelFontHexColourCode: String, labelTitleFontSize: CGFloat, labelTitleFontType: String) {
         
         self.init()
         
-        addNavBarRightButton(dropDownButtonTarget: dropDownButtonTarget, dropDownButtonSelector: dropDownButtonSelector)
+        addNavBarRightButton(rightNavBarButtonTitleForNormalState: rightNavBarButtonTitleForNormalState, rightNavBarButtonImageForNormalState: rightNavBarButtonImageForNormalState, rightNavBarButtonImageForHighlightedState: rightNavBarButtonImageForHighlightedState, rightNavBarButtonTarget: rightNavBarButtonTarget, rightNavBarButtonSelector: rightNavBarButtonSelector)
         
         addNavBarLeftButton(normalStateNavBarLeftButtonImage: normalStateNavBarLeftButtonImage, highlightedStateNavBarLeftButtonImage: highlightedStateNavBarLeftButtonImage, navBarLeftButtonTarget: navBarLeftButtonTarget, navBarLeftButtonSelector: navBarLeftButtonSelector)
-
+        
         setupNavigationBarEssentials(isNavBarTranslucent: isNavBarTranslucent, navBarBackgroundColourHexCode: navBarBackgroundColourHexCode, navBarBackgroundColourAlphaValue: navBarBackgroundColourAlphaValue, navBarStyle: navBarStyle, preferLargeTitles: preferLargeTitles, navBarDelegate: navBarDelegate, navBarItemsHexColourCode: navBarItemsHexColourCode)
         
         addTitleLabel(labelTitleText: labelTitleText, titleLabelFontHexColourCode: titleLabelFontHexColourCode, labelTitleFontSize: labelTitleFontSize, labelTitleFontType: labelTitleFontType)
@@ -168,31 +172,47 @@ class CustomUINavigationBar: UINavigationBar {
         
     }
     
-    func addNavBarRightButton(dropDownButtonTarget: Any?, dropDownButtonSelector: Selector) {
+    func addNavBarRightButton(rightNavBarButtonTitleForNormalState: String, rightNavBarButtonImageForNormalState: String, rightNavBarButtonImageForHighlightedState: String, rightNavBarButtonTarget: Any?, rightNavBarButtonSelector: Selector) {
+    rightNavigationBarDropDownButton.setTitle(rightNavBarButtonTitleForNormalState, for: .normal)
         
-        let button = TrialButtonDropDown(dropDownButtonTarget: dropDownButtonTarget, dropDownButtonSelector: dropDownButtonSelector)
+            rightNavigationBarDropDownButton.setImage(UIImage(named: rightNavBarButtonImageForNormalState), for: .normal)
+    
         
-        let navigationBarRightButtonView: UIView = {
-            
-            let view = UIView()
-            
-            view.backgroundColor = .yellow
-            
-            view.addSubview(button)
-            
-            return view
-            
-        }()
+//        rightNavigationBarDropDownButton.setImage(UIImage(named: rightNavBarButtonImageForNormalState), for: .normal)
+        //
+        //        rightNavigationBarDropDownButton.setImage(UIImage(named: rightNavBarButtonImageForHighlightedState), for: .highlighted)
+        
+        rightNavigationBarDropDownButton.setTitleColor(.black, for: .normal)
+        
+        rightNavigationBarDropDownButton.setTitleColor(.blue, for: .highlighted)
+        
+        rightNavigationBarDropDownButton.addTarget(rightNavBarButtonTarget, action: rightNavBarButtonSelector, for: .touchUpInside)
+        
+        rightNavigationBarDropDownButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        
+        //        let navigationBarRightButtonView: UIView = {
+        //
+        //            let view = UIView()
+        //
+        //            view.addSubview(rightNavigationBarDropDownButton)
+        //
+        //            return view
+        //
+        //        }()
+        
+        navigationBarRightButtonView.addSubview(rightNavigationBarDropDownButton)
+        
         
         NSLayoutConstraint.activate([
             
-            button.topAnchor.constraint(equalTo: navigationBarRightButtonView.topAnchor),
+            rightNavigationBarDropDownButton.topAnchor.constraint(equalTo: navigationBarRightButtonView.topAnchor),
             
-            button.rightAnchor.constraint(equalTo: navigationBarRightButtonView.rightAnchor),
+            rightNavigationBarDropDownButton.rightAnchor.constraint(equalTo: navigationBarRightButtonView.rightAnchor),
             
-            button.leftAnchor.constraint(equalTo: navigationBarRightButtonView.leftAnchor),
+            rightNavigationBarDropDownButton.leftAnchor.constraint(equalTo: navigationBarRightButtonView.leftAnchor),
             
-            button.bottomAnchor.constraint(equalTo: navigationBarRightButtonView.bottomAnchor)
+            rightNavigationBarDropDownButton.bottomAnchor.constraint(equalTo: navigationBarRightButtonView.bottomAnchor)
             
             ])
         
