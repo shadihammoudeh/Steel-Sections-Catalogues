@@ -32,7 +32,7 @@ extension DropdownCustomViewDataSourceProtocol {
     
 }
 
-class DropdownCustomView: UIView{
+class DropdownCustomView: UIView {
     
     //MARK: Variables
     
@@ -99,16 +99,11 @@ class DropdownCustomView: UIView{
         
         // The below line of code sets the width of the dropdown tableView equals to the width of the reference's element width, which the dropdown UIView is going to be linked to:
         
-        let vc = SortByDropdownTableViewCell()
-        
         self.width = widthOfDropdownTableView
-        
         
         // The below defines the vertical offset between the reference element and the top of the dropdown UIView:
         
         self.offset = offset
-        
-
         
         dropdownTableView?.showsVerticalScrollIndicator = false
         
@@ -145,8 +140,8 @@ class DropdownCustomView: UIView{
             self.hideDropdown()
             
         }
-        
-        // Otherwise, display it:
+            
+            // Otherwise, display it:
             
         else {
             
@@ -173,12 +168,12 @@ class DropdownCustomView: UIView{
     
     // Sets Row Height of your Custom XIB
     
-    func setRowHeight(height: CGFloat){
-
+    func setRowHeight(height: CGFloat) {
+        
         self.dropdownTableView?.rowHeight = height
-
+        
         self.dropdownTableView?.estimatedRowHeight = height
-
+        
     }
     
     // Hides DropDownMenu
@@ -197,7 +192,7 @@ class DropdownCustomView: UIView{
         })
         
     }
- 
+    
 }
 
 // MARK: - Table View Methods

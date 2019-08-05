@@ -16,6 +16,8 @@ class CustomUINavigationBar: UINavigationBar {
     
     let rightNavigationBarDropDownButton = UIButton()
     
+    let leftNavigationBarButton = UIButton()
+    
     override init(frame: CGRect) {
         
         super.init(frame: frame)
@@ -173,14 +175,9 @@ class CustomUINavigationBar: UINavigationBar {
     }
     
     func addNavBarRightButton(rightNavBarButtonTitleForNormalState: String, rightNavBarButtonImageForNormalState: String, rightNavBarButtonImageForHighlightedState: String, rightNavBarButtonTarget: Any?, rightNavBarButtonSelector: Selector) {
-    rightNavigationBarDropDownButton.setTitle(rightNavBarButtonTitleForNormalState, for: .normal)
+        rightNavigationBarDropDownButton.setTitle(rightNavBarButtonTitleForNormalState, for: .normal)
         
-            rightNavigationBarDropDownButton.setImage(UIImage(named: rightNavBarButtonImageForNormalState), for: .normal)
-    
-        
-//        rightNavigationBarDropDownButton.setImage(UIImage(named: rightNavBarButtonImageForNormalState), for: .normal)
-        //
-        //        rightNavigationBarDropDownButton.setImage(UIImage(named: rightNavBarButtonImageForHighlightedState), for: .highlighted)
+        rightNavigationBarDropDownButton.setImage(UIImage(named: rightNavBarButtonImageForNormalState), for: .normal)
         
         rightNavigationBarDropDownButton.setTitleColor(.black, for: .normal)
         
@@ -189,17 +186,6 @@ class CustomUINavigationBar: UINavigationBar {
         rightNavigationBarDropDownButton.addTarget(rightNavBarButtonTarget, action: rightNavBarButtonSelector, for: .touchUpInside)
         
         rightNavigationBarDropDownButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        
-        //        let navigationBarRightButtonView: UIView = {
-        //
-        //            let view = UIView()
-        //
-        //            view.addSubview(rightNavigationBarDropDownButton)
-        //
-        //            return view
-        //
-        //        }()
         
         navigationBarRightButtonView.addSubview(rightNavigationBarDropDownButton)
         

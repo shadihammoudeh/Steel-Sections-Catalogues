@@ -8,39 +8,41 @@
 
 import UIKit
 
-class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UINavigationBarDelegate {
+class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UINavigationBarDelegate, UIPopoverPresentationControllerDelegate {
     
-    // The below variable will be filled with the correct value once the viewDidLayoutSubviews cycle gets executed:
+    let tableViewCustomCellClass = IsectionsCustomTableViewCell()
     
-    var halfTheWidthOfNavBarRightButton: CGFloat = 0
+    // The below instance is needed in order to access and print out the heights and widths of the textLabel as well as the buttons displayed inside the dropdown menu:
     
-    // The below gets passed into the setupDropdown function in order to calculate the starting X-coordinate for the dropdown tableView menu:
-    
-    var widthOfDropdownTableView: CGFloat = 200
-    
-    // The below variable will be filled with the correct values once the viewDidLayoutSubviews cycle gets executed:
-    
-    var centerCorrdinateOfNavigationBarRightButtonInRelationToItsSuperview: CGPoint = CGPoint(x: 0, y: 0)
-    
-    // Below we are creating an instance for the SortByDropdownTableViewCell class in order to access the label width inside it to be displayed for the multiple dropdown tableView rows later on, and set the width of the tableView equivalent to the maximum cells' width:
-    
-    let customSortByDropdownTableViewCellClass = SortByDropdownTableViewCell()
-    
-    var sortByTextLabelWidthsInsideDropdownTableViewArray: [CGFloat] = []
+    let sortByDropdownTableViewCell = SortByDropdownTableViewCell()
     
     // Below is an instance for the dropdown menu that is going to be displayed once the user clicks on the Sort By button, located at the right corner of the navigation bar:
     
     let sortByDropdownMenuView = DropdownCustomView()
     
+    // The below gets passed into the setupDropdown function in order to calculate the starting X-coordinate for the dropdown tableView menu by substracting the total view width from the width of the dropdown menu:
+    
+    var widthOfDropdownTableView: CGFloat = 280
+    
     // Below Variable represents the height of each cell that is going to be contained inside the dropdown view:
     
-    var sortByDropdownTableViewCellHeight: CGFloat = 50
+    var sortByDropdownTableViewCellHeight: CGFloat = 65
     
     // Below Constant represents the items that are going to be displayed inside the dropdown menu tableView rows:
     
     let sortByDropdownMenuItemsArray = ["Section Designation","Depth, h","Width, b","Area of Section, A"]
     
-    let tableViewCustomCellClass = IsectionsCustomTableViewCell()
+    var sortByTextLabelWidthsInsideDropdownTableViewArray: [CGFloat] = []
+    
+    var sortByTextLabelHeightsInsideDropdownTableViewArray: [CGFloat] = []
+    
+    var ascendingButtonWidthsInsideDropdownTableViewArray: [CGFloat] = []
+    
+    var ascendingButtonHeightsInsideDropdownTableViewArray: [CGFloat] = []
+    
+    var descendingButtonWidthsInsideDropdownTableViewArray: [CGFloat] = []
+    
+    var descendingButtonHeightsInsideDropdownTableViewArray: [CGFloat] = []
     
     let sectionDesignationLabelFontName: String = "AppleSDGothicNeo-Bold"
     
@@ -126,10 +128,6 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
         
         setupConstraints()
         
-        halfTheWidthOfNavBarRightButton = (navigationBar.navigationBarRightButtonView.frame.size.width) / 2
-        
-        centerCorrdinateOfNavigationBarRightButtonInRelationToItsSuperview = (navigationBar.customNavigationBarItem.rightBarButtonItem?.customView?.convert((navigationBar.customNavigationBarItem.rightBarButtonItem?.customView!.center)!, to: self.view))!
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -170,10 +168,10 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
         
         // Offset in the below line of code defines the vertical offset from the bottom of the viewPositionReference item to the top of the sortByDropDownMenuUIView:
         
-        sortByDropdownMenuView.setUpDropdown(xCoordinateOfDropdownTableView: centerCorrdinateOfNavigationBarRightButtonInRelationToItsSuperview.x + halfTheWidthOfNavBarRightButton - widthOfDropdownTableView, yCoordinateOfDropdownTableView: UIApplication.shared.statusBarFrame.height + navigationBar.frame.size.height, widthOfDropdownTableView: 200, offset: 0)
+        sortByDropdownMenuView.setUpDropdown(xCoordinateOfDropdownTableView: self.view.frame.size.width - widthOfDropdownTableView, yCoordinateOfDropdownTableView: UIApplication.shared.statusBarFrame.height + navigationBar.frame.size.height, widthOfDropdownTableView: widthOfDropdownTableView, offset: 0)
         
         sortByDropdownMenuView.nib = UINib(nibName: "SortByDropdownTableViewCell", bundle: nil)
-
+        
         sortByDropdownMenuView.setRowHeight(height: self.sortByDropdownTableViewCellHeight)
         
         self.view.addSubview(sortByDropdownMenuView)
@@ -306,14 +304,65 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
     
     @objc func navigationBarRightButtonPressed(sender : UIButton) {
         
-        print("Hi I was presssed")
-        
-        self.sortByDropdownMenuView.showDropdown(height: self.sortByDropdownTableViewCellHeight * CGFloat(sortByDropdownMenuItemsArray.count))
-        
-        print("Widths of text Labels inside dropdown tableView is equal to \(sortByTextLabelWidthsInsideDropdownTableViewArray)")
+        print("Right navigation bar button pressed")
 
+        let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        let popOverViewController = storyboard.instantiateViewController(withIdentifier: "PopoverViewController")
+        
+        popOverViewController.modalPresentationStyle = .popover
+
+        let popover = popOverViewController.popoverPresentationController!
+
+        popover.delegate = self
+
+        popover.permittedArrowDirections = .up
+        
+        // The sourceView in the below code line represents the view containing the anchor rectangle for the popover:
+
+        popover.sourceView = navigationBar.navigationBarRightButtonView
+        
+        // The sourceRect in the below code line represents The rectangle in the specified view in which to anchor the popover:
+        
+        popover.sourceRect = navigationBar.navigationBarRightButtonView.bounds
+        
+        present(popOverViewController, animated: true, completion:nil)
+    
+    }
+    //UIPopoverPresentationControllerDelegate inherits from UIAdaptivePresentationControllerDelegate, we will use this method to define the presentation style for popover presentation controller
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        return .none
+    }
+    
+    //UIPopoverPresentationControllerDelegate
+    func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
         
     }
+    
+    func popoverPresentationControllerShouldDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) -> Bool {
+        return true
+    }
+    
+        
+//        if sortByDropdownMenuView.isDropdownPresent == false {
+//            navigationBar.rightNavigationBarDropDownButton.setImage(UIImage(named: "pullUpButton"), for: .normal)
+//
+//            universalBeamsTableView.isUserInteractionEnabled = false
+//
+//            self.sortByDropdownMenuView.showDropdown(height: self.sortByDropdownTableViewCellHeight * CGFloat(sortByDropdownMenuItemsArray.count))
+//
+//        } else {
+//
+//            navigationBar.rightNavigationBarDropDownButton.setImage(UIImage(named: "pullDownButton"), for: .normal)
+//
+//            universalBeamsTableView.isUserInteractionEnabled = true
+//
+//            self.view.alpha = 1.0
+//
+//            sortByDropdownMenuView.hideDropdown()
+//
+//        }
+    
     
     func position(for bar: UIBarPositioning) -> UIBarPosition {
         
@@ -506,11 +555,23 @@ extension BlueBookUniversalBeamsVC: DropdownCustomViewDataSourceProtocol {
             
             customCell.sortByTextLabel.text = self.sortByDropdownMenuItemsArray[indexPos]
             
-            customCell.sortByTextLabel.sizeToFit()
+            customCell.layoutIfNeeded()
             
-            print("Cell width is equal to \(customCell.sortByTextLabel.frame.size.width)")
+            print("Custom cell intrinsic content size width is equal to \(customCell.intrinsicContentSize.width)")
             
-            print("test")
+            print("Custom cell intrinsic content size height is equal to \(customCell.intrinsicContentSize.height)")
+            
+            print("Sort By textLabel Width is equal to \(customCell.sortByTextLabel.frame.width)")
+            
+            print("Sort By textLabel Height is equal to \(customCell.sortByTextLabel.frame.height)")
+            
+            print("Ascending Button Width is equal to \(customCell.ascendingOrderButton.frame.size.width)")
+            
+            print("Ascending Button Height is equal to \(customCell.ascendingOrderButton.frame.size.height)")
+            
+            print("Descending Button Width is equal to \(customCell.descendingOrderButton.frame.size.width)")
+            
+            print("Descending Button Height is equal to \(customCell.descendingOrderButton.frame.size.height)")
             
         }
         
@@ -519,7 +580,7 @@ extension BlueBookUniversalBeamsVC: DropdownCustomViewDataSourceProtocol {
     func selectItemInDropdownView(indexPos: Int, dropdownTableViewCellClass: String) {
         
         self.sortByDropdownMenuView.hideDropdown()
-
+        
     }
     
     func numberOfRows(dropdownTableViewCellClass: String) -> Int {
@@ -527,7 +588,5 @@ extension BlueBookUniversalBeamsVC: DropdownCustomViewDataSourceProtocol {
         return self.sortByDropdownMenuItemsArray.count
         
     }
-    
-
     
 }

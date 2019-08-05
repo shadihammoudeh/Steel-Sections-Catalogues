@@ -21,6 +21,7 @@
 		CF4C735122E3BEB800923B4C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CF4C735022E3BEB800923B4C /* Assets.xcassets */; };
 		CF4C735422E3BEB800923B4C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF4C735222E3BEB800923B4C /* LaunchScreen.storyboard */; };
 		CF4C735D22E3BF7200923B4C /* MainScreenVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4C735C22E3BF7200923B4C /* MainScreenVC.swift */; };
+		CF4CAC9722F8A9B5007A7BED /* PopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4CAC9622F8A9B5007A7BED /* PopoverViewController.swift */; };
 		CF6EAC3E22EC890600C8AC65 /* BlueBookOpenRolledSectionsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6EAC3D22EC890600C8AC65 /* BlueBookOpenRolledSectionsVC.swift */; };
 		CF6EAC4022ECEFC000C8AC65 /* BlueBookUniversalBeamsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6EAC3F22ECEFC000C8AC65 /* BlueBookUniversalBeamsVC.swift */; };
 		CF6EAC4222ECF0A000C8AC65 /* CsvParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6EAC4122ECF0A000C8AC65 /* CsvParser.swift */; };
@@ -52,6 +53,7 @@
 		CF4C735322E3BEB800923B4C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CF4C735522E3BEB800923B4C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CF4C735C22E3BF7200923B4C /* MainScreenVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainScreenVC.swift; sourceTree = "<group>"; };
+		CF4CAC9622F8A9B5007A7BED /* PopoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverViewController.swift; sourceTree = "<group>"; };
 		CF6EAC3D22EC890600C8AC65 /* BlueBookOpenRolledSectionsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlueBookOpenRolledSectionsVC.swift; sourceTree = "<group>"; };
 		CF6EAC3F22ECEFC000C8AC65 /* BlueBookUniversalBeamsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlueBookUniversalBeamsVC.swift; sourceTree = "<group>"; };
 		CF6EAC4122ECF0A000C8AC65 /* CsvParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CsvParser.swift; sourceTree = "<group>"; };
@@ -152,6 +154,7 @@
 				CFD9228722EC81F500DC9757 /* BlueBookTabController.swift */,
 				CF6EAC3D22EC890600C8AC65 /* BlueBookOpenRolledSectionsVC.swift */,
 				CF6EAC3F22ECEFC000C8AC65 /* BlueBookUniversalBeamsVC.swift */,
+				CF4CAC9622F8A9B5007A7BED /* PopoverViewController.swift */,
 				CFD9228B22EC846900DC9757 /* BlueBookClosedSectionsVC.swift */,
 			);
 			path = Controller;
@@ -304,6 +307,7 @@
 				CF3ECE8322F5A4A000479A10 /* SortByDropdownTableViewCell.swift in Sources */,
 				CF0CB86522E8F43B00257A91 /* CustomCollectionView.swift in Sources */,
 				CF0CB86722E8F4A700257A91 /* CustomCollectionViewCell.swift in Sources */,
+				CF4CAC9722F8A9B5007A7BED /* PopoverViewController.swift in Sources */,
 				CF4C734922E3BEB700923B4C /* CustomUIButton.swift in Sources */,
 				CF71D78C22E47FF3000FDDE9 /* CustomUINavigationBar.swift in Sources */,
 				CF4C734722E3BEB700923B4C /* AppDelegate.swift in Sources */,

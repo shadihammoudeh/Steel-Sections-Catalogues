@@ -12,31 +12,45 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="SortByDropdownTableViewCell" customModule="Steel_Sections_Catalogues" customModuleProvider="target">
+        <tableViewCell contentMode="scaleAspectFit" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="SortByDropdownTableViewCell" customModule="Steel_Sections_Catalogues" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oAA-jG-EWS">
-                        <rect key="frame" x="0.0" y="0.0" width="42" height="43.5"/>
+                    <button opaque="NO" contentMode="scaleAspectFit" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Js3-q7-U92">
+                        <rect key="frame" x="199" y="1" width="40" height="40"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <state key="normal" image="ascendingButtonImage">
+                            <attributedString key="attributedTitle"/>
+                        </state>
+                    </button>
+                    <button opaque="NO" contentMode="scaleAspectFit" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mD7-zP-Ph8">
+                        <rect key="frame" x="261" y="1" width="40" height="40"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <state key="normal" image="descendingButtonImage"/>
+                    </button>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oAA-jG-EWS">
+                        <rect key="frame" x="16" y="11" width="42" height="20.5"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
-                <constraints>
-                    <constraint firstAttribute="bottom" secondItem="oAA-jG-EWS" secondAttribute="bottom" id="e5v-KJ-hpw"/>
-                    <constraint firstItem="oAA-jG-EWS" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="ol1-cE-4Yy"/>
-                    <constraint firstItem="oAA-jG-EWS" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="qVl-bk-GGT"/>
-                </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
+                <outlet property="ascendingOrderButton" destination="Js3-q7-U92" id="E84-ba-zqg"/>
+                <outlet property="descendingOrderButton" destination="mD7-zP-Ph8" id="OgJ-GA-wZV"/>
                 <outlet property="sortByTextLabel" destination="oAA-jG-EWS" id="yge-JZ-kb9"/>
             </connections>
-            <point key="canvasLocation" x="47.826086956521742" y="35.491071428571423"/>
+            <point key="canvasLocation" x="91" y="125"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <image name="ascendingButtonImage" width="40" height="40"/>
+        <image name="descendingButtonImage" width="40" height="40"/>
+    </resources>
 </document>
