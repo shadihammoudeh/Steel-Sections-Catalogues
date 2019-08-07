@@ -10,39 +10,11 @@ import UIKit
 
 class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UINavigationBarDelegate, UIPopoverPresentationControllerDelegate {
     
+    // The below Variable is needed in order to figure out whether the pop-over view controller is present on the display or not. If it is not the view alpha value will be equal to 1.0. If it is, the view alpha value will be set to a lower value to make the pop-over view controller the center of attention:
+    
+    var blueBookUniversalBeamVCAlphaValue: CGFloat = 1.0
+    
     let tableViewCustomCellClass = IsectionsCustomTableViewCell()
-    
-    // The below instance is needed in order to access and print out the heights and widths of the textLabel as well as the buttons displayed inside the dropdown menu:
-    
-    let sortByDropdownTableViewCell = SortByDropdownTableViewCell()
-    
-    // Below is an instance for the dropdown menu that is going to be displayed once the user clicks on the Sort By button, located at the right corner of the navigation bar:
-    
-    let sortByDropdownMenuView = DropdownCustomView()
-    
-    // The below gets passed into the setupDropdown function in order to calculate the starting X-coordinate for the dropdown tableView menu by substracting the total view width from the width of the dropdown menu:
-    
-    var widthOfDropdownTableView: CGFloat = 280
-    
-    // Below Variable represents the height of each cell that is going to be contained inside the dropdown view:
-    
-    var sortByDropdownTableViewCellHeight: CGFloat = 65
-    
-    // Below Constant represents the items that are going to be displayed inside the dropdown menu tableView rows:
-    
-    let sortByDropdownMenuItemsArray = ["Section Designation","Depth, h","Width, b","Area of Section, A"]
-    
-    var sortByTextLabelWidthsInsideDropdownTableViewArray: [CGFloat] = []
-    
-    var sortByTextLabelHeightsInsideDropdownTableViewArray: [CGFloat] = []
-    
-    var ascendingButtonWidthsInsideDropdownTableViewArray: [CGFloat] = []
-    
-    var ascendingButtonHeightsInsideDropdownTableViewArray: [CGFloat] = []
-    
-    var descendingButtonWidthsInsideDropdownTableViewArray: [CGFloat] = []
-    
-    var descendingButtonHeightsInsideDropdownTableViewArray: [CGFloat] = []
     
     let sectionDesignationLabelFontName: String = "AppleSDGothicNeo-Bold"
     
@@ -58,7 +30,7 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
     
     // The below code line declares the custom NavigationBar to be added to this ViewController. The reason it is defined as a lazy var, is to allow us to access the view properties of this ViewController. Since the custom NavigationBar is defined outside the viewDidLoad methods, or other methods where view will be available:
     
-    lazy var navigationBar = CustomUINavigationBar(rightNavBarButtonTitleForNormalState: "Sort By:", rightNavBarButtonImageForNormalState: "pullDownButton", rightNavBarButtonImageForHighlightedState: "pullUpButton", rightNavBarButtonTarget: self, rightNavBarButtonSelector: #selector(navigationBarRightButtonPressed(sender:)), isNavBarTranslucent: false, navBarBackgroundColourHexCode: "#FFFFFF", navBarBackgroundColourAlphaValue: 1.0, navBarStyle: .black, preferLargeTitles: false, navBarDelegate: self, navBarItemsHexColourCode: "#FF4F40", normalStateNavBarLeftButtonImage: "normalStateBackButton", highlightedStateNavBarLeftButtonImage: "highlightedStateBackButton", navBarLeftButtonTarget: self, navBarLeftButtonSelector: #selector(navigationBarLeftButtonPressed(sender:)), labelTitleText: "Universal Beams (UB)", titleLabelFontHexColourCode: "#000000", labelTitleFontSize: 16, labelTitleFontType: "AppleSDGothicNeo-Light")
+    lazy var navigationBar = CustomUINavigationBar(rightNavBarTitle: "Sort Data", rightNavBarTitleHexColourCodeNormalState: "#333301", rightNavBarTitleHexColourCodeHighlightedState: "#FFFF05", rightNavBarButtonTarget: self, rightNavBarSelector: #selector(navigationBarRightButtonPressed(sender:)), isNavBarTranslucent: false, navBarBackgroundColourHexCode: "#CCCC04", navBarBackgroundColourAlphaValue: 1.0, navBarStyle: .black, preferLargeTitles: false, navBarDelegate: self, navBarItemsHexColourCode: "#E0E048", normalStateNavBarLeftButtonImage: "normalStateBackButton", highlightedStateNavBarLeftButtonImage: "highlightedStateBackButton", navBarLeftButtonTarget: self, navBarLeftButtonSelector: #selector(navigationBarLeftButtonPressed(sender:)), labelTitleText: "Universal Beams (UB)", titleLabelFontHexColourCode: "#FFFF52", labelTitleFontSize: 16, labelTitleFontType: "AppleSDGothicNeo-Light")
     
     lazy var universalBeamsTableView = CustomTableView(tableViewBackgroundColourHexCode: "#0D0D0D", tableViewDelegate: self, tableViewDataSource: self, tableViewCustomCellClassToBeRegistered: IsectionsCustomTableViewCell.self, tableViewCustomCellReuseIdentifierToBeRegistered: "customCell")
     
@@ -134,8 +106,6 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
         
         print("UniversalBeamsViewController viewDidAppear()")
         
-        setUpDropdown()
-        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -155,26 +125,6 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
         // The below code returns the total number of items inside the universalBeamsSectionSerialNumberArray, which is equal to the ttoal number of section in our table:
         
         return universalBeamsSectionSerialNumberArray.count
-        
-    }
-    
-    func setUpDropdown(){
-        
-        sortByDropdownMenuView.dropdownTableViewCellClass = "DROP_DOWN_NEW"
-        
-        sortByDropdownMenuView.dropdownTableViewCellReusableIdentifier = "dropDownCell"
-        
-        sortByDropdownMenuView.dropdownCustomDataSourceProtocol = self
-        
-        // Offset in the below line of code defines the vertical offset from the bottom of the viewPositionReference item to the top of the sortByDropDownMenuUIView:
-        
-        sortByDropdownMenuView.setUpDropdown(xCoordinateOfDropdownTableView: self.view.frame.size.width - widthOfDropdownTableView, yCoordinateOfDropdownTableView: UIApplication.shared.statusBarFrame.height + navigationBar.frame.size.height, widthOfDropdownTableView: widthOfDropdownTableView, offset: 0)
-        
-        sortByDropdownMenuView.nib = UINib(nibName: "SortByDropdownTableViewCell", bundle: nil)
-        
-        sortByDropdownMenuView.setRowHeight(height: self.sortByDropdownTableViewCellHeight)
-        
-        self.view.addSubview(sortByDropdownMenuView)
         
     }
     
@@ -288,12 +238,6 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
         
     }
     
-    //    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-    //
-    //        return 150
-    //
-    //    }
-    
     @objc func navigationBarLeftButtonPressed(sender : UIButton) {
         
         let viewControllerToGoTo = BlueBookTabController()
@@ -305,64 +249,60 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
     @objc func navigationBarRightButtonPressed(sender : UIButton) {
         
         print("Right navigation bar button pressed")
-
-        let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        
-        let popOverViewController = storyboard.instantiateViewController(withIdentifier: "PopoverViewController")
-        
-        popOverViewController.modalPresentationStyle = .popover
-
-        let popover = popOverViewController.popoverPresentationController!
-
-        popover.delegate = self
-
-        popover.permittedArrowDirections = .up
-        
-        // The sourceView in the below code line represents the view containing the anchor rectangle for the popover:
-
-        popover.sourceView = navigationBar.navigationBarRightButtonView
-        
-        // The sourceRect in the below code line represents The rectangle in the specified view in which to anchor the popover:
-        
-        popover.sourceRect = navigationBar.navigationBarRightButtonView.bounds
-        
-        present(popOverViewController, animated: true, completion:nil)
     
+            let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            
+            let popOverViewController = storyboard.instantiateViewController(withIdentifier: "SortDataPopOverVC")
+            
+            popOverViewController.modalPresentationStyle = .popover
+            
+            let popover = popOverViewController.popoverPresentationController!
+            
+            popover.delegate = self
+            
+            popover.permittedArrowDirections = .up
+        
+            // The below code is needed in order to set the size of the pop-over view controller:
+            
+            popOverViewController.preferredContentSize = CGSize(width: 210, height: 408)
+            
+            // The sourceView in the below code line represents the view containing the anchor rectangle for the popover:
+            
+            popover.sourceView = navigationBar.navigationBarRightButtonView
+            
+            // The sourceRect in the below code line represents The rectangle in the specified view in which to anchor the popover:
+            
+            popover.sourceRect = navigationBar.navigationBarRightButtonView.bounds
+            
+            present(popOverViewController, animated: true, completion:{
+            
+                self.view.alpha = 0.5
+            
+            })
+        
     }
+    
     //UIPopoverPresentationControllerDelegate inherits from UIAdaptivePresentationControllerDelegate, we will use this method to define the presentation style for popover presentation controller
+    
     func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        
         return .none
+        
     }
     
-    //UIPopoverPresentationControllerDelegate
+    // The below function gets called whenever the SortDataPopOverVC gets dismissed:
+    
     func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
         
+            view.alpha = 1.0
+
     }
     
     func popoverPresentationControllerShouldDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) -> Bool {
-        return true
-    }
-    
         
-//        if sortByDropdownMenuView.isDropdownPresent == false {
-//            navigationBar.rightNavigationBarDropDownButton.setImage(UIImage(named: "pullUpButton"), for: .normal)
-//
-//            universalBeamsTableView.isUserInteractionEnabled = false
-//
-//            self.sortByDropdownMenuView.showDropdown(height: self.sortByDropdownTableViewCellHeight * CGFloat(sortByDropdownMenuItemsArray.count))
-//
-//        } else {
-//
-//            navigationBar.rightNavigationBarDropDownButton.setImage(UIImage(named: "pullDownButton"), for: .normal)
-//
-//            universalBeamsTableView.isUserInteractionEnabled = true
-//
-//            self.view.alpha = 1.0
-//
-//            sortByDropdownMenuView.hideDropdown()
-//
-//        }
-    
+        return true
+        
+    }
     
     func position(for bar: UIBarPositioning) -> UIBarPosition {
         
@@ -540,52 +480,6 @@ extension Array where Element: Hashable {
     mutating func removeDuplicates() {
         
         self = self.removingDuplicates()
-        
-    }
-    
-}
-
-extension BlueBookUniversalBeamsVC: DropdownCustomViewDataSourceProtocol {
-    
-    func getDataToDropDown(cell: UITableViewCell, indexPos: Int, dropdownTableViewCellClass: String) {
-        
-        if dropdownTableViewCellClass == "DROP_DOWN_NEW" {
-            
-            let customCell = cell as! SortByDropdownTableViewCell
-            
-            customCell.sortByTextLabel.text = self.sortByDropdownMenuItemsArray[indexPos]
-            
-            customCell.layoutIfNeeded()
-            
-            print("Custom cell intrinsic content size width is equal to \(customCell.intrinsicContentSize.width)")
-            
-            print("Custom cell intrinsic content size height is equal to \(customCell.intrinsicContentSize.height)")
-            
-            print("Sort By textLabel Width is equal to \(customCell.sortByTextLabel.frame.width)")
-            
-            print("Sort By textLabel Height is equal to \(customCell.sortByTextLabel.frame.height)")
-            
-            print("Ascending Button Width is equal to \(customCell.ascendingOrderButton.frame.size.width)")
-            
-            print("Ascending Button Height is equal to \(customCell.ascendingOrderButton.frame.size.height)")
-            
-            print("Descending Button Width is equal to \(customCell.descendingOrderButton.frame.size.width)")
-            
-            print("Descending Button Height is equal to \(customCell.descendingOrderButton.frame.size.height)")
-            
-        }
-        
-    }
-    
-    func selectItemInDropdownView(indexPos: Int, dropdownTableViewCellClass: String) {
-        
-        self.sortByDropdownMenuView.hideDropdown()
-        
-    }
-    
-    func numberOfRows(dropdownTableViewCellClass: String) -> Int {
-        
-        return self.sortByDropdownMenuItemsArray.count
         
     }
     
