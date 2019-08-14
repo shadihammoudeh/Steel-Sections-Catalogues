@@ -144,9 +144,9 @@
 				CF0CB86222E8F3C800257A91 /* CataloguesVC.swift */,
 				CFD9228722EC81F500DC9757 /* BlueBookTabController.swift */,
 				CF6EAC3D22EC890600C8AC65 /* BlueBookOpenRolledSectionsVC.swift */,
+				CFD9228B22EC846900DC9757 /* BlueBookClosedSectionsVC.swift */,
 				CF6EAC3F22ECEFC000C8AC65 /* BlueBookUniversalBeamsVC.swift */,
 				CF4CAC9622F8A9B5007A7BED /* SortDataPopOverVC.swift */,
-				CFD9228B22EC846900DC9757 /* BlueBookClosedSectionsVC.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -434,6 +434,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;

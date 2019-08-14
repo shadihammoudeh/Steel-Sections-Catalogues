@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UINavigationBarDelegate, UIPopoverPresentationControllerDelegate {
+class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UINavigationBarDelegate, UIPopoverPresentationControllerDelegate, PassDataBackToBlueBookUniversalBeamsVCDelegate {
     
     // The below Variable is needed in order to figure out whether the pop-over view controller is present on the display or not. If it is not the view alpha value will be equal to 1.0. If it is, the view alpha value will be set to a lower value to make the pop-over view controller the center of attention:
     
@@ -42,7 +42,7 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
     
     // The below Array is mapped from the above Array, whereby only sectionSerialNumbers are reported inside of it, with no duplication using the extension at the end of this Class (i.e., Array):
     
-    lazy var universalBeamsSectionSerialNumberArray = universalBeamsArrayDataExtractedFromTheCsvFileUsingTheParser.map({ return $0.sectionSerialNumber }).removingDuplicates()
+    var universalBeamsSectionSerialNumberArray: [String] = []
     
     // The below is the first ViewController cycle:
     
@@ -79,6 +79,10 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
             }
             
         }
+        
+        universalBeamsSectionSerialNumberArray = universalBeamsArrayDataExtractedFromTheCsvFileUsingTheParser.map({ return $0.sectionSerialNumber }).removingDuplicates()
+        
+        print(universalBeamsSectionSerialNumberArray)
         
         // It is very important to note that the below code, which calculates the dynamic height of a TableView Cell only works when all the required constrains (i.e., Top, Right, Bottom and Left) for all subViews to be displayed inside the tableView Cell are defined:
         
@@ -249,36 +253,47 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
     @objc func navigationBarRightButtonPressed(sender : UIButton) {
         
         print("Right navigation bar button pressed")
-    
-            let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-            
-            let popOverViewController = storyboard.instantiateViewController(withIdentifier: "SortDataPopOverVC")
-            
-            popOverViewController.modalPresentationStyle = .popover
-            
-            let popover = popOverViewController.popoverPresentationController!
-            
-            popover.delegate = self
-            
-            popover.permittedArrowDirections = .up
         
-            // The below code is needed in order to set the size of the pop-over view controller:
+        let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        let popOverViewController = storyboard.instantiateViewController(withIdentifier: "SortDataPopOverVC")
+        
+        popOverViewController.modalPresentationStyle = .popover
+        
+        let popover = popOverViewController.popoverPresentationController!
+        
+        popover.delegate = self
+        
+        popover.permittedArrowDirections = .up
+        
+        // The below code is needed in order to set the size of the pop-over view controller:
+        
+        popOverViewController.preferredContentSize = CGSize(width: 225, height: 408)
+        
+        // The sourceView in the below code line represents the view containing the anchor rectangle for the popover:
+        
+        popover.sourceView = navigationBar.navigationBarRightButtonView
+        
+        // The sourceRect in the below code line represents The rectangle in the specified view in which to anchor the popover:
+        
+        popover.sourceRect = navigationBar.navigationBarRightButtonView.bounds
+        
+        let viewControllerToPassDataTo = popOverViewController as! SortDataPopOverVC
+        
+        viewControllerToPassDataTo.delegate = self
+        
+        viewControllerToPassDataTo.passedUniversalBeamsDataArrayFromBlueBookUniversalBeamsVC = self.universalBeamsArrayDataExtractedFromTheCsvFileUsingTheParser
+        
+        present(popOverViewController, animated: true, completion:{
             
-            popOverViewController.preferredContentSize = CGSize(width: 210, height: 408)
+            self.view.alpha = 0.5
             
-            // The sourceView in the below code line represents the view containing the anchor rectangle for the popover:
-            
-            popover.sourceView = navigationBar.navigationBarRightButtonView
-            
-            // The sourceRect in the below code line represents The rectangle in the specified view in which to anchor the popover:
-            
-            popover.sourceRect = navigationBar.navigationBarRightButtonView.bounds
-            
-            present(popOverViewController, animated: true, completion:{
-            
-                self.view.alpha = 0.5
-            
-            })
+        })
+        
+    }
+    
+    func prepareForPopoverPresentation(_ popoverPresentationController: UIPopoverPresentationController) {
+        
         
     }
     
@@ -294,8 +309,8 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
     
     func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
         
-            view.alpha = 1.0
-
+        view.alpha = 1.0
+        
     }
     
     func popoverPresentationControllerShouldDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) -> Bool {
@@ -459,6 +474,16 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
         
     }
     
+    func popOverViewControllerWillDismiss(sortedArrayToBePassed: [IsectionsDimensionsParameters]) {
+        
+        self.universalBeamsArrayDataExtractedFromTheCsvFileUsingTheParser = sortedArrayToBePassed
+        
+        self.universalBeamsSectionSerialNumberArray = sortedArrayToBePassed.map({ return $0.sectionSerialNumber }).removingDuplicates()
+        
+        self.universalBeamsTableView.reloadData()
+        
+    }
+    
 }
 
 // The below extension is needed in order to extend the Array's functionalities so that any duplicate item inside Arrays can be removed:
@@ -484,3 +509,4 @@ extension Array where Element: Hashable {
     }
     
 }
+
