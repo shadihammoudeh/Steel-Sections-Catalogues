@@ -34,12 +34,12 @@ class MainScreenVC: UIViewController, UINavigationBarDelegate {
         
         self.view.backgroundColor = UIColor(hexString: "#000000")
         
+        view.addSubview(navigationBar)
+        
         view.addSubview(sectionsCataloguesButton)
         
         view.addSubview(contactUsButton)
-        
-        view.addSubview(navigationBar)
-        
+                
         setupConstraints()
         
     }
@@ -62,16 +62,24 @@ class MainScreenVC: UIViewController, UINavigationBarDelegate {
         
         print("MainScreenVC viewDidLayoutSubviews()")
         
-        let statusBarPlusNavigationBarHeight = UIApplication.shared.statusBarFrame.size.height + navigationBar.frame.size.height
+        let statusBarPlusNavigationBarHeight = (view.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0) + navigationBar.frame.size.height
         
+        print("StatusBarHeight is equal to \(view.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0)")
+        
+        print("NavigationBarHeight is equal to \(navigationBar.frame.size.height)")
+                
         let totalViewControllerHeight = view.frame.size.height
+        
+        print("totalScreenHeight is equal to \(view.frame.size.height)")
         
         let viewControllerBottomSafeAreaHeight = view.safeAreaInsets.bottom
         
+        print("ViewControllerBottomSafeAreaHeight is equal to \(view.safeAreaInsets.bottom)")
+        
         let viewControllerSafeAreaHeight = totalViewControllerHeight - statusBarPlusNavigationBarHeight - viewControllerBottomSafeAreaHeight
         
-        print("View Controller safe area height \(viewControllerSafeAreaHeight)")
-        
+        print("ViewControllerSafeAreaHeight is equal to \(viewControllerSafeAreaHeight)")
+                
         verticalSpacingsBetweenButtons = (viewControllerSafeAreaHeight - sectionsCataloguesButton.frame.size.height - contactUsButton.frame.size.height)/3
         
         NSLayoutConstraint.activate([
@@ -112,15 +120,11 @@ class MainScreenVC: UIViewController, UINavigationBarDelegate {
         
         if sender.tag == 1 {
             
-            guard let nextViewControllerToGoTo = storyboard?.instantiateViewController(withIdentifier: "CataloguesVC") else {
-                
-                print("CataloguesVC could not be presented")
-                
-                return
-                
-            }
+            let main = UIStoryboard(name: "Main", bundle: nil)
             
-            present(nextViewControllerToGoTo, animated: true, completion: nil)
+            let viewControllerToGoTo = main.instantiateViewController(identifier: "CataloguesVC")
+            
+            self.present(viewControllerToGoTo, animated: true, completion: nil)
             
         } else if sender.tag == 2 {
             

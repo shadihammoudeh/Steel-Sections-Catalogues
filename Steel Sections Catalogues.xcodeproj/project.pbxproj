@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -11,6 +11,7 @@
 		CF0CB86322E8F3C800257A91 /* CataloguesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0CB86222E8F3C800257A91 /* CataloguesVC.swift */; };
 		CF0CB86522E8F43B00257A91 /* CustomCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0CB86422E8F43B00257A91 /* CustomCollectionView.swift */; };
 		CF0CB86722E8F4A700257A91 /* CustomCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0CB86622E8F4A700257A91 /* CustomCollectionViewCell.swift */; };
+		CF4A6CB1232525D40040F1ED /* CustomRangeSliderUILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4A6CB0232525D40040F1ED /* CustomRangeSliderUILabel.swift */; };
 		CF4C734722E3BEB700923B4C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4C734622E3BEB700923B4C /* AppDelegate.swift */; };
 		CF4C734922E3BEB700923B4C /* CustomUIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4C734822E3BEB700923B4C /* CustomUIButton.swift */; };
 		CF4C734C22E3BEB700923B4C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF4C734A22E3BEB700923B4C /* Main.storyboard */; };
@@ -26,6 +27,8 @@
 		CF6EAC4622ECF17900C8AC65 /* IsectionsCustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6EAC4522ECF17900C8AC65 /* IsectionsCustomTableViewCell.swift */; };
 		CF6EAC4822ECF1B900C8AC65 /* IsectionsDimensionsParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6EAC4722ECF1B900C8AC65 /* IsectionsDimensionsParameters.swift */; };
 		CF71D78C22E47FF3000FDDE9 /* CustomUINavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF71D78B22E47FF3000FDDE9 /* CustomUINavigationBar.swift */; };
+		CF74C62D232580B400807E7A /* CustomRangeSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF74C62C232580B400807E7A /* CustomRangeSlider.swift */; };
+		CFABFD29231C1E00009F923A /* FilterDataVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFABFD28231C1E00009F923A /* FilterDataVC.swift */; };
 		CFD9228522EC692400DC9757 /* BlueBookUniversalBeams.csv in Resources */ = {isa = PBXBuildFile; fileRef = CFD9228422EC692400DC9757 /* BlueBookUniversalBeams.csv */; };
 		CFD9228822EC81F500DC9757 /* BlueBookTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD9228722EC81F500DC9757 /* BlueBookTabController.swift */; };
 		CFD9228C22EC846900DC9757 /* BlueBookClosedSectionsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD9228B22EC846900DC9757 /* BlueBookClosedSectionsVC.swift */; };
@@ -38,6 +41,7 @@
 		CF0CB86222E8F3C800257A91 /* CataloguesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CataloguesVC.swift; sourceTree = "<group>"; };
 		CF0CB86422E8F43B00257A91 /* CustomCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionView.swift; sourceTree = "<group>"; };
 		CF0CB86622E8F4A700257A91 /* CustomCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewCell.swift; sourceTree = "<group>"; };
+		CF4A6CB0232525D40040F1ED /* CustomRangeSliderUILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomRangeSliderUILabel.swift; sourceTree = "<group>"; };
 		CF4C734322E3BEB700923B4C /* Steel Sections Catalogues.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Steel Sections Catalogues.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF4C734622E3BEB700923B4C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CF4C734822E3BEB700923B4C /* CustomUIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomUIButton.swift; sourceTree = "<group>"; };
@@ -55,6 +59,8 @@
 		CF6EAC4522ECF17900C8AC65 /* IsectionsCustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IsectionsCustomTableViewCell.swift; sourceTree = "<group>"; };
 		CF6EAC4722ECF1B900C8AC65 /* IsectionsDimensionsParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IsectionsDimensionsParameters.swift; sourceTree = "<group>"; };
 		CF71D78B22E47FF3000FDDE9 /* CustomUINavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomUINavigationBar.swift; sourceTree = "<group>"; };
+		CF74C62C232580B400807E7A /* CustomRangeSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomRangeSlider.swift; sourceTree = "<group>"; };
+		CFABFD28231C1E00009F923A /* FilterDataVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterDataVC.swift; sourceTree = "<group>"; };
 		CFD9228422EC692400DC9757 /* BlueBookUniversalBeams.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = BlueBookUniversalBeams.csv; path = "Steel Sections Catalogues/Model/BlueBookUniversalBeams.csv"; sourceTree = SOURCE_ROOT; };
 		CFD9228722EC81F500DC9757 /* BlueBookTabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlueBookTabController.swift; sourceTree = "<group>"; };
 		CFD9228B22EC846900DC9757 /* BlueBookClosedSectionsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlueBookClosedSectionsVC.swift; sourceTree = "<group>"; };
@@ -126,12 +132,14 @@
 			isa = PBXGroup;
 			children = (
 				CF4C734822E3BEB700923B4C /* CustomUIButton.swift */,
+				CF4A6CB0232525D40040F1ED /* CustomRangeSliderUILabel.swift */,
 				CF71D78B22E47FF3000FDDE9 /* CustomUINavigationBar.swift */,
 				CF0CB86422E8F43B00257A91 /* CustomCollectionView.swift */,
 				CF0CB86622E8F4A700257A91 /* CustomCollectionViewCell.swift */,
 				CF6EAC4322ECF13700C8AC65 /* CustomTableView.swift */,
 				CF6EAC4522ECF17900C8AC65 /* IsectionsCustomTableViewCell.swift */,
 				CF6EAC4722ECF1B900C8AC65 /* IsectionsDimensionsParameters.swift */,
+				CF74C62C232580B400807E7A /* CustomRangeSlider.swift */,
 				CF6EAC4122ECF0A000C8AC65 /* CsvParser.swift */,
 			);
 			path = Model;
@@ -147,6 +155,7 @@
 				CFD9228B22EC846900DC9757 /* BlueBookClosedSectionsVC.swift */,
 				CF6EAC3F22ECEFC000C8AC65 /* BlueBookUniversalBeamsVC.swift */,
 				CF4CAC9622F8A9B5007A7BED /* SortDataPopOverVC.swift */,
+				CFABFD28231C1E00009F923A /* FilterDataVC.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -245,22 +254,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Steel Sections Catalogues/Pods-Steel Sections Catalogues-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/BTNavigationDropdownMenu/BTNavigationDropdownMenu.framework",
-				"${BUILT_PRODUCTS_DIR}/ChameleonFramework/ChameleonFramework.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-Steel Sections Catalogues/Pods-Steel Sections Catalogues-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-			);
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BTNavigationDropdownMenu.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ChameleonFramework.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-Steel Sections Catalogues/Pods-Steel Sections Catalogues-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Steel Sections Catalogues/Pods-Steel Sections Catalogues-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Steel Sections Catalogues/Pods-Steel Sections Catalogues-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FDF2459F34C40A24F3510317 /* [CP] Check Pods Manifest.lock */ = {
@@ -300,6 +302,8 @@
 				CF4C734922E3BEB700923B4C /* CustomUIButton.swift in Sources */,
 				CF71D78C22E47FF3000FDDE9 /* CustomUINavigationBar.swift in Sources */,
 				CF4C734722E3BEB700923B4C /* AppDelegate.swift in Sources */,
+				CFABFD29231C1E00009F923A /* FilterDataVC.swift in Sources */,
+				CF74C62D232580B400807E7A /* CustomRangeSlider.swift in Sources */,
 				CF6EAC3E22EC890600C8AC65 /* BlueBookOpenRolledSectionsVC.swift in Sources */,
 				CF4C734F22E3BEB700923B4C /* Steel_Sections_Catalogues.xcdatamodeld in Sources */,
 				CF0CB86322E8F3C800257A91 /* CataloguesVC.swift in Sources */,
@@ -309,6 +313,7 @@
 				CF6EAC4022ECEFC000C8AC65 /* BlueBookUniversalBeamsVC.swift in Sources */,
 				CF6EAC4422ECF13700C8AC65 /* CustomTableView.swift in Sources */,
 				CFD9228C22EC846900DC9757 /* BlueBookClosedSectionsVC.swift in Sources */,
+				CF4A6CB1232525D40040F1ED /* CustomRangeSliderUILabel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -385,7 +390,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -441,7 +446,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;

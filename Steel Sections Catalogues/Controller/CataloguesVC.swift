@@ -48,8 +48,10 @@ class CataloguesVC: UIViewController, UICollectionViewDelegate, UICollectionView
         
         print("CataloguesVC viewDidLayoutSubviews()")
         
-        let statusBarPlusNavigationBarHeight = UIApplication.shared.statusBarFrame.size.height + navigationBar.frame.size.height
+        let statusBarPlusNavigationBarHeight = (view.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0) + navigationBar.frame.size.height
         
+        print("Status Bar Height is equal to \(view.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0)")
+                
         let totalViewControllerHeight = view.frame.size.height
         
         let viewControllerBottomSafeAreaHeight = view.safeAreaInsets.bottom
@@ -140,7 +142,7 @@ class CataloguesVC: UIViewController, UICollectionViewDelegate, UICollectionView
         
     }
     
-    // The below functionis needed in order to get rid of the gap between the NavigationBar and the Status Bar:
+    // The below functions needed in order to get rid of the gap between the NavigationBar and the Status Bar:
     
     func position(for bar: UIBarPositioning) -> UIBarPosition {
         

@@ -110,9 +110,11 @@ class BlueBookOpenRolledSectionsVC: UIViewController, UICollectionViewDelegate, 
         
         if indexPath.row == 0 {
             
-            let viewControllerToGoTo = BlueBookUniversalBeamsVC()
+            let main = UIStoryboard(name: "Main", bundle: nil)
             
-            present(viewControllerToGoTo, animated: true, completion: nil)
+            let viewControllerToGoTo = main.instantiateViewController(identifier: "BlueBookUniversalBeamsVC")
+            
+            self.present(viewControllerToGoTo, animated: true, completion: nil)
             
         }
 

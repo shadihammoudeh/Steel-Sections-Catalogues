@@ -13,10 +13,12 @@ import ChameleonFramework
 class BlueBookTabController: UITabBarController, UINavigationBarDelegate {
     
     // The below lines of code create an instance for the first and second ViewController to be displayed in the TabBar:
+            
+    let main = UIStoryboard(name: "Main", bundle: nil)
     
-    let blueBookOpenRolledSectionsVC = BlueBookOpenRolledSectionsVC()
+    lazy var blueBookOpenRolledSectionsVC = main.instantiateViewController(identifier: "BlueBookOpenRolledSectionsVC") as BlueBookOpenRolledSectionsVC
     
-    let blueBookClosedSectionsVC = BlueBookClosedSectionsVC()
+    lazy var blueBookClosedSectionsVC = main.instantiateViewController(identifier: "BlueBookClosedSectionsVC") as BlueBookClosedSectionsVC
     
     lazy var navigationBar = CustomUINavigationBar(normalStateNavBarLeftButtonImage: "normalStateBackButton", highlightedStateNavBarLeftButtonImage: "highlightedStateBackButton", navBarLeftButtonTarget: self, navBarLeftButtonSelector: #selector(navigationBarLeftButtonPressed(sender:)), labelTitleText: "BlueBook Catalogue", titleLabelFontHexColourCode: "#000000", labelTitleFontSize: 18, labelTitleFontType: "AppleSDGothicNeo-Medium", isNavBarTranslucent: false, navBarBackgroundColourHexCode: "#FFFFFF", navBarBackgroundColourAlphaValue: 1.0, navBarStyle: .black, preferLargeTitles: false, navBarDelegate: self, navBarItemsHexColourCode: "#FF4F40")
     
@@ -42,6 +44,9 @@ class BlueBookTabController: UITabBarController, UINavigationBarDelegate {
         
         print("BlueBookTabController viewWillLayoutSubviews()")
         
+        setupNavigationBarConstraint()
+
+        
     }
     
     override func viewDidLayoutSubviews() {
@@ -50,13 +55,11 @@ class BlueBookTabController: UITabBarController, UINavigationBarDelegate {
         
         print("BlueBookTabController viewDidLayoutSubviews()")
         
-        setupNavigationBarConstraint()
-        
         // The below line of code calculates the total height of the BlueBookTabController statusBar as well as its NavigationBar and pass the total to the BlueBookOpenRolledSectionsVC:
         
-        blueBookOpenRolledSectionsVC.blueBookControllerStatusBarHeight = UIApplication.shared.statusBarFrame.height
+        blueBookOpenRolledSectionsVC.blueBookControllerStatusBarHeight = view.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
         
-        print("BlueBookTabController StatusBar Height is equal to \(UIApplication.shared.statusBarFrame.height)")
+        print("BlueBookTabController StatusBar Height is equal to \(view.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0)")
         
         blueBookOpenRolledSectionsVC.blueBookControllerNavigationBarHeight = navigationBar.frame.size.height
         
@@ -76,7 +79,6 @@ class BlueBookTabController: UITabBarController, UINavigationBarDelegate {
         
         print("BlueBookTabController viewDidAppear()")
         
-        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -92,16 +94,10 @@ class BlueBookTabController: UITabBarController, UINavigationBarDelegate {
     }
     
     @objc func navigationBarLeftButtonPressed(sender : UIButton) {
+                
+        let viewControllerToGoTo = main.instantiateViewController(identifier: "CataloguesVC")
         
-        guard let nextViewControllerToGoTo = storyboard?.instantiateViewController(withIdentifier: "CataloguesVC") else {
-            
-            print("CataloguesVC could not be presented")
-            
-            return
-            
-        }
-        
-        present(nextViewControllerToGoTo, animated: true, completion: nil)
+        self.present(viewControllerToGoTo, animated: true, completion: nil)
         
     }
     

@@ -10,17 +10,39 @@ import UIKit
 
 class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UINavigationBarDelegate, UIPopoverPresentationControllerDelegate, PassDataBackToBlueBookUniversalBeamsVCDelegate {
     
-    // The value of the below Variable is set by default to be equal to "Section Designation" which means that the data displayed inside the table will be sorted by Section Designation in Ascending Order as soon as this ViewController loads up for the first time:
+    // MARK: Instance Variables definitions:
+        
+    // The value of the below Variable is set by default to be equal to "Sorted by: Section Designation in Ascending Order" which means that the data displayed inside the table will be sorted by Section Designation in Ascending Order as soon as this ViewController loads up for the first time:
     
     var sortBy: String = "Sorted by: Section Designation in Ascending Order"
     
-    // The below line of code creates an instance from the IsectionsCustomTableViewCell, which is going to be the cell used inside our tableView to display data:
+    var searchBar = UISearchBar()
+    
+    var isSearching = false
+    
+    // The below array represents the filtered array out of the universalBeamsArrayDataExtractedFromTheCsvFileUsingTheParser as per the search criteria the user has typed inside the Search Bar:
+    
+    var filteredArrayOutOfUniversalBeamsArrayDataExtractedFromTheCsvFileUsingTheParserAsPerSearchedCharacters = [IsectionsDimensionsParameters]()
+    
+    // The below code line declares the custom NavigationBar to be added to this ViewController. The reason it is defined as a lazy var, is to allow us to access the view properties of this ViewController. Since the custom NavigationBar is defined outside the viewDidLoad methods, or other methods where UIVIew is available. This navigationBar is going to have a left button (back button), Title in the middle (UILabel) and a rightButton (Sort Data):
+    
+    lazy var navigationBar = CustomUINavigationBar(rightNavBarTitle: "Sort Data", rightNavBarTitleHexColourCodeNormalState: "#333301", rightNavBarTitleHexColourCodeHighlightedState: "#FFFF05", rightNavBarButtonTarget: self, rightNavBarSelector: #selector(navigationBarRightButtonPressed(sender:)), isNavBarTranslucent: false, navBarBackgroundColourHexCode: "#CCCC04", navBarBackgroundColourAlphaValue: 1.0, navBarStyle: .black, preferLargeTitles: false, navBarDelegate: self, navBarItemsHexColourCode: "#E0E048", normalStateNavBarLeftButtonImage: "normalStateBackButton", highlightedStateNavBarLeftButtonImage: "highlightedStateBackButton", navBarLeftButtonTarget: self, navBarLeftButtonSelector: #selector(navigationBarLeftButtonPressed(sender:)), labelTitleText: "Universal Beams (UB)", titleLabelFontHexColourCode: "#FFFF52", labelTitleFontSize: 16, labelTitleFontType: "AppleSDGothicNeo-Light")
+    
+    lazy var universalBeamsTableView = CustomTableView(tableViewBackgroundColourHexCode: "#0D0D0D", tableViewDelegate: self, tableViewDataSource: self, tableViewCustomCellClassToBeRegistered: IsectionsCustomTableViewCell.self, tableViewCustomCellReuseIdentifierToBeRegistered: "customCell")
+    
+    // The below line of code creates an instance from the IsectionsCustomTableViewCell, which is going to be the custom cell used inside our tableView to display data:
     
     let tableViewCustomCellClass = IsectionsCustomTableViewCell()
     
-    let sectionDesignationLabelFontName: String = "AppleSDGothicNeo-Bold"
+    // The below Array is the one which contains the data extracted from the passed CSV file. It contains the data in a one big Array, which contains several Arrays inside it, whereby each Array inside the big Array contains several Dictionaries. The below Array is going to be filled using the CSV parser which will be used later on:
     
-    var tableSectionHeaderFont = UIFont(name: "AppleSDGothicNeo-Bold", size: 25)
+    var universalBeamsArrayDataExtractedFromTheCsvFileUsingTheParser = [IsectionsDimensionsParameters]()
+    
+    // The below Array is mapped from the above Array, whereby only sectionSerialNumbers are reported inside of it, with no duplication using the extension at the end of this Class (i.e., Array):
+    
+    var universalBeamsSectionSerialNumberArray: [String] = []
+    
+    let sectionDesignationLabelFontName: String = "AppleSDGothicNeo-Bold"
     
     let sectionDesignationLabelFontSize: CGFloat = 18
     
@@ -32,28 +54,6 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
     
     let subscriptAndSuperscriptChractersFontSize: CGFloat = 9
     
-    // The below code line declares the custom NavigationBar to be added to this ViewController. The reason it is defined as a lazy var, is to allow us to access the view properties of this ViewController. Since the custom NavigationBar is defined outside the viewDidLoad methods, or other methods where view will be available. This navigationBar is going to have a left button (back button), Title in the middle (UILabel) and a rightButton (S
-    
-    lazy var navigationBar = CustomUINavigationBar(rightNavBarTitle: "Sort Data", rightNavBarTitleHexColourCodeNormalState: "#333301", rightNavBarTitleHexColourCodeHighlightedState: "#FFFF05", rightNavBarButtonTarget: self, rightNavBarSelector: #selector(navigationBarRightButtonPressed(sender:)), isNavBarTranslucent: false, navBarBackgroundColourHexCode: "#CCCC04", navBarBackgroundColourAlphaValue: 1.0, navBarStyle: .black, preferLargeTitles: false, navBarDelegate: self, navBarItemsHexColourCode: "#E0E048", normalStateNavBarLeftButtonImage: "normalStateBackButton", highlightedStateNavBarLeftButtonImage: "highlightedStateBackButton", navBarLeftButtonTarget: self, navBarLeftButtonSelector: #selector(navigationBarLeftButtonPressed(sender:)), labelTitleText: "Universal Beams (UB)", titleLabelFontHexColourCode: "#FFFF52", labelTitleFontSize: 16, labelTitleFontType: "AppleSDGothicNeo-Light")
-    
-    lazy var universalBeamsTableView = CustomTableView(tableViewBackgroundColourHexCode: "#0D0D0D", tableViewDelegate: self, tableViewDataSource: self, tableViewCustomCellClassToBeRegistered: IsectionsCustomTableViewCell.self, tableViewCustomCellReuseIdentifierToBeRegistered: "customCell")
-    
-    var searchBar = UISearchBar()
-    
-    // The below Array is the one which contains the data extracted from the passed CSV file. It contains the data in a one big Array, which contains several Arrays inside it, whereby each Array inside the big Array contains several Dictionaries. The below Array is going to be filled using the CSV parser which will be used later on:
-    
-    var universalBeamsArrayDataExtractedFromTheCsvFileUsingTheParser = [IsectionsDimensionsParameters]()
-    
-    // The below array represents the filtered array out of the universalBeamsArrayDataExtractedFromTheCsvFileUsingTheParser as per the search criteria the user has typed:
-    
-    var filteredArrayOutOfUniversalBeamsArrayDataExtractedFromTheCsvFileUsingTheParserAsPerSearchedCharacters = [IsectionsDimensionsParameters]()
-    
-    var isSearching = false
-    
-    // The below Array is mapped from the above Array, whereby only sectionSerialNumbers are reported inside of it, with no duplication using the extension at the end of this Class (i.e., Array):
-    
-    var universalBeamsSectionSerialNumberArray: [String] = []
-    
     // The below is the first ViewController cycle:
     
     override func viewDidLoad() {
@@ -62,31 +62,29 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
         
         print("UniversalBeamsViewController viewDidLoad()")
         
-        //Looks for single or multiple taps.
+        // The below code is needed in order to detect when a user has tapped on the screen, consequently dismisses the displayed on-screen keyboard:
         
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
-        
-        view.addGestureRecognizer(tap)
+        let tapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
         
         setupSearchBar()
         
-        // The below line of code changes the colour of the text displayed inside the search bar:
+        // MARK: Adding subViews:
         
-        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.red]
+        view.addGestureRecognizer(tapGesture)
         
         view.addSubview(searchBar)
-
+        
         view.addSubview(navigationBar)
         
         view.addSubview(universalBeamsTableView)
         
-        print("Navigation bar height is equal to \(navigationBar.frame.size.height)")
+        // MARK: Parsing CSV file:
         
-        // We are going to call the parse function on the appropriate CSV file as soon as the application loads in order to extract the needed data to populate the table:
+        // We are going to call the parse function on the appropriate CSV file as soon as the application loads in order to extract the needed data to populate the tableView:
         
         parseCsvFile(csvFileToParse: "BlueBookUniversalBeams")
         
-        // The below code sorts the Data reported from the relevant CSV file using the Parser either in Ascending order by "Section Designation" by default:
+        // The below code sorts the Data reported from the relevant CSV file using the Parser in Ascending Order by Section Designation by default, every time the view loads-up for the first time:
         
         universalBeamsArrayDataExtractedFromTheCsvFileUsingTheParser.sort {
             
@@ -122,32 +120,19 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
         
         print("UniversalBeamsViewController viewWillAppear()")
         
-        print("Navigation bar height is equal to \(navigationBar.frame.size.height)")
-
-        
     }
     
     override func viewWillLayoutSubviews() {
         
         print("UniversalBeamsViewController viwWillLaoutSubviews()")
         
-        print("Navigation bar height is equal to \(navigationBar.frame.size.height)")
-        
-        NSLayoutConstraint.activate([
-            
-            navigationBar.leftAnchor.constraint(equalTo: view.leftAnchor),
-            
-            navigationBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            
-            navigationBar.rightAnchor.constraint(equalTo: view.rightAnchor)
-            
-            ])
-        
     }
     
     override func viewDidLayoutSubviews() {
         
         print("UniversalBeamsViewController viewDidLayoutSubViews()")
+        
+        // MARK: Applying constraints to Navigation Bar, Search Bar and Table View:
         
         setupConstraints()
         
@@ -171,25 +156,23 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
         
     }
     
-    // MARK: tableView numberOfSections method:
-
+    // MARK: tableView Delegate Methods:
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         
-        // The below code checks if sortBy is not equal to the default value of "Section Designation" (i.e., the user selected to sort the table Data by a specific criteria other than Section Designation) then if the user selected to sort the Data by either Depth of Section or Width of Section or Area of Section then set the numbers of sections inside the table to be equal to 0. Otherwise, the number of sections will be equal to the number of items inside the universalBeamsSectionSerialNumberArray:
+        // The below lines of code check the values of the sortBy and isSearching Variables in order to decide on how many section the tableView should contains:
         
-        if sortBy == "Sorted by: Depth of Section in Ascending Order" || sortBy == "Sorted by: Width of Section in Ascending Order" || sortBy == "Sorted by: Section Area in Ascending Order" || sortBy == "Sorted by: Depth of Section in Descending Order" || sortBy == "Sorted by: Width of Section in Descending Order" || sortBy == "Sorted by: Section Area in Descending Order" || isSearching == true {
+        if isSearching == false && (sortBy == "Sorted by: Section Designation in Ascending Order" || sortBy == "Sorted by: Section Designation in Descending Order") {
             
-            return 1
+            return universalBeamsSectionSerialNumberArray.count
             
         } else {
             
-            return universalBeamsSectionSerialNumberArray.count
+            return 1
             
         }
         
     }
-    
-    // MARK: tableView viewForHeaderInSection method:
     
     // The below function defines the properties of section headers as well as what should be displayed inside them:
     
@@ -201,7 +184,7 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
         
         sectionHeaderTitle.translatesAutoresizingMaskIntoConstraints = false
         
-        sectionHeaderTitle.font = tableSectionHeaderFont
+        sectionHeaderTitle.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 25)
         
         sectionHeaderView.backgroundColor = UIColor(hexString: "#BF2C0B")
         
@@ -217,7 +200,7 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
             
         } else if isSearching == true {
             
-            sectionHeaderTitle.text = "Searched data..."
+            sectionHeaderTitle.text = "Searched data:"
             
         } else {
             
@@ -242,8 +225,6 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
         return sectionHeaderView
         
     }
-    
-    // MARK: tableView numberOfRowsInSection method:
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
@@ -270,8 +251,6 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
         }
         
     }
-    
-    // MARK: tableView cellForRowAt indexPath method:
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
@@ -353,7 +332,7 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
             
             cell.sectionMassPerMetreLabel.text = "Mass per Metre [kg/m] = " + String(filteredArrayOutOfUniversalBeamsArrayDataExtractedFromTheCsvFileUsingTheParserAsPerSearchedCharacters.map({ $0.sectionMassPerMetre })[indexPath.row])
             
-            let attributedAreaOfSectionString: NSMutableAttributedString = NSMutableAttributedString(string: "Area of Section, A [cm2] = \(String(universalBeamsArrayDataExtractedFromTheCsvFileUsingTheParser.map({ $0.areaOfSection })[indexPath.row]))", attributes: [.font: UIFont(name: otherCustomCellLabelsFontName, size: otherCustomCellLabelsFontSize)])
+            let attributedAreaOfSectionString: NSMutableAttributedString = NSMutableAttributedString(string: "Area of Section, A [cm2] = \(String(filteredArrayOutOfUniversalBeamsArrayDataExtractedFromTheCsvFileUsingTheParserAsPerSearchedCharacters.map({ $0.areaOfSection })[indexPath.row]))", attributes: [.font: UIFont(name: otherCustomCellLabelsFontName, size: otherCustomCellLabelsFontSize)])
             
             attributedAreaOfSectionString.setAttributes([.font: UIFont(name: subscripAndSuperscriptChractersFontName, size: subscriptAndSuperscriptChractersFontSize),.baselineOffset: 5.5], range: NSRange(location: 22, length: 1))
             
@@ -381,9 +360,11 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
     
     @objc func navigationBarLeftButtonPressed(sender : UIButton) {
         
-        let viewControllerToGoTo = BlueBookTabController()
+        let main = UIStoryboard(name: "Main", bundle: nil)
         
-        present(viewControllerToGoTo, animated: true, completion: nil)
+        let previousViewControllerToGoTo = main.instantiateViewController(withIdentifier: "BlueBookTabController")
+        
+        self.present(previousViewControllerToGoTo, animated: true, completion: nil)
         
     }
     
@@ -421,7 +402,15 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
         
         viewControllerToPassDataTo.delegate = self
         
-        viewControllerToPassDataTo.passedUniversalBeamsDataArrayFromBlueBookUniversalBeamsVC = self.universalBeamsArrayDataExtractedFromTheCsvFileUsingTheParser
+        if isSearching == true {
+            
+            viewControllerToPassDataTo.passedUniversalBeamsDataArrayFromBlueBookUniversalBeamsVC = self.filteredArrayOutOfUniversalBeamsArrayDataExtractedFromTheCsvFileUsingTheParserAsPerSearchedCharacters
+            
+        } else {
+            
+            viewControllerToPassDataTo.passedUniversalBeamsDataArrayFromBlueBookUniversalBeamsVC = self.universalBeamsArrayDataExtractedFromTheCsvFileUsingTheParser
+            
+        }
         
         present(popOverViewController, animated: true, completion:{
             
@@ -432,9 +421,13 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
     }
     
     //Calls this function when the tap is recognized.
+    
     @objc func dismissKeyboard() {
+        
         //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        
         view.endEditing(true)
+        
     }
     
     func prepareForPopoverPresentation(_ popoverPresentationController: UIPopoverPresentationController) {
@@ -475,12 +468,22 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
         
         searchBar.delegate = self
         
+        searchBar.showsBookmarkButton = true
+        
+        searchBar.setImage(UIImage(named: "filterButtonIcon"), for: .bookmark, state: .normal)
+
         searchBar.translatesAutoresizingMaskIntoConstraints = false
+        
+        searchBar.tintColor = UIColor.blue
         
         searchBar.sizeToFit()
         
+        // The below line of code changes the colour of the text displayed inside the search bar:
+        
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.red]
+        
         searchBar.placeholder = "Search by Section Designation..."
-
+        
         searchBar.barStyle = UIBarStyle.default
         
         // The below line of code sets the frame's background colour of the UISearchBar:
@@ -501,15 +504,15 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
         
         NSLayoutConstraint.activate([
             
-//            navigationBar.leftAnchor.constraint(equalTo: view.leftAnchor),
-//
-//            navigationBar.rightAnchor.constraint(equalTo: view.rightAnchor),
-//
-//            navigationBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            navigationBar.leftAnchor.constraint(equalTo: view.leftAnchor),
+            
+            navigationBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            
+            navigationBar.rightAnchor.constraint(equalTo: view.rightAnchor),
             
             searchBar.leftAnchor.constraint(equalTo: view.leftAnchor),
             
-            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: navigationBar.frame.size.height),
+            searchBar.topAnchor.constraint(equalTo: navigationBar.bottomAnchor),
             
             searchBar.rightAnchor.constraint(equalTo: view.rightAnchor),
             
@@ -524,6 +527,8 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
             ])
         
     }
+    
+    // MARK: CSV Parser Method:
     
     // We want to create a function that will parse the Universal Beam CSV data into a format that is useful:
     
@@ -632,7 +637,17 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
         
         self.sortBy = sortBy
         
-        self.universalBeamsArrayDataExtractedFromTheCsvFileUsingTheParser = sortedArrayToBePassed
+        if isSearching == true {
+            
+            self.filteredArrayOutOfUniversalBeamsArrayDataExtractedFromTheCsvFileUsingTheParserAsPerSearchedCharacters = sortedArrayToBePassed
+            
+            
+        } else {
+            
+            self.universalBeamsArrayDataExtractedFromTheCsvFileUsingTheParser = sortedArrayToBePassed
+            
+            
+        }
         
         self.universalBeamsSectionSerialNumberArray = sortedArrayToBePassed.map({ return $0.sectionSerialNumber }).removingDuplicates()
         
@@ -713,7 +728,7 @@ extension BlueBookUniversalBeamsVC: UISearchBarDelegate {
                 newText.deleteCharacters(in: NSRange(location: 8, length: 3))
                 
                 searchBar.text = String(newText)
-            
+                
             } else if searchText.count == 5 && searchText.contains("1016") == false {
                 
                 newText.deleteCharacters(in: NSRange(location: 2, length: 3))
@@ -739,7 +754,7 @@ extension BlueBookUniversalBeamsVC: UISearchBarDelegate {
                 searchBar.text = String(newText)
                 
             }
-                        
+            
             filteredArrayOutOfUniversalBeamsArrayDataExtractedFromTheCsvFileUsingTheParserAsPerSearchedCharacters = universalBeamsArrayDataExtractedFromTheCsvFileUsingTheParser.filter({ $0.fullSectionDesignation.lowercased().prefix(searchText.count) == searchText.lowercased() })
             
             isSearching = true
@@ -760,7 +775,25 @@ extension BlueBookUniversalBeamsVC: UISearchBarDelegate {
         
         let totalCharacters = (searchBar.text?.appending(text).count ?? 0) - range.length
         
-        return totalCharacters <= 16
+        // The below allow the user to input only numbers in the Search Bar:
+        
+        if searchBar.keyboardType == .numberPad {
+            
+            // Check for invalid input characters:
+            
+            if CharacterSet(charactersIn: "0123456789").isSuperset(of: CharacterSet(charactersIn: text)) {
+                
+                return totalCharacters <= 16 && true
+                
+            } else {
+                
+                return false
+                
+            }
+            
+        }
+        
+        return true
         
     }
     
@@ -769,6 +802,18 @@ extension BlueBookUniversalBeamsVC: UISearchBarDelegate {
         isSearching = false
         
         self.searchBar.endEditing(true)
+        
+    }
+    
+    func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {
+        
+        let main = UIStoryboard(name: "Main", bundle: nil)
+        
+        let viewControllerToGoTo = main.instantiateViewController(withIdentifier: "FilterDataVC") as! FilterDataVC
+        
+        viewControllerToGoTo.universalBeamsDataArrayPassedFromPreviousVC = universalBeamsArrayDataExtractedFromTheCsvFileUsingTheParser
+        
+        self.present(viewControllerToGoTo, animated: true, completion: nil)
         
     }
     

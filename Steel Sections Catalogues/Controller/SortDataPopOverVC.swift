@@ -114,6 +114,8 @@ class SortDataPopOverVC: UIViewController {
         
         switch (sortDataByPickerView.selectedRow(inComponent: 0), sortDataByPickerView.selectedRow(inComponent: 1)) {
             
+            // Sorting data inside Array by Section Designation in Ascending Order:
+            
         case (0, 0):
             
             passedUniversalBeamsDataArrayFromBlueBookUniversalBeamsVC.sort {
