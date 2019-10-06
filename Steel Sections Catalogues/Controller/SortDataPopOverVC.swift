@@ -10,23 +10,25 @@ import UIKit
 
 import ChameleonFramework
 
-// The below Protocol is required in order to pass data backwards to the previous ViewController (i.e., BlueBookUniversalBeamsVC) as soon as this ViewController gets dismissed:
-
-protocol PassDataBackToBlueBookUniversalBeamsVCDelegate {
-    
-    func popOverViewControllerWillDismiss(sortedArrayToBePassed: [IsectionsDimensionsParameters], sortBy: String)
-    
-}
-
 class SortDataPopOverVC: UIViewController {
+    
+    // MARK: - Assigning protocol delegate:
     
     // Here we are setting a delegate inside the SortDataPopOverVC in order to be able to access all the methods inside the Protocol:
     
-    var delegate: PassDataBackToBlueBookUniversalBeamsVCDelegate?
+    var delegate: PassingDataBackwardsProtocol?
     
-    // The below Variable gets passed from the BlueBookUniversalBeamsVC as soon as this Popover gets displayed on screen:
+    // MARK: - Instance scope variables and constants declarations:
     
-    var passedUniversalBeamsDataArrayFromBlueBookUniversalBeamsVC = [IsectionsDimensionsParameters]()
+    // The below variables (i.e., sortBy, isSearching and filtersApplied) will be passed from BlueBookUniversalBeamsVC, and when this ViewController gets dismissed, any made changes to these variables will be sent back to BlueBookUniversalBeamsVC using the Protocol:
+    
+    var sortBy: String = "Sorted by: Section Designation in Ascending Order"
+    
+    var isSearching: Bool = false
+    
+    var filtersApplied: Bool = false
+    
+    var universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC = [IsectionsDimensionsParameters]()
     
     // Below we are creating an instance from the UIPickerView class:
     
@@ -39,8 +41,10 @@ class SortDataPopOverVC: UIViewController {
     // The below two arrays represent the items to be displayed inside the UIPickerView components (i.e., columns):
     
     let sortDataByPickerViewComponentZeroArray = ["Ascending Order:", "Descending Order:"]
-
+    
     let sortDataByPickerViewComponentOneArray = ["Section Designation","Depth, d","Width, b","Area of Section, A"]
+    
+    // MARK: - viewDidLoad():
     
     override func viewDidLoad() {
         
@@ -51,6 +55,8 @@ class SortDataPopOverVC: UIViewController {
         setupPickerView()
         
         setupToolBar()
+        
+        // MARK: - Adding subViews and assigning their constraints:
         
         view.addSubview(sortDataByPickerView)
         
@@ -63,16 +69,16 @@ class SortDataPopOverVC: UIViewController {
             toolBar.rightAnchor.constraint(equalTo: view.rightAnchor),
             
             toolBar.topAnchor.constraint(equalTo: view.topAnchor),
-
+            
             sortDataByPickerView.leftAnchor.constraint(equalTo: view.leftAnchor),
-
+            
             sortDataByPickerView.rightAnchor.constraint(equalTo: view.rightAnchor),
-
+            
             sortDataByPickerView.topAnchor.constraint(equalTo: toolBar.bottomAnchor),
             
             sortDataByPickerView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-
-            ])
+            
+        ])
         
     }
     
@@ -108,17 +114,19 @@ class SortDataPopOverVC: UIViewController {
         
     }
     
+    // MARK: - ToolBar button pressed (i.e., Apply button):
+    
     // The below function will be triggered when the user taps on the Apply button contained inside the ToolBar. It is going to check the sort criteria the user is after and send the sorted Array back to the previous ViewController (i.e., BlueBookUniversalBeamsVC) in order to display data accordingly:
     
     @objc func toolBarButtonPressed(sender: UIBarButtonItem) {
         
         switch (sortDataByPickerView.selectedRow(inComponent: 0), sortDataByPickerView.selectedRow(inComponent: 1)) {
             
-            // Sorting data inside Array by Section Designation in Ascending Order:
+        // MARK: - PickerView switch case for Sorting data inside Array by Section Designation in Ascending Order:
             
         case (0, 0):
             
-            passedUniversalBeamsDataArrayFromBlueBookUniversalBeamsVC.sort {
+            universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC.sort {
                 
                 if $0.firstSectionSeriesNumber != $1.firstSectionSeriesNumber {
                     
@@ -137,17 +145,18 @@ class SortDataPopOverVC: UIViewController {
             }
             
             if delegate != nil {
-                delegate?.popOverViewControllerWillDismiss(sortedArrayToBePassed: passedUniversalBeamsDataArrayFromBlueBookUniversalBeamsVC, sortBy: "Sorted by: Section Designation in Ascending Order")
-                
+                                
+                delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC, sortBy: "Sorted by: Section Designation in Ascending Order", filtersApplied: self.filtersApplied, isSearching: self.isSearching)
+                                
             }
-
+                        
             dismiss(animated: true, completion: {})
             
-            // Sort Depth of Section by Ascending Order:
-
+        // MARK: - PickerView switch case for Sorting data inside Array by Depth of Section in Ascending Order:
+            
         case (0, 1):
             
-            passedUniversalBeamsDataArrayFromBlueBookUniversalBeamsVC.sort {
+            universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC.sort {
                 
                 if $0.depthOfSection != $1.depthOfSection {
                     
@@ -174,19 +183,18 @@ class SortDataPopOverVC: UIViewController {
             }
             
             if delegate != nil {
-                delegate?.popOverViewControllerWillDismiss(sortedArrayToBePassed: passedUniversalBeamsDataArrayFromBlueBookUniversalBeamsVC, sortBy: "Sorted by: Depth of Section in Ascending Order")
                 
+                delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC, sortBy: "Sorted by: Depth of Section in Ascending Order", filtersApplied: self.filtersApplied, isSearching: self.isSearching)
+               
             }
             
-            dismiss(animated: true) {
-                
-            }
+            dismiss(animated: true, completion: {})
             
-            // Sort Width of Section by Ascending Order:
-
+        // MARK: - PickerView switch case for Sorting data inside Array by Width of Section in Ascending Order:
+            
         case (0, 2):
             
-            passedUniversalBeamsDataArrayFromBlueBookUniversalBeamsVC.sort {
+            universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC.sort {
                 
                 if $0.widthOfSection != $1.widthOfSection {
                     
@@ -213,19 +221,18 @@ class SortDataPopOverVC: UIViewController {
             }
             
             if delegate != nil {
-                delegate?.popOverViewControllerWillDismiss(sortedArrayToBePassed: passedUniversalBeamsDataArrayFromBlueBookUniversalBeamsVC, sortBy: "Sorted by: Width of Section in Ascending Order")
+                
+                delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC, sortBy: "Sorted by: Width of Section in Ascending Order", filtersApplied: self.filtersApplied, isSearching: self.isSearching)
                 
             }
             
-            dismiss(animated: true) {
-                
-            }
-
-            // Sort Area of Section by Ascending Order:
-
+            dismiss(animated: true, completion: {})
+            
+        // MARK: - PickerView switch case for Sorting data inside Array by Area of Section in Ascending Order:
+            
         case(0, 3):
             
-            passedUniversalBeamsDataArrayFromBlueBookUniversalBeamsVC.sort {
+            universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC.sort {
                 
                 if $0.areaOfSection != $1.areaOfSection {
                     
@@ -253,19 +260,18 @@ class SortDataPopOverVC: UIViewController {
             
             
             if delegate != nil {
-                delegate?.popOverViewControllerWillDismiss(sortedArrayToBePassed: passedUniversalBeamsDataArrayFromBlueBookUniversalBeamsVC, sortBy: "Sorted by: Section Area in Ascending Order")
+                
+                delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC, sortBy: "Sorted by: Section Area in Ascending Order", filtersApplied: self.filtersApplied, isSearching: self.isSearching)
                 
             }
             
-            dismiss(animated: true) {
-                
-            }
+            dismiss(animated: true, completion: {})
             
-            // Sort Section Designation by Descending Order:
-
+        // MARK: - PickerView switch case for Sorting data inside Array by Section Designation in Descending Order:
+            
         case(1, 0):
             
-            passedUniversalBeamsDataArrayFromBlueBookUniversalBeamsVC.sort {
+            universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC.sort {
                 
                 if $0.firstSectionSeriesNumber != $1.firstSectionSeriesNumber {
                     
@@ -284,19 +290,18 @@ class SortDataPopOverVC: UIViewController {
             }
             
             if delegate != nil {
-                delegate?.popOverViewControllerWillDismiss(sortedArrayToBePassed: passedUniversalBeamsDataArrayFromBlueBookUniversalBeamsVC, sortBy: "Sorted by: Section Designation in Descending Order")
+                
+                delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC, sortBy: "Sorted by: Section Designation in Descending Order", filtersApplied: self.filtersApplied, isSearching: self.isSearching)
                 
             }
             
-            dismiss(animated: true) {
-                
-            }
+            dismiss(animated: true, completion: {})
             
-            // Sort Depth of Section by Descending Order:
+        // MARK: - PickerView switch case for Sorting data inside Array by Depth of Section in Descending Order:
             
         case(1, 1):
             
-            passedUniversalBeamsDataArrayFromBlueBookUniversalBeamsVC.sort {
+            universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC.sort {
                 
                 if $0.depthOfSection != $1.depthOfSection {
                     
@@ -323,21 +328,18 @@ class SortDataPopOverVC: UIViewController {
             }
             
             if delegate != nil {
-                delegate?.popOverViewControllerWillDismiss(sortedArrayToBePassed: passedUniversalBeamsDataArrayFromBlueBookUniversalBeamsVC, sortBy: "Sorted by: Depth of Section in Descending Order")
+                
+                delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC, sortBy: "Sorted by: Depth of Section in Descending Order", filtersApplied: self.filtersApplied, isSearching: self.isSearching)
                 
             }
             
-            dismiss(animated: true) {
-                
-            }
-
-            // Sort Width of Section by Descending Order:
+            dismiss(animated: true, completion: {})
+            
+        // MARK: - PickerView switch case for Sorting data inside Array by Width of Section in Descending Order:
             
         case(1, 2):
-            
-            // Sort Area of Section by Descending Order:
-            
-            passedUniversalBeamsDataArrayFromBlueBookUniversalBeamsVC.sort {
+                        
+            universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC.sort {
                 
                 if $0.widthOfSection != $1.widthOfSection {
                     
@@ -364,18 +366,18 @@ class SortDataPopOverVC: UIViewController {
             }
             
             if delegate != nil {
-                delegate?.popOverViewControllerWillDismiss(sortedArrayToBePassed: passedUniversalBeamsDataArrayFromBlueBookUniversalBeamsVC, sortBy: "Sorted by: Width of Section in Descending Order")
+                
+                delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC, sortBy: "Sorted by: Width of Section in Descending Order", filtersApplied: self.filtersApplied, isSearching: self.isSearching)
                 
             }
             
-            dismiss(animated: true) {
-                
-            }
+            dismiss(animated: true, completion: {})
+            
+        // MARK: - PickerView switch case for Sorting data inside Array by Area of Section in Descending Order:
 
-            
         case(1, 3):
             
-            passedUniversalBeamsDataArrayFromBlueBookUniversalBeamsVC.sort {
+            universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC.sort {
                 
                 if $0.areaOfSection != $1.areaOfSection {
                     
@@ -401,22 +403,20 @@ class SortDataPopOverVC: UIViewController {
                 
             }
             
-            
             if delegate != nil {
-                delegate?.popOverViewControllerWillDismiss(sortedArrayToBePassed: passedUniversalBeamsDataArrayFromBlueBookUniversalBeamsVC, sortBy: "Sorted by: Section Area in Descending Order")
+                
+                delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC, sortBy: "Sorted by: Section Area in Descending Order", filtersApplied: self.filtersApplied, isSearching: self.isSearching)
                 
             }
             
-            dismiss(animated: true) {
-                
-            }
-            
+            dismiss(animated: true, completion: {})
+
         case (_, _):
             
             print("Not in list of selection")
             
         }
-
+        
     }
     
     override func viewWillLayoutSubviews() {
@@ -456,6 +456,8 @@ class SortDataPopOverVC: UIViewController {
     }
     
 }
+
+// MARK: - Extensions for UIPickerView:
 
 // It is considered to be a good code practice to place the Delegates and Datasoure protocols required for each element such as UIPickerView and UITableView in their own extension. As this makes things easier to read and easier to figure out where the bugs occured:
 
