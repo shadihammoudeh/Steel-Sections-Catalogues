@@ -22,7 +22,7 @@ class SortDataPopOverVC: UIViewController {
     
     // The below variables (i.e., sortBy, isSearching and filtersApplied) will be passed from BlueBookUniversalBeamsVC, and when this ViewController gets dismissed, any made changes to these variables will be sent back to BlueBookUniversalBeamsVC using the Protocol:
     
-    var sortBy: String = "Sorted by: Section Designation in Ascending Order"
+    var sortBy: String = "None"
     
     var isSearching: Bool = false
     
@@ -146,7 +146,7 @@ class SortDataPopOverVC: UIViewController {
             
             if delegate != nil {
                                 
-                delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC, sortBy: "Sorted by: Section Designation in Ascending Order", filtersApplied: self.filtersApplied, isSearching: self.isSearching)
+                delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC, sortBy: "Sorted by: Section Designation in ascending order", filtersApplied: false, isSearching: false)
                                 
             }
                         
@@ -184,7 +184,7 @@ class SortDataPopOverVC: UIViewController {
             
             if delegate != nil {
                 
-                delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC, sortBy: "Sorted by: Depth of Section in Ascending Order", filtersApplied: self.filtersApplied, isSearching: self.isSearching)
+                delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC, sortBy: "Sorted by: Depth of Section in ascending order", filtersApplied: false, isSearching: false)
                
             }
             
@@ -222,7 +222,7 @@ class SortDataPopOverVC: UIViewController {
             
             if delegate != nil {
                 
-                delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC, sortBy: "Sorted by: Width of Section in Ascending Order", filtersApplied: self.filtersApplied, isSearching: self.isSearching)
+                delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC, sortBy: "Sorted by: Width of Section in ascending order", filtersApplied: false, isSearching: false)
                 
             }
             
@@ -261,7 +261,7 @@ class SortDataPopOverVC: UIViewController {
             
             if delegate != nil {
                 
-                delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC, sortBy: "Sorted by: Section Area in Ascending Order", filtersApplied: self.filtersApplied, isSearching: self.isSearching)
+                delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC, sortBy: "Sorted by: Section Area in ascending order", filtersApplied: false, isSearching: false)
                 
             }
             
@@ -291,7 +291,7 @@ class SortDataPopOverVC: UIViewController {
             
             if delegate != nil {
                 
-                delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC, sortBy: "Sorted by: Section Designation in Descending Order", filtersApplied: self.filtersApplied, isSearching: self.isSearching)
+                delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC, sortBy: "Sorted by: Section Designation in descending order", filtersApplied: false, isSearching: false)
                 
             }
             
@@ -329,7 +329,7 @@ class SortDataPopOverVC: UIViewController {
             
             if delegate != nil {
                 
-                delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC, sortBy: "Sorted by: Depth of Section in Descending Order", filtersApplied: self.filtersApplied, isSearching: self.isSearching)
+                delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC, sortBy: "Sorted by: Depth of Section in descending order", filtersApplied: false, isSearching: false)
                 
             }
             
@@ -367,7 +367,7 @@ class SortDataPopOverVC: UIViewController {
             
             if delegate != nil {
                 
-                delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC, sortBy: "Sorted by: Width of Section in Descending Order", filtersApplied: self.filtersApplied, isSearching: self.isSearching)
+                delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC, sortBy: "Sorted by: Width of Section in descending order", filtersApplied: false, isSearching: false)
                 
             }
             
@@ -405,7 +405,7 @@ class SortDataPopOverVC: UIViewController {
             
             if delegate != nil {
                 
-                delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC, sortBy: "Sorted by: Section Area in Descending Order", filtersApplied: self.filtersApplied, isSearching: self.isSearching)
+                delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC, sortBy: "Sorted by: Section Area in descending order", filtersApplied: false, isSearching: false)
                 
             }
             

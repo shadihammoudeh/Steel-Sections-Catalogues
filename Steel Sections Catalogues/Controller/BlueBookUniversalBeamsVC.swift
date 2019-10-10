@@ -16,7 +16,7 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
     
     // The below variables (i.e., sortBy, isSearching and filtersApplied) will be passed back and forth between this ViewController, SortDataPopOverVC and FilterDataVC in order to keep them up-to-date with the changes the user make to how the data inside the tableView is searched, sorted and/or filtered:
     
-    var sortBy: String = "Sorted by: Section Designation in Ascending Order"
+    var sortBy: String = "None"
     
     var isSearching: Bool = false
     
@@ -28,15 +28,17 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
     
     // The below Array is the one which contains the data extracted from the passed CSV file. It contains the data in a one big Array, which contains several Arrays inside it, whereby each Array inside the big Array contains several Dictionaries. The below Array is going to be filled using the CSV parser which will be used later on:
     
-    var originalUniversalBeamsArrayDataExtractedFromTheCsvFileUsingTheParserContainingAllData = [IsectionsDimensionsParameters]()
+    var originalUniversalBeamsArrayDataExtractedFromTheCSVFileUsingTheParserContainingAllData = [IsectionsDimensionsParameters]()
     
-    // The below array represents the array containing searchedData as per the user's search criteria out of the originalUniversalBeamsArrayDataExtractedFromTheCsvFileUsingTheParserContainingAllData:
+    // The below array represents the array containing searchedData as per the user's search criteria out of the originalUniversalBeamsArrayDataExtractedFromTheCSVFileUsingTheParserContainingAllData:
     
     var universalBeamsDataArrayAsPerTypedSearchCriteria = [IsectionsDimensionsParameters]()
     
-    // The below Array is mapped from the originalUniversalBeamsArrayDataExtractedFromTheCsvFileUsingTheParserContainingAllData Array, whereby only sectionSerialNumbers are reported inside of it, with no duplication using the extension at the end of this Class (i.e., Array):
+    // The below Array is mapped from the originalUniversalBeamsArrayDataExtractedFromTheCSVFileUsingTheParserContainingAllData Array, whereby only sectionSerialNumbers are reported inside of it, with no duplication using the extension at the end of this Class (i.e., Array):
     
-    var universalBeamsArrayContainingAllSectionSerialNumberOnly: [String] = []
+    var universalBeamsArrayContainingAllSectionSerialNumberOnlyDefault: [String] = []
+    
+    var universalBeamsArrayContainingAllSectionSerialNumberOnlySortedInAscendingOrDescendingOrder: [String] = []
     
     var searchBar = UISearchBar()
     
@@ -103,7 +105,7 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
         parseCsvFile(csvFileToParse: "BlueBookUniversalBeams")
         
         // The below code sorts the Data reported from the relevant CSV file using the Parser in Ascending Order by Section Designation by default, every time the view loads-up for the first time. sort Method below does not create a new Array, it modifieds the existing one:
-        originalUniversalBeamsArrayDataExtractedFromTheCsvFileUsingTheParserContainingAllData.sort {
+        originalUniversalBeamsArrayDataExtractedFromTheCSVFileUsingTheParserContainingAllData.sort {
             
             if $0.firstSectionSeriesNumber != $1.firstSectionSeriesNumber {
                 
@@ -121,11 +123,11 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
             
         }
         
-        // MARK: - Extracting all Universal Beams Section Serial Numbers from originalUniversalBeamsArrayDataExtractedFromTheCsvFileUsingTheParserContainingAllData Array and plugging them into universalBeamsArrayContainingAllSectionSerialNumberOnly:
+        // MARK: - Extracting all Universal Beams Section Serial Numbers from originalUniversalBeamsArrayDataExtractedFromTheCSVFileUsingTheParserContainingAllData Array and plugging them into universalBeamsArrayContainingAllSectionSerialNumberOnlyDefault:
         
-        // The below line of code extracts only the sectionSerialNumber Dictionary from the originalUniversalBeamsArrayDataExtractedFromTheCsvFileUsingTheParserContainingAllData as well as remove any duplicates from it. The below will be used later on to decide how many sections we need to have inside our table, when the data gets sorted by Section Designation:
+        // The below line of code extracts only the sectionSerialNumber Dictionary from the originalUniversalBeamsArrayDataExtractedFromTheCSVFileUsingTheParserContainingAllData as well as remove any duplicates from it. The below will be used later on to decide how many sections we need to have inside our table, when the data gets sorted by Section Designation:
         
-        universalBeamsArrayContainingAllSectionSerialNumberOnly = originalUniversalBeamsArrayDataExtractedFromTheCsvFileUsingTheParserContainingAllData.map({ return $0.sectionSerialNumber }).removingDuplicates()
+        universalBeamsArrayContainingAllSectionSerialNumberOnlyDefault = originalUniversalBeamsArrayDataExtractedFromTheCSVFileUsingTheParserContainingAllData.map({ return $0.sectionSerialNumber }).removingDuplicates()
         
         // MARK: - Dynamically calculating the required height for each cell inside our tableView:
         
@@ -197,11 +199,15 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
         
         // The below lines of code check the values of the sortBy, filtersApplied and isSearching Variables in order to decide on how many section the tableView should contains. The tableView will only displays multiple sections when the data is sorted by Section Designation in an ascending or descending order, and isSearching as well as filtersApplied variables are both equal to false:
         
-        if isSearching == false && (sortBy == "Sorted by: Section Designation in Ascending Order" || sortBy == "Sorted by: Section Designation in Descending Order") {
+        if sortBy == "Sorted by: Section Designation in ascending order" || sortBy == "Sorted by: Section Designation in descending order" {
             
-            return universalBeamsArrayContainingAllSectionSerialNumberOnly.count
+            return universalBeamsArrayContainingAllSectionSerialNumberOnlySortedInAscendingOrDescendingOrder.count
             
-        } else {
+        } else if sortBy == "None" && filtersApplied == false && isSearching == false {
+            
+            return universalBeamsArrayContainingAllSectionSerialNumberOnlyDefault.count
+            
+        } else  {
             
             return 1
             
@@ -231,28 +237,28 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
         
         sectionHeaderTitle.numberOfLines = 0
         
-        if isSearching == false && filtersApplied == false && (sortBy == "Sorted by: Section Designation in Ascending Order" || sortBy == "Sorted by: Section Designation in Descending Order") {
+        if sortBy == "Sorted by: Section Designation in ascending order" || sortBy == "Sorted by: Section Designation in descending order" {
             
             // In this case the title for each section header is equal to each section serial number:
             
-            sectionHeaderTitle.text = universalBeamsArrayContainingAllSectionSerialNumberOnly[section] + " Series"
+            sectionHeaderTitle.text = universalBeamsArrayContainingAllSectionSerialNumberOnlySortedInAscendingOrDescendingOrder[section] + " Series"
             
-        } else if isSearching == false && filtersApplied == false && (sortBy == "Sorted by: Depth of Section in Ascending Order" || sortBy == "Sorted by: Width of Section in Ascending Order" || sortBy == "Sorted by: Section Area in Ascending Order" || sortBy == "Sorted by: Depth of Section in Descending Order" || sortBy == "Sorted by: Width of Section in Descending Order" || sortBy == "Sorted by: Section Area in Descending Order") {
+        } else if sortBy == "None" && isSearching == false && filtersApplied == false {
+            
+            sectionHeaderTitle.text = universalBeamsArrayContainingAllSectionSerialNumberOnlyDefault [section] + " Series"
+            
+        } else if sortBy == "Sorted by: Depth of Section in ascending order" || sortBy == "Sorted by: Width of Section in ascending order" || sortBy == "Sorted by: Section Area in ascending order" || sortBy == "Sorted by: Depth of Section in descending order" || sortBy == "Sorted by: Width of Section in descending order" || sortBy == "Sorted by: Section Area in descending order" {
             
             sectionHeaderTitle.text = self.sortBy
             
-        } else if (isSearching == true && filtersApplied == false) {
+        } else if isSearching == true {
             
-            sectionHeaderTitle.text = "Searched results from all UBs data:"
+            sectionHeaderTitle.text = "Results for searched Section Designation for all UBs data:"
             
-        } else if (isSearching == false && filtersApplied == true) || (isSearching == true && filtersApplied == true) {
+        } else if filtersApplied == true {
             
-            sectionHeaderTitle.text = "Filtered results from all UBs data:"
-            
-//        } else if isSearching == true && filtersApplied == true {
-//
-//            sectionHeaderTitle.text = "Filtered results from all UBs data:"
-//
+            sectionHeaderTitle.text = "Results as per applied filters from all UBs data:"
+
         }
         
         sectionHeaderView.addSubview(sectionHeaderTitle)
@@ -277,72 +283,113 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        if isSearching == false && filtersApplied == false && (sortBy == "Sorted by: Section Designation in Ascending Order" || sortBy == "Sorted by: Section Designation in Descending Order") {
+        
+        
+        if sortBy == "Sorted by: Section Designation in ascending order" || sortBy == "Sorted by: Section Designation in descending order" {
             
             // The below line of code will convert the original Array into an Array of key-value pairs using tuples, where each value has the number 1:
             
-            let convertedoriginalUniversalBeamsArrayDataExtractedFromTheCsvFileUsingTheParserWithAllDataIntoKeyValuePairsTuples = originalUniversalBeamsArrayDataExtractedFromTheCsvFileUsingTheParserContainingAllData.map { ($0.sectionSerialNumber, 1) }
+            let convertedUniversalBeamsArrayIntoKeyValuePairsTuples = universalBeamsDataArrayReceivedFromSortDataVCViaProtocol.map { ($0.sectionSerialNumber, 1) }
             
             // The below line of code create a Dictionary from the above tuple array, asking it to add the 1s together every time it finds a duplicate key:
             
-            let totalCountForEveryUniqueSectionSerialNumberInOriginalUniversalBeamsArrayDataExtractedFromTheCsvFileUsingTheParserWithAllData = Dictionary(convertedoriginalUniversalBeamsArrayDataExtractedFromTheCsvFileUsingTheParserWithAllDataIntoKeyValuePairsTuples, uniquingKeysWith: +)
+            let totalCountForEveryUniqueSectionSerialNumber = Dictionary(convertedUniversalBeamsArrayIntoKeyValuePairsTuples, uniquingKeysWith: +)
             
-            return totalCountForEveryUniqueSectionSerialNumberInOriginalUniversalBeamsArrayDataExtractedFromTheCsvFileUsingTheParserWithAllData["\(universalBeamsArrayContainingAllSectionSerialNumberOnly[section])"]!
+            return totalCountForEveryUniqueSectionSerialNumber["\(universalBeamsArrayContainingAllSectionSerialNumberOnlySortedInAscendingOrDescendingOrder[section])"]!
             
-        } else if isSearching == false && filtersApplied == false && (sortBy == "Sorted by: Depth of Section in Ascending Order" || sortBy == "Sorted by: Width of Section in Ascending Order" || sortBy == "Sorted by: Section Area in Ascending Order" || sortBy == "Sorted by: Depth of Section in Descending Order" || sortBy == "Sorted by: Width of Section in Descending Order" || sortBy == "Sorted by: Section Area in Descending Order") {
+        } else if sortBy == "None" && filtersApplied == false && isSearching == false {
             
-            return universalBeamsDataArrayReceivedFromSortDataVCViaProtocol.count
+            let convertedUniversalBeamsArrayIntoKeyValuePairsTuples = originalUniversalBeamsArrayDataExtractedFromTheCSVFileUsingTheParserContainingAllData.map { ($0.sectionSerialNumber, 1) }
             
-        } else if (isSearching == true && filtersApplied == false) {
+            // The below line of code create a Dictionary from the above tuple array, asking it to add the 1s together every time it finds a duplicate key:
             
-            return universalBeamsDataArrayAsPerTypedSearchCriteria.count
+            let totalCountForEveryUniqueSectionSerialNumber = Dictionary(convertedUniversalBeamsArrayIntoKeyValuePairsTuples, uniquingKeysWith: +)
             
-        } else if (isSearching == false && filtersApplied == true) || (isSearching == true && filtersApplied == true) {
+            return totalCountForEveryUniqueSectionSerialNumber["\(universalBeamsArrayContainingAllSectionSerialNumberOnlyDefault[section])"]!
+            
+        } else if filtersApplied == true {
             
             return universalBeamsDataArrayReceivedFromFilterDataVCViaProtocol.count
             
-        } else {
+        } else if sortBy == "Sorted by: Depth of Section in ascending order" || sortBy == "Sorted by: Width of Section in ascending order" || sortBy == "Sorted by: Section Area in ascending order" || sortBy == "Sorted by: Depth of Section in descending order" || sortBy == "Sorted by: Width of Section in descending order" || sortBy == "Sorted by: Section Area in descending order" {
+            
+            return universalBeamsDataArrayReceivedFromSortDataVCViaProtocol.count
+            
+        } else if isSearching == true {
             
             return universalBeamsDataArrayAsPerTypedSearchCriteria.count
-
+            
+        } else {
+            
+            return 1
+            
         }
         
     }
     
-    //
+    // MARK: - cellForRowAtIndexPath:
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "customCell") as! IsectionsCustomTableViewCell
         
-        if isSearching == false && filtersApplied == false && (sortBy == "Sorted by: Section Designation in Ascending Order" ||  sortBy == "Sorted by: Section Designation in Descending Order") {
+        if sortBy == "None" && filtersApplied == false && isSearching == false {
             
-            cell.sectionDesignationLabel.text = "Section Designation: \( .filter({ $0.sectionSerialNumber == universalBeamsArrayContainingAllSectionSerialNumberOnly[indexPath.section] }).map({ $0.fullSectionDesignation })[indexPath.row])"
+            cell.sectionDesignationLabel.text = "Section Designation: \( originalUniversalBeamsArrayDataExtractedFromTheCSVFileUsingTheParserContainingAllData.filter({ $0.sectionSerialNumber == universalBeamsArrayContainingAllSectionSerialNumberOnlyDefault[indexPath.section] }).map({ $0.fullSectionDesignation })[indexPath.row])"
             
-            cell.depthOfSectionLabel.text = "Depth, h [mm] = " + String(originalUniversalBeamsArrayDataExtractedFromTheCsvFileUsingTheParserContainingAllData.filter({ $0.sectionSerialNumber == "\(universalBeamsArrayContainingAllSectionSerialNumberOnly[indexPath.section])" }).map({ $0.depthOfSection })[indexPath.row])
+            cell.depthOfSectionLabel.text = "Depth, h [mm] = " + String(originalUniversalBeamsArrayDataExtractedFromTheCSVFileUsingTheParserContainingAllData.filter({ $0.sectionSerialNumber == "\(universalBeamsArrayContainingAllSectionSerialNumberOnlyDefault[indexPath.section])" }).map({ $0.depthOfSection })[indexPath.row])
             
-            let attributedSectionWebThicknessString: NSMutableAttributedString = NSMutableAttributedString(string: "Web Thickness, tw [mm] = \(String(originalUniversalBeamsArrayDataExtractedFromTheCsvFileUsingTheParserContainingAllData.filter({ $0.sectionSerialNumber == "\(universalBeamsArrayContainingAllSectionSerialNumberOnly[indexPath.section])" }).map({ $0.sectionWebThickness })[indexPath.row]))", attributes: [.font: UIFont(name: otherCustomCellLabelsFontName, size: otherCustomCellLabelsFontSize)])
+            let attributedSectionWebThicknessString: NSMutableAttributedString = NSMutableAttributedString(string: "Web Thickness, tw [mm] = \(String(originalUniversalBeamsArrayDataExtractedFromTheCSVFileUsingTheParserContainingAllData.filter({ $0.sectionSerialNumber == "\(universalBeamsArrayContainingAllSectionSerialNumberOnlyDefault[indexPath.section])" }).map({ $0.sectionWebThickness })[indexPath.row]))", attributes: [.font: UIFont(name: otherCustomCellLabelsFontName, size: otherCustomCellLabelsFontSize)])
+            
             attributedSectionWebThicknessString.setAttributes([.font: UIFont(name: subscripAndSuperscriptChractersFontName, size: subscriptAndSuperscriptChractersFontSize),.baselineOffset:-3], range: NSRange(location:16,length:1))
             
             cell.sectionWebThicknessLabel.attributedText = attributedSectionWebThicknessString
             
-            cell.widthOfSectionLabel.text = "Width, b [mm] = " + String(originalUniversalBeamsArrayDataExtractedFromTheCsvFileUsingTheParserContainingAllData.filter({ $0.sectionSerialNumber == "\(universalBeamsArrayContainingAllSectionSerialNumberOnly[indexPath.section])" }).map({ $0.widthOfSection })[indexPath.row])
+            cell.widthOfSectionLabel.text = "Width, b [mm] = " + String(originalUniversalBeamsArrayDataExtractedFromTheCSVFileUsingTheParserContainingAllData.filter({ $0.sectionSerialNumber == "\(universalBeamsArrayContainingAllSectionSerialNumberOnlyDefault[indexPath.section])" }).map({ $0.widthOfSection })[indexPath.row])
             
-            let attributedSectionFlangeThicknessString: NSMutableAttributedString = NSMutableAttributedString(string: "Flange Thickness, tf [mm] = \(String(originalUniversalBeamsArrayDataExtractedFromTheCsvFileUsingTheParserContainingAllData.filter({ $0.sectionSerialNumber == "\(universalBeamsArrayContainingAllSectionSerialNumberOnly[indexPath.section])" }).map({ $0.sectionFlangeThickness })[indexPath.row]))", attributes: [.font: UIFont(name: otherCustomCellLabelsFontName, size: otherCustomCellLabelsFontSize)])
+            let attributedSectionFlangeThicknessString: NSMutableAttributedString = NSMutableAttributedString(string: "Flange Thickness, tf [mm] = \(String(originalUniversalBeamsArrayDataExtractedFromTheCSVFileUsingTheParserContainingAllData.filter({ $0.sectionSerialNumber == "\(universalBeamsArrayContainingAllSectionSerialNumberOnlyDefault[indexPath.section])" }).map({ $0.sectionFlangeThickness })[indexPath.row]))", attributes: [.font: UIFont(name: otherCustomCellLabelsFontName, size: otherCustomCellLabelsFontSize)])
             
             attributedSectionFlangeThicknessString.setAttributes([.font: UIFont(name: subscripAndSuperscriptChractersFontName, size: subscriptAndSuperscriptChractersFontSize),.baselineOffset: -3], range: NSRange(location: 19, length: 1))
             
             cell.sectionFlangeThicknessLabel.attributedText = attributedSectionFlangeThicknessString
             
-            cell.sectionMassPerMetreLabel.text = "Mass per Metre [kg/m] = " + String(originalUniversalBeamsArrayDataExtractedFromTheCsvFileUsingTheParserContainingAllData.filter({ $0.sectionSerialNumber == "\(universalBeamsArrayContainingAllSectionSerialNumberOnly[indexPath.section])" }).map({ $0.sectionMassPerMetre })[indexPath.row])
+            cell.sectionMassPerMetreLabel.text = "Mass per Metre [kg/m] = " + String(originalUniversalBeamsArrayDataExtractedFromTheCSVFileUsingTheParserContainingAllData.filter({ $0.sectionSerialNumber == "\(universalBeamsArrayContainingAllSectionSerialNumberOnlyDefault[indexPath.section])" }).map({ $0.sectionMassPerMetre })[indexPath.row])
             
-            let attributedAreaOfSectionString: NSMutableAttributedString = NSMutableAttributedString(string: "Area of Section, A [cm2] = \(String(originalUniversalBeamsArrayDataExtractedFromTheCsvFileUsingTheParserContainingAllData.filter({ $0.sectionSerialNumber == "\(universalBeamsArrayContainingAllSectionSerialNumberOnly[indexPath.section])" }).map({ $0.areaOfSection })[indexPath.row]))", attributes: [.font: UIFont(name: otherCustomCellLabelsFontName, size: otherCustomCellLabelsFontSize)])
+            let attributedAreaOfSectionString: NSMutableAttributedString = NSMutableAttributedString(string: "Area of Section, A [cm2] = \(String(originalUniversalBeamsArrayDataExtractedFromTheCSVFileUsingTheParserContainingAllData.filter({ $0.sectionSerialNumber == "\(universalBeamsArrayContainingAllSectionSerialNumberOnlyDefault[indexPath.section])" }).map({ $0.areaOfSection })[indexPath.row]))", attributes: [.font: UIFont(name: otherCustomCellLabelsFontName, size: otherCustomCellLabelsFontSize)])
             
             attributedAreaOfSectionString.setAttributes([.font: UIFont(name: subscripAndSuperscriptChractersFontName, size: subscriptAndSuperscriptChractersFontSize),.baselineOffset: 5.5], range: NSRange(location: 22, length: 1))
             
             cell.areaOfSectionLabel.attributedText = attributedAreaOfSectionString
             
-        } else if isSearching == false && filtersApplied == false && (sortBy == "Sorted by: Depth of Section in Ascending Order" || sortBy == "Sorted by: Width of Section in Ascending Order" || sortBy == "Sorted by: Section Area in Ascending Order" || sortBy == "Sorted by: Depth of Section in Descending Order" || sortBy == "Sorted by: Width of Section in Descending Order" || sortBy == "Sorted by: Section Area in Descending Order") {
+        } else if sortBy == "Sorted by: Section Designation in ascending order" ||  sortBy == "Sorted by: Section Designation in descending order" {
+            
+            cell.sectionDesignationLabel.text = "Section Designation: \( universalBeamsDataArrayReceivedFromSortDataVCViaProtocol.filter({ $0.sectionSerialNumber == universalBeamsArrayContainingAllSectionSerialNumberOnlySortedInAscendingOrDescendingOrder[indexPath.section] }).map({ $0.fullSectionDesignation })[indexPath.row])"
+            
+            cell.depthOfSectionLabel.text = "Depth, h [mm] = " + String(universalBeamsDataArrayReceivedFromSortDataVCViaProtocol.filter({ $0.sectionSerialNumber == "\(universalBeamsArrayContainingAllSectionSerialNumberOnlySortedInAscendingOrDescendingOrder[indexPath.section])" }).map({ $0.depthOfSection })[indexPath.row])
+            
+            let attributedSectionWebThicknessString: NSMutableAttributedString = NSMutableAttributedString(string: "Web Thickness, tw [mm] = \(String(universalBeamsDataArrayReceivedFromSortDataVCViaProtocol.filter({ $0.sectionSerialNumber == "\(universalBeamsArrayContainingAllSectionSerialNumberOnlySortedInAscendingOrDescendingOrder[indexPath.section])" }).map({ $0.sectionWebThickness })[indexPath.row]))", attributes: [.font: UIFont(name: otherCustomCellLabelsFontName, size: otherCustomCellLabelsFontSize)])
+            
+            attributedSectionWebThicknessString.setAttributes([.font: UIFont(name: subscripAndSuperscriptChractersFontName, size: subscriptAndSuperscriptChractersFontSize),.baselineOffset:-3], range: NSRange(location:16,length:1))
+            
+            cell.sectionWebThicknessLabel.attributedText = attributedSectionWebThicknessString
+            
+            cell.widthOfSectionLabel.text = "Width, b [mm] = " + String(universalBeamsDataArrayReceivedFromSortDataVCViaProtocol.filter({ $0.sectionSerialNumber == "\(universalBeamsArrayContainingAllSectionSerialNumberOnlySortedInAscendingOrDescendingOrder[indexPath.section])" }).map({ $0.widthOfSection })[indexPath.row])
+            
+            let attributedSectionFlangeThicknessString: NSMutableAttributedString = NSMutableAttributedString(string: "Flange Thickness, tf [mm] = \(String(universalBeamsDataArrayReceivedFromSortDataVCViaProtocol.filter({ $0.sectionSerialNumber == "\(universalBeamsArrayContainingAllSectionSerialNumberOnlySortedInAscendingOrDescendingOrder[indexPath.section])" }).map({ $0.sectionFlangeThickness })[indexPath.row]))", attributes: [.font: UIFont(name: otherCustomCellLabelsFontName, size: otherCustomCellLabelsFontSize)])
+            
+            attributedSectionFlangeThicknessString.setAttributes([.font: UIFont(name: subscripAndSuperscriptChractersFontName, size: subscriptAndSuperscriptChractersFontSize),.baselineOffset: -3], range: NSRange(location: 19, length: 1))
+            
+            cell.sectionFlangeThicknessLabel.attributedText = attributedSectionFlangeThicknessString
+            
+            cell.sectionMassPerMetreLabel.text = "Mass per Metre [kg/m] = " + String(universalBeamsDataArrayReceivedFromSortDataVCViaProtocol.filter({ $0.sectionSerialNumber == "\(universalBeamsArrayContainingAllSectionSerialNumberOnlySortedInAscendingOrDescendingOrder[indexPath.section])" }).map({ $0.sectionMassPerMetre })[indexPath.row])
+            
+            let attributedAreaOfSectionString: NSMutableAttributedString = NSMutableAttributedString(string: "Area of Section, A [cm2] = \(String(universalBeamsDataArrayReceivedFromSortDataVCViaProtocol.filter({ $0.sectionSerialNumber == "\(universalBeamsArrayContainingAllSectionSerialNumberOnlySortedInAscendingOrDescendingOrder[indexPath.section])" }).map({ $0.areaOfSection })[indexPath.row]))", attributes: [.font: UIFont(name: otherCustomCellLabelsFontName, size: otherCustomCellLabelsFontSize)])
+            
+            attributedAreaOfSectionString.setAttributes([.font: UIFont(name: subscripAndSuperscriptChractersFontName, size: subscriptAndSuperscriptChractersFontSize),.baselineOffset: 5.5], range: NSRange(location: 22, length: 1))
+            
+            cell.areaOfSectionLabel.attributedText = attributedAreaOfSectionString
+            
+        } else if sortBy == "Sorted by: Depth of Section in ascending order" || sortBy == "Sorted by: Width of Section in ascending order" || sortBy == "Sorted by: Section Area in ascending order" || sortBy == "Sorted by: Depth of Section in descending order" || sortBy == "Sorted by: Width of Section in descending order" || sortBy == "Sorted by: Section Area in descending order" {
             
             cell.sectionDesignationLabel.text = "Section Designation: \(universalBeamsDataArrayReceivedFromSortDataVCViaProtocol.map({ $0.fullSectionDesignation })[indexPath.row])"
             
@@ -357,6 +404,7 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
             cell.widthOfSectionLabel.text = "Width, b [mm] = " + String(universalBeamsDataArrayReceivedFromSortDataVCViaProtocol.map({ $0.widthOfSection })[indexPath.row])
             
             let attributedSectionFlangeThicknessString: NSMutableAttributedString = NSMutableAttributedString(string: "Flange Thickness, tf [mm] = \(String(universalBeamsDataArrayReceivedFromSortDataVCViaProtocol.map({ $0.sectionFlangeThickness })[indexPath.row]))", attributes: [.font: UIFont(name: otherCustomCellLabelsFontName, size: otherCustomCellLabelsFontSize)])
+            
             attributedSectionFlangeThicknessString.setAttributes([.font: UIFont(name: subscripAndSuperscriptChractersFontName, size: subscriptAndSuperscriptChractersFontSize),.baselineOffset: -3], range: NSRange(location: 19, length: 1))
             
             cell.sectionFlangeThicknessLabel.attributedText = attributedSectionFlangeThicknessString
@@ -369,8 +417,7 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
             
             cell.areaOfSectionLabel.attributedText = attributedAreaOfSectionString
             
-            
-        } else if (isSearching == true && filtersApplied == false) {
+        } else if isSearching == true {
             
             cell.sectionDesignationLabel.text = "Section Designation: \(universalBeamsDataArrayAsPerTypedSearchCriteria.map({ $0.fullSectionDesignation })[indexPath.row])"
             
@@ -385,6 +432,7 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
             cell.widthOfSectionLabel.text = "Width, b [mm] = " + String(universalBeamsDataArrayAsPerTypedSearchCriteria.map({ $0.widthOfSection })[indexPath.row])
             
             let attributedSectionFlangeThicknessString: NSMutableAttributedString = NSMutableAttributedString(string: "Flange Thickness, tf [mm] = \(String(universalBeamsDataArrayAsPerTypedSearchCriteria.map({ $0.sectionFlangeThickness })[indexPath.row]))", attributes: [.font: UIFont(name: otherCustomCellLabelsFontName, size: otherCustomCellLabelsFontSize)])
+            
             attributedSectionFlangeThicknessString.setAttributes([.font: UIFont(name: subscripAndSuperscriptChractersFontName, size: subscriptAndSuperscriptChractersFontSize),.baselineOffset: -3], range: NSRange(location: 19, length: 1))
             
             cell.sectionFlangeThicknessLabel.attributedText = attributedSectionFlangeThicknessString
@@ -397,7 +445,7 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
             
             cell.areaOfSectionLabel.attributedText = attributedAreaOfSectionString
             
-        } else if (isSearching == false && filtersApplied == true) || (isSearching == true && filtersApplied == true) {
+        } else if filtersApplied == true {
             
             cell.sectionDesignationLabel.text = "Section Designation: \(universalBeamsDataArrayReceivedFromFilterDataVCViaProtocol.map({ $0.fullSectionDesignation })[indexPath.row])"
             
@@ -412,6 +460,7 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
             cell.widthOfSectionLabel.text = "Width, b [mm] = " + String(universalBeamsDataArrayReceivedFromFilterDataVCViaProtocol.map({ $0.widthOfSection })[indexPath.row])
             
             let attributedSectionFlangeThicknessString: NSMutableAttributedString = NSMutableAttributedString(string: "Flange Thickness, tf [mm] = \(String(universalBeamsDataArrayReceivedFromFilterDataVCViaProtocol.map({ $0.sectionFlangeThickness })[indexPath.row]))", attributes: [.font: UIFont(name: otherCustomCellLabelsFontName, size: otherCustomCellLabelsFontSize)])
+            
             attributedSectionFlangeThicknessString.setAttributes([.font: UIFont(name: subscripAndSuperscriptChractersFontName, size: subscriptAndSuperscriptChractersFontSize),.baselineOffset: -3], range: NSRange(location: 19, length: 1))
             
             cell.sectionFlangeThicknessLabel.attributedText = attributedSectionFlangeThicknessString
@@ -488,27 +537,7 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
         
         viewControllerToPassDataTo.filtersApplied = self.filtersApplied
         
-        if isSearching == false && filtersApplied == false && (sortBy == "Sorted by: Section Designation in Ascending Order" || sortBy == "Sorted by: Section Designation in Descending Order") {
-            
-            // In this case the title for each section header is equal to each section serial number:
-            viewControllerToPassDataTo.universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC = originalUniversalBeamsArrayDataExtractedFromTheCsvFileUsingTheParserContainingAllData
-            
-        } else if isSearching == false && filtersApplied == false && (sortBy == "Sorted by: Depth of Section in Ascending Order" || sortBy == "Sorted by: Width of Section in Ascending Order" || sortBy == "Sorted by: Section Area in Ascending Order" || sortBy == "Sorted by: Depth of Section in Descending Order" || sortBy == "Sorted by: Width of Section in Descending Order" || sortBy == "Sorted by: Section Area in Descending Order") {
-            viewControllerToPassDataTo.universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC = originalUniversalBeamsArrayDataExtractedFromTheCsvFileUsingTheParserContainingAllData
-            
-        } else if (isSearching == true && filtersApplied == false) {
-            
-            viewControllerToPassDataTo.universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC = universalBeamsDataArrayAsPerTypedSearchCriteria
-            
-        } else if isSearching == false && filtersApplied == true {
-            
-            viewControllerToPassDataTo.universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC = originalUniversalBeamsArrayDataExtractedFromTheCsvFileUsingTheParserContainingAllData
-            
-        } else if isSearching == true && filtersApplied == true {
-            
-            viewControllerToPassDataTo.universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC = originalUniversalBeamsArrayDataExtractedFromTheCsvFileUsingTheParserContainingAllData
-            
-        }
+        viewControllerToPassDataTo.universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC = originalUniversalBeamsArrayDataExtractedFromTheCSVFileUsingTheParserContainingAllData
         
         present(viewControllerToPassDataTo, animated: true, completion:{
             
@@ -591,7 +620,7 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
         searchBar.isTranslucent = false
         
         searchBar.keyboardType = .numberPad
-
+        
         searchBar.searchBarStyle = UISearchBar.Style.default
         
     }
@@ -719,7 +748,7 @@ class BlueBookUniversalBeamsVC: UIViewController, UITableViewDelegate, UITableVi
                 let individualUniversalBeamArrayOfDictionaries = IsectionsDimensionsParameters(firstSectionSeriesNumber: firstSectionSeriesNumber, secondSectionSeriesNumber: secondSectionSeriesNumber, lastSectionSeriesNumber: lastSectionSeriesNumber, sectionSerialNumber: sectionSerialNumber, fullSectionDesignation: fullSectionDesignation, sectionMassPerMetre: sectionMassPerMetre, depthOfSection: depthOfSection, widthOfSection: widthOfSection, sectionWebThickness: sectionWebThickness, sectionFlangeThickness: sectionFlangeThickness, sectionRootRadius: sectionRootRadius, depthOfSectionBetweenFillets: depthOfSectionBetweenFillets, ratioForLocalWebBuckling: ratioForLocalWebBuckling, ratioForLocalFlangeBuckling: ratioForLocalFlangeBuckling, dimensionForDetailingEndClearance: dimensionForDetailingEndClearance, dimensionForDetailingNotchN: dimensionForDetailingNotchN, dimensionForDetailingNotchn: dimensionForDetailingNotchn, surfaceAreaPerMetre: surfaceAreaPerMetre, surfaceAreaPerTonne: surfaceAreaPerTonne, secondMomentOfAreaMajorAxis: secondMomentOfAreaMajorAxis, secondMomentOfAreaMinorAxis: secondMomentOfAreaMinorAxis, radiusOfGyrationMajorAxis: radiusOfGyrationMajorAxis, radiusOfGyrationMinorAxis: radiusOfGyrationMinorAxis, elasticModulusMajorAxis: elasticModulusMajorAxis, elasticModulusMinorAxis: elasticModulusMinorAxis, plasticModulusMajorAxis: plasticModulusMajorAxis, plasticModulusMinorAxis: plasticModulusMinorAxis, bucklingParameter: bucklingParameter, torsionalIndex: torsionalIndex, wrapingConstant: wrapingConstant, torsionalConstant: torsionalConstant, areaOfSection: areaOfSection)
                 
                 // Then we need to append each of the above created Array of Dictionaries to the main Array declared above:
-                originalUniversalBeamsArrayDataExtractedFromTheCsvFileUsingTheParserContainingAllData.append(individualUniversalBeamArrayOfDictionaries)
+                originalUniversalBeamsArrayDataExtractedFromTheCSVFileUsingTheParserContainingAllData.append(individualUniversalBeamArrayOfDictionaries)
                 
             }
             
@@ -829,9 +858,13 @@ extension BlueBookUniversalBeamsVC: UISearchBarDelegate {
                 
             }
             
-            universalBeamsDataArrayAsPerTypedSearchCriteria = originalUniversalBeamsArrayDataExtractedFromTheCsvFileUsingTheParserContainingAllData.filter({ $0.fullSectionDesignation.lowercased().prefix(searchText.count) == searchText.lowercased() })
+            universalBeamsDataArrayAsPerTypedSearchCriteria = originalUniversalBeamsArrayDataExtractedFromTheCSVFileUsingTheParserContainingAllData.filter({ $0.fullSectionDesignation.lowercased().prefix(searchText.count) == searchText.lowercased() })
             
             isSearching = true
+            
+            sortBy = "None"
+            
+            filtersApplied = false
             
             self.universalBeamsTableView.reloadData()
             
@@ -891,26 +924,8 @@ extension BlueBookUniversalBeamsVC: UISearchBarDelegate {
         
         filterDataVC.delegate = self
         
-        if isSearching == false && filtersApplied == false && (sortBy == "Sorted by: Section Designation in Ascending Order" || sortBy == "Sorted by: Section Designation in Descending Order") {
-            
-            // In this case the title for each section header is equal to each section serial number:
-            filterDataVC.universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC = originalUniversalBeamsArrayDataExtractedFromTheCsvFileUsingTheParserContainingAllData
-            
-        } else if isSearching == false && filtersApplied == false && (sortBy == "Sorted by: Depth of Section in Ascending Order" || sortBy == "Sorted by: Width of Section in Ascending Order" || sortBy == "Sorted by: Section Area in Ascending Order" || sortBy == "Sorted by: Depth of Section in Descending Order" || sortBy == "Sorted by: Width of Section in Descending Order" || sortBy == "Sorted by: Section Area in Descending Order") {
-            filterDataVC.universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC = originalUniversalBeamsArrayDataExtractedFromTheCsvFileUsingTheParserContainingAllData
-            
-        } else if (isSearching == true && filtersApplied == false) {
-            filterDataVC.universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC = originalUniversalBeamsArrayDataExtractedFromTheCsvFileUsingTheParserContainingAllData
-
-        } else if isSearching == false && filtersApplied == true {
-            
-            filterDataVC.universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC = originalUniversalBeamsArrayDataExtractedFromTheCsvFileUsingTheParserContainingAllData
-            
-        } else if isSearching == true && filtersApplied == true {
-            
-            filterDataVC.universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC = originalUniversalBeamsArrayDataExtractedFromTheCsvFileUsingTheParserContainingAllData
-            
-        }
+        
+        filterDataVC.universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC = originalUniversalBeamsArrayDataExtractedFromTheCSVFileUsingTheParserContainingAllData
         
         self.present(filterDataVC, animated: true, completion: nil)
         
@@ -930,27 +945,18 @@ extension BlueBookUniversalBeamsVC: PassingDataBackwardsProtocol {
         
         self.isSearching = isSearching
         
-        if isSearching == false && filtersApplied == false && (sortBy == "Sorted by: Section Designation in Ascending Order" || sortBy == "Sorted by: Section Designation in Descending Order") {
+        if isSearching == false && filtersApplied == false && (sortBy == "Sorted by: Section Designation in ascending order" || sortBy == "Sorted by: Section Designation in descending order" || sortBy == "Sorted by: Depth of Section in ascending order" || sortBy == "Sorted by: Width of Section in ascending order" || sortBy == "Sorted by: Section Area in ascending order" || sortBy == "Sorted by: Depth of Section in descending order" || sortBy == "Sorted by: Width of Section in descending order" || sortBy == "Sorted by: Section Area in descending order") {
             
             // In this case the title for each section header is equal to each section serial number:
             
-            self.originalUniversalBeamsArrayDataExtractedFromTheCsvFileUsingTheParserContainingAllData = modifiedArrayToBePassed
-            
-        } else if isSearching == false && filtersApplied == false && (sortBy == "Sorted by: Depth of Section in Ascending Order" || sortBy == "Sorted by: Width of Section in Ascending Order" || sortBy == "Sorted by: Section Area in Ascending Order" || sortBy == "Sorted by: Depth of Section in Descending Order" || sortBy == "Sorted by: Width of Section in Descending Order" || sortBy == "Sorted by: Section Area in Descending Order") {
-            
             self.universalBeamsDataArrayReceivedFromSortDataVCViaProtocol = modifiedArrayToBePassed
+            self.universalBeamsArrayContainingAllSectionSerialNumberOnlySortedInAscendingOrDescendingOrder = modifiedArrayToBePassed.map({ return $0.sectionSerialNumber }).removingDuplicates()
             
-        } else if isSearching == false && filtersApplied == true {
-            
-            self.universalBeamsDataArrayReceivedFromFilterDataVCViaProtocol = modifiedArrayToBePassed
-            
-        } else if isSearching == true && filtersApplied == true {
+        } else if filtersApplied == true {
             
             self.universalBeamsDataArrayReceivedFromFilterDataVCViaProtocol = modifiedArrayToBePassed
             
         }
-        
-        self.universalBeamsArrayContainingAllSectionSerialNumberOnly = modifiedArrayToBePassed.map({ return $0.sectionSerialNumber }).removingDuplicates()
         
         self.universalBeamsTableView.reloadData()
         

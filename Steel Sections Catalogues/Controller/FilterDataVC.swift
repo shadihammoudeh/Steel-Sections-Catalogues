@@ -20,14 +20,14 @@ class FilterDataVC: UIViewController {
     
     // The below variables (i.e., sortBy, isSearching and filtersApplied) will be passed from BlueBookUniversalBeamsVC, and when this ViewController gets dismissed, any made changes to these variables will be sent back to BlueBookUniversalBeamsVC using the Protocol:
     
-    var sortBy: String = "Sorted by: Section Designation in Ascending Order"
+    var sortBy: String = "None"
     
     var isSearching: Bool = false
     
     var filtersApplied: Bool = false
     
     var universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC = [IsectionsDimensionsParameters]()
-
+    
     let depthOfSectionTitleTopPadding: CGFloat = 10
     
     var depthOfSectionTitleLabelHeight: CGFloat = 0
@@ -199,7 +199,7 @@ class FilterDataVC: UIViewController {
         super.viewDidLoad()
         
         print("FilterDataVC viewDidLoad()")
-                
+        
         // MARK: - Extracting appropriate Arrays data for Range Sliders:
         
         extractedDepthOfSection = universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC.map({ return $0.depthOfSection })
@@ -388,18 +388,6 @@ class FilterDataVC: UIViewController {
                 
                 customSectionAreaSlider?.layoutSubviews()
                 
-                if let depthOfSectionRangeSliderSelectedMinimumValue = customDepthOfSectionRangeSlider?.selectedMinValue, let depthOfSectionRangeSliderSelectedMaximumValue = customDepthOfSectionRangeSlider?.selectedMaxValue, let widthOfSectionRangeSliderSelectedMinimumValue = customWidthOfSectionRangeSlider?.selectedMinValue, let widthOfSectionRangeSliderSelectedMaximumValue = customWidthOfSectionRangeSlider?.selectedMaxValue, let sectionWebThicknessRangeSliderSelectedMinimumValue = customSectionWebThicknessSlider?.selectedMinValue, let sectionWebThicknessRangeSliderSelectedMaximumValue = customSectionWebThicknessSlider?.selectedMaxValue, let sectionFlangeThicknessRangeSliderSelectedMinimumValue = customSectionFlangeThicknessSlider?.selectedMinValue, let sectionFlangeThicknessRangeSliderSelectedMaximumValue = customSectionFlangeThicknessSlider?.selectedMaxValue, let areaOfSectionRangeSliderSelectedMinimumValue = customSectionAreaSlider?.selectedMinValue, let areaOfSectionRangeSliderSelectedMaximumValue = customSectionAreaSlider?.selectedMaxValue {
-                    
-                    if delegate != nil {
-                        
-                        delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC.filter( { return (($0.depthOfSection >= Double(depthOfSectionRangeSliderSelectedMinimumValue)) && ($0.depthOfSection <= Double(depthOfSectionRangeSliderSelectedMaximumValue)) && ($0.widthOfSection >= Double(widthOfSectionRangeSliderSelectedMinimumValue)) && ($0.widthOfSection <= Double(widthOfSectionRangeSliderSelectedMaximumValue)) && ($0.sectionFlangeThickness >= Double(sectionFlangeThicknessRangeSliderSelectedMinimumValue)) && ($0.sectionFlangeThickness <= Double(sectionFlangeThicknessRangeSliderSelectedMaximumValue)) && ($0.sectionWebThickness >= Double(sectionWebThicknessRangeSliderSelectedMinimumValue)) && ($0.sectionWebThickness <= Double(sectionWebThicknessRangeSliderSelectedMaximumValue)) && ($0.areaOfSection >= Double(areaOfSectionRangeSliderSelectedMinimumValue)) && ($0.areaOfSection <= Double(areaOfSectionRangeSliderSelectedMaximumValue))) } ), sortBy: self.sortBy, filtersApplied: false, isSearching: self.isSearching)
-                        
-                    }
-                    
-                    dismiss(animated: true, completion: {})
-                    
-                }
-                
             }
             
         }
@@ -408,15 +396,15 @@ class FilterDataVC: UIViewController {
             
         else if sender.tag == 2 {
             
-
+            
             
             if delegate != nil {
                 
- let filteredArray = universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC.filter( { return (($0.depthOfSection >= Double(customDepthOfSectionRangeSlider!.selectedMinValue)) && ($0.depthOfSection <= Double(customDepthOfSectionRangeSlider!.selectedMaxValue))) } )
-  
-  print("Filtered Array is equal to \(filteredArray)")
+                let filteredArray = universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC.filter( { return (($0.depthOfSection >= Double(customDepthOfSectionRangeSlider!.selectedMinValue)) && ($0.depthOfSection <= Double(customDepthOfSectionRangeSlider!.selectedMaxValue))) } )
                 
-                delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: filteredArray, sortBy: self.sortBy, filtersApplied: true, isSearching: self.isSearching)
+                print("Filtered Array is equal to \(filteredArray)")
+                
+                delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: filteredArray, sortBy: "None", filtersApplied: true, isSearching: false)
                 
             }
             
@@ -524,6 +512,7 @@ class FilterDataVC: UIViewController {
     
 }
 
+
 // MARK: - Extensions:
 
 extension FilterDataVC: UINavigationBarDelegate {
@@ -628,4 +617,3 @@ extension FilterDataVC: RangeSeekSliderDelegate {
     }
     
 }
-
