@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
-    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <device id="retina6_1" orientation="portrait" appearance="dark"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -150,6 +150,21 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kUo-Og-U5l" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4803" y="-2223"/>
+        </scene>
+        <!--Blue Book Universal Beam Data SummaryVC-->
+        <scene sceneID="l1e-hv-B0T">
+            <objects>
+                <viewController storyboardIdentifier="BlueBookUniversalBeamDataSummaryVC" modalPresentationStyle="fullScreen" id="NKj-e4-UQr" customClass="BlueBookUniversalBeamDataSummaryVC" customModule="Steel_Sections_Catalogues" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="x0p-Vz-gaT">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="5x6-Cf-rBn"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="IBE-pI-6Mt" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5780" y="-1834"/>
         </scene>
         <!--Blue Book Closed SectionsVC-->
         <scene sceneID="OND-fl-yEx">

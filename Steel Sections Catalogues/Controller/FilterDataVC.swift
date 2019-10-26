@@ -124,7 +124,7 @@ class FilterDataVC: UIViewController {
         
         let button = UIButton()
         
-        button.setTitle("Remove Filters", for: .normal)
+        button.setTitle("Clear Filters", for: .normal)
         
         button.setTitleColor(.blue, for: .normal)
         
@@ -148,7 +148,7 @@ class FilterDataVC: UIViewController {
         
         let button = UIButton()
         
-        button.setTitle("Add Filters", for: .normal)
+        button.setTitle("Apply Filters", for: .normal)
         
         button.setTitleColor(.blue, for: .normal)
         
@@ -400,10 +400,8 @@ class FilterDataVC: UIViewController {
             
             if delegate != nil {
                 
-                let filteredArray = universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC.filter( { return (($0.depthOfSection >= Double(customDepthOfSectionRangeSlider!.selectedMinValue)) && ($0.depthOfSection <= Double(customDepthOfSectionRangeSlider!.selectedMaxValue))) } )
-                
-                print("Filtered Array is equal to \(filteredArray)")
-                
+                let filteredArray = universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC.filter( { return (($0.depthOfSection >= Double(customDepthOfSectionRangeSlider!.selectedMinValue)) && ($0.depthOfSection <= Double(customDepthOfSectionRangeSlider!.selectedMaxValue)) && ($0.widthOfSection >= Double(customWidthOfSectionRangeSlider!.selectedMinValue)) && ($0.widthOfSection <= Double(customWidthOfSectionRangeSlider!.selectedMaxValue)) && ($0.sectionWebThickness >= Double(customSectionWebThicknessSlider!.selectedMinValue)) && ($0.sectionWebThickness <= Double(customSectionWebThicknessSlider!.selectedMaxValue)) && ($0.sectionFlangeThickness >= Double(customSectionFlangeThicknessSlider!.selectedMinValue)) && ($0.sectionFlangeThickness <= Double(customSectionFlangeThicknessSlider!.selectedMaxValue)) && ($0.areaOfSection >= Double(customSectionAreaSlider!.selectedMinValue)) && ($0.areaOfSection <= Double(customSectionAreaSlider!.selectedMaxValue))) } )
+                                
                 delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: filteredArray, sortBy: "None", filtersApplied: true, isSearching: false)
                 
             }
