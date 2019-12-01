@@ -64,12 +64,14 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     
     let rootRadiusDimensioningAnnotationLineShapeLayer = CAShapeLayer()
     
+    let verticalLineSeparatorBetweenSectionDimensionsLabels = CAShapeLayer()
+    
     // MARK: - depthOfSection Vertical Annotation Line X & Mid Y Coordinates:
     
     var depthOfSectionDimensioningAnnotationLineXcoordinate: CGFloat = 0
-        
+    
     var depthOfSectionAnnotationLineMidYcoordinate: CGFloat = 0
-        
+    
     // MARK: - widthOfSection Horizontal Annotation Line  Y & Mid X Coordinates Coordinate:
     
     var widthOfSectionAnnotationLineMidXcoordinate: CGFloat = 0
@@ -81,11 +83,11 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     var sectionWebThicknessLeftHorizontalAnnotationLineStartingXcoordinate: CGFloat = 0
     
     var sectionWebThicknessDimensioningAnnotationHorizontalLineYcoordinate: CGFloat = 0
-        
+    
     // MARK: - sectionFlangeThickness Top Vertical Annotation Line Starting X & Y Coordinates Declaration:
     
     var sectionFlangeThicknessDimensioningAnnotationLabelVerticalLineXcoordinate: CGFloat = 0
-        
+    
     var sectionFlangeThicknessTopVerticalAnnotationLineStartingYcoordinate: CGFloat = 0
     
     // MARK: - sectionMinor Vertical Annotation Top and Bottom Y Coordinates Declaration:
@@ -93,13 +95,13 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     var sectionMinorAnnotationVerticalLineTopYcoordinate: CGFloat = 0
     
     var sectionMinorAnnotationVerticalLineBottomYcoordinate: CGFloat = 0
-            
+    
     // MARK: - sectionMajor Horizontal Annotation Line Left and Right X Coordinates Declaration:
     
     var sectionMajorAnnotationHorizontalLineLeftXcoordinate: CGFloat = 0
     
     var sectionMajorAnnotationHorizontalLineRightXcoordinate: CGFloat = 0
-        
+    
     // MARK: - section dimensions labels and annotations distances:
     
     let distanceBetweenDepthOfSectionDimensionAnnotationLineAndItsLabel: CGFloat = 0
@@ -108,13 +110,13 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     
     // MARK: - Font Size & Type for Dimensions Annotations Labels:
     
-    let dimensionsAnnotationsLabelsFontSize: CGFloat = 13
+    let dimensionsAnnotationsLabelsFontSize: CGFloat = 11
     
     let dimensionsAnnotationsLabelsFontType: String = "American Typewriter"
-            
+    
     // MARK: - Universal Beam Section Stroke Path Colour and Line Width Declaration:
     
-    let sectionPathStrokeAndDimensioningLabelsColour: String = "sectionStrokePathAndDimensioningLabelsColour"
+    let universalBeamProfilePathStrokeColour: String = "universalBeamProfilePathStrokeColour"
     
     let universalBeamShapeLayerPathLineWidth: CGFloat = 1.5
     
@@ -131,6 +133,40 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     let majorSectionAnnotationLineStrokePathColour: String = "sectionMinorAndMajorAxisStrokePathColour"
     
     let majorAndMinorSectionAnnotationLinesPathLineWidth: CGFloat = 0.75
+    
+    // MARK: - Section root radius inclined dimensioning annotation line starting point:
+    
+    var universalBeamSectionRootRadiusInclinedDimensioningLineStartingXCoordinate: CGFloat = 0
+    
+    var universalBeamSectionRootRadiusInclinedDimensioningLineStartingYCoordinate: CGFloat = 0
+    
+    // MARK: - Declaring section dimensions and properties inside UIScrollView margins and spacings:
+    
+    let sectionDimensionsAndPropertiesTitlesMarginFromScreenLeftEdge: CGFloat = 10
+
+    let sectionDimensionsAndPropertiesLabelsMarginFromScreenLeftEdge: CGFloat = 20
+    
+    let sectionDimensionsLabelsMarginsFromVerticalSeparatorLineLeftAndRightSide: CGFloat = 5
+    
+    let marginFromTopOfScrollView: CGFloat = 10
+    
+    let marginFromScreenRightEdge: CGFloat = 10
+        
+    let verticalSpacingBetweenLabels: CGFloat = 10
+    
+    // MARK: - Declaring section dimensions and properties UIScrollView:
+    
+    lazy var sectionDimensionsAndPropertiesScrollView: UIScrollView = {
+        
+        let scrollView = UIScrollView()
+        
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        
+        scrollView.backgroundColor = .yellow
+        
+        return scrollView
+        
+    }()
     
     // MARK: - Section drawing view and annotations labels declarations:
     
@@ -149,7 +185,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     lazy var universalBeamDepthOfSectionDimensionLabel: UILabel = {
         
         var label = UILabel()
-                        
+        
         label.translatesAutoresizingMaskIntoConstraints = false
         
         label.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2)
@@ -158,7 +194,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         
         label.font = UIFont(name: dimensionsAnnotationsLabelsFontType, size: dimensionsAnnotationsLabelsFontSize)
         
-        label.textColor = UIColor(named: sectionPathStrokeAndDimensioningLabelsColour)
+        label.textColor = UIColor(named: "sectionDimensionAnnotationLabelsFontColour")
         
         return label
         
@@ -167,15 +203,15 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     lazy var universalBeamWidthOfSectionDimensionLabel: UILabel = {
         
         var label = UILabel()
-                        
+        
         label.translatesAutoresizingMaskIntoConstraints = false
         
         label.text = "b = \(self.selectedUniversalBeamWidthOfSection) mm"
         
         label.font = UIFont(name: dimensionsAnnotationsLabelsFontType, size: dimensionsAnnotationsLabelsFontSize)
         
-        label.textColor = UIColor(named: sectionPathStrokeAndDimensioningLabelsColour)
-        
+        label.textColor = UIColor(named: "sectionDimensionAnnotationLabelsFontColour")
+
         return label
         
     }()
@@ -183,7 +219,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     lazy var universalBeamSectionWebThicknessDimensionLabel: UILabel = {
         
         var label = UILabel()
-                        
+        
         label.translatesAutoresizingMaskIntoConstraints = false
         
         let universalBeamSectionWebThicknessAttributtedString:NSMutableAttributedString = NSMutableAttributedString(string: "tw = \(self.selectedUniversalBeamWebThickness) mm")
@@ -194,7 +230,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         
         label.font = UIFont(name: dimensionsAnnotationsLabelsFontType, size: dimensionsAnnotationsLabelsFontSize)
         
-        label.textColor = UIColor(named: sectionPathStrokeAndDimensioningLabelsColour)
+        label.textColor = UIColor(named: "sectionDimensionAnnotationLabelsFontColour")
 
         return label
         
@@ -203,7 +239,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     lazy var universalBeamSectionFlangeThicknessDimensionLabel: UILabel = {
         
         var label = UILabel()
-                        
+        
         label.translatesAutoresizingMaskIntoConstraints = false
         
         let universalBeamSectionFlangeThicknessAttributtedString:NSMutableAttributedString = NSMutableAttributedString(string: "tf = \(self.selectedUniversalBeamFlangeThickness) mm")
@@ -214,8 +250,8 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         
         label.font = UIFont(name: dimensionsAnnotationsLabelsFontType, size: dimensionsAnnotationsLabelsFontSize)
         
-        label.textColor = UIColor(named: sectionPathStrokeAndDimensioningLabelsColour)
-        
+        label.textColor = UIColor(named: "sectionDimensionAnnotationLabelsFontColour")
+
         return label
         
     }()
@@ -223,11 +259,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     lazy var universalBeamMinorAxisBottomAnnotationLabel: UILabel = {
         
         var label = UILabel()
-        
-        label.layer.borderWidth = 1.0
-        
-        label.layer.borderColor = UIColor.black.cgColor
-        
+                        
         label.translatesAutoresizingMaskIntoConstraints = false
         
         label.baselineAdjustment = .alignCenters
@@ -235,6 +267,8 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         label.text = "y"
         
         label.font = UIFont(name: dimensionsAnnotationsLabelsFontType, size: dimensionsAnnotationsLabelsFontSize)
+        
+        label.textColor = UIColor(named: "majorAndMinorAxisLabelsFontColour")
         
         return label
         
@@ -243,11 +277,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     lazy var universalBeamMinorAxisTopAnnotationLabel: UILabel = {
         
         var label = UILabel()
-        
-        label.layer.borderWidth = 1.0
-        
-        label.layer.borderColor = UIColor.black.cgColor
-        
+                        
         label.translatesAutoresizingMaskIntoConstraints = false
         
         label.baselineAdjustment = .alignCenters
@@ -256,6 +286,8 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         
         label.font = UIFont(name: dimensionsAnnotationsLabelsFontType, size: dimensionsAnnotationsLabelsFontSize)
         
+        label.textColor = UIColor(named: "majorAndMinorAxisLabelsFontColour")
+
         return label
         
     }()
@@ -263,11 +295,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     lazy var universalBeamMajorAxisLeftAnnotationLabel: UILabel = {
         
         var label = UILabel()
-        
-        label.layer.borderWidth = 1.0
-        
-        label.layer.borderColor = UIColor.black.cgColor
-        
+                        
         label.translatesAutoresizingMaskIntoConstraints = false
         
         label.baselineAdjustment = .alignCenters
@@ -276,6 +304,8 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         
         label.font = UIFont(name: dimensionsAnnotationsLabelsFontType, size: dimensionsAnnotationsLabelsFontSize)
         
+        label.textColor = UIColor(named: "majorAndMinorAxisLabelsFontColour")
+
         return label
         
     }()
@@ -283,11 +313,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     lazy var universalBeamMajorAxisRightAnnotationLabel: UILabel = {
         
         var label = UILabel()
-        
-        label.layer.borderWidth = 1.0
-        
-        label.layer.borderColor = UIColor.black.cgColor
-        
+                        
         label.translatesAutoresizingMaskIntoConstraints = false
         
         label.baselineAdjustment = .alignCenters
@@ -295,6 +321,76 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         label.text = "x"
         
         label.font = UIFont(name: dimensionsAnnotationsLabelsFontType, size: dimensionsAnnotationsLabelsFontSize)
+        
+        label.textColor = UIColor(named: "majorAndMinorAxisLabelsFontColour")
+
+        return label
+        
+    }()
+    
+    lazy var universalBeamRootRadiusAnnotationLabel: UILabel = {
+        
+        var label = UILabel()
+                        
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        label.baselineAdjustment = .alignCenters
+        
+        label.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
+        
+        label.font = UIFont(name: dimensionsAnnotationsLabelsFontType, size: dimensionsAnnotationsLabelsFontSize)
+        
+        label.text = "r = \(self.selectedUniversalBeamRootRadius) mm"
+        
+        label.textColor = UIColor(named: "sectionDimensionAnnotationLabelsFontColour")
+
+        return label
+        
+    }()
+    
+    // MARK: - Section dimensions and geometric properties labels:
+    
+    lazy var scrollViewSectionDimensionsTitle: UILabel = {
+        
+        let label = UILabel()
+                
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        label.textColor = .black
+        
+        label.text = "Section Dimensions:"
+        
+        return label
+        
+    }()
+    
+    lazy var scrollViewDepthOfSectionLabel: UILabel = {
+        
+        let label = UILabel()
+                
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        label.textColor = .black
+        
+        label.numberOfLines = 0
+        
+        label.text = "Depth, h [mm] = \(self.selectedUniversalBeamDepthOfSection)"
+        
+        return label
+        
+    }()
+    
+    lazy var scrollViewWidthOfSectionLabel: UILabel = {
+        
+        let label = UILabel()
+                
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        label.textColor = .black
+        
+        label.numberOfLines = 0
+        
+        label.text = "Width, b [mm] = \(self.selectedUniversalBeamWidthOfSection)"
         
         return label
         
@@ -305,6 +401,8 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         super.viewDidLoad()
         
         drawUniversalBeamPathAndItsAnnotations()
+        
+        drawingVerticalAndHorizontalSeparatorsLinesForSectionDimensionsAndPropertiesLabel()
         
         // MARK: - Adding SubViews to the main View Controller:
         
@@ -350,6 +448,19 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         
         universalBeamDrawingView.addSubview(universalBeamMajorAxisLeftAnnotationLabel)
         
+        universalBeamDrawingView.addSubview(universalBeamRootRadiusAnnotationLabel)
+        
+        view.addSubview(sectionDimensionsAndPropertiesScrollView)
+        
+        sectionDimensionsAndPropertiesScrollView.layer.addSublayer(verticalLineSeparatorBetweenSectionDimensionsLabels)
+        
+        sectionDimensionsAndPropertiesScrollView.addSubview(scrollViewSectionDimensionsTitle)
+        
+        sectionDimensionsAndPropertiesScrollView.addSubview(scrollViewDepthOfSectionLabel)
+        
+        sectionDimensionsAndPropertiesScrollView.addSubview(scrollViewWidthOfSectionLabel)
+
+        
     }
     
     override func viewWillLayoutSubviews() {
@@ -370,9 +481,9 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         
         let minorAndMajorUniversalBeamDashedAnnotationLinesExtensionLengthFromProfileOutlineEdges: CGFloat = 10
         
-        let thicknessOfWebOrFlangesDimensioningAnnotationsHorizontalOrVerticalLinesLengths: CGFloat = 20
+        let sectionFlangeOrWebThicknessOrRootRadiusDimensioningAnnotationVerticalOrHorizontalOrInclinedLineLength: CGFloat = 20
         
-        let distanceAboveUniversalBeamMajorAxisAnnotationDashedLineToSectionWebThicknessHorizontalDimensioningAnnotationLines: CGFloat = 35
+        let distanceAboveUniversalBeamMajorAxisAnnotationDashedLineToSectionWebThicknessHorizontalDimensioningAnnotationLines: CGFloat = -35
         
         let distanceToTheLeftHandSideOfTheUniversalBeamMinorAxisAnnotationDashedLineToSectionFlangeThicknessVerticalDimensioningAnnotationLines: CGFloat = 30
         
@@ -391,23 +502,23 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         let drawingViewLeftAndRightMargin: CGFloat = depthOfSectionHorizontalDashedDimensioningAnnotationLinesLengths + distanceBetweenEndOfDepthOfSectionHorizontalDashedDimensioningAnnotationLinesndDrawingViewLeftOrRightBorder
         
         // MARK: - Calculating universal beam section drawing scale and setting triangleSidesLengthsOfDimensioningArrowHeadAnnotationSymbol:
-
+        
         let widthScale: CGFloat = (self.view.frame.size.width - (drawingViewLeftAndRightMargin * 2)) / selectedUniversalBeamWidthOfSection
         
         let depthScale: CGFloat = (self.view.frame.size.width - (drawingViewTopAndBottomMargin * 2)) / selectedUniversalBeamDepthOfSection
         
         let scaleToBeApplied = min(widthScale, depthScale)
-
+        
         let triangleSidesLengthsOfDimensioningArrowHeadAnnotationSymbol: CGFloat = (selectedUniversalBeamFlangeThickness * scaleToBeApplied)/2
-                        
+        
         // MARK: - Set of points that define the quarter of the universal beam profile section contained in the +ve x and +ve y quadrant:
         
         let universalBeamSectionOutlineTopCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant: (x: CGFloat, y: CGFloat) = (x: self.view.frame.width/2 , y: drawingViewTopAndBottomMargin)
         
         let universalBeamSectionOutlineTopEdgePointCoordinatesInsideThePositiveXandPositiveYquadrant: (x: CGFloat, y: CGFloat) = (x: (universalBeamSectionOutlineTopCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.x) + ((selectedUniversalBeamWidthOfSection/2) * scaleToBeApplied), y: universalBeamSectionOutlineTopCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.y)
-
+        
         let universalBeamSectionOutlineTopEdgeMinusFlangeThicknessPointCoordinatesInsideThePositiveXandPositiveYquadrant: (x: CGFloat, y: CGFloat) = (x: universalBeamSectionOutlineTopEdgePointCoordinatesInsideThePositiveXandPositiveYquadrant.x, y: (universalBeamSectionOutlineTopEdgePointCoordinatesInsideThePositiveXandPositiveYquadrant.y) + (selectedUniversalBeamFlangeThickness * scaleToBeApplied))
-                
+        
         let universalBeamSectionOutlineRootRadiusCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant: (x: CGFloat, y: CGFloat) = (x: (universalBeamSectionOutlineTopCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.x) + ((selectedUniversalBeamWebThickness * scaleToBeApplied)/2) + (selectedUniversalBeamRootRadius * scaleToBeApplied), y: (universalBeamSectionOutlineTopEdgeMinusFlangeThicknessPointCoordinatesInsideThePositiveXandPositiveYquadrant.y) + (selectedUniversalBeamRootRadius * scaleToBeApplied))
         
         let universalBeamSectionOutlineDepthCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant: (x: CGFloat, y: CGFloat) = (x: (universalBeamSectionOutlineRootRadiusCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.x) - (selectedUniversalBeamRootRadius * scaleToBeApplied), y: (universalBeamSectionOutlineTopCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.y) + ((selectedUniversalBeamDepthOfSection/2) * scaleToBeApplied))
@@ -417,17 +528,17 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         let leftOfWidthOfSectionHorizontalDimensioningAnnotationLinePointCoordiantes: (x: CGFloat, y: CGFloat) = (x: universalBeamSectionOutlineTopCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.x - ((selectedUniversalBeamWidthOfSection/2) * scaleToBeApplied),y: universalBeamSectionOutlineTopCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.y - universalBeamShapeLayerPathLineWidth/2 - (widthOfSectionVerticalDashedDimensioningAnnotationLinesLengths/2))
         
         // MARK: - Declaring the various paths stroke colours:
-                
-        let universalBeamPathStrokeColour = UIColor(named: sectionPathStrokeAndDimensioningLabelsColour)!.cgColor
+        
+        let universalBeamPathStrokeColour = UIColor(named: universalBeamProfilePathStrokeColour)!.cgColor
         
         let dimensioningAnnotationLinesPathStrokeColour = UIColor(named: sectionDimensioningAnnotationsLinesPathStrokeColour)!.cgColor
         
         let sectionMinorAxisAnnotationDashedLinePathStrokeColour = UIColor(named: minorSectionAnnotationLineStrokePathColour)!.cgColor
         
         let sectionMajorAxisAnnotationDashedLinePathStrokeColour = UIColor(named: majorSectionAnnotationLineStrokePathColour)!.cgColor
-        
+                
         // MARK: - Defining Universal Beam Section Outline UIBezierPath:
-
+        
         let path = UIBezierPath()
         
         let mirroredPathOne = UIBezierPath()
@@ -482,7 +593,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         fullSectionPath.append(mirroredPathTwo)
         
         // MARK: - Assigning Universal Beam Section UIBezierPath Properties:
-
+        
         universalBeamShapeLayer.path = fullSectionPath.cgPath
         
         universalBeamShapeLayer.fillColor = UIColor.clear.cgColor
@@ -492,7 +603,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         universalBeamShapeLayer.lineWidth = universalBeamShapeLayerPathLineWidth
         
         // MARK: - Defining Universal Beam Width of Section Dimensioning Annotation UIBezierPath:
-
+        
         let widthOfSectionHalfOfTheLeftSideArrowHeadPath = UIBezierPath()
         
         let widthOfSectionReflectedLeftArrowHeadHalfPath = UIBezierPath()
@@ -514,7 +625,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         widthOfSectionAnnotationLineMidXcoordinate = universalBeamSectionOutlineTopCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.x
         
         widthOfSectionDimensioningAnnotationLineYcoordinate = leftOfWidthOfSectionHorizontalDimensioningAnnotationLinePointCoordiantes.y
-
+        
         widthOfSectionHalfOfTheLeftSideArrowHeadPath.move(to: CGPoint(x: leftOfWidthOfSectionHorizontalDimensioningAnnotationLinePointCoordiantes.x, y: leftOfWidthOfSectionHorizontalDimensioningAnnotationLinePointCoordiantes.y))
         
         widthOfSectionHalfOfTheLeftSideArrowHeadPath.addLine(to: CGPoint(x: leftOfWidthOfSectionHorizontalDimensioningAnnotationLinePointCoordiantes.x + triangleSidesLengthsOfDimensioningArrowHeadAnnotationSymbol, y: leftOfWidthOfSectionHorizontalDimensioningAnnotationLinePointCoordiantes.y + triangleSidesLengthsOfDimensioningArrowHeadAnnotationSymbol))
@@ -559,31 +670,31 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         widthOfSectionFullPath.append(widthOfSectionReflectedFullLeftSideHalfPath)
         
         // MARK: - Defining Universal Beam Width of Section Dashed Dimensioning Annotation UIBezierPath:
-
+        
         widthOfSectionLeftSideDashedLinePath.move(to: CGPoint(x: leftOfWidthOfSectionHorizontalDimensioningAnnotationLinePointCoordiantes.x, y: universalBeamSectionOutlineTopCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.y - (universalBeamShapeLayerPathLineWidth/2)))
-
+        
         widthOfSectionLeftSideDashedLinePath.addLine(to: CGPoint(x: leftOfWidthOfSectionHorizontalDimensioningAnnotationLinePointCoordiantes.x, y: universalBeamSectionOutlineTopCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.y - (universalBeamShapeLayerPathLineWidth/2) - widthOfSectionVerticalDashedDimensioningAnnotationLinesLengths))
-
+        
         widthOfSectionRightSideDashedLinePath.move(to: CGPoint(x: universalBeamSectionOutlineTopEdgePointCoordinatesInsideThePositiveXandPositiveYquadrant.x, y: universalBeamSectionOutlineTopEdgePointCoordinatesInsideThePositiveXandPositiveYquadrant.y - (universalBeamShapeLayerPathLineWidth/2)))
-
+        
         widthOfSectionRightSideDashedLinePath.addLine(to: CGPoint(x: universalBeamSectionOutlineTopEdgePointCoordinatesInsideThePositiveXandPositiveYquadrant.x, y: universalBeamSectionOutlineTopEdgePointCoordinatesInsideThePositiveXandPositiveYquadrant.y - (universalBeamShapeLayerPathLineWidth/2) - widthOfSectionVerticalDashedDimensioningAnnotationLinesLengths))
-
+        
         dashedAnnotationLines.append(widthOfSectionLeftSideDashedLinePath)
-
+        
         dashedAnnotationLines.append(widthOfSectionRightSideDashedLinePath)
         
         // MARK: - Assigning Universal Beam Width of Section UIBezierPath Properties:
-
+        
         widthOfSectionAnnotationShapeLayer.path = widthOfSectionFullPath.cgPath
-
+        
         widthOfSectionAnnotationShapeLayer.strokeColor = dimensioningAnnotationLinesPathStrokeColour
-
+        
         widthOfSectionAnnotationShapeLayer.lineWidth = sectionDimensioningAnnotationsLinesPathLineWidth
         
         // MARK: - Defining Universal Beam Section Major & Minor Axis Annotation UIBezierPath:
-
+        
         let minorSectionAxisDashedLine = UIBezierPath()
-
+        
         let majorSectionAxisDashedLine = UIBezierPath()
         
         sectionMinorAnnotationVerticalLineTopYcoordinate = universalBeamSectionOutlineTopCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.y - minorAndMajorUniversalBeamDashedAnnotationLinesExtensionLengthFromProfileOutlineEdges
@@ -593,304 +704,352 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         sectionMajorAnnotationHorizontalLineLeftXcoordinate = leftOfWidthOfSectionHorizontalDimensioningAnnotationLinePointCoordiantes.x - minorAndMajorUniversalBeamDashedAnnotationLinesExtensionLengthFromProfileOutlineEdges
         
         sectionMajorAnnotationHorizontalLineRightXcoordinate = universalBeamSectionOutlineTopEdgePointCoordinatesInsideThePositiveXandPositiveYquadrant.x + minorAndMajorUniversalBeamDashedAnnotationLinesExtensionLengthFromProfileOutlineEdges
-
+        
         majorSectionAxisDashedLine.move(to: CGPoint(x: leftOfWidthOfSectionHorizontalDimensioningAnnotationLinePointCoordiantes.x - minorAndMajorUniversalBeamDashedAnnotationLinesExtensionLengthFromProfileOutlineEdges, y: universalBeamSectionOutlineDepthCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.y))
-
+        
         majorSectionAxisDashedLine.addLine(to: CGPoint(x: universalBeamSectionOutlineTopEdgePointCoordinatesInsideThePositiveXandPositiveYquadrant.x + minorAndMajorUniversalBeamDashedAnnotationLinesExtensionLengthFromProfileOutlineEdges, y: universalBeamSectionOutlineDepthCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.y))
-
+        
         minorSectionAxisDashedLine.move(to: CGPoint(x: universalBeamSectionOutlineTopCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.x, y: universalBeamSectionOutlineTopCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.y - minorAndMajorUniversalBeamDashedAnnotationLinesExtensionLengthFromProfileOutlineEdges))
-
+        
         minorSectionAxisDashedLine.addLine(to: CGPoint(x: universalBeamSectionOutlineTopCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.x, y: universalBeamSectionOutlineTopCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.y + (selectedUniversalBeamDepthOfSection * scaleToBeApplied) + minorAndMajorUniversalBeamDashedAnnotationLinesExtensionLengthFromProfileOutlineEdges))
-
+        
         // MARK: - Assigning Universal Beam Section Major & Minor Axis Annotation UIBezierPath Properties:
-
+        
         majorAxisDashedAnnotationLineShapeLayer.path = majorSectionAxisDashedLine.cgPath
-
+        
         majorAxisDashedAnnotationLineShapeLayer.lineWidth = majorAndMinorSectionAnnotationLinesPathLineWidth
-
+        
         majorAxisDashedAnnotationLineShapeLayer.strokeColor = sectionMajorAxisAnnotationDashedLinePathStrokeColour
-
+        
         majorAxisDashedAnnotationLineShapeLayer.lineDashPattern = [10, 2]
-
+        
         minorAxisDashedAnnotationLineShapeLayer.path = minorSectionAxisDashedLine.cgPath
-
+        
         minorAxisDashedAnnotationLineShapeLayer.lineWidth = majorAndMinorSectionAnnotationLinesPathLineWidth
-
+        
         minorAxisDashedAnnotationLineShapeLayer.strokeColor = sectionMinorAxisAnnotationDashedLinePathStrokeColour
-
+        
         minorAxisDashedAnnotationLineShapeLayer.lineDashPattern = [10, 2]
         
         // MARK: - Defining Universal Beam Depth of Section Dimensioning Annotation UIBezierPath:
-
+        
         let depthOfSectionHalfOfBottomArrowHeadPath = UIBezierPath()
-
+        
         let depthOfSectionReflectedBottomArrowHeadHalfPath = UIBezierPath()
-
+        
         let depthOfSectionHalfOfVerticalLinePath = UIBezierPath()
-
+        
         let depthOfSectionBottomDashedLinePath = UIBezierPath()
-
+        
         let depthOfSectionTopDashedLinePath = UIBezierPath()
-
+        
         let depthOfSectionFullBottomHalfPath = UIBezierPath()
-
+        
         let depthOfSectionReflectedFullBottomHalfPath = UIBezierPath()
-
+        
         let depthOfSectionFullPath = UIBezierPath()
         
         depthOfSectionDimensioningAnnotationLineXcoordinate = topOfDepthOfSectionVerticalDimensioningAnnotationLinePointCoordinates.x
         
         depthOfSectionAnnotationLineMidYcoordinate = universalBeamSectionOutlineDepthCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.y
-
+        
         depthOfSectionHalfOfBottomArrowHeadPath.move(to: CGPoint(x: topOfDepthOfSectionVerticalDimensioningAnnotationLinePointCoordinates.x, y: topOfDepthOfSectionVerticalDimensioningAnnotationLinePointCoordinates.y))
-
+        
         depthOfSectionHalfOfBottomArrowHeadPath.addLine(to: CGPoint(x: topOfDepthOfSectionVerticalDimensioningAnnotationLinePointCoordinates.x - triangleSidesLengthsOfDimensioningArrowHeadAnnotationSymbol, y: topOfDepthOfSectionVerticalDimensioningAnnotationLinePointCoordinates.y + triangleSidesLengthsOfDimensioningArrowHeadAnnotationSymbol))
-
+        
         depthOfSectionFullBottomHalfPath.append(depthOfSectionHalfOfBottomArrowHeadPath)
         
         // Below code lines are needed to reflect the bottom half of the arrow head about the vertical y-axis:
         
         let depthOfSectionBottomArrowHeadReflectionAxis = CGAffineTransform(scaleX: -1, y: 1)
-
+        
         let depthOfSectionReflectedBottomArrowHeadTranslation = CGAffineTransform(translationX: topOfDepthOfSectionVerticalDimensioningAnnotationLinePointCoordinates.x * 2, y: 0)
-
+        
         let depthOfSectionReflectedBottomArrowHeadCombinedReflectionAndTranslation = depthOfSectionBottomArrowHeadReflectionAxis.concatenating(depthOfSectionReflectedBottomArrowHeadTranslation)
-
+        
         depthOfSectionReflectedBottomArrowHeadHalfPath.append(depthOfSectionHalfOfBottomArrowHeadPath)
-
+        
         depthOfSectionReflectedBottomArrowHeadHalfPath.apply(depthOfSectionReflectedBottomArrowHeadCombinedReflectionAndTranslation)
-
+        
         depthOfSectionFullBottomHalfPath.append(depthOfSectionReflectedBottomArrowHeadHalfPath)
         
         // Below lines of codes are needed to draw the bottom vertical line half needed for the depth of section annotation:
         
         depthOfSectionHalfOfVerticalLinePath.move(to: CGPoint(x: topOfDepthOfSectionVerticalDimensioningAnnotationLinePointCoordinates.x, y: topOfDepthOfSectionVerticalDimensioningAnnotationLinePointCoordinates.y))
-
+        
         depthOfSectionHalfOfVerticalLinePath.addLine(to: CGPoint(x: topOfDepthOfSectionVerticalDimensioningAnnotationLinePointCoordinates.x, y: universalBeamSectionOutlineDepthCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.y))
-
+        
         depthOfSectionFullBottomHalfPath.append(depthOfSectionHalfOfVerticalLinePath)
-                
+        
         // Below code lines are needed in order to reflect the bottom half of the Depth Of Section Annotation elements about the horziontal x-axis:
         
         let depthOfSectionHorizontalReflectionLineForTheFullBottomHalfPath = CGAffineTransform(scaleX: 1, y: -1)
-
+        
         let depthOfSectionTranslationForTheReflectedFullBottomHalfPath = CGAffineTransform(translationX: 0, y: universalBeamSectionOutlineDepthCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.y * 2)
-
+        
         let requiredCombinedReflectionAndTranslationForTheFullBottomHalfPath = depthOfSectionHorizontalReflectionLineForTheFullBottomHalfPath.concatenating(depthOfSectionTranslationForTheReflectedFullBottomHalfPath)
-
+        
         depthOfSectionReflectedFullBottomHalfPath.append(depthOfSectionFullBottomHalfPath)
-
+        
         depthOfSectionReflectedFullBottomHalfPath.apply(requiredCombinedReflectionAndTranslationForTheFullBottomHalfPath)
-
+        
         depthOfSectionFullPath.append(depthOfSectionReflectedFullBottomHalfPath)
-
+        
         depthOfSectionFullPath.append(depthOfSectionFullBottomHalfPath)
-
+        
         // MARK: - Defining Universal Beam Depth of Section Dashed Dimensioning Annotation UIBezierPath:
-
+        
         depthOfSectionBottomDashedLinePath.move(to: CGPoint(x: universalBeamSectionOutlineTopEdgePointCoordinatesInsideThePositiveXandPositiveYquadrant.x + universalBeamShapeLayerPathLineWidth/2, y: universalBeamSectionOutlineTopEdgePointCoordinatesInsideThePositiveXandPositiveYquadrant.y))
-
+        
         depthOfSectionBottomDashedLinePath.addLine(to: CGPoint(x: universalBeamSectionOutlineTopEdgePointCoordinatesInsideThePositiveXandPositiveYquadrant.x + universalBeamShapeLayerPathLineWidth/2 + depthOfSectionHorizontalDashedDimensioningAnnotationLinesLengths, y: universalBeamSectionOutlineTopEdgePointCoordinatesInsideThePositiveXandPositiveYquadrant.y))
-
+        
         depthOfSectionTopDashedLinePath.move(to: CGPoint(x: universalBeamSectionOutlineTopEdgePointCoordinatesInsideThePositiveXandPositiveYquadrant.x + universalBeamShapeLayerPathLineWidth/2, y: topOfDepthOfSectionVerticalDimensioningAnnotationLinePointCoordinates.y + (selectedUniversalBeamDepthOfSection * scaleToBeApplied)))
-
+        
         depthOfSectionTopDashedLinePath.addLine(to: CGPoint(x: universalBeamSectionOutlineTopEdgePointCoordinatesInsideThePositiveXandPositiveYquadrant.x + universalBeamShapeLayerPathLineWidth/2 + depthOfSectionHorizontalDashedDimensioningAnnotationLinesLengths, y: topOfDepthOfSectionVerticalDimensioningAnnotationLinePointCoordinates.y + (selectedUniversalBeamDepthOfSection * scaleToBeApplied)))
-
+        
         dashedAnnotationLines.append(depthOfSectionBottomDashedLinePath)
-
+        
         dashedAnnotationLines.append(depthOfSectionTopDashedLinePath)
-
+        
         // MARK: - Assigning Universal Beam Depth of Section UIBezierPath Properties:
-
+        
         depthOfSectionAnnotationShapeLayer.path = depthOfSectionFullPath.cgPath
-
+        
         depthOfSectionAnnotationShapeLayer.strokeColor = dimensioningAnnotationLinesPathStrokeColour
-
+        
         depthOfSectionAnnotationShapeLayer.lineWidth = sectionDimensioningAnnotationsLinesPathLineWidth
         
         // MARK: - Assinging Universal Beam Depth & Width of Section Dashed Dimensioning Annotation UIBezierPath Properties:
-
+        
         dimensioningAnnotationDashedLinesShapeLayer.path = dashedAnnotationLines.cgPath
-
+        
         dimensioningAnnotationDashedLinesShapeLayer.lineDashPattern =  [NSNumber(value: Float(widthOfSectionVerticalDashedDimensioningAnnotationLinesLengths/6)), NSNumber(value: Float((widthOfSectionVerticalDashedDimensioningAnnotationLinesLengths/6)/4))]
-
+        
         dimensioningAnnotationDashedLinesShapeLayer.strokeColor = dimensioningAnnotationLinesPathStrokeColour
-
+        
         dimensioningAnnotationDashedLinesShapeLayer.lineWidth = universalBeamShapeLayerPathLineWidth
-
+        
         // MARK: - Defining Universal Beam Section Web Thickness Dimensioning Annotation UIBezierPath:
-
+        
         let sectionWebThicknessRightSideHalfOfTheBottomArrowHeadPath = UIBezierPath()
-
+        
         let sectionWebThicknessReflectedRightSideHalfOfTheBottomArrowHeadPath = UIBezierPath()
-
+        
         let sectionWebThicknessRightSideHorizontalLinePath = UIBezierPath()
-
+        
         let sectionWebThicknessFullRightSidePath = UIBezierPath()
-
+        
         let sectionWebThicknessReflectedFullRightSidePath = UIBezierPath()
-
+        
         let sectionWebThicknessFullPath = UIBezierPath()
         
-        sectionWebThicknessLeftHorizontalAnnotationLineStartingXcoordinate = universalBeamSectionOutlineDepthCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.x - (universalBeamShapeLayerPathLineWidth/2) - thicknessOfWebOrFlangesDimensioningAnnotationsHorizontalOrVerticalLinesLengths - (selectedUniversalBeamWebThickness * scaleToBeApplied)
+        sectionWebThicknessLeftHorizontalAnnotationLineStartingXcoordinate = universalBeamSectionOutlineDepthCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.x - (universalBeamShapeLayerPathLineWidth/2) - sectionFlangeOrWebThicknessOrRootRadiusDimensioningAnnotationVerticalOrHorizontalOrInclinedLineLength - (selectedUniversalBeamWebThickness * scaleToBeApplied)
         
         sectionWebThicknessDimensioningAnnotationHorizontalLineYcoordinate = (universalBeamSectionOutlineDepthCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.y) - distanceAboveUniversalBeamMajorAxisAnnotationDashedLineToSectionWebThicknessHorizontalDimensioningAnnotationLines
+        
         sectionWebThicknessRightSideHalfOfTheBottomArrowHeadPath.move(to: CGPoint(x: universalBeamSectionOutlineDepthCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.x + (universalBeamShapeLayerPathLineWidth/2), y: (universalBeamSectionOutlineDepthCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.y) - distanceAboveUniversalBeamMajorAxisAnnotationDashedLineToSectionWebThicknessHorizontalDimensioningAnnotationLines))
-
+        
         sectionWebThicknessRightSideHalfOfTheBottomArrowHeadPath.addLine(to: CGPoint(x: universalBeamSectionOutlineDepthCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.x + (universalBeamShapeLayerPathLineWidth/2) + triangleSidesLengthsOfDimensioningArrowHeadAnnotationSymbol, y: (universalBeamSectionOutlineDepthCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.y) - distanceAboveUniversalBeamMajorAxisAnnotationDashedLineToSectionWebThicknessHorizontalDimensioningAnnotationLines + triangleSidesLengthsOfDimensioningArrowHeadAnnotationSymbol))
-
+        
         sectionWebThicknessFullRightSidePath.append(sectionWebThicknessRightSideHalfOfTheBottomArrowHeadPath)
         
         // Below code lines are needed to reflect the bottom right hand side arrow head about the horizontal axis:
         
         let sectionWebThicknessBottomRightHandSideArrowHeadReflectionAxis = CGAffineTransform(scaleX: 1, y: -1)
-
+        
         let sectionWebThicknessReflectedBottomRightHandSideArrowHeadTranslation = CGAffineTransform(translationX: 0, y: ((universalBeamSectionOutlineDepthCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.y) - distanceAboveUniversalBeamMajorAxisAnnotationDashedLineToSectionWebThicknessHorizontalDimensioningAnnotationLines) * 2)
-
+        
         let sectionWebThicknessReflectedBottomRightHandSideArrowHeadCombinedReflectionAndTranslation = sectionWebThicknessBottomRightHandSideArrowHeadReflectionAxis.concatenating(sectionWebThicknessReflectedBottomRightHandSideArrowHeadTranslation)
-
+        
         sectionWebThicknessReflectedRightSideHalfOfTheBottomArrowHeadPath.append(sectionWebThicknessRightSideHalfOfTheBottomArrowHeadPath)
-
+        
         sectionWebThicknessReflectedRightSideHalfOfTheBottomArrowHeadPath.apply(sectionWebThicknessReflectedBottomRightHandSideArrowHeadCombinedReflectionAndTranslation)
-
+        
         sectionWebThicknessFullRightSidePath.append(sectionWebThicknessReflectedRightSideHalfOfTheBottomArrowHeadPath)
         
-//         Below lines of codes are needed to draw the right hand side horizontal line needed for the section web thickness annotation:
+        //         Below lines of codes are needed to draw the right hand side horizontal line needed for the section web thickness annotation:
         
         sectionWebThicknessRightSideHorizontalLinePath.move(to: CGPoint(x: universalBeamSectionOutlineDepthCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.x + (universalBeamShapeLayerPathLineWidth/2), y: (universalBeamSectionOutlineDepthCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.y) - distanceAboveUniversalBeamMajorAxisAnnotationDashedLineToSectionWebThicknessHorizontalDimensioningAnnotationLines))
-
-        sectionWebThicknessRightSideHorizontalLinePath.addLine(to: CGPoint(x: universalBeamSectionOutlineDepthCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.x + (universalBeamShapeLayerPathLineWidth/2) + thicknessOfWebOrFlangesDimensioningAnnotationsHorizontalOrVerticalLinesLengths, y: (universalBeamSectionOutlineDepthCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.y) - distanceAboveUniversalBeamMajorAxisAnnotationDashedLineToSectionWebThicknessHorizontalDimensioningAnnotationLines))
-
+        
+        sectionWebThicknessRightSideHorizontalLinePath.addLine(to: CGPoint(x: universalBeamSectionOutlineDepthCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.x + (universalBeamShapeLayerPathLineWidth/2) + sectionFlangeOrWebThicknessOrRootRadiusDimensioningAnnotationVerticalOrHorizontalOrInclinedLineLength, y: (universalBeamSectionOutlineDepthCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.y) - distanceAboveUniversalBeamMajorAxisAnnotationDashedLineToSectionWebThicknessHorizontalDimensioningAnnotationLines))
+        
         sectionWebThicknessFullRightSidePath.append(sectionWebThicknessRightSideHorizontalLinePath)
         
         // Below code lines are needed to reflect the full right hand side section web thickness annotation about the vertical axis:
         
         let sectionWebThicknessFullRightHandSidePathReflectionAxis = CGAffineTransform(scaleX: -1, y: 1)
-
+        
         let sectionWebThicknessReflectedBottomFullRightHandSidePathTranslation = CGAffineTransform(translationX: (universalBeamSectionOutlineDepthCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.x * 2) - (selectedUniversalBeamWebThickness * scaleToBeApplied), y: 0)
-
+        
         let sectionWebThicknessReflectedFullRightHandSidePathCombinedReflectionAndTranslation = sectionWebThicknessFullRightHandSidePathReflectionAxis.concatenating(sectionWebThicknessReflectedBottomFullRightHandSidePathTranslation)
-
+        
         sectionWebThicknessReflectedFullRightSidePath.append(sectionWebThicknessFullRightSidePath)
-
+        
         sectionWebThicknessReflectedFullRightSidePath.apply(sectionWebThicknessReflectedFullRightHandSidePathCombinedReflectionAndTranslation)
-
+        
         sectionWebThicknessFullPath.append(sectionWebThicknessFullRightSidePath)
-
+        
         sectionWebThicknessFullPath.append(sectionWebThicknessReflectedFullRightSidePath)
         
         // MARK: - Assinging Universal Beam Section Web Thickness Dimensioning Annotation UIBezierPath Properties:
-
+        
         sectionWebThicknessAnnotationShapeLayer.path = sectionWebThicknessFullPath.cgPath
-
+        
         sectionWebThicknessAnnotationShapeLayer.strokeColor = dimensioningAnnotationLinesPathStrokeColour
-
+        
         sectionWebThicknessAnnotationShapeLayer.lineWidth = sectionDimensioningAnnotationsLinesPathLineWidth
         
         // MARK: - Defining Universal Beam Section Flange Thickness Dimensioning Annotation UIBezierPath:
-
+        
         let sectionFlangeThicknessBottomSideHalfArrowHeadPath = UIBezierPath()
-
+        
         let sectionFlangeThicknessReflectedBottomSideHalfArrowHeadPath = UIBezierPath()
-
+        
         let sectionFlangeThicknessBottomSideVerticalLinePath = UIBezierPath()
-
+        
         let sectionFlangeThicknessFullBottomSidePath = UIBezierPath()
-
+        
         let sectionFlangeThicknessReflectedFullBottomSidePath = UIBezierPath()
-
+        
         let sectionFlangeThicknessFullPath = UIBezierPath()
         
         sectionFlangeThicknessDimensioningAnnotationLabelVerticalLineXcoordinate = universalBeamSectionOutlineTopCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.x - distanceToTheLeftHandSideOfTheUniversalBeamMinorAxisAnnotationDashedLineToSectionFlangeThicknessVerticalDimensioningAnnotationLines
         
-        sectionFlangeThicknessTopVerticalAnnotationLineStartingYcoordinate = universalBeamSectionOutlineTopCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.y + (selectedUniversalBeamDepthOfSection * scaleToBeApplied) - (selectedUniversalBeamFlangeThickness * scaleToBeApplied) - (universalBeamShapeLayerPathLineWidth/2) - thicknessOfWebOrFlangesDimensioningAnnotationsHorizontalOrVerticalLinesLengths
-
+        sectionFlangeThicknessTopVerticalAnnotationLineStartingYcoordinate = universalBeamSectionOutlineTopCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.y + (selectedUniversalBeamDepthOfSection * scaleToBeApplied) - (selectedUniversalBeamFlangeThickness * scaleToBeApplied) - (universalBeamShapeLayerPathLineWidth/2) - sectionFlangeOrWebThicknessOrRootRadiusDimensioningAnnotationVerticalOrHorizontalOrInclinedLineLength
+        
         sectionFlangeThicknessBottomSideHalfArrowHeadPath.move(to: CGPoint(x: universalBeamSectionOutlineTopCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.x - distanceToTheLeftHandSideOfTheUniversalBeamMinorAxisAnnotationDashedLineToSectionFlangeThicknessVerticalDimensioningAnnotationLines, y: universalBeamSectionOutlineTopCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.y + (selectedUniversalBeamDepthOfSection * scaleToBeApplied) + (universalBeamShapeLayerPathLineWidth/2)))
-
+        
         sectionFlangeThicknessBottomSideHalfArrowHeadPath.addLine(to: CGPoint(x: universalBeamSectionOutlineTopCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.x - distanceToTheLeftHandSideOfTheUniversalBeamMinorAxisAnnotationDashedLineToSectionFlangeThicknessVerticalDimensioningAnnotationLines + triangleSidesLengthsOfDimensioningArrowHeadAnnotationSymbol, y: universalBeamSectionOutlineTopCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.y + (selectedUniversalBeamDepthOfSection * scaleToBeApplied) + (universalBeamShapeLayerPathLineWidth/2) + triangleSidesLengthsOfDimensioningArrowHeadAnnotationSymbol))
-
+        
         sectionFlangeThicknessFullBottomSidePath.append(sectionFlangeThicknessBottomSideHalfArrowHeadPath)
         
-//         Below code lines are needed to reflect the bottom half arrow head about the vertical axis:
-
+        //         Below code lines are needed to reflect the bottom half arrow head about the vertical axis:
+        
         let sectionFlangeThicknessBottomSideHalfArrowHeadReflectionAxis = CGAffineTransform(scaleX: -1, y: 1)
-
+        
         let sectionFlangeThicknessReflectedBottomSideHalfArrowHeadTranslation = CGAffineTransform(translationX: (universalBeamSectionOutlineTopCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.x - distanceToTheLeftHandSideOfTheUniversalBeamMinorAxisAnnotationDashedLineToSectionFlangeThicknessVerticalDimensioningAnnotationLines) * 2, y: 0)
-
+        
         let sectionFlangeThicknessReflectedBottomSideHalfArrowHeadCombinedReflectionAndTranslation = sectionFlangeThicknessBottomSideHalfArrowHeadReflectionAxis.concatenating(sectionFlangeThicknessReflectedBottomSideHalfArrowHeadTranslation)
-
+        
         sectionFlangeThicknessReflectedBottomSideHalfArrowHeadPath.append(sectionFlangeThicknessBottomSideHalfArrowHeadPath)
-
+        
         sectionFlangeThicknessReflectedBottomSideHalfArrowHeadPath.apply(sectionFlangeThicknessReflectedBottomSideHalfArrowHeadCombinedReflectionAndTranslation)
-
+        
         sectionFlangeThicknessFullBottomSidePath.append(sectionFlangeThicknessReflectedBottomSideHalfArrowHeadPath)
-
+        
         // Below lines of codes are needed to draw the bottom hand side vertical line needed for the section flange thickness annotation:
         
         sectionFlangeThicknessBottomSideVerticalLinePath.move(to: CGPoint(x: universalBeamSectionOutlineTopCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.x - distanceToTheLeftHandSideOfTheUniversalBeamMinorAxisAnnotationDashedLineToSectionFlangeThicknessVerticalDimensioningAnnotationLines, y: universalBeamSectionOutlineTopCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.y + (selectedUniversalBeamDepthOfSection * scaleToBeApplied) + (universalBeamShapeLayerPathLineWidth/2)))
-
-        sectionFlangeThicknessBottomSideVerticalLinePath.addLine(to: CGPoint(x: universalBeamSectionOutlineTopCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.x - distanceToTheLeftHandSideOfTheUniversalBeamMinorAxisAnnotationDashedLineToSectionFlangeThicknessVerticalDimensioningAnnotationLines, y: universalBeamSectionOutlineTopCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.y + (selectedUniversalBeamDepthOfSection * scaleToBeApplied) + (universalBeamShapeLayerPathLineWidth/2) + thicknessOfWebOrFlangesDimensioningAnnotationsHorizontalOrVerticalLinesLengths))
+        
+        sectionFlangeThicknessBottomSideVerticalLinePath.addLine(to: CGPoint(x: universalBeamSectionOutlineTopCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.x - distanceToTheLeftHandSideOfTheUniversalBeamMinorAxisAnnotationDashedLineToSectionFlangeThicknessVerticalDimensioningAnnotationLines, y: universalBeamSectionOutlineTopCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.y + (selectedUniversalBeamDepthOfSection * scaleToBeApplied) + (universalBeamShapeLayerPathLineWidth/2) + sectionFlangeOrWebThicknessOrRootRadiusDimensioningAnnotationVerticalOrHorizontalOrInclinedLineLength))
         
         sectionFlangeThicknessFullBottomSidePath.append(sectionFlangeThicknessBottomSideVerticalLinePath)
-
+        
         // Below code lines are needed to reflect the full bottom section flange thickness annotation about the horizontal axis:
         
         let sectionFlangeThicknessFullBottomHandSidePathReflectionAxis = CGAffineTransform(scaleX: 1, y: -1)
-
+        
         let sectionFlangeThicknessReflectedFullBottomHandSidePathTranslation = CGAffineTransform(translationX: 0, y: ((universalBeamSectionOutlineTopCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.y + (selectedUniversalBeamDepthOfSection * scaleToBeApplied) + (universalBeamShapeLayerPathLineWidth/2)) * 2) - (selectedUniversalBeamFlangeThickness * scaleToBeApplied) - (universalBeamShapeLayerPathLineWidth))
-
+        
         let sectionFlangeThicknessReflectedFullBottomHandSidePathCombinedReflectionAndTranslation = sectionFlangeThicknessFullBottomHandSidePathReflectionAxis.concatenating(sectionFlangeThicknessReflectedFullBottomHandSidePathTranslation)
-
+        
         sectionFlangeThicknessReflectedFullBottomSidePath.append(sectionFlangeThicknessFullBottomSidePath)
-
+        
         sectionFlangeThicknessReflectedFullBottomSidePath.apply(sectionFlangeThicknessReflectedFullBottomHandSidePathCombinedReflectionAndTranslation)
-
+        
         sectionFlangeThicknessFullPath.append(sectionFlangeThicknessFullBottomSidePath)
-
+        
         sectionFlangeThicknessFullPath.append(sectionFlangeThicknessReflectedFullBottomSidePath)
         
         // MARK: - Assinging Universal Beam Section Flange Thickness Dimensioning Annotation UIBezierPath Properties:
-
+        
         sectionFlangeThicknessAnnotationShapeLayer.path = sectionFlangeThicknessFullPath.cgPath
-
+        
         sectionFlangeThicknessAnnotationShapeLayer.strokeColor = dimensioningAnnotationLinesPathStrokeColour
-
+        
         sectionFlangeThicknessAnnotationShapeLayer.lineWidth = universalBeamShapeLayerPathLineWidth
         
-          // MARK: - Defining Universal Beam Section Root Radius Dimensioning Annotation Arrow UIBezierPath:
+        // MARK: - Defining Universal Beam Section Root Radius Dimensioning Annotation Arrow UIBezierPath:
         
-        let rootRadiusDimensioningInclinedLinePath = UIBezierPath()
+        let rootRadiusDimensioningInclinedLinePathAndHorizontalHalfArrowSymbol = UIBezierPath()
         
-        var rootRadiusDimensioningAnnotationLineLengthToBeUsed: CGFloat = 0
+        let rootRadiusVerticalHalfArrowHeadSymbol = UIBezierPath()
         
-        let differenceBetweenTotalDimensioningRootRadiusAnnotationLineLengthAndSelectedUniversalBeamRootRadiusLength = triangleSidesLengthsOfDimensioningArrowHeadAnnotationSymbol - (selectedUniversalBeamRootRadius * scaleToBeApplied)
+        let fullRootRadiusDimensioningAnnotationPath = UIBezierPath()
         
-        if differenceBetweenTotalDimensioningRootRadiusAnnotationLineLengthAndSelectedUniversalBeamRootRadiusLength > 0 {
+        let differenceBetweenSectionFlangeOrWebThicknessOrRootRadiusDimensioningAnnotationVerticalOrHorizontalOrInclinedLineLengthAndSelectedUniversalBeamRootRadius = sectionFlangeOrWebThicknessOrRootRadiusDimensioningAnnotationVerticalOrHorizontalOrInclinedLineLength - (selectedUniversalBeamRootRadius * scaleToBeApplied)
+        
+        if differenceBetweenSectionFlangeOrWebThicknessOrRootRadiusDimensioningAnnotationVerticalOrHorizontalOrInclinedLineLengthAndSelectedUniversalBeamRootRadius > 0 {
             
-            rootRadiusDimensioningAnnotationLineLengthToBeUsed = differenceBetweenTotalDimensioningRootRadiusAnnotationLineLengthAndSelectedUniversalBeamRootRadiusLength
+            universalBeamSectionRootRadiusInclinedDimensioningLineStartingXCoordinate = universalBeamSectionOutlineRootRadiusCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.x + (cos(CGFloat.pi/4) * differenceBetweenSectionFlangeOrWebThicknessOrRootRadiusDimensioningAnnotationVerticalOrHorizontalOrInclinedLineLengthAndSelectedUniversalBeamRootRadius)
+            
+            universalBeamSectionRootRadiusInclinedDimensioningLineStartingYCoordinate = universalBeamSectionOutlineRootRadiusCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.y + (sin(CGFloat.pi/4) * differenceBetweenSectionFlangeOrWebThicknessOrRootRadiusDimensioningAnnotationVerticalOrHorizontalOrInclinedLineLengthAndSelectedUniversalBeamRootRadius)
+            
+            rootRadiusDimensioningInclinedLinePathAndHorizontalHalfArrowSymbol.move(to: CGPoint(x: universalBeamSectionRootRadiusInclinedDimensioningLineStartingXCoordinate, y: universalBeamSectionRootRadiusInclinedDimensioningLineStartingYCoordinate))
+            
+            rootRadiusDimensioningInclinedLinePathAndHorizontalHalfArrowSymbol.addLine(to: CGPoint(x: universalBeamSectionRootRadiusInclinedDimensioningLineStartingXCoordinate - (cos(CGFloat.pi/4) * sectionFlangeOrWebThicknessOrRootRadiusDimensioningAnnotationVerticalOrHorizontalOrInclinedLineLength) + universalBeamShapeLayerPathLineWidth/2, y: universalBeamSectionRootRadiusInclinedDimensioningLineStartingYCoordinate - (sin(CGFloat.pi/4) * sectionFlangeOrWebThicknessOrRootRadiusDimensioningAnnotationVerticalOrHorizontalOrInclinedLineLength) + universalBeamShapeLayerPathLineWidth/2))
+            
+            rootRadiusDimensioningInclinedLinePathAndHorizontalHalfArrowSymbol.addLine(to: CGPoint(x: (universalBeamSectionRootRadiusInclinedDimensioningLineStartingXCoordinate - (cos(CGFloat.pi/4) * sectionFlangeOrWebThicknessOrRootRadiusDimensioningAnnotationVerticalOrHorizontalOrInclinedLineLength) + universalBeamShapeLayerPathLineWidth/2) + (sqrt(pow(triangleSidesLengthsOfDimensioningArrowHeadAnnotationSymbol, 2) + pow(triangleSidesLengthsOfDimensioningArrowHeadAnnotationSymbol, 2))), y: universalBeamSectionRootRadiusInclinedDimensioningLineStartingYCoordinate - (sin(CGFloat.pi/4) * sectionFlangeOrWebThicknessOrRootRadiusDimensioningAnnotationVerticalOrHorizontalOrInclinedLineLength) + universalBeamShapeLayerPathLineWidth/2))
+            
+            fullRootRadiusDimensioningAnnotationPath.append(rootRadiusDimensioningInclinedLinePathAndHorizontalHalfArrowSymbol)
+            
+            
+            rootRadiusVerticalHalfArrowHeadSymbol.move(to: CGPoint(x: universalBeamSectionRootRadiusInclinedDimensioningLineStartingXCoordinate - (cos(CGFloat.pi/4) * sectionFlangeOrWebThicknessOrRootRadiusDimensioningAnnotationVerticalOrHorizontalOrInclinedLineLength) + universalBeamShapeLayerPathLineWidth/2, y: universalBeamSectionRootRadiusInclinedDimensioningLineStartingYCoordinate - (sin(CGFloat.pi/4) * sectionFlangeOrWebThicknessOrRootRadiusDimensioningAnnotationVerticalOrHorizontalOrInclinedLineLength) + universalBeamShapeLayerPathLineWidth/2))
+            
+            rootRadiusVerticalHalfArrowHeadSymbol.addLine(to: CGPoint(x: universalBeamSectionRootRadiusInclinedDimensioningLineStartingXCoordinate - (cos(CGFloat.pi/4) * sectionFlangeOrWebThicknessOrRootRadiusDimensioningAnnotationVerticalOrHorizontalOrInclinedLineLength) + universalBeamShapeLayerPathLineWidth/2, y: universalBeamSectionRootRadiusInclinedDimensioningLineStartingYCoordinate - (sin(CGFloat.pi/4) * sectionFlangeOrWebThicknessOrRootRadiusDimensioningAnnotationVerticalOrHorizontalOrInclinedLineLength) + universalBeamShapeLayerPathLineWidth/2 + (sqrt(pow(triangleSidesLengthsOfDimensioningArrowHeadAnnotationSymbol, 2) + pow(triangleSidesLengthsOfDimensioningArrowHeadAnnotationSymbol, 2)))))
+            
+            fullRootRadiusDimensioningAnnotationPath.append(rootRadiusVerticalHalfArrowHeadSymbol)
+            
             
         } else {
             
-            rootRadiusDimensioningAnnotationLineLengthToBeUsed = selectedUniversalBeamRootRadius * scaleToBeApplied
+            universalBeamSectionRootRadiusInclinedDimensioningLineStartingXCoordinate = universalBeamSectionOutlineRootRadiusCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.x
+            
+            universalBeamSectionRootRadiusInclinedDimensioningLineStartingYCoordinate = universalBeamSectionOutlineRootRadiusCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.y
+            rootRadiusDimensioningInclinedLinePathAndHorizontalHalfArrowSymbol.move(to: CGPoint(x: universalBeamSectionRootRadiusInclinedDimensioningLineStartingXCoordinate, y: universalBeamSectionRootRadiusInclinedDimensioningLineStartingYCoordinate))
+            
+            rootRadiusDimensioningInclinedLinePathAndHorizontalHalfArrowSymbol.addLine(to: CGPoint(x: (universalBeamSectionRootRadiusInclinedDimensioningLineStartingXCoordinate - (cos(CGFloat.pi/4) * selectedUniversalBeamRootRadius * scaleToBeApplied)) + universalBeamShapeLayerPathLineWidth/2, y: (universalBeamSectionRootRadiusInclinedDimensioningLineStartingYCoordinate - (sin(CGFloat.pi/4) * selectedUniversalBeamRootRadius * scaleToBeApplied)) + universalBeamShapeLayerPathLineWidth/2))
+            
+            rootRadiusDimensioningInclinedLinePathAndHorizontalHalfArrowSymbol.addLine(to: CGPoint(x: (universalBeamSectionRootRadiusInclinedDimensioningLineStartingXCoordinate - (cos(CGFloat.pi/4) * sectionFlangeOrWebThicknessOrRootRadiusDimensioningAnnotationVerticalOrHorizontalOrInclinedLineLength) + universalBeamShapeLayerPathLineWidth/2) + (sqrt(pow(triangleSidesLengthsOfDimensioningArrowHeadAnnotationSymbol, 2) + pow(triangleSidesLengthsOfDimensioningArrowHeadAnnotationSymbol, 2))), y: (universalBeamSectionRootRadiusInclinedDimensioningLineStartingYCoordinate - (sin(CGFloat.pi/4) * sectionFlangeOrWebThicknessOrRootRadiusDimensioningAnnotationVerticalOrHorizontalOrInclinedLineLength) + universalBeamShapeLayerPathLineWidth/2)))
+            fullRootRadiusDimensioningAnnotationPath.append(rootRadiusDimensioningInclinedLinePathAndHorizontalHalfArrowSymbol)
+            
+            rootRadiusVerticalHalfArrowHeadSymbol.move(to: CGPoint(x: universalBeamSectionRootRadiusInclinedDimensioningLineStartingXCoordinate - (cos(CGFloat.pi/4) * sectionFlangeOrWebThicknessOrRootRadiusDimensioningAnnotationVerticalOrHorizontalOrInclinedLineLength) + universalBeamShapeLayerPathLineWidth/2, y: universalBeamSectionRootRadiusInclinedDimensioningLineStartingYCoordinate - (sin(CGFloat.pi/4) * sectionFlangeOrWebThicknessOrRootRadiusDimensioningAnnotationVerticalOrHorizontalOrInclinedLineLength) + universalBeamShapeLayerPathLineWidth/2))
+            
+            rootRadiusVerticalHalfArrowHeadSymbol.addLine(to: CGPoint(x: universalBeamSectionRootRadiusInclinedDimensioningLineStartingXCoordinate - (cos(CGFloat.pi/4) * sectionFlangeOrWebThicknessOrRootRadiusDimensioningAnnotationVerticalOrHorizontalOrInclinedLineLength) + universalBeamShapeLayerPathLineWidth/2, y: universalBeamSectionRootRadiusInclinedDimensioningLineStartingYCoordinate - (sin(CGFloat.pi/4) * sectionFlangeOrWebThicknessOrRootRadiusDimensioningAnnotationVerticalOrHorizontalOrInclinedLineLength) + universalBeamShapeLayerPathLineWidth/2 + (sqrt(pow(triangleSidesLengthsOfDimensioningArrowHeadAnnotationSymbol, 2) + pow(triangleSidesLengthsOfDimensioningArrowHeadAnnotationSymbol, 2)))))
+            
+            fullRootRadiusDimensioningAnnotationPath.append(rootRadiusVerticalHalfArrowHeadSymbol)
             
         }
         
-        rootRadiusDimensioningInclinedLinePath.move(to: CGPoint(x: universalBeamSectionOutlineRootRadiusCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.x, y: universalBeamSectionOutlineRootRadiusCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.y))
-        
-        rootRadiusDimensioningInclinedLinePath.addLine(to: CGPoint(x: universalBeamSectionOutlineRootRadiusCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.x - (selectedUniversalBeamRootRadius * scaleToBeApplied * cos(CGFloat.pi/4)), y: universalBeamSectionOutlineRootRadiusCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.y - (selectedUniversalBeamRootRadius * scaleToBeApplied * cos(CGFloat.pi/4))))
-        
-        rootRadiusDimensioningInclinedLinePath.addLine(to: CGPoint(x: universalBeamSectionOutlineRootRadiusCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.x - (selectedUniversalBeamRootRadius * scaleToBeApplied * cos(CGFloat.pi/4)), y: universalBeamSectionOutlineRootRadiusCentrePointCoordinatesInsideThePositiveXandPositiveYquadrant.y - (selectedUniversalBeamRootRadius * scaleToBeApplied * cos(CGFloat.pi/4)) + (selectedUniversalBeamRootRadius/2 * scaleToBeApplied * cos(CGFloat.pi/4))))
-        
-        
         // MARK: - Assinging Universal Beam Section Root Radius Dimensioning Annotation UIBezierPath Properties:
-
-        rootRadiusDimensioningAnnotationLineShapeLayer.path = rootRadiusDimensioningInclinedLinePath.cgPath
-
+        
+        rootRadiusDimensioningAnnotationLineShapeLayer.path = fullRootRadiusDimensioningAnnotationPath.cgPath
+        
         rootRadiusDimensioningAnnotationLineShapeLayer.strokeColor = dimensioningAnnotationLinesPathStrokeColour
-
+        
+        rootRadiusDimensioningAnnotationLineShapeLayer.fillColor = UIColor.clear.cgColor
+        
         rootRadiusDimensioningAnnotationLineShapeLayer.lineWidth = sectionDimensioningAnnotationsLinesPathLineWidth
-    
+        
     }
+    
+    func drawingVerticalAndHorizontalSeparatorsLinesForSectionDimensionsAndPropertiesLabel() {
+        
+        let verticalSeparatorLinePathBetweenSectionDimensionsLabels = UIBezierPath()
+        
+        verticalSeparatorLinePathBetweenSectionDimensionsLabels.move(to: CGPoint(x: self.view.frame.width/2, y: 10))
+        
+        verticalSeparatorLinePathBetweenSectionDimensionsLabels.addLine(to: CGPoint(x: self.view.frame.width/2, y: 800))
+        
+        verticalLineSeparatorBetweenSectionDimensionsLabels.path = verticalSeparatorLinePathBetweenSectionDimensionsLabels.cgPath
+                
+        verticalLineSeparatorBetweenSectionDimensionsLabels.strokeColor = UIColor.black.cgColor
+        
+        verticalLineSeparatorBetweenSectionDimensionsLabels.lineWidth = 2
+        
+    }
+    
+    // MARK: - Declaring constraints:
     
     func setupSubViewsConstraints() {
         
@@ -940,8 +1099,40 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
             
             universalBeamMajorAxisRightAnnotationLabel.topAnchor.constraint(equalTo: universalBeamDrawingView.topAnchor, constant: depthOfSectionAnnotationLineMidYcoordinate - universalBeamMajorAxisRightAnnotationLabel.intrinsicContentSize.height/2),
             
-            universalBeamMajorAxisRightAnnotationLabel.leftAnchor.constraint(equalTo: universalBeamDrawingView.leftAnchor, constant: sectionMajorAnnotationHorizontalLineRightXcoordinate)
+            universalBeamMajorAxisRightAnnotationLabel.leftAnchor.constraint(equalTo: universalBeamDrawingView.leftAnchor, constant: sectionMajorAnnotationHorizontalLineRightXcoordinate),
             
+            universalBeamRootRadiusAnnotationLabel.leftAnchor.constraint(equalTo: universalBeamDrawingView.leftAnchor, constant: universalBeamSectionRootRadiusInclinedDimensioningLineStartingXCoordinate - universalBeamRootRadiusAnnotationLabel.intrinsicContentSize.width/2 + universalBeamRootRadiusAnnotationLabel.intrinsicContentSize.height/2),
+            
+            universalBeamRootRadiusAnnotationLabel.topAnchor.constraint(equalTo: universalBeamDrawingView.topAnchor, constant: universalBeamSectionRootRadiusInclinedDimensioningLineStartingYCoordinate + universalBeamRootRadiusAnnotationLabel.intrinsicContentSize.width/2),
+            
+            sectionDimensionsAndPropertiesScrollView.leftAnchor.constraint(equalTo: self.view.leftAnchor),
+            
+            sectionDimensionsAndPropertiesScrollView.rightAnchor.constraint(equalTo: self.view.rightAnchor),
+            
+            sectionDimensionsAndPropertiesScrollView.topAnchor.constraint(equalTo: universalBeamDrawingView.bottomAnchor),
+            
+            sectionDimensionsAndPropertiesScrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            
+            scrollViewSectionDimensionsTitle.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: sectionDimensionsAndPropertiesTitlesMarginFromScreenLeftEdge),
+            
+            scrollViewSectionDimensionsTitle.topAnchor.constraint(equalTo: sectionDimensionsAndPropertiesScrollView.topAnchor, constant: marginFromTopOfScrollView),
+            
+            scrollViewDepthOfSectionLabel.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: sectionDimensionsAndPropertiesLabelsMarginFromScreenLeftEdge),
+            
+            scrollViewDepthOfSectionLabel.rightAnchor.constraint(equalTo: self.view.centerXAnchor, constant: -1 * sectionDimensionsLabelsMarginsFromVerticalSeparatorLineLeftAndRightSide),
+
+            scrollViewDepthOfSectionLabel.topAnchor.constraint(equalTo: scrollViewSectionDimensionsTitle.bottomAnchor, constant: verticalSpacingBetweenLabels),
+            
+            scrollViewWidthOfSectionLabel.leftAnchor.constraint(equalTo: self.view.centerXAnchor, constant: sectionDimensionsLabelsMarginsFromVerticalSeparatorLineLeftAndRightSide),
+            
+            
+            
+            scrollViewWidthOfSectionLabel.topAnchor.constraint(equalTo: scrollViewSectionDimensionsTitle.bottomAnchor, constant: verticalSpacingBetweenLabels),
+            
+            scrollViewWidthOfSectionLabel.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: marginFromScreenRightEdge)
+
+
+
         ])
         
     }
