@@ -10,7 +10,7 @@ import UIKit
 
 class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     
-    // MARK: - univeralBeam properties passed from previous viewController:
+    // MARK: - Univeral Beam properties passed from previous viewController, the below start at 0 and later on get their values from the previous View Controller:
     
     var selectedUniversalBeamMassPerMetre: Double = 0
     
@@ -30,6 +30,10 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     
     var selectedUniversalBeamEndClearanceDetailingDimension = 0
     
+    var selectedUniversalBeamNotchNdetailingDimension = 0
+    
+    var selectedUniversalBeamNotchnDetailingDimension = 0
+    
     var selectedUniversalBeamSecondMomentOfAreaAboutMajorAxis: Double = 0
     
     var selectedUniversalBeamSecondMomentOfAreaAboutMinorAxis: Double = 0
@@ -46,7 +50,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     
     lazy var navigationBar = CustomUINavigationBar(normalStateNavBarLeftButtonImage: "normalStateBackButton", highlightedStateNavBarLeftButtonImage: "highlightedStateBackButton", navBarLeftButtonTarget: self, navBarLeftButtonSelector: #selector(navigationBarLeftButtonPressed(sender:)), labelTitleText: "Universal Beam Data", titleLabelFontHexColourCode: "#FFFF52", labelTitleFontSize: 16, labelTitleFontType: "AppleSDGothicNeo-Light", isNavBarTranslucent: false, navBarBackgroundColourHexCode: "#CCCC04", navBarBackgroundColourAlphaValue: 1.0, navBarStyle: .black, preferLargeTitles: false, navBarDelegate: self, navBarItemsHexColourCode: "#E0E048")
     
-    // MARK: - CoreAnimation Layers Declaration:
+    // MARK: - CoreAnimation Layers Declaration that are needed to draw the universal beam section, as well as its annotations:
     
     let universalBeamShapeLayer = CAShapeLayer()
     
@@ -68,51 +72,53 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     
     let rootRadiusDimensioningAnnotationLineShapeLayer = CAShapeLayer()
     
+    // MARK: - CoreAnimation Layers Declaration that are needed to draw the separation lines needed inside the UIScrollView:
+    
     let verticalLineSeparatorBetweenSectionDimensionsLabels = CAShapeLayer()
     
-    // MARK: - depthOfSection Vertical Annotation Line X & Mid Y Coordinates:
+    // MARK: - depthOfSection Vertical Annotation Line X & Mid Y Coordinates, the below gets their values later on from the draw universal beam profile function:
     
     var depthOfSectionDimensioningAnnotationLineXcoordinate: CGFloat = 0
     
     var depthOfSectionAnnotationLineMidYcoordinate: CGFloat = 0
     
-    // MARK: - widthOfSection Horizontal Annotation Line  Y & Mid X Coordinates Coordinate:
+    // MARK: - widthOfSection Horizontal Annotation Line  Y & Mid X Coordinates Coordinate, the below gets their values later on from the draw universal beam profile function:
     
     var widthOfSectionAnnotationLineMidXcoordinate: CGFloat = 0
     
     var widthOfSectionDimensioningAnnotationLineYcoordinate: CGFloat = 0
     
-    // MARK: - sectionWebThickness Left hand side Horizontal Annotation Line starting X & Y coordinate Declaration:
+    // MARK: - sectionWebThickness Left hand side Horizontal Annotation Line starting X & Y coordinate Declaration, the below gets their values later on from the draw universal beam profile function:
     
     var sectionWebThicknessLeftHorizontalAnnotationLineStartingXcoordinate: CGFloat = 0
     
     var sectionWebThicknessDimensioningAnnotationHorizontalLineYcoordinate: CGFloat = 0
     
-    // MARK: - sectionFlangeThickness Top Vertical Annotation Line Starting X & Y Coordinates Declaration:
+    // MARK: - sectionFlangeThickness Top Vertical Annotation Line Starting X & Y Coordinates Declaration, the below gets their values later on from the draw universal beam profile function:
     
     var sectionFlangeThicknessDimensioningAnnotationLabelVerticalLineXcoordinate: CGFloat = 0
     
     var sectionFlangeThicknessTopVerticalAnnotationLineStartingYcoordinate: CGFloat = 0
     
-    // MARK: - sectionMinor Vertical Annotation Top and Bottom Y Coordinates Declaration:
+    // MARK: - sectionMinor Vertical Annotation Top and Bottom Y Coordinates Declaration, the below gets their values later on from the draw universal beam profile function:
     
     var sectionMinorAnnotationVerticalLineTopYcoordinate: CGFloat = 0
     
     var sectionMinorAnnotationVerticalLineBottomYcoordinate: CGFloat = 0
     
-    // MARK: - sectionMajor Horizontal Annotation Line Left and Right X Coordinates Declaration:
+    // MARK: - sectionMajor Horizontal Annotation Line Left and Right X Coordinates Declaration, the below gets their values later on from the draw universal beam profile function:
     
     var sectionMajorAnnotationHorizontalLineLeftXcoordinate: CGFloat = 0
     
     var sectionMajorAnnotationHorizontalLineRightXcoordinate: CGFloat = 0
     
-    // MARK: - section dimensions labels and annotations distances:
+    // MARK: - section dimensions labels and annotations distances, the below gets their values later on from the draw universal beam profile function:
     
     let distanceBetweenDepthOfSectionDimensionAnnotationLineAndItsLabel: CGFloat = 0
     
     let distanceBetweenWidthOfSectionDimensionAnnotationLineAndItsLabel: CGFloat = 0
     
-    // MARK: - Section root radius inclined dimensioning annotation line starting point:
+    // MARK: - Section root radius inclined dimensioning annotation line starting point, the below gets their values later on from the draw universal beam profile function:
     
     var universalBeamSectionRootRadiusInclinedDimensioningLineStartingXCoordinate: CGFloat = 0
     
@@ -147,7 +153,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     // MARK: - Declaring section dimensions and properties inside UIScrollView margins and spacings:
     
     let sectionDimensionsAndPropertiesTitlesMarginFromScreenLeftEdge: CGFloat = 10
-
+    
     let sectionDimensionsAndPropertiesLabelsMarginFromScreenLeftEdge: CGFloat = 20
     
     let sectionDimensionsLabelsMarginsFromVerticalSeparatorLineLeftAndRightSide: CGFloat = 5
@@ -155,9 +161,9 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     let marginFromTopOfScrollView: CGFloat = 10
     
     let marginFromScreenRightEdge: CGFloat = 10
-        
+    
     let verticalSpacingBetweenLabels: CGFloat = 10
-        
+    
     // MARK: - Section drawing view and annotations labels declarations:
     
     lazy var universalBeamDrawingView: UIView = {
@@ -201,7 +207,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         label.font = UIFont(name: dimensionsAnnotationsLabelsFontType, size: dimensionsAnnotationsLabelsFontSize)
         
         label.textColor = UIColor(named: "sectionDimensionAnnotationLabelsFontColour")
-
+        
         return label
         
     }()
@@ -221,7 +227,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         label.font = UIFont(name: dimensionsAnnotationsLabelsFontType, size: dimensionsAnnotationsLabelsFontSize)
         
         label.textColor = UIColor(named: "sectionDimensionAnnotationLabelsFontColour")
-
+        
         return label
         
     }()
@@ -241,7 +247,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         label.font = UIFont(name: dimensionsAnnotationsLabelsFontType, size: dimensionsAnnotationsLabelsFontSize)
         
         label.textColor = UIColor(named: "sectionDimensionAnnotationLabelsFontColour")
-
+        
         return label
         
     }()
@@ -249,7 +255,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     lazy var universalBeamMinorAxisBottomAnnotationLabel: UILabel = {
         
         var label = UILabel()
-                        
+        
         label.translatesAutoresizingMaskIntoConstraints = false
         
         label.baselineAdjustment = .alignCenters
@@ -267,7 +273,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     lazy var universalBeamMinorAxisTopAnnotationLabel: UILabel = {
         
         var label = UILabel()
-                        
+        
         label.translatesAutoresizingMaskIntoConstraints = false
         
         label.baselineAdjustment = .alignCenters
@@ -277,7 +283,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         label.font = UIFont(name: dimensionsAnnotationsLabelsFontType, size: dimensionsAnnotationsLabelsFontSize)
         
         label.textColor = UIColor(named: "majorAndMinorAxisLabelsFontColour")
-
+        
         return label
         
     }()
@@ -285,7 +291,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     lazy var universalBeamMajorAxisLeftAnnotationLabel: UILabel = {
         
         var label = UILabel()
-                        
+        
         label.translatesAutoresizingMaskIntoConstraints = false
         
         label.baselineAdjustment = .alignCenters
@@ -295,7 +301,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         label.font = UIFont(name: dimensionsAnnotationsLabelsFontType, size: dimensionsAnnotationsLabelsFontSize)
         
         label.textColor = UIColor(named: "majorAndMinorAxisLabelsFontColour")
-
+        
         return label
         
     }()
@@ -303,7 +309,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     lazy var universalBeamMajorAxisRightAnnotationLabel: UILabel = {
         
         var label = UILabel()
-                        
+        
         label.translatesAutoresizingMaskIntoConstraints = false
         
         label.baselineAdjustment = .alignCenters
@@ -313,7 +319,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         label.font = UIFont(name: dimensionsAnnotationsLabelsFontType, size: dimensionsAnnotationsLabelsFontSize)
         
         label.textColor = UIColor(named: "majorAndMinorAxisLabelsFontColour")
-
+        
         return label
         
     }()
@@ -321,7 +327,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     lazy var universalBeamRootRadiusAnnotationLabel: UILabel = {
         
         var label = UILabel()
-                        
+        
         label.translatesAutoresizingMaskIntoConstraints = false
         
         label.baselineAdjustment = .alignCenters
@@ -333,7 +339,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         label.text = "r = \(self.selectedUniversalBeamRootRadius) mm"
         
         label.textColor = UIColor(named: "sectionDimensionAnnotationLabelsFontColour")
-
+        
         return label
         
     }()
@@ -346,7 +352,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         
-        scrollView.backgroundColor = .yellow
+        scrollView.backgroundColor = UIColor(named: "sectionDimensionsAndPropertiesScrollViewBackgroundColour")
         
         return scrollView
         
@@ -357,10 +363,10 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     lazy var scrollViewSectionDimensionsTitle: UILabel = {
         
         let label = UILabel()
-                
+        
         label.translatesAutoresizingMaskIntoConstraints = false
         
-        label.textColor = .black
+        label.textColor = UIColor(named: "sectionDimensionAnnotationLabelsFontColour")
         
         label.text = "Section Dimensions:"
         
@@ -371,10 +377,10 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     lazy var scrollViewDepthOfSectionLabel: UILabel = {
         
         let label = UILabel()
-                
+        
         label.translatesAutoresizingMaskIntoConstraints = false
         
-        label.textColor = .black
+        label.textColor = UIColor(named: "sectionDimensionAnnotationLabelsFontColour")
         
         label.numberOfLines = 0
         
@@ -387,10 +393,10 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     lazy var scrollViewWidthOfSectionLabel: UILabel = {
         
         let label = UILabel()
-                
+        
         label.translatesAutoresizingMaskIntoConstraints = false
         
-        label.textColor = .black
+        label.textColor = UIColor(named: "sectionDimensionAnnotationLabelsFontColour")
         
         label.numberOfLines = 0
         
@@ -403,50 +409,50 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     lazy var scrollViewFlangeThicknessLabel: UILabel = {
         
         let label = UILabel()
-                
+        
         label.translatesAutoresizingMaskIntoConstraints = false
         
-        label.textColor = .black
+        label.textColor = UIColor(named: "sectionDimensionAnnotationLabelsFontColour")
         
         label.numberOfLines = 0
         
-        let universalBeamFlangeThicknessAttributedString:NSMutableAttributedString = NSMutableAttributedString(string: "Flange Thickness, tf = \(self.selectedUniversalBeamFlangeThickness) mm")
+        let universalBeamFlangeThicknessAttributedString:NSMutableAttributedString = NSMutableAttributedString(string: "Flange Thickness, tf [mm] = \(self.selectedUniversalBeamFlangeThickness)")
         
         universalBeamFlangeThicknessAttributedString.setAttributes([.baselineOffset: -3], range: NSRange(location: 19, length: 1))
         
         label.attributedText = universalBeamFlangeThicknessAttributedString
-                
-       return label
+        
+        return label
         
     }()
     
     lazy var scrollViewWebThicknessLabel: UILabel = {
         
         let label = UILabel()
-                
+        
         label.translatesAutoresizingMaskIntoConstraints = false
         
-        label.textColor = .black
+        label.textColor = UIColor(named: "sectionDimensionAnnotationLabelsFontColour")
         
         label.numberOfLines = 0
         
-        let universalBeamWebThicknessAttributedString:NSMutableAttributedString = NSMutableAttributedString(string: "Web Thickness, tw = \(self.selectedUniversalBeamWebThickness) mm")
+        let universalBeamWebThicknessAttributedString:NSMutableAttributedString = NSMutableAttributedString(string: "Web Thickness, tw [mm] = \(self.selectedUniversalBeamWebThickness)")
         
         universalBeamWebThicknessAttributedString.setAttributes([.baselineOffset: -3], range: NSRange(location: 16, length: 1))
         
         label.attributedText = universalBeamWebThicknessAttributedString
-                
-       return label
+        
+        return label
         
     }()
     
     lazy var scrollViewSectionRootRadiusLabel: UILabel = {
         
         let label = UILabel()
-                
+        
         label.translatesAutoresizingMaskIntoConstraints = false
         
-        label.textColor = .black
+        label.textColor = UIColor(named: "sectionDimensionAnnotationLabelsFontColour")
         
         label.numberOfLines = 0
         
@@ -459,10 +465,10 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     lazy var scrollViewDepthOfSectionBetweenFilletsLabel: UILabel = {
         
         let label = UILabel()
-                
+        
         label.translatesAutoresizingMaskIntoConstraints = false
         
-        label.textColor = .black
+        label.textColor = UIColor(named: "sectionDimensionAnnotationLabelsFontColour")
         
         label.numberOfLines = 0
         
@@ -475,10 +481,10 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     lazy var scrollViewAreaOfSectionLabel: UILabel = {
         
         let label = UILabel()
-                
+        
         label.translatesAutoresizingMaskIntoConstraints = false
         
-        label.textColor = .black
+        label.textColor = UIColor(named: "sectionDimensionAnnotationLabelsFontColour")
         
         label.numberOfLines = 0
         
@@ -487,7 +493,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         attributedAreaOfSectionString.setAttributes([.baselineOffset: 5.5], range: NSRange(location: 22, length: 1))
         
         label.attributedText = attributedAreaOfSectionString
-                
+        
         return label
         
     }()
@@ -495,10 +501,10 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     lazy var scrollViewSerctionMassPerMetreLabel: UILabel = {
         
         let label = UILabel()
-                
+        
         label.translatesAutoresizingMaskIntoConstraints = false
         
-        label.textColor = .black
+        label.textColor = UIColor(named: "sectionDimensionAnnotationLabelsFontColour")
         
         label.numberOfLines = 0
         
@@ -511,10 +517,10 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     lazy var scrollViewSectionDetailingDimensionsTitle: UILabel = {
         
         let label = UILabel()
-                
+        
         label.translatesAutoresizingMaskIntoConstraints = false
         
-        label.textColor = .black
+        label.textColor = UIColor(named: "sectionDimensionAnnotationLabelsFontColour")
         
         label.text = "Section Detailing Dimensions:"
         
@@ -525,25 +531,77 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     lazy var scrollViewEndClearanceDetailingDimensionLabel: UILabel = {
         
         let label = UILabel()
-                
+        
         label.translatesAutoresizingMaskIntoConstraints = false
         
-        label.textColor = .black
+        label.numberOfLines = 0
         
-        label.text = "End clearance, C = \(self.selectedUniversalBeamEndClearanceDetailingDimension)"
+        label.textColor = UIColor(named: "sectionDimensionAnnotationLabelsFontColour")
+        
+        label.text = "End clearance, C [mm] = \(self.selectedUniversalBeamEndClearanceDetailingDimension)"
         
         return label
         
     }()
     
+    lazy var scrollViewNotchNdetailingDimensionLabel: UILabel = {
+        
+        let label = UILabel()
+        
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        label.textColor = UIColor(named: "sectionDimensionAnnotationLabelsFontColour")
+        
+        label.numberOfLines = 0
+        
+        label.text = "Notch, N [mm] = \(self.selectedUniversalBeamNotchNdetailingDimension)"
+        
+        return label
+        
+    }()
+    
+    lazy var scrollViewNotchnDetailingDimensionLabel: UILabel = {
+        
+        let label = UILabel()
+        
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        label.textColor = UIColor(named: "sectionDimensionAnnotationLabelsFontColour")
+        
+        label.numberOfLines = 0
+        
+        label.text = "Notch, n [mm] = \(self.selectedUniversalBeamNotchnDetailingDimension)"
+        
+        return label
+        
+    }()
+    
+    lazy var scrollViewUniversalBeamDetailingDimensionsImage: UIImageView = {
+        
+        let image = UIImageView()
+        
+        image.translatesAutoresizingMaskIntoConstraints = false
+        
+        image.image = UIImage(named: "UniversalBeamDetailingDimensionsImage")
+        
+        image.contentMode = .scaleAspectFit
+        
+        image.clipsToBounds = true
+        
+        image.layer.borderColor = UIColor.blue.cgColor
+        
+        return image
+        
+    }()
+    
     // MARK: - viewDidLoad():
-
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
         
         drawUniversalBeamPathAndItsAnnotations()
-                
+        
         // MARK: - Adding SubViews to the main View Controller:
         
         view.addSubview(navigationBar)
@@ -593,7 +651,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         view.addSubview(sectionDimensionsAndPropertiesScrollView)
         
         sectionDimensionsAndPropertiesScrollView.layer.addSublayer(verticalLineSeparatorBetweenSectionDimensionsLabels)
-                
+        
         sectionDimensionsAndPropertiesScrollView.addSubview(scrollViewSectionDimensionsTitle)
         
         sectionDimensionsAndPropertiesScrollView.addSubview(scrollViewDepthOfSectionLabel)
@@ -609,12 +667,18 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         sectionDimensionsAndPropertiesScrollView.addSubview(scrollViewDepthOfSectionBetweenFilletsLabel)
         
         sectionDimensionsAndPropertiesScrollView.addSubview(scrollViewAreaOfSectionLabel)
-
+        
         sectionDimensionsAndPropertiesScrollView.addSubview(scrollViewSerctionMassPerMetreLabel)
         
         sectionDimensionsAndPropertiesScrollView.addSubview(scrollViewSectionDetailingDimensionsTitle)
         
         sectionDimensionsAndPropertiesScrollView.addSubview(scrollViewEndClearanceDetailingDimensionLabel)
+        
+        sectionDimensionsAndPropertiesScrollView.addSubview(scrollViewUniversalBeamDetailingDimensionsImage)
+        
+        sectionDimensionsAndPropertiesScrollView.addSubview(scrollViewNotchNdetailingDimensionLabel)
+        
+        sectionDimensionsAndPropertiesScrollView.addSubview(scrollViewNotchnDetailingDimensionLabel)
         
     }
     
@@ -627,7 +691,11 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         setupSubViewsConstraints()
         
         drawingVerticalAndHorizontalSeparatorsLinesForSectionDimensionsAndPropertiesLabel()
-
+        
+        // MARK: - Defining sectionDimensionsAndPropertiesScrollView contentSize:
+        
+        sectionDimensionsAndPropertiesScrollView.contentSize = CGSize(width: view.frame.size.width, height: 1500)
+        
     }
     
     override func viewDidLayoutSubviews() {
@@ -697,7 +765,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         let sectionMinorAxisAnnotationDashedLinePathStrokeColour = UIColor(named: minorSectionAnnotationLineStrokePathColour)!.cgColor
         
         let sectionMajorAxisAnnotationDashedLinePathStrokeColour = UIColor(named: majorSectionAnnotationLineStrokePathColour)!.cgColor
-                
+        
         // MARK: - Defining Universal Beam Section Outline UIBezierPath:
         
         let path = UIBezierPath()
@@ -1195,7 +1263,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     }
     
     // MARK: - Function declaration to draw vertical separation lines inside scrollView:
-
+    
     func drawingVerticalAndHorizontalSeparatorsLinesForSectionDimensionsAndPropertiesLabel() {
         
         let verticalSeparatorLinePathBetweenSectionDimensionsLabels = UIBezierPath()
@@ -1205,16 +1273,16 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         let scrollViewEndClearanceDetailingDimensionLabelCoordinatesInRelationToItsScrollView = scrollViewEndClearanceDetailingDimensionLabel.convert(scrollViewEndClearanceDetailingDimensionLabel.bounds.origin, to: sectionDimensionsAndPropertiesScrollView)
         
         verticalSeparatorLinePathBetweenSectionDimensionsLabels.move(to: CGPoint(x: self.view.frame.width/2, y: marginFromTopOfScrollView + scrollViewSectionDimensionsTitle.intrinsicContentSize.height))
-
+        
         
         verticalSeparatorLinePathBetweenSectionDimensionsLabels.addLine(to: CGPoint(x: self.view.frame.width/2, y: scrollViewAreaOfSectionLabelCoordinatesInRelationToItsScrollView.y + max(scrollViewAreaOfSectionLabel.intrinsicContentSize.height, scrollViewSerctionMassPerMetreLabel.intrinsicContentSize.height)))
         
         verticalSeparatorLinePathBetweenSectionDimensionsLabels.move(to: CGPoint(x: self.view.frame.width/2, y: scrollViewEndClearanceDetailingDimensionLabelCoordinatesInRelationToItsScrollView.y))
         
         verticalSeparatorLinePathBetweenSectionDimensionsLabels.addLine(to: CGPoint(x: self.view.frame.width/2, y: 500))
-                
+        
         verticalLineSeparatorBetweenSectionDimensionsLabels.path = verticalSeparatorLinePathBetweenSectionDimensionsLabels.cgPath
-                
+        
         verticalLineSeparatorBetweenSectionDimensionsLabels.strokeColor = UIColor.black.cgColor
         
         verticalLineSeparatorBetweenSectionDimensionsLabels.lineWidth = 2
@@ -1292,7 +1360,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
             scrollViewDepthOfSectionLabel.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: sectionDimensionsAndPropertiesLabelsMarginFromScreenLeftEdge),
             
             scrollViewDepthOfSectionLabel.rightAnchor.constraint(equalTo: self.view.centerXAnchor, constant: -1 * sectionDimensionsLabelsMarginsFromVerticalSeparatorLineLeftAndRightSide),
-
+            
             scrollViewDepthOfSectionLabel.topAnchor.constraint(equalTo: scrollViewSectionDimensionsTitle.bottomAnchor, constant: verticalSpacingBetweenLabels),
             
             scrollViewWidthOfSectionLabel.leftAnchor.constraint(equalTo: self.view.centerXAnchor, constant: sectionDimensionsLabelsMarginsFromVerticalSeparatorLineLeftAndRightSide),
@@ -1320,7 +1388,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
             scrollViewSectionRootRadiusLabel.rightAnchor.constraint(equalTo: self.view.centerXAnchor, constant: -1 * sectionDimensionsLabelsMarginsFromVerticalSeparatorLineLeftAndRightSide),
             
             scrollViewSectionRootRadiusLabel.topAnchor.constraint(equalTo: scrollViewFlangeThicknessLabel.bottomAnchor, constant: verticalSpacingBetweenLabels),
-
+            
             scrollViewDepthOfSectionBetweenFilletsLabel.leftAnchor.constraint(equalTo: self.view.centerXAnchor, constant: sectionDimensionsLabelsMarginsFromVerticalSeparatorLineLeftAndRightSide),
             
             scrollViewDepthOfSectionBetweenFilletsLabel.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -1 * marginFromScreenRightEdge),
@@ -1347,7 +1415,27 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
             
             scrollViewEndClearanceDetailingDimensionLabel.rightAnchor.constraint(equalTo: self.view.centerXAnchor, constant: -1 * sectionDimensionsLabelsMarginsFromVerticalSeparatorLineLeftAndRightSide),
             
-            scrollViewEndClearanceDetailingDimensionLabel.topAnchor.constraint(equalTo: scrollViewSectionDetailingDimensionsTitle.bottomAnchor, constant: verticalSpacingBetweenLabels)
+            scrollViewEndClearanceDetailingDimensionLabel.topAnchor.constraint(equalTo: scrollViewSectionDetailingDimensionsTitle.bottomAnchor, constant: verticalSpacingBetweenLabels),
+            
+            scrollViewNotchNdetailingDimensionLabel.topAnchor.constraint(equalTo: scrollViewEndClearanceDetailingDimensionLabel.topAnchor, constant: 0),
+            
+            scrollViewNotchNdetailingDimensionLabel.leftAnchor.constraint(equalTo: self.view.centerXAnchor, constant: sectionDimensionsLabelsMarginsFromVerticalSeparatorLineLeftAndRightSide),
+            
+            
+            scrollViewNotchNdetailingDimensionLabel.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -1 * marginFromScreenRightEdge),
+            
+            scrollViewNotchnDetailingDimensionLabel.topAnchor.constraint(equalTo: scrollViewEndClearanceDetailingDimensionLabel.bottomAnchor, constant: verticalSpacingBetweenLabels),
+            
+            scrollViewNotchnDetailingDimensionLabel.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: sectionDimensionsAndPropertiesLabelsMarginFromScreenLeftEdge),
+            
+            
+            scrollViewNotchnDetailingDimensionLabel.rightAnchor.constraint(equalTo: self.view.centerXAnchor, constant: -1 * sectionDimensionsLabelsMarginsFromVerticalSeparatorLineLeftAndRightSide),
+            
+            scrollViewUniversalBeamDetailingDimensionsImage.topAnchor.constraint(equalTo: scrollViewNotchnDetailingDimensionLabel.bottomAnchor, constant: verticalSpacingBetweenLabels),
+            
+            scrollViewUniversalBeamDetailingDimensionsImage.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -1 * marginFromScreenRightEdge),
+            
+            scrollViewUniversalBeamDetailingDimensionsImage.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: sectionDimensionsAndPropertiesLabelsMarginFromScreenLeftEdge),
             
         ])
         

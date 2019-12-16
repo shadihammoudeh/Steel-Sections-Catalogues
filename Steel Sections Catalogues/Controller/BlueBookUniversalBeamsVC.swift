@@ -845,6 +845,10 @@ extension BlueBookUniversalBeamsVC: UITableViewDelegate {
             blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamMassPerMetre = Double(arrayWithAllDataRelatedToUbsSections.filter({ $0.sectionSerialNumber == "\(arrayWithAllSectionsSerialNumbers[indexPath.section])" }).map({ $0.sectionMassPerMetre })[indexPath.row])
             
             blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamEndClearanceDetailingDimension = Int(arrayWithAllDataRelatedToUbsSections.filter({ $0.sectionSerialNumber == "\(arrayWithAllSectionsSerialNumbers[indexPath.section])" }).map({ $0.dimensionForDetailingEndClearance })[indexPath.row])
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamNotchNdetailingDimension = Int(arrayWithAllDataRelatedToUbsSections.filter({ $0.sectionSerialNumber == "\(arrayWithAllSectionsSerialNumbers[indexPath.section])" }).map({ $0.dimensionForDetailingNotchN })[indexPath.row])
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamNotchnDetailingDimension = Int(arrayWithAllDataRelatedToUbsSections.filter({ $0.sectionSerialNumber == "\(arrayWithAllSectionsSerialNumbers[indexPath.section])" }).map({ $0.dimensionForDetailingNotchn })[indexPath.row])
 
         } else {
 
