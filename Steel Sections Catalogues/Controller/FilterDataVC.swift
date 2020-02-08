@@ -190,7 +190,7 @@ class FilterDataVC: UIViewController {
     
     let sectionAreaSliderTitle = CustomRangeSliderUILabel(attributedStringFontName: "AppleSDGothicNeo-Light", attributedStringFontSize: 18, attributedStringFontHexColourCode: "#D454FF", textToDisplay: "Slider Range for Area of Section, A [cm2]:", subOrSuperScriptFontName: "AppleSDGothicNeo-Light", subOrSuperScriptFontSize: 10, subOrSuperScriptLocation: 39)
     
-    lazy var navigationBar = CustomUINavigationBar(normalStateNavBarLeftButtonImage: "normalStateBackButton", highlightedStateNavBarLeftButtonImage: "highlightedStateBackButton", navBarLeftButtonTarget: self, navBarLeftButtonSelector: #selector(navigationBarLeftButtonPressed(sender:)), labelTitleText: "UB Data Filter", titleLabelFontHexColourCode: "#FFFF52", labelTitleFontSize: 16, labelTitleFontType: "AppleSDGothicNeo-Light", isNavBarTranslucent: false, navBarBackgroundColourHexCode: "#CCCC04", navBarBackgroundColourAlphaValue: 1.0, navBarStyle: .black, preferLargeTitles: false, navBarDelegate: self, navBarItemsHexColourCode: "#E0E048")
+    lazy var navigationBar = CustomUINavigationBar(normalStateNavBarLeftButtonImage: "normalStateBackButton", highlightedStateNavBarLeftButtonImage: "highlightedStateBackButton", navBarLeftButtonTarget: self, navBarLeftButtonSelector: #selector(navigationBarLeftButtonPressed(sender:)), labelTitleText: "UB Data Filter", titleLabelFontHexColourCode: "#FFFF52", labelTitleFontSize: 16, labelTitleFontType: "AppleSDGothicNeo-Light", preferLargeTitles: false, navBarDelegate: self, navBarItemsHexColourCode: "#E0E048")
     
     // MARK: - viewDidLoad():
     

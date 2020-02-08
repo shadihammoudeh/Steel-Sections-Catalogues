@@ -46,7 +46,7 @@ class BlueBookUniversalBeamsVC: UIViewController {
     
     // The below code line declares the custom NavigationBar to be added to this ViewController. The reason it is defined as a lazy var, is to allow us to access the view properties of this ViewController. Since the custom NavigationBar is defined outside the viewDidLoad methods, or other methods where UIVIew is available. This navigationBar is going to have a left button (back button), Title in the middle (UILabel) and a rightButton (Sort Data):
     
-    lazy var navigationBar = CustomUINavigationBar(rightNavBarTitle: "Sort Data", rightNavBarTitleHexColourCodeNormalState: "#333301", rightNavBarTitleHexColourCodeHighlightedState: "#FFFF05", rightNavBarButtonTarget: self, rightNavBarSelector: #selector(navigationBarRightButtonPressed(sender:)), isNavBarTranslucent: false, navBarBackgroundColourHexCode: "#CCCC04", navBarBackgroundColourAlphaValue: 1.0, navBarStyle: .black, preferLargeTitles: false, navBarDelegate: self, navBarItemsHexColourCode: "#E0E048", normalStateNavBarLeftButtonImage: "normalStateBackButton", highlightedStateNavBarLeftButtonImage: "highlightedStateBackButton", navBarLeftButtonTarget: self, navBarLeftButtonSelector: #selector(navigationBarLeftButtonPressed(sender:)), labelTitleText: "Universal Beams (UB)", titleLabelFontHexColourCode: "#FFFF52", labelTitleFontSize: 16, labelTitleFontType: "AppleSDGothicNeo-Light")
+    lazy var navigationBar = CustomUINavigationBar(rightNavBarTitle: "Sort Data", rightNavBarTitleHexColourCodeNormalState: "#333301", rightNavBarTitleHexColourCodeHighlightedState: "#FFFF05", rightNavBarButtonTarget: self, rightNavBarSelector: #selector(navigationBarRightButtonPressed(sender:)), preferLargeTitles: false, navBarDelegate: self, navBarItemsHexColourCode: "#E0E048", normalStateNavBarLeftButtonImage: "normalStateBackButton", highlightedStateNavBarLeftButtonImage: "highlightedStateBackButton", navBarLeftButtonTarget: self, navBarLeftButtonSelector: #selector(navigationBarLeftButtonPressed(sender:)), labelTitleText: "Universal Beams (UB)", titleLabelFontHexColourCode: "#FFFF52", labelTitleFontSize: 16, labelTitleFontType: "AppleSDGothicNeo-Light")
     
     let universalBeamsTableView = UITableView()
     
@@ -807,33 +807,32 @@ extension BlueBookUniversalBeamsVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         let blueBookUniversalBeamsDataSummaryVcProperties = blueBookUniversalBeamDataSummaryVC as! BlueBookUniversalBeamDataSummaryVC
-                
+        
+        var arrayWithAllDataRelatedToUbsSections = [IsectionsDimensionsParameters]()
+        
         if (sortBy == "None" && filtersApplied == false && isSearching == false) || sortBy == "Sorted by: Section Designation in ascending order" ||  sortBy == "Sorted by: Section Designation in descending order" {
-
-            var arrayWithAllDataRelatedToUbsSections = [IsectionsDimensionsParameters]()
-
+                        
             var arrayWithAllSectionsSerialNumbers: [String]
-
+            
             if (sortBy == "None" && filtersApplied == false && isSearching == false) {
-
+                
                 arrayWithAllDataRelatedToUbsSections = originalUniversalBeamsArrayDataExtractedFromTheCSVFileUsingTheParserContainingAllData
-
+                
                 arrayWithAllSectionsSerialNumbers = universalBeamsArrayContainingAllSectionSerialNumberOnlyDefault
-
+                
             } else {
-
+                
                 arrayWithAllDataRelatedToUbsSections = universalBeamsDataArrayReceivedFromSortDataVCViaProtocol
-
+                
                 arrayWithAllSectionsSerialNumbers = universalBeamsArrayContainingAllSectionSerialNumberOnlySortedInAscendingOrDescendingOrder
-
+                
             }
-
             blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamDepthOfSection = CGFloat(arrayWithAllDataRelatedToUbsSections.filter({ $0.sectionSerialNumber == "\(arrayWithAllSectionsSerialNumbers[indexPath.section])" }).map({ $0.depthOfSection })[indexPath.row])
-
+            
             blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamWidthOfSection = CGFloat(arrayWithAllDataRelatedToUbsSections.filter({ $0.sectionSerialNumber == "\(arrayWithAllSectionsSerialNumbers[indexPath.section])" }).map({ $0.widthOfSection })[indexPath.row])
-
+            
             blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamWebThickness = CGFloat(arrayWithAllDataRelatedToUbsSections.filter({ $0.sectionSerialNumber == "\(arrayWithAllSectionsSerialNumbers[indexPath.section])" }).map({ $0.sectionWebThickness })[indexPath.row])
-
+            
             blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamFlangeThickness = CGFloat(arrayWithAllDataRelatedToUbsSections.filter({ $0.sectionSerialNumber == "\(arrayWithAllSectionsSerialNumbers[indexPath.section])" }).map({ $0.sectionFlangeThickness })[indexPath.row])
             
             blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamRootRadius = CGFloat(arrayWithAllDataRelatedToUbsSections.filter({ $0.sectionSerialNumber == "\(arrayWithAllSectionsSerialNumbers[indexPath.section])" }).map({ $0.sectionRootRadius })[indexPath.row])
@@ -849,39 +848,113 @@ extension BlueBookUniversalBeamsVC: UITableViewDelegate {
             blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamNotchNdetailingDimension = Int(arrayWithAllDataRelatedToUbsSections.filter({ $0.sectionSerialNumber == "\(arrayWithAllSectionsSerialNumbers[indexPath.section])" }).map({ $0.dimensionForDetailingNotchN })[indexPath.row])
             
             blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamNotchnDetailingDimension = Int(arrayWithAllDataRelatedToUbsSections.filter({ $0.sectionSerialNumber == "\(arrayWithAllSectionsSerialNumbers[indexPath.section])" }).map({ $0.dimensionForDetailingNotchn })[indexPath.row])
-
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamSecondMomentOfAreaAboutMajorAxis = Double(arrayWithAllDataRelatedToUbsSections.filter({ $0.sectionSerialNumber == "\(arrayWithAllSectionsSerialNumbers[indexPath.section])" }).map({ $0.secondMomentOfAreaMajorAxis })[indexPath.row])
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamSecondMomentOfAreaAboutMinorAxis = Double(arrayWithAllDataRelatedToUbsSections.filter({ $0.sectionSerialNumber == "\(arrayWithAllSectionsSerialNumbers[indexPath.section])" }).map({ $0.secondMomentOfAreaMinorAxis })[indexPath.row])
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamRadiusOfGyrationAboutMajorAxis = Double(arrayWithAllDataRelatedToUbsSections.filter({ $0.sectionSerialNumber == "\(arrayWithAllSectionsSerialNumbers[indexPath.section])" }).map({ $0.radiusOfGyrationMajorAxis })[indexPath.row])
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamRadiusOfGyrationAboutMinorAxis = Double(arrayWithAllDataRelatedToUbsSections.filter({ $0.sectionSerialNumber == "\(arrayWithAllSectionsSerialNumbers[indexPath.section])" }).map({ $0.radiusOfGyrationMinorAxis })[indexPath.row])
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamElasticModulusAboutMajorAxis = Double(arrayWithAllDataRelatedToUbsSections.filter({ $0.sectionSerialNumber == "\(arrayWithAllSectionsSerialNumbers[indexPath.section])" }).map({ $0.elasticModulusMajorAxis })[indexPath.row])
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamElasticModulusAboutMinorAxis = Double(arrayWithAllDataRelatedToUbsSections.filter({ $0.sectionSerialNumber == "\(arrayWithAllSectionsSerialNumbers[indexPath.section])" }).map({ $0.elasticModulusMinorAxis })[indexPath.row])
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamPlasticModulusAboutMajorAxis = arrayWithAllDataRelatedToUbsSections.filter({ $0.sectionSerialNumber == "\(arrayWithAllSectionsSerialNumbers[indexPath.section])" }).map({ $0.plasticModulusMajorAxis })[indexPath.row]
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamPlasticModulusAboutMinorAxis = arrayWithAllDataRelatedToUbsSections.filter({ $0.sectionSerialNumber == "\(arrayWithAllSectionsSerialNumbers[indexPath.section])" }).map({ $0.plasticModulusMinorAxis })[indexPath.row]
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamBucklingParameter = arrayWithAllDataRelatedToUbsSections.filter({ $0.sectionSerialNumber == "\(arrayWithAllSectionsSerialNumbers[indexPath.section])" }).map({ $0.bucklingParameter })[indexPath.row]
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamTorsionalIndex = arrayWithAllDataRelatedToUbsSections.filter({ $0.sectionSerialNumber == "\(arrayWithAllSectionsSerialNumbers[indexPath.section])" }).map({ $0.torsionalIndex })[indexPath.row]
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamWarpingConstant = arrayWithAllDataRelatedToUbsSections.filter({ $0.sectionSerialNumber == "\(arrayWithAllSectionsSerialNumbers[indexPath.section])" }).map({ $0.wrapingConstant })[indexPath.row]
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamTorsionalConstant = arrayWithAllDataRelatedToUbsSections.filter({ $0.sectionSerialNumber == "\(arrayWithAllSectionsSerialNumbers[indexPath.section])" }).map({ $0.torsionalConstant })[indexPath.row]
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamSurfaceAreaPerMetre = arrayWithAllDataRelatedToUbsSections.filter({ $0.sectionSerialNumber == "\(arrayWithAllSectionsSerialNumbers[indexPath.section])" }).map({ $0.surfaceAreaPerMetre })[indexPath.row]
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamSurfaceAreaPerTonne = arrayWithAllDataRelatedToUbsSections.filter({ $0.sectionSerialNumber == "\(arrayWithAllSectionsSerialNumbers[indexPath.section])" }).map({ $0.surfaceAreaPerTonne })[indexPath.row]
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamRatioForWebLocalBuckling = arrayWithAllDataRelatedToUbsSections.filter({ $0.sectionSerialNumber == "\(arrayWithAllSectionsSerialNumbers[indexPath.section])" }).map({ $0.ratioForLocalWebBuckling })[indexPath.row]
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamRatioForFlangeLocalBuckling = arrayWithAllDataRelatedToUbsSections.filter({ $0.sectionSerialNumber == "\(arrayWithAllSectionsSerialNumbers[indexPath.section])" }).map({ $0.ratioForLocalFlangeBuckling })[indexPath.row]
+            
         } else {
-
-            var arrayWithAllDataRelatedToUbsSections = [IsectionsDimensionsParameters]()
-
+            
             if (sortBy == "Sorted by: Depth of Section in ascending order" || sortBy == "Sorted by: Width of Section in ascending order" || sortBy == "Sorted by: Section Area in ascending order" || sortBy == "Sorted by: Depth of Section in descending order" || sortBy == "Sorted by: Width of Section in descending order" || sortBy == "Sorted by: Section Area in descending order") {
-
+                
                 arrayWithAllDataRelatedToUbsSections = universalBeamsDataArrayReceivedFromSortDataVCViaProtocol
-
+                
             } else if isSearching == true {
-
+                
                 arrayWithAllDataRelatedToUbsSections = universalBeamsDataArrayAsPerTypedSearchCriteria
-
+                
             } else if filtersApplied == true {
-
+                
                 arrayWithAllDataRelatedToUbsSections = universalBeamsDataArrayReceivedFromFilterDataVCViaProtocol
-
+                
             }
-
+            
             blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamDepthOfSection = CGFloat(arrayWithAllDataRelatedToUbsSections.map({ $0.depthOfSection })[indexPath.row])
-
-            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamWebThickness = CGFloat(arrayWithAllDataRelatedToUbsSections.map({ $0.sectionWebThickness })[indexPath.row])
-
+            
             blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamWidthOfSection = CGFloat(arrayWithAllDataRelatedToUbsSections.map({ $0.widthOfSection })[indexPath.row])
-
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamWebThickness = CGFloat(arrayWithAllDataRelatedToUbsSections.map({ $0.sectionWebThickness })[indexPath.row])
+            
             blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamFlangeThickness = CGFloat(arrayWithAllDataRelatedToUbsSections.map({ $0.sectionFlangeThickness })[indexPath.row])
             
             blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamRootRadius = CGFloat(arrayWithAllDataRelatedToUbsSections.map({ $0.sectionRootRadius })[indexPath.row])
-
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamDepthBetweenFillets = Double(arrayWithAllDataRelatedToUbsSections.map({ $0.depthOfSectionBetweenFillets })[indexPath.row])
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamAreaOfSection = Double(arrayWithAllDataRelatedToUbsSections.map({ $0.areaOfSection })[indexPath.row])
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamMassPerMetre = Double(arrayWithAllDataRelatedToUbsSections.map({ $0.sectionMassPerMetre })[indexPath.row])
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamEndClearanceDetailingDimension = Int(arrayWithAllDataRelatedToUbsSections.map({ $0.dimensionForDetailingEndClearance })[indexPath.row])
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamNotchNdetailingDimension = Int(arrayWithAllDataRelatedToUbsSections.map({ $0.dimensionForDetailingNotchN })[indexPath.row])
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamNotchnDetailingDimension = Int(arrayWithAllDataRelatedToUbsSections.map({ $0.dimensionForDetailingNotchn })[indexPath.row])
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamSecondMomentOfAreaAboutMajorAxis = Double(arrayWithAllDataRelatedToUbsSections.map({ $0.secondMomentOfAreaMajorAxis })[indexPath.row])
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamSecondMomentOfAreaAboutMinorAxis = Double(arrayWithAllDataRelatedToUbsSections.map({ $0.secondMomentOfAreaMinorAxis })[indexPath.row])
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamRadiusOfGyrationAboutMajorAxis = Double(arrayWithAllDataRelatedToUbsSections.map({ $0.radiusOfGyrationMajorAxis })[indexPath.row])
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamRadiusOfGyrationAboutMinorAxis = Double(arrayWithAllDataRelatedToUbsSections.map({ $0.radiusOfGyrationMinorAxis })[indexPath.row])
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamElasticModulusAboutMajorAxis = Double(arrayWithAllDataRelatedToUbsSections.map({ $0.elasticModulusMajorAxis })[indexPath.row])
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamElasticModulusAboutMinorAxis = Double(arrayWithAllDataRelatedToUbsSections.map({ $0.elasticModulusMinorAxis })[indexPath.row])
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamPlasticModulusAboutMajorAxis = arrayWithAllDataRelatedToUbsSections.map({ $0.plasticModulusMajorAxis })[indexPath.row]
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamPlasticModulusAboutMinorAxis = arrayWithAllDataRelatedToUbsSections.map({ $0.plasticModulusMinorAxis })[indexPath.row]
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamBucklingParameter = arrayWithAllDataRelatedToUbsSections.map({ $0.bucklingParameter })[indexPath.row]
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamTorsionalIndex = arrayWithAllDataRelatedToUbsSections.map({ $0.torsionalIndex })[indexPath.row]
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamWarpingConstant = arrayWithAllDataRelatedToUbsSections.map({ $0.wrapingConstant })[indexPath.row]
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamTorsionalConstant = arrayWithAllDataRelatedToUbsSections.map({ $0.torsionalConstant })[indexPath.row]
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamSurfaceAreaPerMetre = arrayWithAllDataRelatedToUbsSections.map({ $0.surfaceAreaPerMetre })[indexPath.row]
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamSurfaceAreaPerTonne = arrayWithAllDataRelatedToUbsSections.map({ $0.surfaceAreaPerTonne })[indexPath.row]
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamRatioForWebLocalBuckling = arrayWithAllDataRelatedToUbsSections.map({ $0.ratioForLocalWebBuckling })[indexPath.row]
+            
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamRatioForFlangeLocalBuckling = arrayWithAllDataRelatedToUbsSections.map({ $0.ratioForLocalFlangeBuckling })[indexPath.row]
+            
         }
         
         self.present(blueBookUniversalBeamDataSummaryVC, animated: true, completion: nil)
-
+        
     }
     
 }

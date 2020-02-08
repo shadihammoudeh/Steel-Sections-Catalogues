@@ -20,7 +20,7 @@ class BlueBookTabController: UITabBarController, UINavigationBarDelegate {
     
     lazy var blueBookClosedSectionsVC = main.instantiateViewController(identifier: "BlueBookClosedSectionsVC") as BlueBookClosedSectionsVC
     
-    lazy var navigationBar = CustomUINavigationBar(normalStateNavBarLeftButtonImage: "normalStateBackButton", highlightedStateNavBarLeftButtonImage: "highlightedStateBackButton", navBarLeftButtonTarget: self, navBarLeftButtonSelector: #selector(navigationBarLeftButtonPressed(sender:)), labelTitleText: "BlueBook Catalogue", titleLabelFontHexColourCode: "#000000", labelTitleFontSize: 18, labelTitleFontType: "AppleSDGothicNeo-Medium", isNavBarTranslucent: false, navBarBackgroundColourHexCode: "#FFFFFF", navBarBackgroundColourAlphaValue: 1.0, navBarStyle: .black, preferLargeTitles: false, navBarDelegate: self, navBarItemsHexColourCode: "#FF4F40")
+    lazy var navigationBar = CustomUINavigationBar(normalStateNavBarLeftButtonImage: "normalStateBackButton", highlightedStateNavBarLeftButtonImage: "highlightedStateBackButton", navBarLeftButtonTarget: self, navBarLeftButtonSelector: #selector(navigationBarLeftButtonPressed(sender:)), labelTitleText: "BlueBook Catalogue", titleLabelFontHexColourCode: "#000000", labelTitleFontSize: 18, labelTitleFontType: "AppleSDGothicNeo-Medium", preferLargeTitles: false, navBarDelegate: self, navBarItemsHexColourCode: "#FF4F40")
     
     override func viewDidLoad() {
         

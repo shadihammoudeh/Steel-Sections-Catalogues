@@ -24,7 +24,7 @@ class MainScreenVC: UIViewController, UINavigationBarDelegate {
     
     lazy var contactUsButton: UIButton = CustomUIButton(normalStateButtonTitleHexColourCode: "#FCE9CC", highlightedStateButtonTitleHexColourCode: "#FF625E", buttonTitleFontName: buttonTitleFontName, buttonTitleFontSize: buttonTitleFontSize, normalStateButtonTitleText: "Contact Us", buttonBackgroundColourHexCode: "#123638", buttonBackgroundColourAlphaValue: 0.5, buttonCornerRadius: 2, buttonBorderWidth: 1, buttonBorderHexColourCode: "#FFCDAC", highlightButtonWhenTapped: true, buttonContentHorizontalAlignment: .left, buttonContentVerticalAlignment: .center, buttonTagValue: 2, buttonTarget: self, buttonSelector: #selector(buttonPressed(sender:)), normalStateButtonImage: "contactUsButton")
     
-    lazy var navigationBar = CustomUINavigationBar(labelTitleText: "Steel Sections Catalogues", titleLabelFontHexColourCode: "#FFFFFF", labelTitleFontSize: 18, labelTitleFontType: "AppleSDGothicNeo-Medium", isNavBarTranslucent: false, navBarBackgroundColourHexCode: "#000000", navBarBackgroundColourAlphaValue: 1.0, navBarStyle: .black, preferLargeTitles: false, navBarDelegate: self, navBarItemsHexColourCode: "#FF4F40")
+    lazy var navigationBar = CustomUINavigationBar(labelTitleText: "Steel Sections Catalogues", titleLabelFontHexColourCode: "#FFFFFF", labelTitleFontSize: 18, labelTitleFontType: "AppleSDGothicNeo-Medium", preferLargeTitles: false, navBarDelegate: self, navBarItemsHexColourCode: "#FF4F40")
     
     override func viewDidLoad() {
         
