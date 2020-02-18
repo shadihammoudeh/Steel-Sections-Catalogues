@@ -46,7 +46,7 @@ class BlueBookUniversalBeamsVC: UIViewController {
     
     // The below code line declares the custom NavigationBar to be added to this ViewController. The reason it is defined as a lazy var, is to allow us to access the view properties of this ViewController. Since the custom NavigationBar is defined outside the viewDidLoad methods, or other methods where UIVIew is available. This navigationBar is going to have a left button (back button), Title in the middle (UILabel) and a rightButton (Sort Data):
     
-    lazy var navigationBar = CustomUINavigationBar(rightNavBarTitle: "Sort Data", rightNavBarTitleHexColourCodeNormalState: "#333301", rightNavBarTitleHexColourCodeHighlightedState: "#FFFF05", rightNavBarButtonTarget: self, rightNavBarSelector: #selector(navigationBarRightButtonPressed(sender:)), preferLargeTitles: false, navBarDelegate: self, navBarItemsHexColourCode: "#E0E048", normalStateNavBarLeftButtonImage: "normalStateBackButton", highlightedStateNavBarLeftButtonImage: "highlightedStateBackButton", navBarLeftButtonTarget: self, navBarLeftButtonSelector: #selector(navigationBarLeftButtonPressed(sender:)), labelTitleText: "Universal Beams (UB)", titleLabelFontHexColourCode: "#FFFF52", labelTitleFontSize: 16, labelTitleFontType: "AppleSDGothicNeo-Light")
+    lazy var navigationBar = CustomUINavigationBar(rightNavBarTitle: "Sort Data", rightNavBarButtonTarget: self, rightNavBarSelector: #selector(navigationBarRightButtonPressed(sender:)), navBarDelegate: self, navBarLeftButtonTarget: self, navBarLeftButtonSelector: #selector(navigationBarLeftButtonPressed(sender:)), labelTitleText: "Universal Beams (UB)")
     
     let universalBeamsTableView = UITableView()
     
@@ -400,9 +400,7 @@ extension BlueBookUniversalBeamsVC: UINavigationBarDelegate {
     // MARK: - Navigaton Bar Right button pressed (Sort Data button):
     
     @objc func navigationBarRightButtonPressed(sender : UIButton) {
-        
-        print("Right navigation bar button pressed")
-        
+                
         sortDataPopOverVC.modalPresentationStyle = .popover
         
         let popover = sortDataPopOverVC.popoverPresentationController!
@@ -809,6 +807,9 @@ extension BlueBookUniversalBeamsVC: UITableViewDelegate {
         let blueBookUniversalBeamsDataSummaryVcProperties = blueBookUniversalBeamDataSummaryVC as! BlueBookUniversalBeamDataSummaryVC
         
         var arrayWithAllDataRelatedToUbsSections = [IsectionsDimensionsParameters]()
+       
+        
+    blueBookUniversalBeamsDataSummaryVcProperties.selectedTableRowNumberFromPreviousViewController = indexPath.row
         
         if (sortBy == "None" && filtersApplied == false && isSearching == false) || sortBy == "Sorted by: Section Designation in ascending order" ||  sortBy == "Sorted by: Section Designation in descending order" {
                         
@@ -881,6 +882,8 @@ extension BlueBookUniversalBeamsVC: UITableViewDelegate {
             
             blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamRatioForFlangeLocalBuckling = arrayWithAllDataRelatedToUbsSections.filter({ $0.sectionSerialNumber == "\(arrayWithAllSectionsSerialNumbers[indexPath.section])" }).map({ $0.ratioForLocalFlangeBuckling })[indexPath.row]
             
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamSectionDesignation = arrayWithAllDataRelatedToUbsSections.filter({ $0.sectionSerialNumber == "\(arrayWithAllSectionsSerialNumbers[indexPath.section])" }).map({ $0.fullSectionDesignation })[indexPath.row]
+            
         } else {
             
             if (sortBy == "Sorted by: Depth of Section in ascending order" || sortBy == "Sorted by: Width of Section in ascending order" || sortBy == "Sorted by: Section Area in ascending order" || sortBy == "Sorted by: Depth of Section in descending order" || sortBy == "Sorted by: Width of Section in descending order" || sortBy == "Sorted by: Section Area in descending order") {
@@ -950,6 +953,7 @@ extension BlueBookUniversalBeamsVC: UITableViewDelegate {
             blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamRatioForWebLocalBuckling = arrayWithAllDataRelatedToUbsSections.map({ $0.ratioForLocalWebBuckling })[indexPath.row]
             
             blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamRatioForFlangeLocalBuckling = arrayWithAllDataRelatedToUbsSections.map({ $0.ratioForLocalFlangeBuckling })[indexPath.row]
+            blueBookUniversalBeamsDataSummaryVcProperties.selectedUniversalBeamSectionDesignation = arrayWithAllDataRelatedToUbsSections.map({ $0.fullSectionDesignation })[indexPath.row]
             
         }
         

@@ -28,33 +28,33 @@ class CustomUINavigationBar: UINavigationBar {
     
     // The below convenience initialiser, initialises a custom standalone Navigation Bar which only contains a custom UILabel that holds the Navigation Bar title:
     
-    convenience init(labelTitleText: String, titleLabelFontHexColourCode: String, labelTitleFontSize: CGFloat, labelTitleFontType: String, preferLargeTitles: Bool, navBarDelegate: UINavigationBarDelegate, navBarItemsHexColourCode: String)  {
+    convenience init(labelTitleText: String, navBarDelegate: UINavigationBarDelegate)  {
         
         self.init()
         
-        addTitleLabel(labelTitleText: labelTitleText, titleLabelFontHexColourCode: titleLabelFontHexColourCode, labelTitleFontSize: labelTitleFontSize, labelTitleFontType: labelTitleFontType)
+        addTitleLabel(labelTitleText: labelTitleText)
         
-        setupNavigationBarEssentials(preferLargeTitles: preferLargeTitles, navBarDelegate: navBarDelegate, navBarItemsHexColourCode: navBarItemsHexColourCode)
+        setupNavigationBarEssentials(navBarDelegate: navBarDelegate)
         
     }
     
     // The below convenience initialiser, initialises a custom standalone Navigation Bar with a custom UILabel for the title and a left button item:
     
-    convenience init(normalStateNavBarLeftButtonImage: String, highlightedStateNavBarLeftButtonImage: String, navBarLeftButtonTarget: Any?, navBarLeftButtonSelector: Selector, labelTitleText: String, titleLabelFontHexColourCode: String, labelTitleFontSize: CGFloat, labelTitleFontType: String, preferLargeTitles: Bool, navBarDelegate: UINavigationBarDelegate, navBarItemsHexColourCode: String) {
+    convenience init(navBarLeftButtonTarget: Any?, navBarLeftButtonSelector: Selector, labelTitleText: String, navBarDelegate: UINavigationBarDelegate) {
         
         self.init()
         
-        addNavBarLeftButton(normalStateNavBarLeftButtonImage: normalStateNavBarLeftButtonImage, highlightedStateNavBarLeftButtonImage: highlightedStateNavBarLeftButtonImage, navBarLeftButtonTarget: navBarLeftButtonTarget, navBarLeftButtonSelector: navBarLeftButtonSelector)
+        addNavBarLeftButton(navBarLeftButtonTarget: navBarLeftButtonTarget, navBarLeftButtonSelector: navBarLeftButtonSelector)
         
-        addTitleLabel(labelTitleText: labelTitleText, titleLabelFontHexColourCode: titleLabelFontHexColourCode, labelTitleFontSize: labelTitleFontSize, labelTitleFontType: labelTitleFontType)
+        addTitleLabel(labelTitleText: labelTitleText)
         
-        setupNavigationBarEssentials(preferLargeTitles: preferLargeTitles, navBarDelegate: navBarDelegate, navBarItemsHexColourCode: navBarItemsHexColourCode)
+        setupNavigationBarEssentials(navBarDelegate: navBarDelegate)
         
     }
     
     // The below initialiser, initialises a custom Navigation Bar with a default Title prompt, a title image underneath the prompt and a left button item:
     
-    convenience init(navBarPromptTitleText: String, navBarTitleImage: String, normalStateNavBarLeftButtonImage: String, highlightedStateNavBarLeftButtonImage: String, navBarLeftButtonTarget: Any?, navBarLeftButtonSelector: Selector, preferLargeTitles: Bool, navBarDelegate: UINavigationBarDelegate, navBarItemsHexColourCode: String) {
+    convenience init(navBarPromptTitleText: String, navBarTitleImage: String, navBarLeftButtonTarget: Any?, navBarLeftButtonSelector: Selector, navBarDelegate: UINavigationBarDelegate) {
         
         self.init()
         
@@ -62,25 +62,25 @@ class CustomUINavigationBar: UINavigationBar {
         
         addTitleImageToNavBar(navBarTitleImage: navBarTitleImage)
         
-        addNavBarLeftButton(normalStateNavBarLeftButtonImage: normalStateNavBarLeftButtonImage, highlightedStateNavBarLeftButtonImage: highlightedStateNavBarLeftButtonImage, navBarLeftButtonTarget: navBarLeftButtonTarget, navBarLeftButtonSelector: navBarLeftButtonSelector)
+        addNavBarLeftButton(navBarLeftButtonTarget: navBarLeftButtonTarget, navBarLeftButtonSelector: navBarLeftButtonSelector)
         
-        setupNavigationBarEssentials(preferLargeTitles: preferLargeTitles, navBarDelegate: navBarDelegate, navBarItemsHexColourCode: navBarItemsHexColourCode)
+        setupNavigationBarEssentials(navBarDelegate: navBarDelegate)
         
     }
     
     // The below initialise a custom Navigation Bar with a Right and Left Button as well as a title with a UILabel in the middle:
     
-    convenience init(rightNavBarTitle: String, rightNavBarTitleHexColourCodeNormalState: String, rightNavBarTitleHexColourCodeHighlightedState: String, rightNavBarButtonTarget: Any?, rightNavBarSelector: Selector, preferLargeTitles: Bool, navBarDelegate: UINavigationBarDelegate, navBarItemsHexColourCode: String, normalStateNavBarLeftButtonImage: String, highlightedStateNavBarLeftButtonImage: String, navBarLeftButtonTarget: Any?, navBarLeftButtonSelector: Selector, labelTitleText: String, titleLabelFontHexColourCode: String, labelTitleFontSize: CGFloat, labelTitleFontType: String) {
+    convenience init(rightNavBarTitle: String, rightNavBarButtonTarget: Any?, rightNavBarSelector: Selector, navBarDelegate: UINavigationBarDelegate, navBarLeftButtonTarget: Any?, navBarLeftButtonSelector: Selector, labelTitleText: String) {
         
         self.init()
         
-        addNavBarRightButton(rightNavBarTitle: rightNavBarTitle, rightNavBarTitleHexColourCodeNormalState: rightNavBarTitleHexColourCodeNormalState, rightNavBarTitleHexColourCodeHighlightedState: rightNavBarTitleHexColourCodeHighlightedState, rightNavBarButtonTarget: rightNavBarButtonTarget, rightNavBarSelector: rightNavBarSelector)
-
-        addNavBarLeftButton(normalStateNavBarLeftButtonImage: normalStateNavBarLeftButtonImage, highlightedStateNavBarLeftButtonImage: highlightedStateNavBarLeftButtonImage, navBarLeftButtonTarget: navBarLeftButtonTarget, navBarLeftButtonSelector: navBarLeftButtonSelector)
+        addNavBarRightButton(rightNavBarTitle: rightNavBarTitle, rightNavBarButtonTarget: rightNavBarButtonTarget, rightNavBarSelector: rightNavBarSelector)
         
-        setupNavigationBarEssentials(preferLargeTitles: preferLargeTitles, navBarDelegate: navBarDelegate, navBarItemsHexColourCode: navBarItemsHexColourCode)
+        addNavBarLeftButton(navBarLeftButtonTarget: navBarLeftButtonTarget, navBarLeftButtonSelector: navBarLeftButtonSelector)
         
-        addTitleLabel(labelTitleText: labelTitleText, titleLabelFontHexColourCode: titleLabelFontHexColourCode, labelTitleFontSize: labelTitleFontSize, labelTitleFontType: labelTitleFontType)
+        setupNavigationBarEssentials(navBarDelegate: navBarDelegate)
+        
+        addTitleLabel(labelTitleText: labelTitleText)
         
     }
     
@@ -88,7 +88,7 @@ class CustomUINavigationBar: UINavigationBar {
     
     // The below function adds a title Label to the NavigationBar:
     
-    func addTitleLabel(labelTitleText titleText: String, titleLabelFontHexColourCode hexCode: String, labelTitleFontSize fontSize: CGFloat, labelTitleFontType fontType: String) {
+    func addTitleLabel(labelTitleText titleText: String) {
         
         // The default height for a Navigation Bar is 44 points:
         
@@ -96,11 +96,11 @@ class CustomUINavigationBar: UINavigationBar {
         
         navBarTitle.text = titleText
         
-        navBarTitle.textColor = UIColor(hexString: hexCode)
+        navBarTitle.textColor = UIColor(named: "Navigation Bar Title Text Colour")
         
         navBarTitle.textAlignment = .center
         
-        navBarTitle.font = UIFont(name: fontType, size: fontSize)
+        navBarTitle.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 19)
         
         navBarTitle.numberOfLines = 0
         
@@ -120,7 +120,7 @@ class CustomUINavigationBar: UINavigationBar {
         
     }
     
-    func addNavBarLeftButton(normalStateNavBarLeftButtonImage: String, highlightedStateNavBarLeftButtonImage: String, navBarLeftButtonTarget: Any?, navBarLeftButtonSelector: Selector) {
+    func addNavBarLeftButton(navBarLeftButtonTarget: Any?, navBarLeftButtonSelector: Selector) {
         
         // You can specify a custom tint colour for a navigation bar background by using the barTintColor property. Setting this property overrides the default colour inferred from the bar style. As with all UIView subclasses, you can control the colour of the interactive elements within navigation bars, including button images and titles, using the tintColor property.
         
@@ -128,13 +128,15 @@ class CustomUINavigationBar: UINavigationBar {
             
             let button = UIButton()
             
-            let normalStateNavBarLeftButtonImage = UIImage(named: normalStateNavBarLeftButtonImage)
+            let normalStateNavBarLeftButtonImage = UIImage(named: "Back Button un-Selected State")
             
-            let highlightedStateNavBarLeftButtonImage = UIImage(named: highlightedStateNavBarLeftButtonImage)
+            let highlightedStateNavBarLeftButtonImage = UIImage(named: "Back Button Selected State")
             
             button.setImage(normalStateNavBarLeftButtonImage, for: .normal)
             
             button.setImage(highlightedStateNavBarLeftButtonImage, for: .highlighted)
+            
+            button.imageView!.contentMode = .scaleAspectFit
             
             button.addTarget(navBarLeftButtonTarget, action: navBarLeftButtonSelector, for: .touchUpInside)
             
@@ -159,7 +161,7 @@ class CustomUINavigationBar: UINavigationBar {
                 
                 navBarLeftButton.leftAnchor.constraint(equalTo: view.leftAnchor)
                 
-                ])
+            ])
             
             return view
             
@@ -171,7 +173,7 @@ class CustomUINavigationBar: UINavigationBar {
         
     }
     
-    func addNavBarRightButton(rightNavBarTitle: String, rightNavBarTitleHexColourCodeNormalState: String, rightNavBarTitleHexColourCodeHighlightedState: String, rightNavBarButtonTarget: Any?, rightNavBarSelector: Selector) {
+    func addNavBarRightButton(rightNavBarTitle: String, rightNavBarButtonTarget: Any?, rightNavBarSelector: Selector) {
         
         let navBarRightButton: UIButton = {
             
@@ -179,10 +181,12 @@ class CustomUINavigationBar: UINavigationBar {
             
             button.setTitle(rightNavBarTitle, for: .normal)
             
-            button.setTitleColor(UIColor(hexString: rightNavBarTitleHexColourCodeNormalState), for: .normal)
+            button.setTitleColor(UIColor(named: "Navigation Bar and SortBy Bar Button Text Colour - Normal State"), for: .normal)
             
-            button.setTitleColor(UIColor(hexString: rightNavBarTitleHexColourCodeHighlightedState), for: .highlighted)
+            button.setTitleColor(UIColor(named: "Navigation Bar and SortBy Bar Button Text Colour - Highlighted State"), for: .highlighted)
             
+            button.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 18)
+
             button.addTarget(rightNavBarButtonTarget, action: rightNavBarSelector, for: .touchUpInside)
             
             button.translatesAutoresizingMaskIntoConstraints = false
@@ -191,18 +195,18 @@ class CustomUINavigationBar: UINavigationBar {
             
         }()
         
-            navigationBarRightButtonView.addSubview(navBarRightButton)
+        navigationBarRightButtonView.addSubview(navBarRightButton)
+        
+        NSLayoutConstraint.activate([
+            navBarRightButton.topAnchor.constraint(equalTo: navigationBarRightButtonView.topAnchor),
             
-            NSLayoutConstraint.activate([
-                navBarRightButton.topAnchor.constraint(equalTo: navigationBarRightButtonView.topAnchor),
-                
-                navBarRightButton.rightAnchor.constraint(equalTo: navigationBarRightButtonView.rightAnchor),
-                
-                navBarRightButton.bottomAnchor.constraint(equalTo: navigationBarRightButtonView.bottomAnchor),
-                
-                navBarRightButton.leftAnchor.constraint(equalTo: navigationBarRightButtonView.leftAnchor)
-                
-                ])
+            navBarRightButton.rightAnchor.constraint(equalTo: navigationBarRightButtonView.rightAnchor),
+            
+            navBarRightButton.bottomAnchor.constraint(equalTo: navigationBarRightButtonView.bottomAnchor),
+            
+            navBarRightButton.leftAnchor.constraint(equalTo: navigationBarRightButtonView.leftAnchor)
+            
+        ])
         
         let navBarRightButtonItem = UIBarButtonItem(customView: navigationBarRightButtonView)
         
@@ -222,7 +226,7 @@ class CustomUINavigationBar: UINavigationBar {
         
     }
     
-    func setupNavigationBarEssentials(preferLargeTitles: Bool, navBarDelegate: UINavigationBarDelegate, navBarItemsHexColourCode: String) {
+    func setupNavigationBarEssentials(navBarDelegate: UINavigationBarDelegate) {
         
         // The below line of code adds the navigationBarItems created above in different Methods to the navigationBarItems Array, in order for them to be displayed inside the NavigationBar. UINavigationBar contains an array of UINavigationBarItem for displaying content. According to Apple documents, UINavigationBarItem means; the items to be displayed by a navigation bar when the associated view controller is visible:
         
@@ -244,11 +248,9 @@ class CustomUINavigationBar: UINavigationBar {
         
         // The below line of code decides whether the title property of the navigationBarItem should have large font:
         
-        prefersLargeTitles = preferLargeTitles
+        prefersLargeTitles = false
         
         delegate = navBarDelegate
-        
-        tintColor = UIColor(hexString: navBarItemsHexColourCode)
         
         // The below lines of code set the needed constraints for the Navigation Bar when displayed inside the hostView:
         

@@ -9,12 +9,10 @@
 import UIKit
 
 class BlueBookUniversalBeamDataSummaryVC: UIViewController {
-        
-    // MARK: - navigationBar instance declaration:
-    
-    lazy var navigationBar = CustomUINavigationBar(normalStateNavBarLeftButtonImage: "normalStateBackButton", highlightedStateNavBarLeftButtonImage: "highlightedStateBackButton", navBarLeftButtonTarget: self, navBarLeftButtonSelector: #selector(navigationBarLeftButtonPressed(sender:)), labelTitleText: "Universal Beam Data", titleLabelFontHexColourCode: "#FFFF52", labelTitleFontSize: 16, labelTitleFontType: "AppleSDGothicNeo-Light", preferLargeTitles: false, navBarDelegate: self, navBarItemsHexColourCode: "#E0E048")
     
     // MARK: - Univeral Beam properties passed from previous viewController, the below start at 0 and later on get their values from the previous View Controller:
+    
+    var selectedTableRowNumberFromPreviousViewController: Int = 0
     
     var selectedUniversalBeamMassPerMetre: Double = 0
     
@@ -69,6 +67,12 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     var selectedUniversalBeamRatioForWebLocalBuckling: Double = 0
     
     var selectedUniversalBeamRatioForFlangeLocalBuckling: Double = 0
+    
+    var selectedUniversalBeamSectionDesignation: String = ""
+    
+    // MARK: - navigationBar instance declaration:
+    
+    lazy var navigationBar = CustomUINavigationBar(navBarLeftButtonTarget: self, navBarLeftButtonSelector: #selector(navigationBarLeftButtonPressed(sender:)), labelTitleText: "UB \(selectedUniversalBeamSectionDesignation)", navBarDelegate: self)
     
     // MARK: - Font colour, type, size and strings attributes used for labels inside the Section Profile Drawing Area:
     
@@ -1344,8 +1348,14 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         
         super.viewDidLoad()
         
-        drawUniversalBeamPathAndItsAnnotations()
-        
+        print("The user selected row number \(selectedTableRowNumberFromPreviousViewController) from previous ViewController")
+                
+        let rightGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(navigationBarLeftButtonPressed(sender:)))
+                
+        rightGestureRecognizer.direction = .right
+                
+        self.view.addGestureRecognizer(rightGestureRecognizer)
+                
         // MARK: - Adding SubViews to the main View Controller:
         
         view.addSubview(navigationBar)
@@ -1476,6 +1486,10 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     // MARK: - viewWillLayoutSubviews():
     
     override func viewWillLayoutSubviews() {
+        
+        // In order for the beam profile as well as its annotation to red-draw themselves when the system theme changes from light to dark or visa versa, we need to place the draw function inside viewWillLayoutSubviews:
+        
+        drawUniversalBeamPathAndItsAnnotations()
         
         // MARK: - Assigning needed constraints:
         
@@ -2090,6 +2104,12 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         verticalAndHorizontalSeparationLinesNeededBetweenLabelsContainedInSectionDimensionsAndPropertiesScrollViewCoreAnimationShapeLayer.path = verticalAndHorizontalSeparatorLinesNeededBetweenLabelsContainedInSectionDimensionsAndPropertiesScrollView.cgPath
         verticalAndHorizontalSeparationLinesNeededBetweenLabelsContainedInSectionDimensionsAndPropertiesScrollViewCoreAnimationShapeLayer.strokeColor = UIColor(named: verticalAndHorizontalSeparationLinesColourInsideSectionDimensionalAndPropertiesScrollView)?.cgColor
         verticalAndHorizontalSeparationLinesNeededBetweenLabelsContainedInSectionDimensionsAndPropertiesScrollViewCoreAnimationShapeLayer.lineWidth = verticalAndHorizontalSeparationLinesWidthsInsideSectionDimensionalAndPropertiesScrollView
+        
+    }
+    
+    @IBAction func swipeMade(_ sender: UISwipeGestureRecognizer) {
+        
+        
         
     }
     

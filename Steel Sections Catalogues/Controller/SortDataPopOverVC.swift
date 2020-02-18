@@ -23,9 +23,9 @@ class SortDataPopOverVC: UIViewController {
     // The below variables (i.e., sortBy, isSearching and filtersApplied) will be passed from BlueBookUniversalBeamsVC, and when this ViewController gets dismissed, any made changes to these variables will be sent back to BlueBookUniversalBeamsVC using the Protocol:
     
     var sortBy: String = "None"
-    
+
     var isSearching: Bool = false
-    
+
     var filtersApplied: Bool = false
     
     var universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC = [IsectionsDimensionsParameters]()
@@ -49,9 +49,7 @@ class SortDataPopOverVC: UIViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        
-        print("PopoverViewController viewDidLoad()")
-        
+                
         setupPickerView()
         
         setupToolBar()
@@ -64,19 +62,19 @@ class SortDataPopOverVC: UIViewController {
         
         NSLayoutConstraint.activate([
             
+            toolBar.topAnchor.constraint(equalTo: view.topAnchor),
+
+            toolBar.rightAnchor.constraint(equalTo: view.rightAnchor),
+
             toolBar.leftAnchor.constraint(equalTo: view.leftAnchor),
             
-            toolBar.rightAnchor.constraint(equalTo: view.rightAnchor),
-            
-            toolBar.topAnchor.constraint(equalTo: view.topAnchor),
-            
-            sortDataByPickerView.leftAnchor.constraint(equalTo: view.leftAnchor),
-            
-            sortDataByPickerView.rightAnchor.constraint(equalTo: view.rightAnchor),
-            
             sortDataByPickerView.topAnchor.constraint(equalTo: toolBar.bottomAnchor),
-            
-            sortDataByPickerView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+
+            sortDataByPickerView.rightAnchor.constraint(equalTo: view.rightAnchor),
+
+            sortDataByPickerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+
+            sortDataByPickerView.leftAnchor.constraint(equalTo: view.leftAnchor),
             
         ])
         
@@ -84,7 +82,7 @@ class SortDataPopOverVC: UIViewController {
     
     func setupPickerView() {
         
-        sortDataByPickerView.backgroundColor = UIColor(hexString: "#0D0D0D")
+        sortDataByPickerView.backgroundColor = UIColor(named: "SoryBy PopOver Window Picker View Background Colour")
         
         sortDataByPickerView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -96,17 +94,29 @@ class SortDataPopOverVC: UIViewController {
         
         // The below line of code will change the colour of the Tool Bar:
         
-        toolBar.barTintColor = UIColor(hexString: "#737373")
-        
-        // The below line of code will adjust the colour of the text inside the Tool Bar:
-        
-        toolBar.tintColor = UIColor(hexString: "#262626")
+        toolBar.barTintColor = UIColor(named: "SortBy PopOver Window Top Toolbar Background Colour")
         
         toolBar.sizeToFit()
         
-        let doneButton = UIBarButtonItem(title: "Apply", style: .plain, target: self, action: #selector(toolBarButtonPressed(sender:)))
+        let doneButton = UIButton(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height))
+                
+        doneButton.contentHorizontalAlignment = .left
         
-        toolBar.setItems([doneButton], animated: false)
+        doneButton.contentEdgeInsets.top = 11
+        
+        doneButton.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 18)
+        
+        doneButton.setTitle("Apply", for: .normal)
+        
+        doneButton.setTitleColor(UIColor(named: "Navigation Bar and SortBy Bar Button Text Colour - Normal State"), for: .normal)
+        
+        doneButton.setTitleColor(UIColor(named: "Navigation Bar and SortBy Bar Button Text Colour - Highlighted State"), for: .highlighted)
+        
+        doneButton.addTarget(self, action: #selector(toolBarButtonPressed(sender:)), for: .touchUpInside)
+        
+        let doneButtonBarItem = UIBarButtonItem(customView: doneButton)
+                        
+        toolBar.setItems([doneButtonBarItem], animated: false)
         
         toolBar.isUserInteractionEnabled = true
         
@@ -419,42 +429,6 @@ class SortDataPopOverVC: UIViewController {
         
     }
     
-    override func viewWillLayoutSubviews() {
-        
-        print("PopoverViewController viewWillLayoutSubviews()")
-        
-    }
-    
-    override func viewDidLayoutSubviews() {
-        
-        print("PopoverViewController viewDidLayoutSubviews()")
-        
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        
-        print("PopoverViewController viewWillAppear()")
-        
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        
-        print("PopoverViewController viewDidAppear()")
-        
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        
-        print("PopoverViewController viewWillDisappear")
-                
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        
-        print("PopoverViewController viewDidDisappear")
-        
-    }
-    
 }
 
 // MARK: - Extensions for UIPickerView:
@@ -519,11 +493,11 @@ extension SortDataPopOverVC: UIPickerViewDelegate, UIPickerViewDataSource {
             
         }
         
-        label.textColor = UIColor(hexString: "#F2F2F2")
+        label.textColor = UIColor(named: "SortBy PopOver Window PickerView Items Text Colour")
         
         label.textAlignment = .center
         
-        label.font = UIFont(name: "AppleSDGothicNeo-Light", size: 18)
+        label.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 18)
         
         if component == 0 {
             label.text = sortDataByPickerViewComponentZeroArray[row]
