@@ -1,0 +1,86 @@
+{
+  "images" : [
+    {
+      "idiom" : "iphone",
+      "filename" : "Search Bar Filter Icon Higlighted State @1x.png",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "iphone",
+      "filename" : "Search Bar Filter Icon Higlighted State @1x-1.png",
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "light"
+        }
+      ],
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "iphone",
+      "scale" : "1x",
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ]
+    },
+    {
+      "idiom" : "iphone",
+      "filename" : "Search Bar Filter Icon Higlighted State @2x.png",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "iphone",
+      "filename" : "Search Bar Filter Icon Higlighted State @2x-1.png",
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "light"
+        }
+      ],
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "iphone",
+      "scale" : "2x",
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ]
+    },
+    {
+      "idiom" : "iphone",
+      "filename" : "Search Bar Filter Icon Higlighted State @3x.png",
+      "scale" : "3x"
+    },
+    {
+      "idiom" : "iphone",
+      "filename" : "Search Bar Filter Icon Higlighted State @3x-1.png",
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "light"
+        }
+      ],
+      "scale" : "3x"
+    },
+    {
+      "idiom" : "iphone",
+      "scale" : "3x",
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ]
+    }
+  ],
+  "info" : {
+    "version" : 1,
+    "author" : "xcode"
+  }
+}

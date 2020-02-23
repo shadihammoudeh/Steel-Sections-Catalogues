@@ -218,32 +218,69 @@ class BlueBookUniversalBeamsVC: UIViewController {
         
         searchBar.showsBookmarkButton = true
         
-        searchBar.setImage(UIImage(named: "filterButtonIcon"), for: .bookmark, state: .normal)
+        // The below line of code sets the image to be used for the filter results button as well as asks Xcode to render the image as it is originally without applying any additional effects:
+        
+        let searchBarFilterImageForNormalState = UIImage(named:"searchBarFilterButtonIcon - Normal State")?.withRenderingMode(.alwaysOriginal)
+        
+        let searchBarFilterImageForHighlightedState = UIImage(named:"searchBarFilterButtonIcon - Highlighted State")?.withRenderingMode(.alwaysOriginal)
+        
+        searchBar.setImage(searchBarFilterImageForNormalState, for: .bookmark, state: .normal)
+        
+        searchBar.setImage(searchBarFilterImageForHighlightedState, for: .bookmark, state: .highlighted)
         
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         
-        searchBar.tintColor = UIColor.blue
-        
+        searchBar.searchTextField.contentVerticalAlignment = .center
+                
         searchBar.sizeToFit()
-        
-        // The below line of code changes the colour of the text displayed inside the search bar:
-        
-        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.red]
-        
+                
         searchBar.placeholder = "Search by Section Designation..."
+        
+        // The below line of code make use of the UISearchbar Extension, which allows for quick changes to be made for the colour of the placeholder text inside the UISearchBar text field:
+
+        searchBar.setPlaceholder(textColor: UIColor(named: "Search Bar Text Field Placeholder Text And Search Icon Colour")!)
+        
+        // The below line of code make use of the UISearchbar Extension, which allows for quick changes to be made for the colour of the search icon (i.e. magnifying glass inside the UISearchBar text field:
+        
+        searchBar.setSearchImage(color: UIColor(named: "Search Bar Text Field Placeholder Text And Search Icon Colour")!)
+        
+        // The below line of code make use of the UISearchbar Extension, which allows for quick changes to be made for the colour of the text that the user will type inside the UISearchBar text field:
+        
+        searchBar.set(textColor: UIColor(named: "Search Bar Text Field Label Text Font Colour")!)
+        
+        // The below line of code make use of the UISearchbar Extension, which allows for quick changes to be made for the background colour of the UISearchBar text field:
+        
+        searchBar.setTextField(color: UIColor(named: "Search Bar Text Field Background Colour")!.withAlphaComponent(0.6))
+        
+        // The below line of code sets the font type and size to be used for the placeholder text as well as the text typed by the user inside the UISearchBar text field:
+        
+        searchBar.searchTextField.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 20)
         
         searchBar.barStyle = UIBarStyle.default
         
+        searchBar.searchBarStyle = UISearchBar.Style.default
+        
         // The below line of code sets the frame's background colour of the UISearchBar:
         
-        searchBar.barTintColor = UIColor.black
+        searchBar.barTintColor = UIColor(named: "Search Bar Background Colour")
+                                        
+        searchBar.searchTextField.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            
+            searchBar
+                .searchTextField.centerYAnchor.constraint(equalTo: searchBar.centerYAnchor, constant: 0),
+            
+            searchBar.searchTextField.leftAnchor.constraint(equalTo: searchBar.leftAnchor, constant: 5),
+            
+            searchBar.searchTextField.rightAnchor.constraint(equalTo: searchBar.rightAnchor, constant: -5)
+            
+            ])
         
         searchBar.isTranslucent = false
         
         searchBar.keyboardType = .numberPad
-        
-        searchBar.searchBarStyle = UISearchBar.Style.default
-        
+                
     }
     
     // MARK: Setup Constraints for navigationBar, searchBar and tableView:
@@ -1213,4 +1250,93 @@ extension BlueBookUniversalBeamsVC: UIPopoverPresentationControllerDelegate {
         
     }
     
+}
+
+// MARK: - UISearchBar Extension to allow for quick changes to be made for placeholder text, text typed by the user inside the UISearchBar textfield and search manifying glass icon colourv:
+
+extension UISearchBar {
+
+    func getTextField() -> UITextField? { return value(forKey: "searchField") as? UITextField }
+    func set(textColor: UIColor) { if let textField = getTextField() { textField.textColor = textColor } }
+    func setPlaceholder(textColor: UIColor) { getTextField()?.setPlaceholder(textColor: textColor) }
+    func setClearButton(color: UIColor) { getTextField()?.setClearButton(color: color) }
+
+    func setTextField(color: UIColor) {
+        guard let textField = getTextField() else { return }
+        switch searchBarStyle {
+        case .minimal:
+            textField.layer.backgroundColor = color.cgColor
+            textField.layer.cornerRadius = 6
+        case .prominent, .default: textField.backgroundColor = color
+        @unknown default: break
+        }
+    }
+
+    func setSearchImage(color: UIColor) {
+        guard let imageView = getTextField()?.leftView as? UIImageView else { return }
+        imageView.tintColor = color
+        imageView.image = imageView.image?.withRenderingMode(.alwaysTemplate)
+    }
+}
+
+private extension UITextField {
+
+    private class Label: UILabel {
+        private var _textColor = UIColor.lightGray
+        override var textColor: UIColor! {
+            set { super.textColor = _textColor }
+            get { return _textColor }
+        }
+
+        init(label: UILabel, textColor: UIColor = .lightGray) {
+            _textColor = textColor
+            super.init(frame: label.frame)
+            self.text = label.text
+            self.font = label.font
+        }
+
+        required init?(coder: NSCoder) { super.init(coder: coder) }
+    }
+
+
+    private class ClearButtonImage {
+        static private var _image: UIImage?
+        static private var semaphore = DispatchSemaphore(value: 1)
+        static func getImage(closure: @escaping (UIImage?)->()) {
+            DispatchQueue.global(qos: .userInteractive).async {
+                semaphore.wait()
+                DispatchQueue.main.async {
+                    if let image = _image { closure(image); semaphore.signal(); return }
+                    guard let window = UIApplication.shared.windows.first else { semaphore.signal(); return }
+                    let searchBar = UISearchBar(frame: CGRect(x: 0, y: -200, width: UIScreen.main.bounds.width, height: 44))
+                    window.rootViewController?.view.addSubview(searchBar)
+                    searchBar.text = "txt"
+                    searchBar.layoutIfNeeded()
+                    _image = searchBar.getTextField()?.getClearButton()?.image(for: .normal)
+                    closure(_image)
+                    searchBar.removeFromSuperview()
+                    semaphore.signal()
+                }
+            }
+        }
+    }
+
+    func setClearButton(color: UIColor) {
+        ClearButtonImage.getImage { [weak self] image in
+            guard   let image = image,
+                let button = self?.getClearButton() else { return }
+            button.imageView?.tintColor = color
+            button.setImage(image.withRenderingMode(.alwaysTemplate), for: .normal)
+        }
+    }
+
+    var placeholderLabel: UILabel? { return value(forKey: "placeholderLabel") as? UILabel }
+
+    func setPlaceholder(textColor: UIColor) {
+        guard let placeholderLabel = placeholderLabel else { return }
+        let label = Label(label: placeholderLabel, textColor: textColor)
+        setValue(label, forKey: "placeholderLabel")
+    }
+
+    func getClearButton() -> UIButton? { return value(forKey: "clearButton") as? UIButton }
 }

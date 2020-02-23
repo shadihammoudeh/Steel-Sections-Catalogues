@@ -174,22 +174,22 @@ class FilterDataVC: UIViewController {
         
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         
-        scrollView.backgroundColor = .yellow
+        scrollView.backgroundColor = UIColor(named: "Filter Results View Controller Background Colour")
         
         return scrollView
         
     }()
     
-    let depthOfSectionRangeSliderTitle = CustomRangeSliderUILabel(textToDisplay: "Slider Range for Depth of Section, h [mm]:", textFontName: "AppleSDGothicNeo-Light", textFontSize: 20, textHexColourCode: "#033E8C")
-    
-    let widthOfSectionRangeSliderTitle = CustomRangeSliderUILabel(textToDisplay: "Slider Range for Width of Section, b [mm]:", textFontName: "AppleSDGothicNeo-Light", textFontSize: 20, textHexColourCode: "#033E8C")
-    
-    let sectionWebThicknessSliderTitle = CustomRangeSliderUILabel(attributedStringFontName: "AppleSDGothicNeo-Light", attributedStringFontSize: 18, attributedStringFontHexColourCode: "#D454FF", textToDisplay: "Slider Range for Section Web Thickness, tw [mm]:", subOrSuperScriptFontName: "AppleSDGothicNeo-Light", subOrSuperScriptFontSize: 10, subOrSuperScriptLocation: 41)
-    
-    let sectionFlangeThicknessSliderTitle = CustomRangeSliderUILabel(attributedStringFontName: "AppleSDGothicNeo-Light", attributedStringFontSize: 18, attributedStringFontHexColourCode: "#D454FF", textToDisplay: "Slider Range for Section Flange Thickness, tf [mm]:", subOrSuperScriptFontName: "AppleSDGothicNeo-Light", subOrSuperScriptFontSize: 10, subOrSuperScriptLocation: 44)
-    
-    let sectionAreaSliderTitle = CustomRangeSliderUILabel(attributedStringFontName: "AppleSDGothicNeo-Light", attributedStringFontSize: 18, attributedStringFontHexColourCode: "#D454FF", textToDisplay: "Slider Range for Area of Section, A [cm2]:", subOrSuperScriptFontName: "AppleSDGothicNeo-Light", subOrSuperScriptFontSize: 10, subOrSuperScriptLocation: 39)
-    
+    let depthOfSectionRangeSliderTitle = CustomRangeSliderUILabel(rangeSliderTitle: "Slider Range for Depth of Section, h [mm]:", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 34, abbreviationLettersLength: 1, containsSubScriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 0, containsSuperScriptletters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 0)
+            
+    let widthOfSectionRangeSliderTitle = CustomRangeSliderUILabel(rangeSliderTitle: "Slider Range for Width of Section, b [mm]:", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 34, abbreviationLettersLength: 1, containsSubScriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 0, containsSuperScriptletters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 0)
+            
+    let sectionWebThicknessSliderTitle = CustomRangeSliderUILabel(rangeSliderTitle: "Slider Range for Section Web Thickness, tw [mm]:", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 39, abbreviationLettersLength: 2, containsSubScriptLetters: true, subScriptLettersStartingLocation: 40, subScriptLettersLength: 1, containsSuperScriptletters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 0)
+            
+    let sectionFlangeThicknessSliderTitle = CustomRangeSliderUILabel(rangeSliderTitle: "Slider Range for Section Flange Thickness, tf [mm]:", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 39, abbreviationLettersLength: 2, containsSubScriptLetters: true, subScriptLettersStartingLocation: 40, subScriptLettersLength: 1, containsSuperScriptletters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 0)
+        
+    let sectionAreaSliderTitle = CustomRangeSliderUILabel(rangeSliderTitle: "Slider Range for Area of Section, A [cm2]:", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 34, abbreviationLettersLength: 1, containsSubScriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 0, containsSuperScriptletters: true, superScriptLettersStartingLocation: 35, superScriptLettersLength: 1)
+            
     lazy var navigationBar = CustomUINavigationBar(navBarLeftButtonTarget: self, navBarLeftButtonSelector: #selector(navigationBarLeftButtonPressed(sender:)), labelTitleText: "UB Data Filter", navBarDelegate: self)
     
     // MARK: - viewDidLoad():
