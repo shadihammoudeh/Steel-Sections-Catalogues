@@ -16,6 +16,10 @@ class CustomTableViewMessageCell: UITableViewCell {
         
         super.awakeFromNib()
         
+        messageLabel.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 19)
+        
+        messageLabel.textColor = UIColor(named: "Custom Table View Message Cell Text Font Colour")
+        
         // Initialization code
         
     }

@@ -14,15 +14,15 @@ import ChameleonFramework
 
 class CustomRangeSeekSlider: RangeSeekSlider {
     
-    convenience init(sectionPropertyDataArrayForRangeSlide: [Double], minimumDistanceBetweenSliders: CGFloat, slidersHexColourCode: String, minimumSliderLabelHexColourCode: String, maximumSliderLabelHexColourCode: String, trackColourBetweenSliders: String, hexColourCodeOfRangeSliderWhenSlidersAtMaxAndMinValues: String) {
+    convenience init(sectionPropertyDataArrayForRangeSlide: [Double], minimumDistanceBetweenSliders: CGFloat) {
         
         self.init()
         
-        setupRangeSlider(sectionPropertyDataArrayForRangeSlide: sectionPropertyDataArrayForRangeSlide, minimumDistanceBetweenSliders: minimumDistanceBetweenSliders, slidersHexColourCode: slidersHexColourCode, minimumSliderLabelHexColourCode: minimumSliderLabelHexColourCode, maximumSliderLabelHexColourCode: maximumSliderLabelHexColourCode, trackColourBetweenSliders: trackColourBetweenSliders, hexColourCodeOfRangeSliderWhenSlidersAtMaxAndMinValues: hexColourCodeOfRangeSliderWhenSlidersAtMaxAndMinValues)
+        setupRangeSlider(sectionPropertyDataArrayForRangeSlide: sectionPropertyDataArrayForRangeSlide, minimumDistanceBetweenSliders: minimumDistanceBetweenSliders)
         
     }
     
-    func setupRangeSlider(sectionPropertyDataArrayForRangeSlide: [Double], minimumDistanceBetweenSliders: CGFloat, slidersHexColourCode: String, minimumSliderLabelHexColourCode: String, maximumSliderLabelHexColourCode: String, trackColourBetweenSliders: String, hexColourCodeOfRangeSliderWhenSlidersAtMaxAndMinValues: String) {
+    func setupRangeSlider(sectionPropertyDataArrayForRangeSlide: [Double], minimumDistanceBetweenSliders: CGFloat) {
         
         translatesAutoresizingMaskIntoConstraints = false
         
@@ -50,27 +50,44 @@ class CustomRangeSeekSlider: RangeSeekSlider {
         
         minDistance = minimumDistanceBetweenSliders
         
-        handleColor = UIColor(hexString: slidersHexColourCode)
+        handleColor = UIColor(named: "Range Slider Handle Colour inside Filter View Controller")
         
-        minLabelColor = UIColor(hexString: minimumSliderLabelHexColourCode)
+        minLabelColor = UIColor(named: "Range Slider Minimum & Maximum Value Label Text Colour inside Filter View Controller")
         
-        maxLabelColor = UIColor(hexString: maximumSliderLabelHexColourCode)
+        maxLabelColor = UIColor(named: "Range Slider Minimum & Maximum Value Label Text Colour inside Filter View Controller")
         
-        colorBetweenHandles = UIColor(hexString: trackColourBetweenSliders)
+        colorBetweenHandles = UIColor(named: "Range Slider Track Colour in between Handles")
+        
+        lineHeight = 5
+        
+        minLabelFont = UIFont(name: "AppleSDGothicNeo-Medium", size: 15)!
+        
+        maxLabelFont = UIFont(name: "AppleSDGothicNeo-Medium", size: 15)!
+
+        // The below line of code sets the colour of the range slider track not in between the two handles:
+        
+        tintColor = UIColor(named: "Range Slider Track Colour not between Handles")
+        
+        // The color of the entire slider when the handle is set to the minimum value and the maximum value:
+
+        
+        initialColor = UIColor(named: "Range Slider Colour when Values Set to Max and Min")
+        
+        handleBorderWidth = 1.5
+        
+        handleBorderColor = UIColor(named: "Range Slider Handle Border Colour inside Filter View Controller")
         
         numberFormatter.numberStyle = .decimal
         
         labelsFixed = false
-        
-        initialColor = UIColor(hexString: hexColourCodeOfRangeSliderWhenSlidersAtMaxAndMinValues)
-        
-        handleDiameter = 20
+                
+        handleDiameter = 22
         
         selectedHandleDiameterMultiplier = 1.3
         
         numberFormatter.maximumFractionDigits = 1
         
-        labelPadding = -40
+        labelPadding = -45
         
     }
     

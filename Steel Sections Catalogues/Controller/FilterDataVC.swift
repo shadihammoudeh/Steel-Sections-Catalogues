@@ -28,58 +28,16 @@ class FilterDataVC: UIViewController {
     
     var universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC = [IsectionsDimensionsParameters]()
     
-    let depthOfSectionTitleTopPadding: CGFloat = 10
+    let rangeSliderTitleTopPaddingFromNavigationBarBottom: CGFloat = 20
     
-    var depthOfSectionTitleLabelHeight: CGFloat = 0
+    let rangeSliderTitleLeftAndRightPadding: CGFloat = 20
     
-    let depthOfSectionRangeSliderTopPadding: CGFloat = 10
+    let rangeSliderTrackTopPaddingFromBottomOfRangeSlideTitle: CGFloat = 10
     
-    var depthOfSectionRangeSliderHeight: CGFloat = 0
+    let rangeSliderTrackLeftAndRightPadding: CGFloat = 15
     
-    let widthOfSectionTitleTopPadding: CGFloat = 10
-    
-    var widthOfSectionTitleLabelHeight: CGFloat = 0
-    
-    let widthOfSectionRangeSliderTopPadding: CGFloat = 10
-    
-    var widthOfSectionRangeSliderHeight: CGFloat = 0
-    
-    let sectionWebThicknessTitleTopPadding: CGFloat = 10
-    
-    var sectionWebThicknessTitleLabelHeight: CGFloat = 0
-    
-    let sectionWebThicknessRangeSliderTopPadding: CGFloat = 10
-    
-    var sectionWebThicknessRangeSliderHeight: CGFloat = 0
-    
-    let sectionFlangeThicknessTitleTopPadding: CGFloat = 10
-    
-    var sectionFlangeThicknessTitleLabelHeight: CGFloat = 0
-    
-    let sectionFlangeThicknessRangeSliderTopPadding: CGFloat = 10
-    
-    var sectionFlangeThicknessRangeSliderHeight: CGFloat = 0
-    
-    let areaOfSectionTitleTopPadding: CGFloat = 10
-    
-    var areaOfSectionTitleLabelHeight: CGFloat = 0
-    
-    let areaOfSectionRangeSliderTopPadding: CGFloat = 10
-    
-    var areaOfSectionRangeSliderHeight: CGFloat = 0
-    
-    let resetFiltersButtonTopPadding: CGFloat = 10
-    
-    var resetFiltersButtonHeight: CGFloat = 0
-    
-    let applyFiltersButtonTopPadding: CGFloat = 10
-    
-    var applyFiltersButtonHeight: CGFloat = 0
-    
-    var resetAndApplyFiltersButtonsBottomPadding: CGFloat = 10
-    
-    let customRangeSlidersLeftAndRightPadding: CGFloat = 22
-    
+    let verticalSpacingBetweenBottomOfRangeSliderTrackAndTopOfRangeSliderTitleLabel: CGFloat = 10
+                    
     var extractedDepthOfSection: [Double]?
     
     var extractedWidthOfSection: [Double]?
@@ -126,11 +84,11 @@ class FilterDataVC: UIViewController {
         
         button.setTitle("Clear Filters", for: .normal)
         
-        button.setTitleColor(.blue, for: .normal)
+        button.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 20)
         
-        button.setTitleColor(.red, for: .highlighted)
+        button.setTitleColor(UIColor(named: "Filter View Controller Clear & Apply Filters Buttons Text Colour - Normal State"), for: .normal)
         
-        button.layer.borderWidth = 1
+        button.setTitleColor(UIColor(named: "Filter View Controller Clear & Apply Filters Buttons Text Colour - Highlighted State"), for: .highlighted)
         
         button.titleLabel?.numberOfLines = 1
         
@@ -150,11 +108,11 @@ class FilterDataVC: UIViewController {
         
         button.setTitle("Apply Filters", for: .normal)
         
-        button.setTitleColor(.blue, for: .normal)
+        button.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 20)
         
-        button.setTitleColor(.red, for: .highlighted)
+        button.setTitleColor(UIColor(named: "Filter View Controller Clear & Apply Filters Buttons Text Colour - Normal State"), for: .normal)
         
-        button.layer.borderWidth = 1
+        button.setTitleColor(UIColor(named: "Filter View Controller Clear & Apply Filters Buttons Text Colour - Highlighted State"), for: .highlighted)
         
         button.titleLabel?.numberOfLines = 1
         
@@ -180,16 +138,16 @@ class FilterDataVC: UIViewController {
         
     }()
     
-    let depthOfSectionRangeSliderTitle = CustomRangeSliderUILabel(rangeSliderTitle: "Slider Range for Depth of Section, h [mm]:", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 34, abbreviationLettersLength: 1, containsSubScriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 0, containsSuperScriptletters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 0)
-            
-    let widthOfSectionRangeSliderTitle = CustomRangeSliderUILabel(rangeSliderTitle: "Slider Range for Width of Section, b [mm]:", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 34, abbreviationLettersLength: 1, containsSubScriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 0, containsSuperScriptletters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 0)
-            
-    let sectionWebThicknessSliderTitle = CustomRangeSliderUILabel(rangeSliderTitle: "Slider Range for Section Web Thickness, tw [mm]:", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 39, abbreviationLettersLength: 2, containsSubScriptLetters: true, subScriptLettersStartingLocation: 40, subScriptLettersLength: 1, containsSuperScriptletters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 0)
-            
-    let sectionFlangeThicknessSliderTitle = CustomRangeSliderUILabel(rangeSliderTitle: "Slider Range for Section Flange Thickness, tf [mm]:", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 39, abbreviationLettersLength: 2, containsSubScriptLetters: true, subScriptLettersStartingLocation: 40, subScriptLettersLength: 1, containsSuperScriptletters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 0)
-        
-    let sectionAreaSliderTitle = CustomRangeSliderUILabel(rangeSliderTitle: "Slider Range for Area of Section, A [cm2]:", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 34, abbreviationLettersLength: 1, containsSubScriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 0, containsSuperScriptletters: true, superScriptLettersStartingLocation: 35, superScriptLettersLength: 1)
-            
+    let depthOfSectionRangeSliderTitle = CustomRangeSliderUILabel(rangeSliderTitle: "Range Slider for Depth of Section, h [mm]:", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 35, abbreviationLettersLength: 1, containsSubScriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 0, containsSuperScriptletters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 0)
+    
+    let widthOfSectionRangeSliderTitle = CustomRangeSliderUILabel(rangeSliderTitle: "Range Slider for Width of Section, b [mm]:", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 35, abbreviationLettersLength: 1, containsSubScriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 0, containsSuperScriptletters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 0)
+    
+    let sectionWebThicknessSliderTitle = CustomRangeSliderUILabel(rangeSliderTitle: "Range Slider for Section Web Thickness, tw [mm]:", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 40, abbreviationLettersLength: 2, containsSubScriptLetters: true, subScriptLettersStartingLocation: 41, subScriptLettersLength: 1, containsSuperScriptletters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 0)
+    
+    let sectionFlangeThicknessSliderTitle = CustomRangeSliderUILabel(rangeSliderTitle: "Range Slider for Section Flange Thickness, tf [mm]:", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 43, abbreviationLettersLength: 2, containsSubScriptLetters: true, subScriptLettersStartingLocation: 44, subScriptLettersLength: 1, containsSuperScriptletters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 0)
+    
+    let sectionAreaSliderTitle = CustomRangeSliderUILabel(rangeSliderTitle: "Range Slider for Area of Section, A [cm2]:", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 34, abbreviationLettersLength: 1, containsSubScriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 0, containsSuperScriptletters: true, superScriptLettersStartingLocation: 39, superScriptLettersLength: 1)
+    
     lazy var navigationBar = CustomUINavigationBar(navBarLeftButtonTarget: self, navBarLeftButtonSelector: #selector(navigationBarLeftButtonPressed(sender:)), labelTitleText: "UB Data Filter", navBarDelegate: self)
     
     // MARK: - viewDidLoad():
@@ -198,8 +156,12 @@ class FilterDataVC: UIViewController {
         
         super.viewDidLoad()
         
-        print("FilterDataVC viewDidLoad()")
+        // MARK: - Adding right swipe gesture:
         
+        let rightGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(navigationBarLeftButtonPressed(sender:)))
+        
+        rightGestureRecognizer.direction = .right
+    
         // MARK: - Extracting appropriate Arrays data for Range Sliders:
         
         extractedDepthOfSection = universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC.map({ return $0.depthOfSection })
@@ -216,15 +178,15 @@ class FilterDataVC: UIViewController {
         
         if let extractedDepthOfSection = extractedDepthOfSection, let extractedWidthOfSection = extractedWidthOfSection, let extractedSectionWebThickness = extractedSectionWebThickness, let extractedSectionFlangeThickness = extractedSectionFlangeThickness, let extractedSectionArea = extractedSectionArea {
             
-            customDepthOfSectionRangeSlider = CustomRangeSeekSlider(sectionPropertyDataArrayForRangeSlide: extractedDepthOfSection, minimumDistanceBetweenSliders: 80, slidersHexColourCode: "#A0DBF2", minimumSliderLabelHexColourCode: "#3068D9", maximumSliderLabelHexColourCode: "#2955D9", trackColourBetweenSliders: "#698C35", hexColourCodeOfRangeSliderWhenSlidersAtMaxAndMinValues: "#3068D9")
+            customDepthOfSectionRangeSlider = CustomRangeSeekSlider(sectionPropertyDataArrayForRangeSlide: extractedDepthOfSection, minimumDistanceBetweenSliders: 80)
             
-            customWidthOfSectionRangeSlider = CustomRangeSeekSlider(sectionPropertyDataArrayForRangeSlide: extractedWidthOfSection, minimumDistanceBetweenSliders: 30, slidersHexColourCode: "#A0DBF2", minimumSliderLabelHexColourCode: "#3068D9", maximumSliderLabelHexColourCode: "#2955D9", trackColourBetweenSliders: "#698C35", hexColourCodeOfRangeSliderWhenSlidersAtMaxAndMinValues: "#3068D9")
+            customWidthOfSectionRangeSlider = CustomRangeSeekSlider(sectionPropertyDataArrayForRangeSlide: extractedWidthOfSection, minimumDistanceBetweenSliders: 30)
             
-            customSectionWebThicknessSlider = CustomRangeSeekSlider(sectionPropertyDataArrayForRangeSlide: extractedSectionWebThickness, minimumDistanceBetweenSliders: 3, slidersHexColourCode: "#A0DBF2", minimumSliderLabelHexColourCode: "#3068D9", maximumSliderLabelHexColourCode: "#2955D9", trackColourBetweenSliders: "#698C35", hexColourCodeOfRangeSliderWhenSlidersAtMaxAndMinValues: "#3068D9")
+            customSectionWebThicknessSlider = CustomRangeSeekSlider(sectionPropertyDataArrayForRangeSlide: extractedSectionWebThickness, minimumDistanceBetweenSliders: 3)
             
-            customSectionFlangeThicknessSlider = CustomRangeSeekSlider(sectionPropertyDataArrayForRangeSlide: extractedSectionFlangeThickness, minimumDistanceBetweenSliders: 5, slidersHexColourCode: "#A0DBF2", minimumSliderLabelHexColourCode: "#3068D9", maximumSliderLabelHexColourCode: "#2955D9", trackColourBetweenSliders: "#698C35", hexColourCodeOfRangeSliderWhenSlidersAtMaxAndMinValues: "#3068D9")
+            customSectionFlangeThicknessSlider = CustomRangeSeekSlider(sectionPropertyDataArrayForRangeSlide: extractedSectionFlangeThickness, minimumDistanceBetweenSliders: 5)
             
-            customSectionAreaSlider = CustomRangeSeekSlider(sectionPropertyDataArrayForRangeSlide: extractedSectionArea, minimumDistanceBetweenSliders: 55, slidersHexColourCode: "#A0DBF2", minimumSliderLabelHexColourCode: "#3068D9", maximumSliderLabelHexColourCode: "#2955D9", trackColourBetweenSliders: "#698C35", hexColourCodeOfRangeSliderWhenSlidersAtMaxAndMinValues: "#3068D9")
+            customSectionAreaSlider = CustomRangeSeekSlider(sectionPropertyDataArrayForRangeSlide: extractedSectionArea, minimumDistanceBetweenSliders: 55)
             
         }
         
@@ -244,6 +206,8 @@ class FilterDataVC: UIViewController {
         
         view.addSubview(navigationBar)
         
+        view.addGestureRecognizer(rightGestureRecognizer)
+
         view.addSubview(scrollView)
         
         scrollView.addSubview(depthOfSectionRangeSliderTitle)
@@ -273,79 +237,39 @@ class FilterDataVC: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
-        print("FilterDataVC viewWillAppear()")
-        
+                
     }
     
     // MARK: - viewWillLayoutSubviews():
     
     override func viewWillLayoutSubviews() {
+                
+        let clearFiltersButtonCoordinatesInRelationToItsScrollView = applyFiltersButton.convert(applyFiltersButton.bounds.origin, to: scrollView)
         
-        print("FilterDataVC viewWillLayoutSubviews()")
+        scrollView.contentSize = CGSize(width: self.view.frame.width, height: clearFiltersButtonCoordinatesInRelationToItsScrollView.y + applyFiltersButton.intrinsicContentSize.height + rangeSliderTitleTopPaddingFromNavigationBarBottom)
         
-        // MARK: - Assigning UILabels heights and customRangeSliders heights to their corresponding instances:
-        
-        depthOfSectionTitleLabelHeight = depthOfSectionRangeSliderTitle.frame.size.height
-        
-        widthOfSectionTitleLabelHeight = widthOfSectionRangeSliderTitle.frame.size.height
-        
-        sectionWebThicknessTitleLabelHeight = sectionWebThicknessSliderTitle.frame.size.height
-        
-        sectionFlangeThicknessTitleLabelHeight = sectionFlangeThicknessSliderTitle.frame.size.height
-        
-        areaOfSectionTitleLabelHeight = sectionAreaSliderTitle.frame.size.height
-        
-        resetFiltersButtonHeight = CGFloat(resetFiltersButton.intrinsicContentSize.height)
-        
-        applyFiltersButtonHeight = CGFloat(applyFiltersButton.intrinsicContentSize.height)
-        
-        if let customDepthOfSectionRangeSlider = customDepthOfSectionRangeSlider, let customWidthOfSectionRangeSlider = customWidthOfSectionRangeSlider, let customSectionWebThicknessSlider = customSectionWebThicknessSlider, let customSectionFlangeThicknessSlider = customSectionFlangeThicknessSlider, let customSectionAreaSlider = customSectionAreaSlider {
-            
-            depthOfSectionRangeSliderHeight = customDepthOfSectionRangeSlider.frame.size.height
-            
-            widthOfSectionRangeSliderHeight = customWidthOfSectionRangeSlider.frame.size.height
-            
-            sectionWebThicknessRangeSliderHeight = customSectionWebThicknessSlider.frame.size.height
-            
-            sectionFlangeThicknessRangeSliderHeight = customSectionFlangeThicknessSlider.frame.size.height
-            
-            areaOfSectionRangeSliderHeight = customSectionAreaSlider.frame.size.height
+    // MARK: - Calling the setupConstraints function:
+    
+    setupConstraints()
             
         }
-        
-        // MARK: - Calculating ScrollView ContentSize:
-        
-        scrollView.contentSize = CGSize(width: view.frame.size.width, height: depthOfSectionTitleTopPadding + depthOfSectionTitleLabelHeight + depthOfSectionRangeSliderTopPadding + depthOfSectionRangeSliderHeight + widthOfSectionTitleTopPadding + widthOfSectionTitleLabelHeight + widthOfSectionRangeSliderTopPadding + widthOfSectionRangeSliderHeight + sectionWebThicknessTitleTopPadding + sectionWebThicknessTitleLabelHeight + sectionWebThicknessRangeSliderTopPadding + sectionWebThicknessRangeSliderHeight + sectionFlangeThicknessTitleTopPadding + sectionFlangeThicknessTitleLabelHeight + sectionFlangeThicknessRangeSliderTopPadding + sectionFlangeThicknessRangeSliderHeight + areaOfSectionTitleTopPadding + areaOfSectionTitleLabelHeight + areaOfSectionRangeSliderTopPadding + areaOfSectionRangeSliderHeight + resetFiltersButtonTopPadding + max(resetFiltersButtonHeight, applyFiltersButtonHeight) + resetAndApplyFiltersButtonsBottomPadding)
-        
-        // MARK: - Calling the setupConstraints function:
-        
-        setupConstraints()
-        
-    }
     
     override func viewDidLayoutSubviews() {
-        
-        print("FilterDataVC viewDidLayoutSubviews()")
-        
+                
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        
-        print("FilterDataVC viewDidAppear()")
-        
+                
+        self.scrollView.flashScrollIndicators()
+
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        
-        print("FilterDataVC viewWillDisappear()")
-        
+                
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        
-        print("FilterDataVC viewDidDisappear()")
-        
+                
     }
     
     // MARK: - Button pressed method:
@@ -396,12 +320,10 @@ class FilterDataVC: UIViewController {
             
         else if sender.tag == 2 {
             
-            
-            
             if delegate != nil {
                 
                 let filteredArray = universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC.filter( { return (($0.depthOfSection >= Double(customDepthOfSectionRangeSlider!.selectedMinValue)) && ($0.depthOfSection <= Double(customDepthOfSectionRangeSlider!.selectedMaxValue)) && ($0.widthOfSection >= Double(customWidthOfSectionRangeSlider!.selectedMinValue)) && ($0.widthOfSection <= Double(customWidthOfSectionRangeSlider!.selectedMaxValue)) && ($0.sectionWebThickness >= Double(customSectionWebThicknessSlider!.selectedMinValue)) && ($0.sectionWebThickness <= Double(customSectionWebThicknessSlider!.selectedMaxValue)) && ($0.sectionFlangeThickness >= Double(customSectionFlangeThicknessSlider!.selectedMinValue)) && ($0.sectionFlangeThickness <= Double(customSectionFlangeThicknessSlider!.selectedMaxValue)) && ($0.areaOfSection >= Double(customSectionAreaSlider!.selectedMinValue)) && ($0.areaOfSection <= Double(customSectionAreaSlider!.selectedMaxValue))) } )
-                                
+                
                 delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: filteredArray, sortBy: "None", filtersApplied: true, isSearching: false)
                 
             }
@@ -418,91 +340,87 @@ class FilterDataVC: UIViewController {
         
         NSLayoutConstraint.activate([
             
-            navigationBar.leftAnchor.constraint(equalTo: view.leftAnchor),
-            
             navigationBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             
             navigationBar.rightAnchor.constraint(equalTo: view.rightAnchor),
-            
+
+            navigationBar.leftAnchor.constraint(equalTo: view.leftAnchor),
+                        
             scrollView.topAnchor.constraint(equalTo: navigationBar.bottomAnchor),
-            
-            scrollView.leftAnchor.constraint(equalTo: view.leftAnchor),
             
             scrollView.rightAnchor.constraint(equalTo: view.rightAnchor),
             
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
-            depthOfSectionRangeSliderTitle.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: depthOfSectionTitleTopPadding),
+            scrollView.leftAnchor.constraint(equalTo: view.leftAnchor),
             
-            depthOfSectionRangeSliderTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 5),
+            depthOfSectionRangeSliderTitle.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: rangeSliderTitleTopPaddingFromNavigationBarBottom),
             
-            depthOfSectionRangeSliderTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -5),
+            depthOfSectionRangeSliderTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTitleLeftAndRightPadding),
             
-            customDepthOfSectionRangeSlider!.topAnchor.constraint(equalTo: depthOfSectionRangeSliderTitle.bottomAnchor, constant: depthOfSectionRangeSliderTopPadding),
+            depthOfSectionRangeSliderTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTitleLeftAndRightPadding),
             
-            customDepthOfSectionRangeSlider!.leftAnchor.constraint(equalTo: view.leftAnchor, constant: customRangeSlidersLeftAndRightPadding),
+            customDepthOfSectionRangeSlider!.topAnchor.constraint(equalTo: depthOfSectionRangeSliderTitle.bottomAnchor, constant: rangeSliderTrackTopPaddingFromBottomOfRangeSlideTitle),
             
-            customDepthOfSectionRangeSlider!.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * (customRangeSlidersLeftAndRightPadding)),
+            customDepthOfSectionRangeSlider!.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTrackLeftAndRightPadding),
             
-            widthOfSectionRangeSliderTitle.topAnchor.constraint(equalTo: customDepthOfSectionRangeSlider!.bottomAnchor, constant: widthOfSectionTitleTopPadding),
+            customDepthOfSectionRangeSlider!.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTrackLeftAndRightPadding),
             
-            widthOfSectionRangeSliderTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 5),
+            widthOfSectionRangeSliderTitle.topAnchor.constraint(equalTo: customDepthOfSectionRangeSlider!.bottomAnchor, constant: verticalSpacingBetweenBottomOfRangeSliderTrackAndTopOfRangeSliderTitleLabel),
             
-            widthOfSectionRangeSliderTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -5),
+            widthOfSectionRangeSliderTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTitleLeftAndRightPadding),
             
-            customWidthOfSectionRangeSlider!.topAnchor.constraint(equalTo: widthOfSectionRangeSliderTitle.bottomAnchor, constant: widthOfSectionRangeSliderTopPadding),
+            widthOfSectionRangeSliderTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTitleLeftAndRightPadding),
+                        
+            customWidthOfSectionRangeSlider!.topAnchor.constraint(equalTo: widthOfSectionRangeSliderTitle.bottomAnchor, constant: rangeSliderTrackTopPaddingFromBottomOfRangeSlideTitle),
             
-            customWidthOfSectionRangeSlider!.leftAnchor.constraint(equalTo: view.leftAnchor, constant: customRangeSlidersLeftAndRightPadding),
+            customWidthOfSectionRangeSlider!.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTrackLeftAndRightPadding),
             
-            customWidthOfSectionRangeSlider!.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * (customRangeSlidersLeftAndRightPadding)),
+            customWidthOfSectionRangeSlider!.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTrackLeftAndRightPadding),
             
-            sectionWebThicknessSliderTitle.topAnchor.constraint(equalTo: customWidthOfSectionRangeSlider!.bottomAnchor, constant: sectionWebThicknessTitleTopPadding),
+            sectionWebThicknessSliderTitle.topAnchor.constraint(equalTo: customWidthOfSectionRangeSlider!.bottomAnchor, constant: verticalSpacingBetweenBottomOfRangeSliderTrackAndTopOfRangeSliderTitleLabel),
             
-            sectionWebThicknessSliderTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 5),
+            sectionWebThicknessSliderTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTitleLeftAndRightPadding),
             
-            sectionWebThicknessSliderTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -5),
+            sectionWebThicknessSliderTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTitleLeftAndRightPadding),
+                        
+            customSectionWebThicknessSlider!.topAnchor.constraint(equalTo: sectionWebThicknessSliderTitle.bottomAnchor, constant: rangeSliderTrackTopPaddingFromBottomOfRangeSlideTitle),
             
-            customSectionWebThicknessSlider!.topAnchor.constraint(equalTo: sectionWebThicknessSliderTitle.bottomAnchor, constant: sectionWebThicknessRangeSliderTopPadding),
+            customSectionWebThicknessSlider!.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTrackLeftAndRightPadding),
             
-            customSectionWebThicknessSlider!.leftAnchor.constraint(equalTo: view.leftAnchor, constant: customRangeSlidersLeftAndRightPadding),
+            customSectionWebThicknessSlider!.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTrackLeftAndRightPadding),
+                        
+            sectionFlangeThicknessSliderTitle.topAnchor.constraint(equalTo: customSectionWebThicknessSlider!.bottomAnchor, constant: verticalSpacingBetweenBottomOfRangeSliderTrackAndTopOfRangeSliderTitleLabel),
             
-            customSectionWebThicknessSlider!.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * (customRangeSlidersLeftAndRightPadding)),
+            sectionFlangeThicknessSliderTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTitleLeftAndRightPadding),
             
-            sectionFlangeThicknessSliderTitle.topAnchor.constraint(equalTo: customSectionWebThicknessSlider!.bottomAnchor, constant: sectionFlangeThicknessTitleTopPadding),
+            sectionFlangeThicknessSliderTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTitleLeftAndRightPadding),
+                        
+            customSectionFlangeThicknessSlider!.topAnchor.constraint(equalTo: sectionFlangeThicknessSliderTitle.bottomAnchor, constant: rangeSliderTrackTopPaddingFromBottomOfRangeSlideTitle),
             
-            sectionFlangeThicknessSliderTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 5),
+            customSectionFlangeThicknessSlider!.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTrackLeftAndRightPadding),
             
-            sectionFlangeThicknessSliderTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -5),
+            customSectionFlangeThicknessSlider!.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTrackLeftAndRightPadding),
             
-            customSectionFlangeThicknessSlider!.topAnchor.constraint(equalTo: sectionFlangeThicknessSliderTitle.bottomAnchor, constant: sectionFlangeThicknessRangeSliderTopPadding),
+            sectionAreaSliderTitle.topAnchor.constraint(equalTo: customSectionFlangeThicknessSlider!.bottomAnchor, constant: verticalSpacingBetweenBottomOfRangeSliderTrackAndTopOfRangeSliderTitleLabel),
             
-            customSectionFlangeThicknessSlider!.leftAnchor.constraint(equalTo: view.leftAnchor, constant: customRangeSlidersLeftAndRightPadding),
+            sectionAreaSliderTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTitleLeftAndRightPadding),
+
+            sectionAreaSliderTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTitleLeftAndRightPadding),
+                        
+            customSectionAreaSlider!.topAnchor.constraint(equalTo: sectionAreaSliderTitle.bottomAnchor, constant: rangeSliderTrackTopPaddingFromBottomOfRangeSlideTitle),
             
-            customSectionFlangeThicknessSlider!.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * (customRangeSlidersLeftAndRightPadding)),
+            customSectionAreaSlider!.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * (rangeSliderTrackLeftAndRightPadding)),
             
-            sectionAreaSliderTitle.topAnchor.constraint(equalTo: customSectionFlangeThicknessSlider!.bottomAnchor, constant: areaOfSectionTitleTopPadding),
-            
-            sectionAreaSliderTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 5),
-            
-            sectionAreaSliderTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -5),
-            
-            customSectionAreaSlider!.topAnchor.constraint(equalTo: sectionAreaSliderTitle.bottomAnchor, constant: areaOfSectionRangeSliderTopPadding),
-            
-            customSectionAreaSlider!.leftAnchor.constraint(equalTo: view.leftAnchor, constant: customRangeSlidersLeftAndRightPadding),
-            
-            customSectionAreaSlider!.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * (customRangeSlidersLeftAndRightPadding)),
-            
-            resetFiltersButton.topAnchor.constraint(equalTo: customSectionAreaSlider!.bottomAnchor, constant: resetFiltersButtonTopPadding),
-            
-            resetFiltersButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: ((((view.frame.size.width) / 2) - (resetFiltersButton.intrinsicContentSize.width)) / 2)),
-            
-            resetFiltersButton.rightAnchor.constraint(equalTo: view.centerXAnchor, constant: -1 * ((((view.frame.size.width) / 2) - (resetFiltersButton.intrinsicContentSize.width)) / 2)),
-            
-            applyFiltersButton.topAnchor.constraint(equalTo: customSectionAreaSlider!.bottomAnchor, constant: applyFiltersButtonTopPadding),
-            
-            applyFiltersButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * ((((view.frame.size.width) / 2) - (applyFiltersButton.intrinsicContentSize.width)) / 2)),
-            
-            applyFiltersButton.leftAnchor.constraint(equalTo: view.centerXAnchor, constant: ((((view.frame.size.width) / 2) - (applyFiltersButton.intrinsicContentSize.width)) / 2)),
+            customSectionAreaSlider!.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTrackLeftAndRightPadding),
+                        
+            resetFiltersButton.topAnchor.constraint(equalTo: customSectionAreaSlider!.bottomAnchor, constant: rangeSliderTitleTopPaddingFromNavigationBarBottom),
+
+            resetFiltersButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: -1 * (self.view.frame.width/4)),
+
+            applyFiltersButton.topAnchor.constraint(equalTo: customSectionAreaSlider!.bottomAnchor, constant: rangeSliderTitleTopPaddingFromNavigationBarBottom),
+
+            applyFiltersButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: self.view.frame.width/4)
             
         ])
         

@@ -30,6 +30,10 @@ class CustomIsectionTableViewCells: UITableViewCell {
         
         // Initialization code
         
+        sectionDesignationLabel.textColor = UIColor(named: "Table View Sections Header Background Colour")
+        
+        sectionDesignationLabel.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 16)
+        
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -39,5 +43,5 @@ class CustomIsectionTableViewCells: UITableViewCell {
         // Configure the view for the selected state
         
     }
-    
+        
 }

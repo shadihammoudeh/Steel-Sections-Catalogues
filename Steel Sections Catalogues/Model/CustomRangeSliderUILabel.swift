@@ -32,14 +32,6 @@ class CustomRangeSliderUILabel: UILabel {
         
     }
     
-//    convenience init(textToDisplay: String, subOrSuperScriptLocation: Int) {
-//
-//        self.init()
-//
-//        setupSubOrSuperScriptLettersInTitle(textToDisplay: textToDisplay, subOrSuperScriptLocation: subOrSuperScriptLocation)
-//
-//    }
-    
     func returnedNSAttributedStringTobeDisplayedForRangeSliderTitle(rangeSliderTitle titleText: String, containsAbbreviationLetters: Bool, abbreviationLettersStartingLocation: Int, abbreviationLettersLength: Int, containsSubscriptLetters: Bool, subScriptLettersStartingLocation: Int, subScriptLettersLength: Int, containsSuperScriptLetters: Bool, superScriptLettersStartingLocation: Int, superScriptLettersLength: Int) -> NSAttributedString {
         
         let rangeSliderTitle: String = titleText
@@ -72,38 +64,36 @@ class CustomRangeSliderUILabel: UILabel {
             
             .baselineOffset: 7,
             
+            .font: UIFont(name: "AppleSDGothicNeo-SemiBold", size: 14)!
+            
         ]
         
         rangeSliderAttributedTitleString.addAttributes(rangeSliderTitleGeneralAttributes, range: NSRange(location: 0, length: rangeSliderAttributedTitleString.length))
 
-        if containsAbbreviationLetters == true {
+        if containsAbbreviationLetters == true && containsSubscriptLetters == false && containsSuperScriptLetters == false {
             
             rangeSliderAttributedTitleString.addAttributes(rangeSliderTitleAbbrivationLettersAttributes, range: NSRange(location: abbreviationLettersStartingLocation, length: abbreviationLettersLength))
 
-        } else {
+        } else if containsAbbreviationLetters == true && containsSubscriptLetters == true && containsSuperScriptLetters == false {
             
-            return rangeSliderAttributedTitleString
-            
-        }
-        
-        if containsSubscriptLetters == true {
+            rangeSliderAttributedTitleString.addAttributes(rangeSliderTitleAbbrivationLettersAttributes, range: NSRange(location: abbreviationLettersStartingLocation, length: abbreviationLettersLength))
             
             rangeSliderAttributedTitleString.addAttributes(rangeSliderTitleSubScriptLettersAttributes, range: NSRange(location: subScriptLettersStartingLocation, length: subScriptLettersLength))
 
+
+        } else if containsAbbreviationLetters == true && containsSuperScriptLetters == true && containsSubscriptLetters == false {
             
-        } else {
-            
-            return rangeSliderAttributedTitleString
-            
-        }
-        
-        if containsSuperScriptLetters == true {
+            rangeSliderAttributedTitleString.addAttributes(rangeSliderTitleAbbrivationLettersAttributes, range: NSRange(location: abbreviationLettersStartingLocation, length: abbreviationLettersLength))
             
             rangeSliderAttributedTitleString.addAttributes(rangeSliderTitleSuperScriptLettersAttributes, range: NSRange(location: superScriptLettersStartingLocation, length: superScriptLettersLength))
-
+            
         } else {
             
-            return rangeSliderAttributedTitleString
+            rangeSliderAttributedTitleString.addAttributes(rangeSliderTitleAbbrivationLettersAttributes, range: NSRange(location: abbreviationLettersStartingLocation, length: abbreviationLettersLength))
+            
+            rangeSliderAttributedTitleString.addAttributes(rangeSliderTitleSubScriptLettersAttributes, range: NSRange(location: subScriptLettersStartingLocation, length: subScriptLettersLength))
+            
+            rangeSliderAttributedTitleString.addAttributes(rangeSliderTitleSuperScriptLettersAttributes, range: NSRange(location: superScriptLettersStartingLocation, length: superScriptLettersLength))
             
         }
         
@@ -123,33 +113,4 @@ class CustomRangeSliderUILabel: UILabel {
                 
     }
     
-//    func setupSubOrSuperScriptLettersInTitle(textToDisplay: String, subOrSuperScriptLocation: Int) {
-//
-//        translatesAutoresizingMaskIntoConstraints = false
-//
-//        numberOfLines = 0
-//
-//        let paragraphStyle = NSMutableParagraphStyle()
-//
-//        paragraphStyle.alignment = .left
-//
-//        let attributes: [NSAttributedString.Key: Any] = [
-//
-//            .font: UIFont(name: "AppleSDGothicNeo-Bold", size: 15)!,
-//
-//            .foregroundColor: UIColor(named: "Filter Results Range Slide Title Text Colour")!,
-//
-//            .paragraphStyle: paragraphStyle
-//
-//        ]
-//
-//        let attributedString = NSMutableAttributedString(string: textToDisplay, attributes: attributes)
-//
-//        attributedString.setAttributes([.font: UIFont(name: "AppleSDGothicNeo-Bold", size: 15)!, .baselineOffset: -7, .foregroundColor: UIColor(named: "Filter Results Range Slide Title Text Colour")!], range: NSRange(location: subOrSuperScriptLocation,length: 1))
-//
-//        attributedText = attributedString
-//
-//    }
-    
-
 }

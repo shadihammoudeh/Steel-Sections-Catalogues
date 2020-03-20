@@ -23,6 +23,7 @@
 		CF4C735422E3BEB800923B4C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF4C735222E3BEB800923B4C /* LaunchScreen.storyboard */; };
 		CF4C735D22E3BF7200923B4C /* MainScreenVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4C735C22E3BF7200923B4C /* MainScreenVC.swift */; };
 		CF4CAC9722F8A9B5007A7BED /* SortDataPopOverVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4CAC9622F8A9B5007A7BED /* SortDataPopOverVC.swift */; };
+		CF5216B224251434007FB00A /* ProtocolToPassDataBackwardsWithTwoArrays.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5216B124251434007FB00A /* ProtocolToPassDataBackwardsWithTwoArrays.swift */; };
 		CF6EAC3E22EC890600C8AC65 /* BlueBookOpenRolledSectionsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6EAC3D22EC890600C8AC65 /* BlueBookOpenRolledSectionsVC.swift */; };
 		CF6EAC4022ECEFC000C8AC65 /* BlueBookUniversalBeamsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6EAC3F22ECEFC000C8AC65 /* BlueBookUniversalBeamsVC.swift */; };
 		CF6EAC4222ECF0A000C8AC65 /* CsvParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6EAC4122ECF0A000C8AC65 /* CsvParser.swift */; };
@@ -31,11 +32,11 @@
 		CF6EAC4822ECF1B900C8AC65 /* IsectionsDimensionsParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6EAC4722ECF1B900C8AC65 /* IsectionsDimensionsParameters.swift */; };
 		CF71D78C22E47FF3000FDDE9 /* CustomUINavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF71D78B22E47FF3000FDDE9 /* CustomUINavigationBar.swift */; };
 		CF74C62D232580B400807E7A /* CustomRangeSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF74C62C232580B400807E7A /* CustomRangeSlider.swift */; };
+		CFA38D7624157B1A00EAFD22 /* BlueBookUniversalBeams.csv in Resources */ = {isa = PBXBuildFile; fileRef = CFA38D7524157B1A00EAFD22 /* BlueBookUniversalBeams.csv */; };
 		CFABFD29231C1E00009F923A /* FilterDataVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFABFD28231C1E00009F923A /* FilterDataVC.swift */; };
 		CFB7B1C62346B27900BBCE3B /* PassingDataBackwardsProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB7B1C52346B27900BBCE3B /* PassingDataBackwardsProtocol.swift */; };
 		CFD1010A2353890B004E84C1 /* CustomTableViewMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD101082353890B004E84C1 /* CustomTableViewMessageCell.swift */; };
 		CFD1010B2353890B004E84C1 /* CustomTableViewMessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CFD101092353890B004E84C1 /* CustomTableViewMessageCell.xib */; };
-		CFD9228522EC692400DC9757 /* BlueBookUniversalBeams.csv in Resources */ = {isa = PBXBuildFile; fileRef = CFD9228422EC692400DC9757 /* BlueBookUniversalBeams.csv */; };
 		CFD9228822EC81F500DC9757 /* BlueBookTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD9228722EC81F500DC9757 /* BlueBookTabController.swift */; };
 		CFD9228C22EC846900DC9757 /* BlueBookClosedSectionsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD9228B22EC846900DC9757 /* BlueBookClosedSectionsVC.swift */; };
 /* End PBXBuildFile section */
@@ -61,6 +62,7 @@
 		CF4C735522E3BEB800923B4C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CF4C735C22E3BF7200923B4C /* MainScreenVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainScreenVC.swift; sourceTree = "<group>"; };
 		CF4CAC9622F8A9B5007A7BED /* SortDataPopOverVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortDataPopOverVC.swift; sourceTree = "<group>"; };
+		CF5216B124251434007FB00A /* ProtocolToPassDataBackwardsWithTwoArrays.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProtocolToPassDataBackwardsWithTwoArrays.swift; sourceTree = "<group>"; };
 		CF6EAC3D22EC890600C8AC65 /* BlueBookOpenRolledSectionsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlueBookOpenRolledSectionsVC.swift; sourceTree = "<group>"; };
 		CF6EAC3F22ECEFC000C8AC65 /* BlueBookUniversalBeamsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlueBookUniversalBeamsVC.swift; sourceTree = "<group>"; };
 		CF6EAC4122ECF0A000C8AC65 /* CsvParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CsvParser.swift; sourceTree = "<group>"; };
@@ -69,11 +71,11 @@
 		CF6EAC4722ECF1B900C8AC65 /* IsectionsDimensionsParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IsectionsDimensionsParameters.swift; sourceTree = "<group>"; };
 		CF71D78B22E47FF3000FDDE9 /* CustomUINavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomUINavigationBar.swift; sourceTree = "<group>"; };
 		CF74C62C232580B400807E7A /* CustomRangeSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomRangeSlider.swift; sourceTree = "<group>"; };
+		CFA38D7524157B1A00EAFD22 /* BlueBookUniversalBeams.csv */ = {isa = PBXFileReference; lastKnownFileType = text; name = BlueBookUniversalBeams.csv; path = "Catalogues CSV Files/BlueBook/UB/BlueBookUniversalBeams.csv"; sourceTree = SOURCE_ROOT; };
 		CFABFD28231C1E00009F923A /* FilterDataVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterDataVC.swift; sourceTree = "<group>"; };
 		CFB7B1C52346B27900BBCE3B /* PassingDataBackwardsProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassingDataBackwardsProtocol.swift; sourceTree = "<group>"; };
 		CFD101082353890B004E84C1 /* CustomTableViewMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewMessageCell.swift; sourceTree = "<group>"; };
 		CFD101092353890B004E84C1 /* CustomTableViewMessageCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomTableViewMessageCell.xib; sourceTree = "<group>"; };
-		CFD9228422EC692400DC9757 /* BlueBookUniversalBeams.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = BlueBookUniversalBeams.csv; path = "Steel Sections Catalogues/Model/BlueBookUniversalBeams.csv"; sourceTree = SOURCE_ROOT; };
 		CFD9228722EC81F500DC9757 /* BlueBookTabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlueBookTabController.swift; sourceTree = "<group>"; };
 		CFD9228B22EC846900DC9757 /* BlueBookClosedSectionsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlueBookClosedSectionsVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -191,6 +193,7 @@
 			isa = PBXGroup;
 			children = (
 				CFB7B1C52346B27900BBCE3B /* PassingDataBackwardsProtocol.swift */,
+				CF5216B124251434007FB00A /* ProtocolToPassDataBackwardsWithTwoArrays.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -198,7 +201,7 @@
 		CFD9228622EC693000DC9757 /* CSV Files */ = {
 			isa = PBXGroup;
 			children = (
-				CFD9228422EC692400DC9757 /* BlueBookUniversalBeams.csv */,
+				CFA38D7524157B1A00EAFD22 /* BlueBookUniversalBeams.csv */,
 			);
 			name = "CSV Files";
 			path = Model;
@@ -265,10 +268,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				CF07916923513C2000FA530D /* CustomIsectionTableViewCells.xib in Resources */,
-				CFD9228522EC692400DC9757 /* BlueBookUniversalBeams.csv in Resources */,
 				CFD1010B2353890B004E84C1 /* CustomTableViewMessageCell.xib in Resources */,
 				CF4C735422E3BEB800923B4C /* LaunchScreen.storyboard in Resources */,
 				CF4C735122E3BEB800923B4C /* Assets.xcassets in Resources */,
+				CFA38D7624157B1A00EAFD22 /* BlueBookUniversalBeams.csv in Resources */,
 				CF4C734C22E3BEB700923B4C /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -329,6 +332,7 @@
 				CF07916823513C2000FA530D /* CustomIsectionTableViewCells.swift in Sources */,
 				CF2A3DC3235CD1A200552C92 /* BlueBookUniversalBeamDataSummaryVC.swift in Sources */,
 				CF4CAC9722F8A9B5007A7BED /* SortDataPopOverVC.swift in Sources */,
+				CF5216B224251434007FB00A /* ProtocolToPassDataBackwardsWithTwoArrays.swift in Sources */,
 				CF4C734922E3BEB700923B4C /* CustomUIButton.swift in Sources */,
 				CF71D78C22E47FF3000FDDE9 /* CustomUINavigationBar.swift in Sources */,
 				CF4C734722E3BEB700923B4C /* AppDelegate.swift in Sources */,

@@ -55,21 +55,5 @@ class CustomTableView: UITableView {
         translatesAutoresizingMaskIntoConstraints = false
         
     }
-    
-    //    func setupConstraints(hostView: UIView, topAnchorConstraint: NSLayoutAnchor<NSLayoutYAxisAnchor>, bottomAnchorConstraint: NSLayoutAnchor<NSLayoutYAxisAnchor>) {
-    //
-    //        NSLayoutConstraint.activate([
-    //
-    //            leftAnchor.constraint(equalTo: hostView.leftAnchor),
-    //
-    //            rightAnchor.constraint(equalTo: hostView.rightAnchor),
-    //
-    //            topAnchor.constraint(equalTo: topAnchorConstraint),
-    //
-    //            bottomAnchor.constraint(equalTo: bottomAnchorConstraint)
-    //
-    //        ])
-    //
-    //    }
-    
+        
 }

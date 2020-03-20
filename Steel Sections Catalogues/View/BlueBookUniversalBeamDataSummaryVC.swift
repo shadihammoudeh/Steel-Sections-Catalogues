@@ -10,7 +10,25 @@ import UIKit
 
 class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     
+    // MARK: - Assigning protocol delegate:
+    
+    // Here we are setting a delegate inside this View Controller in order to be able to access all the methods inside the Protocol:
+    
+    var delegate: ProtocolToPassDataBackwardsWithTwoArrays?
+    
+    var sortBy: String = "None"
+
+    var isSearching: Bool = false
+
+    var filtersApplied: Bool = false
+    
+    var passedArrayFromPreviousViewControllerContainingAllDataRelatedToUbs = [IsectionsDimensionsParameters]()
+    
+    var passedArrayFromPreviousViewControllerContainingDataRelatedToSectionSerialNumbersOnly: [String] = []
+    
     // MARK: - Univeral Beam properties passed from previous viewController, the below start at 0 and later on get their values from the previous View Controller:
+    
+    var selectedTableSectionNumberFromPreviousViewController: Int = 0
     
     var selectedTableRowNumberFromPreviousViewController: Int = 0
     
@@ -1347,9 +1365,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        
-        print("The user selected row number \(selectedTableRowNumberFromPreviousViewController) from previous ViewController")
-                
+                                
         let rightGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(navigationBarLeftButtonPressed(sender:)))
                 
         rightGestureRecognizer.direction = .right
@@ -2107,12 +2123,6 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         
     }
     
-    @IBAction func swipeMade(_ sender: UISwipeGestureRecognizer) {
-        
-        
-        
-    }
-    
     // MARK: - Declaring constraints:
     
     func setupSubViewsConstraints() {
@@ -2426,6 +2436,12 @@ extension BlueBookUniversalBeamDataSummaryVC: UINavigationBarDelegate {
         let main = UIStoryboard(name: "Main", bundle: nil)
         
         let previousViewControllerToGoTo = main.instantiateViewController(withIdentifier: "BlueBookUniversalBeamsVC")
+        
+        if delegate != nil {
+        
+            delegate?.dataToBePassedUsingProtocol(modifiedArrayContainingAllUBsDataToBePassed: passedArrayFromPreviousViewControllerContainingAllDataRelatedToUbs, modifiedArrayContainingSectionSerialNumbersDataToBePassed: passedArrayFromPreviousViewControllerContainingDataRelatedToSectionSerialNumbersOnly, sortBy: self.sortBy, filtersApplied: self.filtersApplied, isSearching: self.isSearching)
+            
+        }
         
         self.present(previousViewControllerToGoTo, animated: true, completion: nil)
         
