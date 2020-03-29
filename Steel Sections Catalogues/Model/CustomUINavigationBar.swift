@@ -143,6 +143,7 @@ class CustomUINavigationBar: UINavigationBar {
             button.translatesAutoresizingMaskIntoConstraints = false
             
             return button
+            
         }()
         
         let navBarLeftView: UIView = {
@@ -198,6 +199,7 @@ class CustomUINavigationBar: UINavigationBar {
         navigationBarRightButtonView.addSubview(navBarRightButton)
         
         NSLayoutConstraint.activate([
+            
             navBarRightButton.topAnchor.constraint(equalTo: navigationBarRightButtonView.topAnchor),
             
             navBarRightButton.rightAnchor.constraint(equalTo: navigationBarRightButtonView.rightAnchor),

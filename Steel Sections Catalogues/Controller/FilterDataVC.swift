@@ -156,12 +156,34 @@ class FilterDataVC: UIViewController {
         
         super.viewDidLoad()
         
+        // In order to prevent the movement of a UISlider's trackers to get confused with a swipeGesture (i.e. avoid the swipeGesture to get triggered when a user moves one of the slider's trackers in the right direction, which also correspond to the direction of the swipeGesture). We need to add a panGesture to the UISlider, whereby the panGesture does nothing at all. Then we need to set the cancelsTouchesInView property to be equal to false. As this will prevent the delivery of gestures to the view. Note that a UIGestureRecognizer is to be used with a single view:
+        
+        let panGestureRecogniseForDepthOfSectionUISlider = UIPanGestureRecognizer(target: nil, action:nil)
+        
+        panGestureRecogniseForDepthOfSectionUISlider.cancelsTouchesInView = false
+        
+        let panGestureRecogniseForWidthOfSectionUISlider = UIPanGestureRecognizer(target: nil, action:nil)
+        
+        panGestureRecogniseForWidthOfSectionUISlider.cancelsTouchesInView = false
+        
+        let panGestureRecogniseForWebThicknessUISlider = UIPanGestureRecognizer(target: nil, action:nil)
+        
+        panGestureRecogniseForWebThicknessUISlider.cancelsTouchesInView = false
+        
+        let panGestureRecogniseForFlangeThicknessUISlider = UIPanGestureRecognizer(target: nil, action:nil)
+        
+        panGestureRecogniseForFlangeThicknessUISlider.cancelsTouchesInView = false
+        
+        let panGestureRecogniseForAreaOfSectionUISlider = UIPanGestureRecognizer(target: nil, action:nil)
+        
+        panGestureRecogniseForAreaOfSectionUISlider.cancelsTouchesInView = false
+        
         // MARK: - Adding right swipe gesture:
         
         let rightGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(navigationBarLeftButtonPressed(sender:)))
-        
+                
         rightGestureRecognizer.direction = .right
-    
+        
         // MARK: - Extracting appropriate Arrays data for Range Sliders:
         
         extractedDepthOfSection = universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC.map({ return $0.depthOfSection })
@@ -207,9 +229,19 @@ class FilterDataVC: UIViewController {
         view.addSubview(navigationBar)
         
         view.addGestureRecognizer(rightGestureRecognizer)
-
-        view.addSubview(scrollView)
         
+        customDepthOfSectionRangeSlider!.addGestureRecognizer(panGestureRecogniseForDepthOfSectionUISlider)
+        
+        customWidthOfSectionRangeSlider!.addGestureRecognizer(panGestureRecogniseForWidthOfSectionUISlider)
+        
+        customSectionWebThicknessSlider!.addGestureRecognizer(panGestureRecogniseForWebThicknessUISlider)
+        
+        customSectionFlangeThicknessSlider!.addGestureRecognizer(panGestureRecogniseForFlangeThicknessUISlider)
+        
+        customSectionAreaSlider!.addGestureRecognizer(panGestureRecogniseForAreaOfSectionUISlider)
+        
+        view.addSubview(scrollView)
+                
         scrollView.addSubview(depthOfSectionRangeSliderTitle)
         
         scrollView.addSubview(widthOfSectionRangeSliderTitle)
@@ -234,7 +266,10 @@ class FilterDataVC: UIViewController {
         
         scrollView.addSubview(applyFiltersButton)
         
+        
+
     }
+    
     
     override func viewWillAppear(_ animated: Bool) {
                 
@@ -254,22 +289,10 @@ class FilterDataVC: UIViewController {
             
         }
     
-    override func viewDidLayoutSubviews() {
-                
-    }
-    
     override func viewDidAppear(_ animated: Bool) {
                 
         self.scrollView.flashScrollIndicators()
 
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-                
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-                
     }
     
     // MARK: - Button pressed method:
@@ -320,13 +343,27 @@ class FilterDataVC: UIViewController {
             
         else if sender.tag == 2 {
             
-            if delegate != nil {
+            var filteredArrayToBeSentBack = [IsectionsDimensionsParameters]()
+            
+            if customDepthOfSectionRangeSlider?.selectedMinValue == CGFloat(minimumDepthOfSection!) && customDepthOfSectionRangeSlider?.selectedMaxValue == CGFloat(maximumDepthOfSection!) && customWidthOfSectionRangeSlider?.selectedMinValue == CGFloat(minimumWidthOfSection!) && customWidthOfSectionRangeSlider?.selectedMaxValue == CGFloat(maximumWidthOfSection!) && customSectionWebThicknessSlider?.selectedMinValue == CGFloat(minimumSectionWebThickness!) && customSectionWebThicknessSlider?.selectedMaxValue == CGFloat(maximumSectionWebThickness!) && customSectionFlangeThicknessSlider?.selectedMinValue == CGFloat(minimumSectionFlangeThickness!) && customSectionFlangeThicknessSlider?.selectedMaxValue == CGFloat(maximumSectionFlangeThickness!) && customSectionAreaSlider?.selectedMinValue == CGFloat(minimumAreaOfSection!) && customSectionAreaSlider?.selectedMaxValue == CGFloat(maximumAreaOfSection!) {
                 
-                let filteredArray = universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC.filter( { return (($0.depthOfSection >= Double(customDepthOfSectionRangeSlider!.selectedMinValue)) && ($0.depthOfSection <= Double(customDepthOfSectionRangeSlider!.selectedMaxValue)) && ($0.widthOfSection >= Double(customWidthOfSectionRangeSlider!.selectedMinValue)) && ($0.widthOfSection <= Double(customWidthOfSectionRangeSlider!.selectedMaxValue)) && ($0.sectionWebThickness >= Double(customSectionWebThicknessSlider!.selectedMinValue)) && ($0.sectionWebThickness <= Double(customSectionWebThicknessSlider!.selectedMaxValue)) && ($0.sectionFlangeThickness >= Double(customSectionFlangeThicknessSlider!.selectedMinValue)) && ($0.sectionFlangeThickness <= Double(customSectionFlangeThicknessSlider!.selectedMaxValue)) && ($0.areaOfSection >= Double(customSectionAreaSlider!.selectedMinValue)) && ($0.areaOfSection <= Double(customSectionAreaSlider!.selectedMaxValue))) } )
+                filteredArrayToBeSentBack = universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC
                 
-                delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: filteredArray, sortBy: "None", filtersApplied: true, isSearching: false)
+                delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: filteredArrayToBeSentBack, sortBy: "None", filtersApplied: false, isSearching: false)
+                
+            } else {
+                
+                if delegate != nil {
+                    
+                    filteredArrayToBeSentBack = universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC.filter( { return (($0.depthOfSection >= Double(customDepthOfSectionRangeSlider!.selectedMinValue)) && ($0.depthOfSection <= Double(customDepthOfSectionRangeSlider!.selectedMaxValue)) && ($0.widthOfSection >= Double(customWidthOfSectionRangeSlider!.selectedMinValue)) && ($0.widthOfSection <= Double(customWidthOfSectionRangeSlider!.selectedMaxValue)) && ($0.sectionWebThickness >= Double(customSectionWebThicknessSlider!.selectedMinValue)) && ($0.sectionWebThickness <= Double(customSectionWebThicknessSlider!.selectedMaxValue)) && ($0.sectionFlangeThickness >= Double(customSectionFlangeThicknessSlider!.selectedMinValue)) && ($0.sectionFlangeThickness <= Double(customSectionFlangeThicknessSlider!.selectedMaxValue)) && ($0.areaOfSection >= Double(customSectionAreaSlider!.selectedMinValue)) && ($0.areaOfSection <= Double(customSectionAreaSlider!.selectedMaxValue))) } )
+                    
+                    delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: filteredArrayToBeSentBack, sortBy: "None", filtersApplied: true, isSearching: false)
+                    
+                }
                 
             }
+            
+            
             
             dismiss(animated: true, completion: {})
             

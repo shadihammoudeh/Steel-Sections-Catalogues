@@ -12,9 +12,9 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     
     // MARK: - Assigning protocol delegate:
     
-    // Here we are setting a delegate inside this View Controller in order to be able to access all the methods inside the Protocol:
+    // Here we are setting a delegate inside this View Controller in order to be able to access all the methods inside the Protocol. Notice that the delegate is defined as a "weak" one, as in most cases you do not want a child object maintaining a string reference to a parent object:
     
-    var delegate: ProtocolToPassDataBackwardsWithTwoArrays?
+    weak var delegate: ProtocolToPassDataBackwardsFromDataSummaryVcToPreviousVc?
     
     var sortBy: String = "None"
 
@@ -26,11 +26,11 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     
     var passedArrayFromPreviousViewControllerContainingDataRelatedToSectionSerialNumbersOnly: [String] = []
     
-    // MARK: - Univeral Beam properties passed from previous viewController, the below start at 0 and later on get their values from the previous View Controller:
-    
     var selectedTableSectionNumberFromPreviousViewController: Int = 0
     
     var selectedTableRowNumberFromPreviousViewController: Int = 0
+    
+    // MARK: - Univeral Beam properties passed from previous viewController, the below start at 0 and later on get their values from the previous View Controller:
     
     var selectedUniversalBeamMassPerMetre: Double = 0
     
@@ -1365,7 +1365,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
-                                
+                
         let rightGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(navigationBarLeftButtonPressed(sender:)))
                 
         rightGestureRecognizer.direction = .right
@@ -1518,10 +1518,6 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         // MARK: - Defining sectionDimensionsAndPropertiesScrollView contentSize:
         
         sectionDimensionsAndPropertiesScrollView.contentSize = CGSize(width: view.frame.size.width, height: scrollViewTorsionalConstantLabelCoordinatesOriginInRelationToItsScrollView.y + scrollViewMainTitleTopMargin + scrollViewTorsionalConstant.intrinsicContentSize.height)
-        
-    }
-    
-    override func viewDidLayoutSubviews() {
         
     }
     
@@ -2122,7 +2118,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         verticalAndHorizontalSeparationLinesNeededBetweenLabelsContainedInSectionDimensionsAndPropertiesScrollViewCoreAnimationShapeLayer.lineWidth = verticalAndHorizontalSeparationLinesWidthsInsideSectionDimensionalAndPropertiesScrollView
         
     }
-    
+        
     // MARK: - Declaring constraints:
     
     func setupSubViewsConstraints() {
@@ -2432,19 +2428,17 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
 extension BlueBookUniversalBeamDataSummaryVC: UINavigationBarDelegate {
     
     @objc func navigationBarLeftButtonPressed(sender : UIButton) {
-        
-        let main = UIStoryboard(name: "Main", bundle: nil)
-        
-        let previousViewControllerToGoTo = main.instantiateViewController(withIdentifier: "BlueBookUniversalBeamsVC")
-        
+                
         if delegate != nil {
         
-            delegate?.dataToBePassedUsingProtocol(modifiedArrayContainingAllUBsDataToBePassed: passedArrayFromPreviousViewControllerContainingAllDataRelatedToUbs, modifiedArrayContainingSectionSerialNumbersDataToBePassed: passedArrayFromPreviousViewControllerContainingDataRelatedToSectionSerialNumbersOnly, sortBy: self.sortBy, filtersApplied: self.filtersApplied, isSearching: self.isSearching)
+            delegate?.dataToBePassedUsingProtocol(modifiedArrayContainingAllUBsDataToBePassed: self.passedArrayFromPreviousViewControllerContainingAllDataRelatedToUbs, modifiedArrayContainingSectionSerialNumbersDataToBePassed: self.passedArrayFromPreviousViewControllerContainingDataRelatedToSectionSerialNumbersOnly, passedSortBy: self.sortBy, passedFiltersApplied: self.filtersApplied, passedIsSearching: self.isSearching, passedSelectedTableSectionNumberFromPreviousVc: self.selectedTableSectionNumberFromPreviousViewController, passedSelectedTableRowNumberFromPreviousVc: self.selectedTableRowNumberFromPreviousViewController)
             
         }
         
-        self.present(previousViewControllerToGoTo, animated: true, completion: nil)
-        
+                // In order not to instantiate a new instance of the first view controller once the user navigates back to the previous view controller, we should use present.viewController. Instead the second view controller should be dismissed. This is needed so that the user will be guided back to the previous view controller, specifically to the last location he was on inside the tableView (in terms of row and section):
+                        
+        dismiss(animated: true) {}
+                
     }
     
     func position(for bar: UIBarPositioning) -> UIBarPosition {
