@@ -12,6 +12,8 @@ import ChameleonFramework
 
 class CustomCollectionViewCell: UICollectionViewCell {
     
+    let cellImage = UIImageView()
+    
     override init(frame: CGRect) {
         
         super.init(frame: frame)
@@ -30,33 +32,42 @@ class CustomCollectionViewCell: UICollectionViewCell {
         
     }
     
-    func setupCustomCellElements(cellImageName image: String, cellTitleTextColour textColour: String, cellTitleTextSize textSize: CGFloat, cellTitleFontType fontType: String, cellTitle title: String, cellHexColorCode hexCode: String, cellCornerRadius radius: CGFloat, cellShadowOffsetWidth offsetWidth: CGFloat, cellShadowOffsetHeight offsetHeight: CGFloat, cellShadowColor shadowColor: String, cellShadowRadius shadowRadius: CGFloat, cellShadowOpacity shadowOpacity: Float) {
+    func setupCustomCellElements(cellImageName image: String,  cellTitleTextSize textSize: CGFloat, cellTitle title: String) {
         
-        let cellImage: UIImageView = {
-            
-            let imageView = UIImageView()
-            
-            imageView.backgroundColor = .clear
-            
-            imageView.image = UIImage(named: image)
-            
-            // The below line of code maintains the aspect ratio of the image (no distrotion):
-            
-            imageView.contentMode = .scaleAspectFit
-            
-            imageView.translatesAutoresizingMaskIntoConstraints = false
-            
-            return imageView
-            
-        }()
+//        let cellImage: UIImageView = {
+//
+////            let imageView = UIImageView()
+//
+//            imageView.backgroundColor = .clear
+//
+//            imageView.image = UIImage(named: image)
+//
+//            // The below line of code maintains the aspect ratio of the image (no distrotion):
+//
+//            imageView.contentMode = .scaleAspectFit
+//
+//            imageView.translatesAutoresizingMaskIntoConstraints = false
+//
+//            return imageView
+//
+//        }()
+        cellImage.backgroundColor = .clear
+        
+        cellImage.image = UIImage(named: image)
+        
+        // The below line of code maintains the aspect ratio of the image (no distrotion):
+        
+        cellImage.contentMode = .scaleAspectFit
+        
+        cellImage.translatesAutoresizingMaskIntoConstraints = false
         
         let cellTitle: UILabel = {
             
             let label = UILabel()
             
-            label.textColor = .init(hexString: textColour)
+            label.textColor = UIColor(named: "Collection View Cell Title Colour")
             
-            label.font = UIFont(name: fontType, size: textSize)
+            label.font = UIFont(name: "AppleSDGothicNeo-Regular", size: textSize)
             
             label.text = title
             
@@ -70,17 +81,21 @@ class CustomCollectionViewCell: UICollectionViewCell {
             
         }()
         
-        backgroundColor = .init(hexString: hexCode)
+        backgroundColor = UIColor(named: "Collection View Cell Background Colour")
         
-        layer.cornerRadius = radius
+        layer.borderColor = UIColor(named: "Collection View Cell Border Colour")?.cgColor
         
-        layer.shadowOffset = CGSize(width: offsetWidth, height: offsetHeight)
+        layer.borderWidth = 1
         
-        layer.shadowColor = UIColor.init(hexString: shadowColor).cgColor
+        layer.cornerRadius = 10
         
-        layer.shadowRadius = shadowRadius
+        layer.shadowOffset = CGSize(width: 7, height: 7)
         
-        layer.shadowOpacity = shadowOpacity
+        layer.shadowColor = UIColor(named: "Collection View Cell Shadow Colour")?.cgColor
+        
+        layer.shadowRadius = 3
+        
+        layer.shadowOpacity = 0.60
         
         layer.masksToBounds = false
         
@@ -92,51 +107,63 @@ class CustomCollectionViewCell: UICollectionViewCell {
         
         NSLayoutConstraint.activate([
             
-            cellTitle.bottomAnchor.constraint(equalTo: bottomAnchor),
+            cellTitle.rightAnchor.constraint(equalTo: rightAnchor, constant: -5),
             
-            cellTitle.leftAnchor.constraint(equalTo: leftAnchor),
+            cellTitle.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5),
             
-            cellTitle.rightAnchor.constraint(equalTo: rightAnchor),
+            cellTitle.leftAnchor.constraint(equalTo: leftAnchor, constant: 5),
             
-            cellTitle.topAnchor.constraint(equalTo: bottomAnchor, constant: -1 * (cellTextLabelHeight(cellTitleTextSize: textSize, cellTitleFontType: fontType, cellTitle: title))),
+            cellImage.topAnchor.constraint(equalTo: topAnchor, constant: 5),
             
-            cellImage.topAnchor.constraint(equalTo: topAnchor),
+            cellImage.rightAnchor.constraint(equalTo: rightAnchor, constant: -5),
             
-            cellImage.leftAnchor.constraint(equalTo: leftAnchor),
+            cellImage.bottomAnchor.constraint(equalTo: cellTitle.topAnchor, constant: -5),
             
-            cellImage.rightAnchor.constraint(equalTo: rightAnchor),
+            cellImage.leftAnchor.constraint(equalTo: leftAnchor, constant: 5)
             
-            cellImage.bottomAnchor.constraint(equalTo: topAnchor, constant: (self.frame.size.height) - (cellTextLabelHeight(cellTitleTextSize: textSize, cellTitleFontType: fontType, cellTitle: title)))
-            
-            ])
+        ])
         
+    }
+    
+    func disableCellDropShadow() {
+        
+        layer.shadowOffset = CGSize(width: 07, height: 0)
+
+        layer.shadowOpacity = 0.0
+
+    }
+    
+    func changeLocation(x: CGFloat, y: CGFloat) {
+        
+        cellImage.bounds.origin = CGPoint(x: x, y: y)
+
     }
     
     // The below function is needed in order to calculate the height of the cellLabel height based on its contents. Then this height is used to calulate the needed constraints for the cellLabel and cellImage:
     
-    func cellTextLabelHeight(cellTitleTextSize textSize: CGFloat, cellTitleFontType fontType: String, cellTitle title: String) -> CGFloat {
-        
-        var currentHeight: CGFloat!
-        
-        let cellTitle = UILabel(frame: CGRect(x: 0, y: 0, width: self.frame.size.width, height: CGFloat.greatestFiniteMagnitude))
-        
-        cellTitle.text = title
-        
-        cellTitle.font = UIFont(name: fontType, size: textSize)
-        
-        cellTitle.numberOfLines = 0
-        
-        cellTitle.sizeToFit()
-        
-        cellTitle.lineBreakMode = .byWordWrapping
-        
-        currentHeight = cellTitle.frame.height
-        
-        cellTitle.removeFromSuperview()
-        
-        return currentHeight
-        
-    }
+    //    func cellTextLabelHeight(cellTitleTextSize textSize: CGFloat, cellTitleFontType fontType: String, cellTitle title: String) -> CGFloat {
+    //
+    //        var currentHeight: CGFloat!
+    //
+    //        let cellTitle = UILabel(frame: CGRect(x: 0, y: 0, width: self.frame.size.width, height: CGFloat.greatestFiniteMagnitude))
+    //
+    //        cellTitle.text = title
+    //
+    //        cellTitle.font = UIFont(name: fontType, size: textSize)
+    //
+    //        cellTitle.numberOfLines = 0
+    //
+    //        cellTitle.sizeToFit()
+    //
+    //        cellTitle.lineBreakMode = .byWordWrapping
+    //
+    //        currentHeight = cellTitle.frame.height
+    //
+    //        cellTitle.removeFromSuperview()
+    //
+    //        return currentHeight
+    //
+    //    }
     
 }
 

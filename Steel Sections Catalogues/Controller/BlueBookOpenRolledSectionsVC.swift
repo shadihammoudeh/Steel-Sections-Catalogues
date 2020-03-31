@@ -22,7 +22,7 @@ class BlueBookOpenRolledSectionsVC: UIViewController, UICollectionViewDelegate, 
     
     // The below Array represents the titles of the cells to be displayed for the CollectionView cells:
     
-    let cellTitleArray = ["Universal beams (UB)", "Universal columns (UC)", "Universal bearing piles (UBP)", "Parallel flange channels (PFC)", "Equal leg angles (L)", "Unequal leg angles (L)", "Tees (T) split from UB", "Tees (T) split from UC"]
+    let cellTitleArray = ["Universal Beams (UB)", "Universal Columns (UC)", "Universal Bearing Piles (UBP)", "Parallel Flange Channels (PFC)", "Equal Leg Angles (L)", "Unequal Leg Angles (L)", "Tees (T) split from UB", "Tees (T) split from UC"]
     
     // The below Array represents the images for the cells to be displayed inside the CollectionView:
     
@@ -31,55 +31,21 @@ class BlueBookOpenRolledSectionsVC: UIViewController, UICollectionViewDelegate, 
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        
-        print("BlueBookOpenRolledSectionsVC viewDidLoad()")
-        
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        
-        print("BlueBookOpenRolledSectionsVC viewWillAppear()")
-        
-    }
-    
-    override func viewWillLayoutSubviews() {
-        
-        print("BlueBookOpenRolledSectionsVC viewWillLayoutSubviews()")
-        
+                
     }
     
     override func viewDidLayoutSubviews() {
-        
-        print("BlueBookOpenRolledSectionsVC viewDidLayoutSubviews()")
-        
+                
         // The below line of code calculates the required height for the OpenRolledSectionsTabViewController class. By substracting the total height of this view from the height of the NavigationBar plus Status Bar Height defined inside the NewFileTabController Class. The height of the TabBar as well as Bottom Safe Area Height are already substracted from the overall screen height of this ViewController (view.frame.size.height), and therefore, there is no need to substract them again:
         
         let blueBookOpenRolledSectionsCollectionViewHeight: CGFloat = view.frame.size.height - blueBookControllerNavigationBarHeight - blueBookControllerStatusBarHeight
         
-        var blueBookOpenRolledSectionsCollectionView = CustomCollectionView(startingHoriztonalCoordinateOfCollectionView: 0, startingVerticalCoordinateOfCollectionView: blueBookControllerStatusBarHeight + blueBookControllerNavigationBarHeight, widthOfCollectionView: view.frame.size.width, heightOfCollectionView: blueBookOpenRolledSectionsCollectionViewHeight, collectionViewLayoutTopEdgeInset: 20, collectionViewLayoutLeftEdgeInset: 20, collectionViewLayoutBottomEdgeInset: 20, collectionViewLayoutRightEdgeInset: 20, collectionViewLayoutCellsMinimumVerticalSpacings: 20, collectionViewLayoutCellsMinimumHorizontalSpacings: 20, numberOfCellsPerRow: 2, numberOfCellsPerColumn: 4, hostViewDataSource: self, hostViewDelegate: self, hexCodeColorForBackgroundColor: "#020301")
+        let blueBookOpenRolledSectionsCollectionView = CustomCollectionView(startingHoriztonalCoordinateOfCollectionView: 0, startingVerticalCoordinateOfCollectionView: blueBookControllerStatusBarHeight + blueBookControllerNavigationBarHeight, widthOfCollectionView: view.frame.size.width, heightOfCollectionView: blueBookOpenRolledSectionsCollectionViewHeight, collectionViewLayoutTopEdgeInset: 20, collectionViewLayoutLeftEdgeInset: 20, collectionViewLayoutBottomEdgeInset: 20, collectionViewLayoutRightEdgeInset: 20, collectionViewLayoutCellsMinimumVerticalSpacings: 20, collectionViewLayoutCellsMinimumHorizontalSpacings: 20, numberOfCellsPerRow: 2, numberOfCellsPerColumn: 4, hostViewDataSource: self, hostViewDelegate: self)
         
         view.addSubview(blueBookOpenRolledSectionsCollectionView)
         
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
         
-        print("OpenRolledSectionsTabViewController viewDidAppear()")
-        
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        
-        print("FirstTabBarItem viewWillDisappear()")
-        
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        
-        print("FirstTabBarItem viewDidDiappear()")
-        
-    }
-    
     // The below methods are required to adopt the UICollectionViewDataSource and UICollectionViewDelegate protocols:
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -92,8 +58,8 @@ class BlueBookOpenRolledSectionsVC: UIViewController, UICollectionViewDelegate, 
         
         let myCell = collectionView.dequeueReusableCell(withReuseIdentifier: "MyCell", for: indexPath) as! CustomCollectionViewCell
         
-        myCell.setupCustomCellElements(cellImageName: cellImageArray[indexPath.item], cellTitleTextColour: "#797D70", cellTitleTextSize: 15, cellTitleFontType: "Apple SD Gothic Neo", cellTitle: cellTitleArray[indexPath.item], cellHexColorCode: "#E8FFB5", cellCornerRadius: 3, cellShadowOffsetWidth: 0, cellShadowOffsetHeight: 1.5, cellShadowColor: "#9CCC38", cellShadowRadius: 3, cellShadowOpacity: 0.6)
-        
+        myCell.setupCustomCellElements(cellImageName: cellImageArray[indexPath.item], cellTitleTextSize: 15, cellTitle: cellTitleArray[indexPath.item])
+    
         print(myCell.frame.size.height)
         
         return myCell
@@ -108,16 +74,26 @@ class BlueBookOpenRolledSectionsVC: UIViewController, UICollectionViewDelegate, 
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        if indexPath.row == 0 {
+        let cell = collectionView.cellForItem(at: indexPath)
+
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, animations: ({
+                        
+            cell?.frame.origin = CGPoint(x: (cell?.frame.origin.x)! + 3, y: (cell?.frame.origin.y)! + 3)
+                        
+            cell?.layer.shadowOpacity = 0
             
+            }), completion: nil)
+        
+        if indexPath.row == 0 {
+                                                
             let main = UIStoryboard(name: "Main", bundle: nil)
             
             let viewControllerToGoTo = main.instantiateViewController(identifier: "BlueBookUniversalBeamsVC")
             
             self.present(viewControllerToGoTo, animated: true, completion: nil)
             
-        }
-
+            }
+        
     }
     
 }

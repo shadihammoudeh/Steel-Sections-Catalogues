@@ -25,74 +25,35 @@ class BlueBookTabController: UITabBarController, UINavigationBarDelegate {
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        
-        print("BlueBookTabController viewDidLoad()")
-        
+                
         view.addSubview(navigationBar)
         
         setupTabBarItems()
         
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        
-        print("BlueBookTabController viewWillAppear()")
-        
-    }
-    
     override func viewWillLayoutSubviews() {
-        
-        print("BlueBookTabController viewWillLayoutSubviews()")
-        
+                
         setupNavigationBarConstraint()
 
-        
     }
     
     override func viewDidLayoutSubviews() {
         
         super.viewDidLayoutSubviews()
-        
-        print("BlueBookTabController viewDidLayoutSubviews()")
-        
+                
         // The below line of code calculates the total height of the BlueBookTabController statusBar as well as its NavigationBar and pass the total to the BlueBookOpenRolledSectionsVC:
         
         blueBookOpenRolledSectionsVC.blueBookControllerStatusBarHeight = view.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
-        
-        print("BlueBookTabController StatusBar Height is equal to \(view.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0)")
-        
+                
         blueBookOpenRolledSectionsVC.blueBookControllerNavigationBarHeight = navigationBar.frame.size.height
-        
-        print("BlueBookTabController NavigationBar Height is equal to \(navigationBar.frame.size.height)")
-        
+                
         blueBookOpenRolledSectionsVC.blueBookControllerTabBarHeight = tabBar.frame.size.height
-        
-        print("BlueBookTabController TabBar Height is equal to \(tabBar.frame.size.height)")
-        
+                
         blueBookOpenRolledSectionsVC.blueBookControllerBottomSafeAreaHeight = view.safeAreaInsets.bottom
-        
-        print("BlueBookTabController BottomSafeArea Height is equal to \(view.safeAreaInsets.bottom)")
-        
+                
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
         
-        print("BlueBookTabController viewDidAppear()")
-        
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        
-        print("BlueBookTabController viewWillDisappear()")
-        
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        
-        print("BlueBookTabController viewDidDisappear()")
-        
-    }
-    
     @objc func navigationBarLeftButtonPressed(sender : UIButton) {
                 
         let viewControllerToGoTo = main.instantiateViewController(identifier: "CataloguesVC")
@@ -148,15 +109,11 @@ class BlueBookTabController: UITabBarController, UINavigationBarDelegate {
     override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
         
         if tabBarItem.tag == 1 {
-            
-            print("TabBarItem with tag 1 has been pressed")
-            
+                        
         }
             
         else {
-            
-            print("TabBarItem with tag 2 has been pressed")
-            
+                        
         }
         
     }

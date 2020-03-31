@@ -1,14 +1,14 @@
 //
-//  BlueBookUniversalBeamDataSummaryVC.swift
+//  BlueBookUniversalColumnsSectionsToEurocodesDataSummaryViewController.swift
 //  Steel Sections Catalogues
 //
-//  Created by Shadi Hammoudeh on 20/10/2019.
-//  Copyright © 2019 Bespoke Engineering. All rights reserved.
+//  Created by Shadi Hammoudeh on 31/03/2020.
+//  Copyright © 2020 Bespoke Engineering. All rights reserved.
 //
 
 import UIKit
 
-class BlueBookUniversalBeamDataSummaryVC: UIViewController {
+class BlueBookUniversalColumnsSectionsToEurocodesDataSummaryViewController: UIViewController {
     
     // MARK: - Assigning protocol delegate:
     
@@ -22,7 +22,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
 
     var filtersApplied: Bool = false
     
-    var passedArrayFromPreviousViewControllerContainingAllDataRelatedToUbs = [IsectionsDimensionsParameters]()
+    var passedArrayFromPreviousViewControllerContainingAllDataRelatedToUcs = [IsectionsDimensionsParameters]()
     
     var passedArrayFromPreviousViewControllerContainingDataRelatedToSectionSerialNumbersOnly: [String] = []
     
@@ -32,61 +32,61 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     
     // MARK: - Univeral Beam properties passed from previous viewController, the below start at 0 and later on get their values from the previous View Controller:
     
-    var selectedUniversalBeamMassPerMetre: Double = 0
+    var selectedUniversalColumnMassPerMetre: Double = 0
     
-    var selectedUniversalBeamAreaOfSection: Double = 0
+    var selectedUniversalColumnAreaOfSection: Double = 0
     
-    var selectedUniversalBeamDepthOfSection: CGFloat = 0
+    var selectedUniversalColumnDepthOfSection: CGFloat = 0
     
-    var selectedUniversalBeamWidthOfSection: CGFloat = 0
+    var selectedUniversalColumnWidthOfSection: CGFloat = 0
     
-    var selectedUniversalBeamWebThickness: CGFloat = 0
+    var selectedUniversalColumnWebThickness: CGFloat = 0
     
-    var selectedUniversalBeamFlangeThickness: CGFloat = 0
+    var selectedUniversalColumnFlangeThickness: CGFloat = 0
     
-    var selectedUniversalBeamRootRadius: CGFloat = 0
+    var selectedUniversalColumnRootRadius: CGFloat = 0
     
-    var selectedUniversalBeamDepthBetweenFillets: Double = 0
+    var selectedUniversalColumnDepthBetweenFillets: Double = 0
     
-    var selectedUniversalBeamEndClearanceDetailingDimension = 0
+    var selectedUniversalColumnEndClearanceDetailingDimension = 0
     
-    var selectedUniversalBeamNotchNdetailingDimension = 0
+    var selectedUniversalColumnNotchNdetailingDimension = 0
     
-    var selectedUniversalBeamNotchnDetailingDimension = 0
+    var selectedUniversalColumnNotchnDetailingDimension = 0
     
-    var selectedUniversalBeamSecondMomentOfAreaAboutMajorAxis: Double = 0
+    var selectedUniversalColumnSecondMomentOfAreaAboutMajorAxis: Double = 0
     
-    var selectedUniversalBeamSecondMomentOfAreaAboutMinorAxis: Double = 0
+    var selectedUniversalColumnSecondMomentOfAreaAboutMinorAxis: Double = 0
     
-    var selectedUniversalBeamRadiusOfGyrationAboutMajorAxis: Double = 0
+    var selectedUniversalColumnRadiusOfGyrationAboutMajorAxis: Double = 0
     
-    var selectedUniversalBeamRadiusOfGyrationAboutMinorAxis: Double = 0
+    var selectedUniversalColumnRadiusOfGyrationAboutMinorAxis: Double = 0
     
-    var selectedUniversalBeamElasticModulusAboutMajorAxis: Double = 0
+    var selectedUniversalColumnElasticModulusAboutMajorAxis: Double = 0
     
-    var selectedUniversalBeamElasticModulusAboutMinorAxis: Double = 0
+    var selectedUniversalColumnElasticModulusAboutMinorAxis: Double = 0
     
-    var selectedUniversalBeamPlasticModulusAboutMajorAxis: Double = 0
+    var selectedUniversalColumnPlasticModulusAboutMajorAxis: Double = 0
     
-    var selectedUniversalBeamPlasticModulusAboutMinorAxis: Double = 0
+    var selectedUniversalColumnPlasticModulusAboutMinorAxis: Double = 0
     
-    var selectedUniversalBeamBucklingParameter: Double = 0
+    var selectedUniversalColumnBucklingParameter: Double = 0
     
-    var selectedUniversalBeamTorsionalIndex: Double = 0
+    var selectedUniversalColumnTorsionalIndex: Double = 0
     
-    var selectedUniversalBeamWarpingConstant: Double = 0
+    var selectedUniversalColumnWarpingConstant: Double = 0
     
-    var selectedUniversalBeamTorsionalConstant: Double = 0
+    var selectedUniversalColumnTorsionalConstant: Double = 0
     
-    var selectedUniversalBeamSurfaceAreaPerMetre: Double = 0
+    var selectedUniversalColumnSurfaceAreaPerMetre: Double = 0
     
-    var selectedUniversalBeamSurfaceAreaPerTonne: Double = 0
+    var selectedUniversalColumnSurfaceAreaPerTonne: Double = 0
     
-    var selectedUniversalBeamRatioForWebLocalBuckling: Double = 0
+    var selectedUniversalColumnRatioForWebLocalBuckling: Double = 0
     
-    var selectedUniversalBeamRatioForFlangeLocalBuckling: Double = 0
+    var selectedUniversalColumnRatioForFlangeLocalBuckling: Double = 0
     
-    var selectedUniversalBeamSectionDesignation: String = ""
+    var selectedUniversalColumnSectionDesignation: String = ""
     
     // MARK: - navigationBar instance declaration:
     
@@ -94,51 +94,51 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     
     // MARK: - Font colour, type, size and strings attributes used for labels inside the Section Profile Drawing Area:
     
-    let universalBeamProfileDimensionAnnotationLabelsFontSizeAndTypeInsideTheProfileDrawingArea = UIFont(name: "AppleSDGothicNeo-Light", size: 11.5)
+    let universalColumnProfileDimensionAnnotationLabelsFontSizeAndTypeInsideTheProfileDrawingArea = UIFont(name: "AppleSDGothicNeo-Light", size: 11.5)
     
-    let universalBeamProfileDimensionAnnotationLabelsFontColourInsideTheProfileDrawingArea = UIColor(named: "Text Font Colour for Sub Labels Inside the Section Dimensional & Structural Properties Scroll View")
+    let universalColumnProfileDimensionAnnotationLabelsFontColourInsideTheProfileDrawingArea = UIColor(named: "Text Font Colour for Sub Labels Inside the Section Dimensional & Structural Properties Scroll View")
     
-    lazy var universalBeamProfileDimensionAnnotationLabelsStringsAttributesInsideTheProfileDrawingArea: [NSAttributedString.Key: Any] = [
+    lazy var universalColumnProfileDimensionAnnotationLabelsStringsAttributesInsideTheProfileDrawingArea: [NSAttributedString.Key: Any] = [
         
-        .foregroundColor: universalBeamProfileDimensionAnnotationLabelsFontColourInsideTheProfileDrawingArea!,
+        .foregroundColor: universalColumnProfileDimensionAnnotationLabelsFontColourInsideTheProfileDrawingArea!,
         
-        .font: universalBeamProfileDimensionAnnotationLabelsFontSizeAndTypeInsideTheProfileDrawingArea!,
-        
-    ]
-    
-    let universalBeamProfileDimensionLabelsAbbreviationLettersFontSizeAndTypeInsideDTheProfileDrawingArea = UIFont(name: "AppleSDGothicNeo-SemiBold", size: 12.5)
-    
-    let universalBeamProfileDimensionLabelsAbbreviationLettersFontColourInsideDTheProfileDrawingArea = UIColor(named: "Text Font Colour for Sub Labels Abbreviation Letters Inside the Section Dimensional & Structural Properties Scroll View")
-    
-    lazy var universalBeamProfileDimensionLabelsAbbreviationLettersAttributesInsideTheProfileDrawingArea: [NSAttributedString.Key: Any] = [
-        
-        .foregroundColor: universalBeamProfileDimensionLabelsAbbreviationLettersFontColourInsideDTheProfileDrawingArea!,
-        
-        .font: universalBeamProfileDimensionLabelsAbbreviationLettersFontSizeAndTypeInsideDTheProfileDrawingArea!,
+        .font: universalColumnProfileDimensionAnnotationLabelsFontSizeAndTypeInsideTheProfileDrawingArea!,
         
     ]
     
-    lazy var universalBeamProfileDimensionLabelsSubAbbreviationLettersAttributesInsideTheProfileDrawingArea: [NSAttributedString.Key: Any] = [
+    let universalColumnProfileDimensionLabelsAbbreviationLettersFontSizeAndTypeInsideDTheProfileDrawingArea = UIFont(name: "AppleSDGothicNeo-SemiBold", size: 12.5)
+    
+    let universalColumnProfileDimensionLabelsAbbreviationLettersFontColourInsideDTheProfileDrawingArea = UIColor(named: "Text Font Colour for Sub Labels Abbreviation Letters Inside the Section Dimensional & Structural Properties Scroll View")
+    
+    lazy var universalColumnProfileDimensionLabelsAbbreviationLettersAttributesInsideTheProfileDrawingArea: [NSAttributedString.Key: Any] = [
+        
+        .foregroundColor: universalColumnProfileDimensionLabelsAbbreviationLettersFontColourInsideDTheProfileDrawingArea!,
+        
+        .font: universalColumnProfileDimensionLabelsAbbreviationLettersFontSizeAndTypeInsideDTheProfileDrawingArea!,
+        
+    ]
+    
+    lazy var universalColumnProfileDimensionLabelsSubAbbreviationLettersAttributesInsideTheProfileDrawingArea: [NSAttributedString.Key: Any] = [
         
         .baselineOffset: -6,
         
     ]
     
-    let universalBeamProfileMajorAndMinorAxisLabelFontSizeAndTypeInsideTheProfileDrawingArea = UIFont(name: "AppleSDGothicNeo-UltraLight", size: 16)
+    let universalColumnProfileMajorAndMinorAxisLabelFontSizeAndTypeInsideTheProfileDrawingArea = UIFont(name: "AppleSDGothicNeo-UltraLight", size: 16)
     
-    let universalBeamProfileMajorAndMinorAxisLabelFontColourInsideTheProfileDrawingArea = UIColor(named: "Text Font Colour for Table Title and Table Columns Titles Inside the Section Dimensional & Structural Properties Scroll View")
+    let universalColumnProfileMajorAndMinorAxisLabelFontColourInsideTheProfileDrawingArea = UIColor(named: "Text Font Colour for Table Title and Table Columns Titles Inside the Section Dimensional & Structural Properties Scroll View")
     
-    lazy var universalBeamProfileMajorAndMinorAxisLabelFontAttributesInsideTheProfileDrawingArea: [NSAttributedString.Key: Any] = [
+    lazy var universalColumnProfileMajorAndMinorAxisLabelFontAttributesInsideTheProfileDrawingArea: [NSAttributedString.Key: Any] = [
         
-        .foregroundColor: universalBeamProfileMajorAndMinorAxisLabelFontColourInsideTheProfileDrawingArea!,
+        .foregroundColor: universalColumnProfileMajorAndMinorAxisLabelFontColourInsideTheProfileDrawingArea!,
         
-        .font: universalBeamProfileMajorAndMinorAxisLabelFontSizeAndTypeInsideTheProfileDrawingArea!,
+        .font: universalColumnProfileMajorAndMinorAxisLabelFontSizeAndTypeInsideTheProfileDrawingArea!,
         
     ]
     
     // MARK: - Declaration of universal beam drawing area:
     
-    lazy var universalBeamDrawingView: UIView = {
+    lazy var universalColumnrawingView: UIView = {
         
         let view = UIView()
         
@@ -152,7 +152,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     
     // MARK: - Declaration of UILabels to be displayed inside the universal beam drawing area:
     
-    lazy var universalBeamDepthOfSectionDimensionLabel: UILabel = {
+    lazy var universalColumnDepthOfSectionDimensionLabel: UILabel = {
 
         var label = UILabel()
 
@@ -162,11 +162,13 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
 
         label.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2)
 
-        let labelString: String = "h = \(self.selectedUniversalBeamDepthOfSection) mm"
+        let labelString: String = "h = \(self.selectedUniversalColumnDepthOfSection) mm"
 
         let labelAttributedString: NSMutableAttributedString = NSMutableAttributedString(string: labelString)
-        labelAttributedString.addAttributes(universalBeamProfileDimensionAnnotationLabelsStringsAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: labelString.count))
-        labelAttributedString.addAttributes(universalBeamProfileDimensionLabelsAbbreviationLettersAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: 1))
+        
+        labelAttributedString.addAttributes(universalColumnProfileDimensionAnnotationLabelsStringsAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: labelString.count))
+        
+        labelAttributedString.addAttributes(universalColumnProfileDimensionLabelsAbbreviationLettersAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: 1))
 
         label.attributedText = labelAttributedString
 
@@ -174,7 +176,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
 
     }()
 
-    lazy var universalBeamWidthOfSectionDimensionLabel: UILabel = {
+    lazy var universalColumnWidthOfSectionDimensionLabel: UILabel = {
 
         var label = UILabel()
 
@@ -182,11 +184,13 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
 
         label.numberOfLines = 0
 
-        let labelString: String = "b = \(self.selectedUniversalBeamWidthOfSection) mm"
+        let labelString: String = "b = \(self.selectedUniversalColumnWidthOfSection) mm"
 
         let labelAttributedString: NSMutableAttributedString = NSMutableAttributedString(string: labelString)
-        labelAttributedString.addAttributes(universalBeamProfileDimensionAnnotationLabelsStringsAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: labelString.count))
-        labelAttributedString.addAttributes(universalBeamProfileDimensionLabelsAbbreviationLettersAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: 1))
+        
+        labelAttributedString.addAttributes(universalColumnProfileDimensionAnnotationLabelsStringsAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: labelString.count))
+        
+        labelAttributedString.addAttributes(universalColumnProfileDimensionLabelsAbbreviationLettersAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: 1))
 
         label.attributedText = labelAttributedString
 
@@ -194,7 +198,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
 
     }()
 
-    lazy var universalBeamSectionWebThicknessDimensionLabel: UILabel = {
+    lazy var universalColumnSectionWebThicknessDimensionLabel: UILabel = {
 
         var label = UILabel()
 
@@ -202,13 +206,15 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
 
         label.numberOfLines = 0
 
-        let labelString: String = "tw = \(self.selectedUniversalBeamWebThickness) mm"
+        let labelString: String = "tw = \(self.selectedUniversalColumnWebThickness) mm"
 
         let labelAttributedString: NSMutableAttributedString = NSMutableAttributedString(string: labelString)
-        labelAttributedString.addAttributes(universalBeamProfileDimensionAnnotationLabelsStringsAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: labelString.count))
-        labelAttributedString.addAttributes(universalBeamProfileDimensionLabelsAbbreviationLettersAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: 2))
+        
+        labelAttributedString.addAttributes(universalColumnProfileDimensionAnnotationLabelsStringsAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: labelString.count))
+        
+        labelAttributedString.addAttributes(universalColumnProfileDimensionLabelsAbbreviationLettersAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: 2))
 
-        labelAttributedString.addAttributes(universalBeamProfileDimensionLabelsSubAbbreviationLettersAttributesInsideTheProfileDrawingArea, range: NSRange(location: 1, length: 1))
+        labelAttributedString.addAttributes(universalColumnProfileDimensionLabelsSubAbbreviationLettersAttributesInsideTheProfileDrawingArea, range: NSRange(location: 1, length: 1))
 
         label.attributedText = labelAttributedString
 
@@ -216,7 +222,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
 
     }()
 
-    lazy var universalBeamSectionFlangeThicknessDimensionLabel: UILabel = {
+    lazy var universalColumnSectionFlangeThicknessDimensionLabel: UILabel = {
 
         var label = UILabel()
 
@@ -224,13 +230,15 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
 
         label.numberOfLines = 0
 
-        let labelString: String = "tf = \(self.selectedUniversalBeamFlangeThickness) mm"
+        let labelString: String = "tf = \(self.selectedUniversalColumnFlangeThickness) mm"
 
         let labelAttributedString: NSMutableAttributedString = NSMutableAttributedString(string: labelString)
-        labelAttributedString.addAttributes(universalBeamProfileDimensionAnnotationLabelsStringsAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: labelString.count))
-        labelAttributedString.addAttributes(universalBeamProfileDimensionLabelsAbbreviationLettersAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: 2))
+        
+        labelAttributedString.addAttributes(universalColumnProfileDimensionAnnotationLabelsStringsAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: labelString.count))
+        
+        labelAttributedString.addAttributes(universalColumnProfileDimensionLabelsAbbreviationLettersAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: 2))
 
-        labelAttributedString.addAttributes(universalBeamProfileDimensionLabelsSubAbbreviationLettersAttributesInsideTheProfileDrawingArea, range: NSRange(location: 1, length: 1))
+        labelAttributedString.addAttributes(universalColumnProfileDimensionLabelsSubAbbreviationLettersAttributesInsideTheProfileDrawingArea, range: NSRange(location: 1, length: 1))
 
         label.attributedText = labelAttributedString
 
@@ -238,7 +246,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
 
     }()
     
-    lazy var universalBeamRootRadiusAnnotationLabel: UILabel = {
+    lazy var universalColumnRootRadiusAnnotationLabel: UILabel = {
 
         var label = UILabel()
 
@@ -248,11 +256,13 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
 
         label.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
 
-        let labelString: String = "r = \(self.selectedUniversalBeamRootRadius) mm"
+        let labelString: String = "r = \(self.selectedUniversalColumnRootRadius) mm"
 
         let labelAttributedString: NSMutableAttributedString = NSMutableAttributedString(string: labelString)
-        labelAttributedString.addAttributes(universalBeamProfileDimensionAnnotationLabelsStringsAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: labelString.count))
-        labelAttributedString.addAttributes(universalBeamProfileDimensionLabelsAbbreviationLettersAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: 1))
+        
+        labelAttributedString.addAttributes(universalColumnProfileDimensionAnnotationLabelsStringsAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: labelString.count))
+        
+        labelAttributedString.addAttributes(universalColumnProfileDimensionLabelsAbbreviationLettersAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: 1))
 
         label.attributedText = labelAttributedString
 
@@ -260,7 +270,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
 
     }()
 
-    lazy var universalBeamMinorAxisBottomAnnotationLabel: UILabel = {
+    lazy var universalColumnMinorAxisBottomAnnotationLabel: UILabel = {
 
         var label = UILabel()
 
@@ -271,7 +281,8 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         let labelString: String = "z"
 
         let labelAttributedString: NSMutableAttributedString = NSMutableAttributedString(string: labelString)
-    labelAttributedString.addAttributes(universalBeamProfileMajorAndMinorAxisLabelFontAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: 1))
+        
+    labelAttributedString.addAttributes(universalColumnProfileMajorAndMinorAxisLabelFontAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: 1))
 
         label.attributedText = labelAttributedString
 
@@ -279,7 +290,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
 
     }()
 
-    lazy var universalBeamMinorAxisTopAnnotationLabel: UILabel = {
+    lazy var universalColumnMinorAxisTopAnnotationLabel: UILabel = {
 
         var label = UILabel()
 
@@ -290,7 +301,8 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         let labelString: String = "z"
 
         let labelAttributedString: NSMutableAttributedString = NSMutableAttributedString(string: labelString)
-    labelAttributedString.addAttributes(universalBeamProfileMajorAndMinorAxisLabelFontAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: 1))
+        
+    labelAttributedString.addAttributes(universalColumnProfileMajorAndMinorAxisLabelFontAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: 1))
 
         label.attributedText = labelAttributedString
 
@@ -298,7 +310,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
 
     }()
 
-    lazy var universalBeamMajorAxisLeftAnnotationLabel: UILabel = {
+    lazy var universalColumnMajorAxisLeftAnnotationLabel: UILabel = {
 
         var label = UILabel()
 
@@ -309,7 +321,8 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         let labelString: String = "y"
 
         let labelAttributedString: NSMutableAttributedString = NSMutableAttributedString(string: labelString)
-    labelAttributedString.addAttributes(universalBeamProfileMajorAndMinorAxisLabelFontAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: 1))
+        
+    labelAttributedString.addAttributes(universalColumnProfileMajorAndMinorAxisLabelFontAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: 1))
 
         label.attributedText = labelAttributedString
 
@@ -317,7 +330,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
 
     }()
 
-    lazy var universalBeamMajorAxisRightAnnotationLabel: UILabel = {
+    lazy var universalColumnMajorAxisRightAnnotationLabel: UILabel = {
 
         var label = UILabel()
 
@@ -328,7 +341,8 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
         let labelString: String = "y"
 
         let labelAttributedString: NSMutableAttributedString = NSMutableAttributedString(string: labelString)
-    labelAttributedString.addAttributes(universalBeamProfileMajorAndMinorAxisLabelFontAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: 1))
+        
+    labelAttributedString.addAttributes(universalColumnProfileMajorAndMinorAxisLabelFontAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: 1))
 
         label.attributedText = labelAttributedString
 
@@ -338,7 +352,7 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
 
     // MARK: - CoreAnimation layers used to draw paths inside the Section Profile Drawing Area:
     
-    let universalBeamShapeLayer = CAShapeLayer()
+    let universalColumnShapeLayer = CAShapeLayer()
     
     let depthOfSectionAnnotationShapeLayer = CAShapeLayer()
     
@@ -352,23 +366,23 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
     
     let dimensioningAnnotationDashedLinesShapeLayer = CAShapeLayer()
     
-    let universalBeamSectionMinorAndMajorAxisLinesShapeLayer = CAShapeLayer()
+    let universalColumnSectionMinorAndMajorAxisLinesShapeLayer = CAShapeLayer()
     
     let rootRadiusDimensioningAnnotationLineShapeLayer = CAShapeLayer()
         
     // MARK: - BezierPaths stroke colours and line widths inside the Section Profile Drawing Area:
     
-    let universalBeamProfilePathStrokeColour: String = "Section Profile Stroke Colour"
+    let universalColumnProfilePathStrokeColour: String = "Section Profile Stroke Colour"
     
-    let universalBeamShapeLayerPathLineWidth: CGFloat = 1.50
+    let universalColumnShapeLayerPathLineWidth: CGFloat = 1.50
     
-    let universalBeamProfileDimensionalAnnotationLinesPathsStrokeColour: String = "Section Profile Dimensional Annotation Lines Paths Stroke Colour"
+    let universalColumnProfileDimensionalAnnotationLinesPathsStrokeColour: String = "Section Profile Dimensional Annotation Lines Paths Stroke Colour"
     
-    let universalBeamProfileDimensionalAnnotationLinesPathsLineWidths: CGFloat = 1.0
+    let universalColumnProfileDimensionalAnnotationLinesPathsLineWidths: CGFloat = 1.0
     
-    let universalBeamSectionMinorAndMajorAxisLinesStrokePathColour: String = "Text Font Colour for Table Title and Table Columns Titles Inside the Section Dimensional & Structural Properties Scroll View"
+    let universalColumnSectionMinorAndMajorAxisLinesStrokePathColour: String = "Text Font Colour for Table Title and Table Columns Titles Inside the Section Dimensional & Structural Properties Scroll View"
     
-    let universalBeamSectionMinorAndMajorAxisLinesStrokePathLineWidth: CGFloat = 0.80
+    let universalColumnSectionMinorAndMajorAxisLinesStrokePathLineWidth: CGFloat = 0.80
         
     // MARK: - depthOfSection Vertical Annotation Line X & Mid Y Coordinates, the below gets their values later on from the draw universal beam profile function:
     
@@ -2425,13 +2439,13 @@ class BlueBookUniversalBeamDataSummaryVC: UIViewController {
 
 // MARK: - UINavigationBarDelegate Extension:
 
-extension BlueBookUniversalBeamDataSummaryVC: UINavigationBarDelegate {
+extension BlueBookUniversalColumnsSectionsToEurocodesDataSummaryViewController: UINavigationBarDelegate {
     
     @objc func navigationBarLeftButtonPressed(sender : UIButton) {
                 
         if delegate != nil {
         
-            delegate?.dataToBePassedUsingProtocol(modifiedArrayContainingAllUBsDataToBePassed: self.passedArrayFromPreviousViewControllerContainingAllDataRelatedToUbs, modifiedArrayContainingSectionSerialNumbersDataToBePassed: self.passedArrayFromPreviousViewControllerContainingDataRelatedToSectionSerialNumbersOnly, passedSortBy: self.sortBy, passedFiltersApplied: self.filtersApplied, passedIsSearching: self.isSearching, passedSelectedTableSectionNumberFromPreviousVc: self.selectedTableSectionNumberFromPreviousViewController, passedSelectedTableRowNumberFromPreviousVc: self.selectedTableRowNumberFromPreviousViewController)
+            delegate?.dataToBePassedUsingProtocol(modifiedArrayContainingAllUBsDataToBePassed: self.passedArrayFromPreviousViewControllerContainingAllDataRelatedToUcs, modifiedArrayContainingSectionSerialNumbersDataToBePassed: self.passedArrayFromPreviousViewControllerContainingDataRelatedToSectionSerialNumbersOnly, passedSortBy: self.sortBy, passedFiltersApplied: self.filtersApplied, passedIsSearching: self.isSearching, passedSelectedTableSectionNumberFromPreviousVc: self.selectedTableSectionNumberFromPreviousViewController, passedSelectedTableRowNumberFromPreviousVc: self.selectedTableRowNumberFromPreviousViewController)
             
         }
         
@@ -2448,4 +2462,5 @@ extension BlueBookUniversalBeamDataSummaryVC: UINavigationBarDelegate {
     }
     
 }
+
 

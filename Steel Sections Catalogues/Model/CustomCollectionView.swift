@@ -24,7 +24,7 @@ class CustomCollectionView: UICollectionView {
         
     }
     
-    convenience init(startingHoriztonalCoordinateOfCollectionView xCoordinate: CGFloat, startingVerticalCoordinateOfCollectionView yCoordinate: CGFloat, widthOfCollectionView: CGFloat, heightOfCollectionView height: CGFloat, collectionViewLayoutTopEdgeInset topInset: CGFloat, collectionViewLayoutLeftEdgeInset leftInset: CGFloat, collectionViewLayoutBottomEdgeInset bottomInset: CGFloat, collectionViewLayoutRightEdgeInset rightInset: CGFloat, collectionViewLayoutCellsMinimumVerticalSpacings cellsVerticalSpacings: CGFloat, collectionViewLayoutCellsMinimumHorizontalSpacings cellsHorizontalSpacings: CGFloat, numberOfCellsPerRow cellsPerRow: CGFloat, numberOfCellsPerColumn cellsPerColumn: CGFloat, hostViewDataSource: UICollectionViewDataSource, hostViewDelegate: UICollectionViewDelegate, hexCodeColorForBackgroundColor hexCode: String) {
+    convenience init(startingHoriztonalCoordinateOfCollectionView xCoordinate: CGFloat, startingVerticalCoordinateOfCollectionView yCoordinate: CGFloat, widthOfCollectionView: CGFloat, heightOfCollectionView height: CGFloat, collectionViewLayoutTopEdgeInset topInset: CGFloat, collectionViewLayoutLeftEdgeInset leftInset: CGFloat, collectionViewLayoutBottomEdgeInset bottomInset: CGFloat, collectionViewLayoutRightEdgeInset rightInset: CGFloat, collectionViewLayoutCellsMinimumVerticalSpacings cellsVerticalSpacings: CGFloat, collectionViewLayoutCellsMinimumHorizontalSpacings cellsHorizontalSpacings: CGFloat, numberOfCellsPerRow cellsPerRow: CGFloat, numberOfCellsPerColumn cellsPerColumn: CGFloat, hostViewDataSource: UICollectionViewDataSource, hostViewDelegate: UICollectionViewDelegate) {
         
         self.init(frame: CGRect(x: xCoordinate, y: yCoordinate, width: widthOfCollectionView, height: height), collectionViewLayout: {
             
@@ -60,7 +60,7 @@ class CustomCollectionView: UICollectionView {
         
         delegate = hostViewDelegate
         
-        backgroundColor = .init(hexString: hexCode)
+        backgroundColor = UIColor(named: "Collection View Background Colour")
         
         translatesAutoresizingMaskIntoConstraints = false
         

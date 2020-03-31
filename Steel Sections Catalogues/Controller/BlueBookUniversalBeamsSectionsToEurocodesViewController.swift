@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BlueBookUniversalBeamsVC: UIViewController {
+class BlueBookUniversalBeamsSectionsToEurocodesViewController: UIViewController {
     
     // The below two variables will get their values later on inside the accessoryButtonTappedForRowWith method (i.e. when the user taps on a particular discoluse icon button displayed inside a tableView cell). These two variables will be sent to the next viewController (i.e. BlueBookUniversalBeamDataSummaryVC) that will be displayed based on which tableView cell disclosure icon button the user tapped on. And then they will be sent back to this viewController again once the displayed viewController for the particular tableView cell disclosure icon that got tapped gets dismissed:
     
@@ -70,9 +70,9 @@ class BlueBookUniversalBeamsVC: UIViewController {
     
     let main = UIStoryboard(name: "Main", bundle: nil)
     
-    lazy var sortDataPopOverVC = main.instantiateViewController(withIdentifier: "SortDataPopOverVC")
+    lazy var sortDataPopOverVC = main.instantiateViewController(withIdentifier: "BlueBookUniversalBeamsSectionsToEurocodesSortByDataViewController")
     
-    lazy var filterDataVC = main.instantiateViewController(withIdentifier: "FilterDataVC") as! FilterDataVC
+    lazy var filterDataVC = main.instantiateViewController(withIdentifier: "BlueBookUniversalBeamsSectionsToEurocodesFilterByViewController") as! BlueBookUniversalBeamsSectionsToEurocodesFilterByViewController
     
     // MARK: - viewDidLoad():
     
@@ -93,7 +93,7 @@ class BlueBookUniversalBeamsVC: UIViewController {
         setupSearchBar()
         
         setupTableView()
-        
+                
         // MARK: - Gestures & Adding subViews:
         
         view.addGestureRecognizer(tapGesture)
@@ -110,7 +110,7 @@ class BlueBookUniversalBeamsVC: UIViewController {
         
         // We are going to call the parse function on the appropriate CSV file as soon as the application loads in order to extract the needed data to populate the tableView:
         
-        parseCsvFile(csvFileToParse: "BlueBookUniversalBeams")
+        parseCsvFile(csvFileToParse: "UniversalBeamsDimensionsToEurocodes")
         
         // The below code sorts the Data reported from the relevant CSV file using the Parser in Ascending Order by Section Designation by default, every time the view loads-up for the first time. Sort Method below does not create a new Array, it modifies the existing one:
         
@@ -193,6 +193,8 @@ class BlueBookUniversalBeamsVC: UIViewController {
         universalBeamsTableView.dataSource = self
         
         universalBeamsTableView.delegate = self
+        
+        universalBeamsTableView.flashScrollIndicators()
         
         universalBeamsTableView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -428,7 +430,7 @@ class BlueBookUniversalBeamsVC: UIViewController {
 
 // MARK: - UINavigationBarDelegate Extension:
 
-extension BlueBookUniversalBeamsVC: UINavigationBarDelegate {
+extension BlueBookUniversalBeamsSectionsToEurocodesViewController: UINavigationBarDelegate {
     
     // MARK: Navigation Bar Left button pressed (back button):
     
@@ -464,7 +466,7 @@ extension BlueBookUniversalBeamsVC: UINavigationBarDelegate {
         
         popover.sourceRect = navigationBar.navigationBarRightButtonView.bounds
         
-        let viewControllerToPassDataTo = sortDataPopOverVC as! SortDataPopOverVC
+        let viewControllerToPassDataTo = sortDataPopOverVC as! BlueBookUniversalBeamsSectionsToEurocodesSortByDataViewController
         
         viewControllerToPassDataTo.delegate = self
         
@@ -504,7 +506,7 @@ extension BlueBookUniversalBeamsVC: UINavigationBarDelegate {
 
 // Below is the tableViewDataSource extension onto this viewController. The methods inside this extension will provide all needed data for the tableView:
 
-extension BlueBookUniversalBeamsVC: UITableViewDataSource {
+extension BlueBookUniversalBeamsSectionsToEurocodesViewController: UITableViewDataSource {
     
     // MARK: - numberOfSection:
     
@@ -789,13 +791,13 @@ extension BlueBookUniversalBeamsVC: UITableViewDataSource {
 
 // MARK: - UITableViewDelegate Extension:
 
-extension BlueBookUniversalBeamsVC: UITableViewDelegate {
+extension BlueBookUniversalBeamsSectionsToEurocodesViewController: UITableViewDelegate {
         
     func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
         
         // In order to de-initialize/de-allocate the viewController (i.e. BlueBookUniversalBeamDatSummaryVC) that gets displayed depending on which tableView cell disclosure icon the user tapped, once it gets dismissed. So that a new one gets initialised when the user taps on a different tableView cell disclosure icon, and therefore, its navigationBar title as well as relevant information about the selected section get displayed. The below is needed in order to avoid having a Strong Reference to the viewController that will be displayed once the user hit on a particular tableView Cell Disclosure Icon. This is achieved by making the reference to the viewController that will be displayed once the user hit on a particular tableView cell inside this method (i.e. a Local Variable) as opposed to outside this methid (Global Variable):
                         
-        let blueBookUniversalBeamDataSummaryVCProperties = main.instantiateViewController(withIdentifier: "BlueBookUniversalBeamDataSummaryVC") as! BlueBookUniversalBeamDataSummaryVC
+        let blueBookUniversalBeamDataSummaryVCProperties = main.instantiateViewController(withIdentifier: "BlueBookUniversalBeamsSectionsToEurocodesDataSummaryViewController") as! BlueBookUniversalBeamsSectionsToEurocodesDataSummaryViewController
                 
         blueBookUniversalBeamDataSummaryVCProperties.delegate = self
         
@@ -1028,7 +1030,7 @@ extension Array where Element: Hashable {
 
 // MARK: - Extension for UISearchBar:
 
-extension BlueBookUniversalBeamsVC: UISearchBarDelegate {
+extension BlueBookUniversalBeamsSectionsToEurocodesViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
@@ -1182,7 +1184,7 @@ extension BlueBookUniversalBeamsVC: UISearchBarDelegate {
 
 // MARK: - Protocol extension in order to receive data from SortDataPopOverVC or FilterDataVC:
 
-extension BlueBookUniversalBeamsVC: PassingDataBackwardsProtocol {
+extension BlueBookUniversalBeamsSectionsToEurocodesViewController: PassingDataBackwardsProtocol {
 
     func dataToBePassedUsingProtocol(modifiedArrayToBePassed: [IsectionsDimensionsParameters], sortBy: String, filtersApplied: Bool, isSearching: Bool) {
 
@@ -1221,7 +1223,7 @@ extension BlueBookUniversalBeamsVC: PassingDataBackwardsProtocol {
 
 // MARK: - Protocol extension in order to receive data from BlueBookUniversalBeamDataSummaryVC:
 
-extension BlueBookUniversalBeamsVC: ProtocolToPassDataBackwardsFromDataSummaryVcToPreviousVc {
+extension BlueBookUniversalBeamsSectionsToEurocodesViewController: ProtocolToPassDataBackwardsFromDataSummaryVcToPreviousVc {
     
     func dataToBePassedUsingProtocol(modifiedArrayContainingAllUBsDataToBePassed: [IsectionsDimensionsParameters], modifiedArrayContainingSectionSerialNumbersDataToBePassed: [String], passedSortBy: String, passedFiltersApplied: Bool, passedIsSearching: Bool, passedSelectedTableSectionNumberFromPreviousVc: Int, passedSelectedTableRowNumberFromPreviousVc: Int) {
 
@@ -1262,7 +1264,7 @@ extension BlueBookUniversalBeamsVC: ProtocolToPassDataBackwardsFromDataSummaryVc
 
 // MARK: - UIPopoverPresentationControllerDelegate Extension:
 
-extension BlueBookUniversalBeamsVC: UIPopoverPresentationControllerDelegate {
+extension BlueBookUniversalBeamsSectionsToEurocodesViewController: UIPopoverPresentationControllerDelegate {
     
     func prepareForPopoverPresentation(_ popoverPresentationController: UIPopoverPresentationController) {
         

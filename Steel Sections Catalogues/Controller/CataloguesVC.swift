@@ -16,7 +16,7 @@ class CataloguesVC: UIViewController, UICollectionViewDelegate, UICollectionView
     
     var cataloguesCollectionViewHeight: CGFloat?
     
-    lazy var cataloguesCollectionView = CustomCollectionView(startingHoriztonalCoordinateOfCollectionView: 0, startingVerticalCoordinateOfCollectionView: 0, widthOfCollectionView: self.view.frame.size.width, heightOfCollectionView: cataloguesCollectionViewHeight!, collectionViewLayoutTopEdgeInset: 20, collectionViewLayoutLeftEdgeInset: 20, collectionViewLayoutBottomEdgeInset: 20, collectionViewLayoutRightEdgeInset: 20, collectionViewLayoutCellsMinimumVerticalSpacings: 20, collectionViewLayoutCellsMinimumHorizontalSpacings: 20, numberOfCellsPerRow: 1, numberOfCellsPerColumn: 2, hostViewDataSource: self, hostViewDelegate: self, hexCodeColorForBackgroundColor: "0D0D0D")
+    lazy var cataloguesCollectionView = CustomCollectionView(startingHoriztonalCoordinateOfCollectionView: 0, startingVerticalCoordinateOfCollectionView: 0, widthOfCollectionView: self.view.frame.size.width, heightOfCollectionView: cataloguesCollectionViewHeight!, collectionViewLayoutTopEdgeInset: 20, collectionViewLayoutLeftEdgeInset: 20, collectionViewLayoutBottomEdgeInset: 20, collectionViewLayoutRightEdgeInset: 20, collectionViewLayoutCellsMinimumVerticalSpacings: 20, collectionViewLayoutCellsMinimumHorizontalSpacings: 20, numberOfCellsPerRow: 1, numberOfCellsPerColumn: 2, hostViewDataSource: self, hostViewDelegate: self)
     
     lazy var navigationBar = CustomUINavigationBar(navBarLeftButtonTarget: self, navBarLeftButtonSelector: #selector(navigationBarLeftButtonPressed(sender:)), labelTitleText: "Steel Catalogues", navBarDelegate: self)
     
@@ -106,8 +106,8 @@ class CataloguesVC: UIViewController, UICollectionViewDelegate, UICollectionView
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MyCell", for: indexPath) as! CustomCollectionViewCell
         
-        cell.setupCustomCellElements(cellImageName: collectionViewCellsImagesArray[indexPath.row], cellTitleTextColour: "#797D70", cellTitleTextSize: 15, cellTitleFontType: "Apple SD Gothic Neo", cellTitle: collectionViewCellsTitlesArray[indexPath.row], cellHexColorCode: "#E8FFB5", cellCornerRadius: 3, cellShadowOffsetWidth: 0, cellShadowOffsetHeight: 1.5, cellShadowColor: "#9CCC38", cellShadowRadius: 3, cellShadowOpacity: 0.6)
-        
+        cell.setupCustomCellElements(cellImageName: collectionViewCellsImagesArray[indexPath.row], cellTitleTextSize: 15, cellTitle: collectionViewCellsTitlesArray[indexPath.row])
+    
         return cell
         
     }

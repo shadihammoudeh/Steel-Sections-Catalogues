@@ -10,7 +10,7 @@ import UIKit
 
 import RangeSeekSlider
 
-class FilterDataVC: UIViewController {
+class BlueBookUniversalBeamsSectionsToEurocodesFilterByViewController: UIViewController {
     
     // MARK: - Assigning protocol delegate:
     
@@ -468,13 +468,13 @@ class FilterDataVC: UIViewController {
 
 // MARK: - Extensions:
 
-extension FilterDataVC: UINavigationBarDelegate {
+extension BlueBookUniversalBeamsSectionsToEurocodesFilterByViewController: UINavigationBarDelegate {
     
     @objc func navigationBarLeftButtonPressed(sender : UIButton) {
         
         let main = UIStoryboard(name: "Main", bundle: nil)
         
-        let previousViewControllerToGoTo = main.instantiateViewController(withIdentifier: "BlueBookUniversalBeamsVC")
+        let previousViewControllerToGoTo = main.instantiateViewController(withIdentifier: "BlueBookUniversalBeamsSectionsToEurocodesViewController")
         
         self.present(previousViewControllerToGoTo, animated: true, completion: nil)
         
@@ -488,7 +488,7 @@ extension FilterDataVC: UINavigationBarDelegate {
     
 }
 
-extension FilterDataVC: RangeSeekSliderDelegate {
+extension BlueBookUniversalBeamsSectionsToEurocodesFilterByViewController: RangeSeekSliderDelegate {
     
     func rangeSeekSlider(_ slider: RangeSeekSlider, didChange minValue: CGFloat, maxValue: CGFloat) {
         
