@@ -23,9 +23,7 @@ class CataloguesVC: UIViewController, UICollectionViewDelegate, UICollectionView
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        
-        print("CataloguesVC viewDidLoad()")
-        
+                
         view.addSubview(navigationBar)
         
         setupConstraints()
@@ -33,25 +31,17 @@ class CataloguesVC: UIViewController, UICollectionViewDelegate, UICollectionView
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
-        print("CataloguesVC viewWillAppear()")
-        
+                
     }
     
     override func viewWillLayoutSubviews() {
-        
-        print("CataloguesVC viewWillLayoutSubviews()")
-        
+                
     }
     
     override func viewDidLayoutSubviews() {
-        
-        print("CataloguesVC viewDidLayoutSubviews()")
-        
-        let statusBarPlusNavigationBarHeight = (view.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0) + navigationBar.frame.size.height
-        
-        print("Status Bar Height is equal to \(view.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0)")
                 
+        let statusBarPlusNavigationBarHeight = (view.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0) + navigationBar.frame.size.height
+                        
         let totalViewControllerHeight = view.frame.size.height
         
         let viewControllerBottomSafeAreaHeight = view.safeAreaInsets.bottom
@@ -74,26 +64,19 @@ class CataloguesVC: UIViewController, UICollectionViewDelegate, UICollectionView
             
             
             ])
-        print("View Controller safe area height \(viewControllerSafeAreaHeight)")
         
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        
-        print("CataloguesVC viewDidAppear()")
-        
+                
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        
-        print("CataloguesVC viewWillDisappear()")
-        
+                
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        
-        print("CataloguesVC viewDidDisappear()")
-        
+                
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -113,9 +96,7 @@ class CataloguesVC: UIViewController, UICollectionViewDelegate, UICollectionView
     }
     
     @objc func navigationBarLeftButtonPressed(sender: UIButton) {
-        
-        print("CataloguesVC Navigation Bar Left Button Pressed")
-        
+                
         guard let nextViewControllerToGoTo = storyboard?.instantiateViewController(withIdentifier: "MainScreenVC") else {
             
             print("MainScreenVC could not be presented")
@@ -154,7 +135,7 @@ class CataloguesVC: UIViewController, UICollectionViewDelegate, UICollectionView
         
         if indexPath.row == 0 {
             
-            guard let nextViewControllerToGoTo = storyboard?.instantiateViewController(withIdentifier: "BlueBookTabController") else {
+            guard let nextViewControllerToGoTo = storyboard?.instantiateViewController(withIdentifier: "OpenAndClosedSteelSectionsTabViewController") else {
                 
                 print("BlueBookTabController could not be presented")
                 

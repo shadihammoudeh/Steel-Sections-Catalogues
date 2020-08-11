@@ -10,7 +10,7 @@ import UIKit
 
 protocol PassingDataBackwardsProtocol {
     
-    func dataToBePassedUsingProtocol(modifiedArrayToBePassed: [IsectionsDimensionsParameters], sortBy: String, filtersApplied: Bool, isSearching: Bool)
+    func dataToBePassedUsingProtocol(modifiedArrayToBePassed: [SteelSectionParameters], sortBy: String, filtersApplied: Bool, isSearching: Bool)
     
 }
 

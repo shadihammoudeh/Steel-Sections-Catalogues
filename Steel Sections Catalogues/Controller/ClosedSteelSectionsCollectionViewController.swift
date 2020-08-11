@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BlueBookClosedSectionsVC: UIViewController {
+class ClosedSteelSectionsCollectionViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()

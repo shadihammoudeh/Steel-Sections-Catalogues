@@ -10,15 +10,15 @@ import UIKit
 
 import ChameleonFramework
 
-class BlueBookTabController: UITabBarController, UINavigationBarDelegate {
+class OpenAndClosedSteelSectionsTabViewController: UITabBarController, UINavigationBarDelegate {
     
-    // The below lines of code create an instance for the first and second ViewController to be displayed in the TabBar:
+    // The below lines of code create an instance for the Open and Closed Steel Sections ViewControllers to be displayed in the TabBar View Controller, i.e this one:
             
     let main = UIStoryboard(name: "Main", bundle: nil)
     
-    lazy var blueBookOpenRolledSectionsVC = main.instantiateViewController(identifier: "BlueBookOpenRolledSectionsVC") as BlueBookOpenRolledSectionsVC
+    lazy var blueBookOpenRolledSectionsVC = main.instantiateViewController(identifier: "OpenRolledSteelSectionsCollectionViewController") as OpenRolledSteelSectionsCollectionViewController
     
-    lazy var blueBookClosedSectionsVC = main.instantiateViewController(identifier: "BlueBookClosedSectionsVC") as BlueBookClosedSectionsVC
+    lazy var blueBookClosedSectionsVC = main.instantiateViewController(identifier: "ClosedSteelSectionsCollectionViewController") as ClosedSteelSectionsCollectionViewController
     
     lazy var navigationBar = CustomUINavigationBar(navBarLeftButtonTarget: self, navBarLeftButtonSelector: #selector(navigationBarLeftButtonPressed(sender:)), labelTitleText: "BlueBook Catalogue", navBarDelegate: self)
     

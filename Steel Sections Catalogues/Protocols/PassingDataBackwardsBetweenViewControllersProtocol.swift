@@ -20,8 +20,8 @@ import UIKit
 
 // As a general rule, delegates should be marked as "weak" because most delegates are referencing classes that they do not own. This is definitely true when a child is using a delegate to communicate with a parent. Using a "weak" reference for the delegate is what the documentation recommends.
 
-protocol ProtocolToPassDataBackwardsFromDataSummaryVcToPreviousVc: AnyObject {
+protocol PassingDataBackwardsBetweenViewControllersProtocol: AnyObject {
     
-    func dataToBePassedUsingProtocol(modifiedArrayContainingAllUBsDataToBePassed: [IsectionsDimensionsParameters], modifiedArrayContainingSectionSerialNumbersDataToBePassed: [String], passedSortBy: String, passedFiltersApplied: Bool, passedIsSearching: Bool, passedSelectedTableSectionNumberFromPreviousVc: Int, passedSelectedTableRowNumberFromPreviousVc: Int)
+    func dataToBePassedUsingProtocol(datComingFromViewController: String, configuredArrayContainingSteelSectionsData: [SteelSectionParameters], configuredArrayContainingSteelSectionsSerialNumbersOnly: [String], configuredSortByVariable: String, configuredFiltersAppliedVariable: Bool, configuredIsSearchingVariable: Bool, exchangedUserSelectedTableCellSectionNumber: Int, exchangedUserSelectedTableCellRowNumber: Int)
     
 }

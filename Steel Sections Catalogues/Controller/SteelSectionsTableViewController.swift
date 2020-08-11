@@ -1,0 +1,1827 @@
+//
+//  BlueBookUniversalBeamsVC.swift
+//  Steel Sections Catalogues
+//
+//  Created by Shadi Hammoudeh on 27/07/2019.
+//  Copyright © 2019 Bespoke Engineering. All rights reserved.
+//
+
+import UIKit
+
+class SteelSectionsTableViewController: UIViewController {
+    
+    // MARK: - Data received from previous View Controller (i.e. OpenRolledSteelSectionsCollectionViewController):
+    
+    // The below is important in order to set the title of the NavigatioBar on this page, whether it is going to be Universal Beams (UB), Universal Columns (UC), Universal Bearing Piles (UBP), Parallel Flange Channels (PFC), Equal Leg Angles (L), Unequal Leg Angles (L), Tees (T) splift from UB or Tees (T) splift from UC:
+    
+    var receivedNavigatioBarTitleFromPreviousViewController: String = ""
+    
+    // The below is needed in order to figure out which collectionViewCell the user has pressed on from the previous viewController:
+    
+    var userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController: Int = 0
+    
+    // The below two variables will get their values later on inside the accessoryButtonTappedForRowWith method (i.e. when the user taps on a particular discoluse icon button displayed inside a tableView cell). These two variables will be sent to the next viewController (i.e. SelectedSteelSectionSummaryPage) that will be displayed based on which tableView cell disclosure icon button the user tapped on. And then they will be sent back to this viewController again once the displayed viewController for the particular tableView cell disclosure icon that got tapped gets dismissed:
+    
+    var userLastSelectedTableCellSectionNumberBeforeTheSelectedSteelSectionSummaryPageViewControllerWasDisplayed: Int = 0
+    
+    var userLastSelectedTableCellRowNumberBeforeTheSelectedSteelSectionSummaryPageViewControllerWasDisplayed: Int = 0
+    
+    // MARK: - Sorting/Searching criteria Variables definition:
+    
+    // The value of the sortBy Variable below is set by default to be equal to "None" which means that the data displayed inside the table will be sorted by Section Designation in Ascending Order as soon as this ViewController loads up for the first time:
+    
+    // The below variables (i.e., sortBy, isSearching and filtersApplied) will be passed back and forth between this ViewController, TableViewSteelSectionsSortByOptionsPopoverViewController, TableViewSteelSectionsDataFilterOptions and SelectedSteelSectionSummaryPage in order to keep them up-to-date with the changes the user make to how the data inside the tableView is searched, sorted and/or filtered:
+    
+    var sortBy: String = "None"
+    
+    var isSearching: Bool = false
+    
+    var filtersApplied: Bool = false
+    
+    // MARK: - Various arrays definitions:
+    
+    // The below Array is the one which contains the data extracted from the passed CSV file, depending on the selected CollectionViewCell from the previous ViewController. It contains the data in a one big Array, which contains several Arrays inside it, whereby each Array inside the big Array contains several Dictionaries. The below Array is going to be filled using the CSV parser which will be used later on:
+    
+    var extractedSteelSectionsDataArrayFromThePassedCsvFileUsingTheParser = [SteelSectionParameters]()
+    
+    // The below Arrays will get their values from either TableViewSteelSectionsDataFilterOptions or TableViewSteelSectionsSortByOptionsPopoverViewController in order to display the data inside the tableView accordingly:
+    
+    // Array gets filled by the data passed back from the TableViewSteelSectionsDataFilterOptions:
+    
+    var steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsDataFilterOptionsViewController = [SteelSectionParameters]()
+    
+    // Array gets filled by the data passed back from the TableViewSteelSectionsSortByOptionsPopoverViewController:
+    
+    var steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsSortByOptionsPopoverViewController = [SteelSectionParameters]()
+    
+    // The below array represents the array containing searchedData as per the user's search criteria out of the extractedSteelSectionsDataArrayFromThePassedCsvFileUsingTheParser:
+    
+    var steelSectionsDataArrayAsPerSearchedCriteria = [SteelSectionParameters]()
+    
+    // The below Array is mapped out from the extractedSteelSectionsDataArrayFromThePassedCsvFileUsingTheParser Array, whereby only sectionSerialNumbers are reported inside of it, with no duplication using the extension at the end of this Class (i.e., Array) and sorted in Ascending Order. The below array will be used in order to decide later on how may sections our tableView needs to display:
+    
+    var steelSectionsDataArrayContainingOnlyInfoAboutSectionsSerialNumberSortedInAscendingOrder: [String] = []
+    
+    // The below array contains all of the section serial numbers sorted in ascending or descending order, in order for them to be displayed as cells' headers when user sort data by Section Designation in Descending or Ascending Order:
+    
+    var steelSectionsDataArrayContainingOnlyInfoAboutSectionsSerialNumberSortedInAscendingOrDescendingOrder: [String] = []
+    
+    // MARK: - Search Bar, Navigation Bar and Table View instances definitions:
+    
+    var searchBar = UISearchBar()
+    
+    // The below code line declares the custom NavigationBar to be added to this ViewController. The reason it is defined as a lazy var, is to allow us to access the view properties of this ViewController. Since the custom NavigationBar is defined outside the viewDidLoad methods, or other methods where UIVIew is available. This navigationBar is going to have a left button (back button), Title in the middle (UILabel) and a rightButton (Sort Data). The title of this Navigation Br will depends in the selected Collection View Cell in the previous View Controller:
+    
+    lazy var navigationBar = CustomUINavigationBar(rightNavBarTitle: "Sort Data", rightNavBarButtonTarget: self, rightNavBarSelector: #selector(navigationBarRightButtonPressed(sender:)), navBarDelegate: self, navBarLeftButtonTarget: self, navBarLeftButtonSelector: #selector(navigationBarLeftButtonPressed(sender:)), labelTitleText: receivedNavigatioBarTitleFromPreviousViewController)
+    
+    let steelSectionsTableView = UITableView()
+    
+    // MARK: - ViewControllers instances definitions:
+    
+    let main = UIStoryboard(name: "Main", bundle: nil)
+    
+    lazy var tableViewSteelSectionsSortByOptionsViewController = main.instantiateViewController(withIdentifier: "TableViewSteelSectionsSortByOptionsPopoverViewController")
+    
+    lazy var tableViewSteelSectionsDataFilterOptionsViewController = main.instantiateViewController(withIdentifier: "TableViewSteelSectionsDataFilterOptions") as! TableViewSteelSectionsDataFilterOptions
+    
+    // MARK: - viewDidLoad():
+    
+    override func viewDidLoad() {
+        
+        super.viewDidLoad()
+        
+        // The below gesture is needed in order to go back to the previous View Controller when a right swipe gesture gets detected:
+        
+        let rightGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(navigationBarLeftButtonPressed(sender:)))
+        
+        rightGestureRecognizer.direction = .right
+        
+        // MARK: - tapGesture declaration to dismiss keyboard:
+        
+        // The below code is needed in order to detect when a user has tapped on the screen, consequently dismisses the displayed on-screen keyboard:
+        
+        let tapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
+        
+        setupSearchBar()
+        
+        setupTableView()
+        
+        // MARK: - Gestures & Adding subViews:
+        
+        view.addGestureRecognizer(tapGesture)
+        
+        view.addGestureRecognizer(rightGestureRecognizer)
+        
+        view.addSubview(searchBar)
+        
+        view.addSubview(navigationBar)
+        
+        view.addSubview(steelSectionsTableView)
+        
+        // MARK: - Parsing the CSV file to extract required data out of it:
+        
+        // We are going to call the parse function on the appropriate CSV file as soon as the application loads in order to extract the needed data to populate the tableView. The CSV file to be parsed will depends on the selected Collection View Cell number by the user made in the previous View Controller:
+        
+        switch userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController {
+            
+        case 0:
+            
+            parseCsvFile(csvFileToParse: "EurocodesBlueBookUniversalBeamsSections")
+            
+        case 1:
+            
+            parseCsvFile(csvFileToParse: "EurocodesBlueBookUniversalColumnsSections")
+            
+        case 2:
+            
+            parseCsvFile(csvFileToParse: "EurocodesBlueBookUniversalBearingPilesSections")
+            
+        case 3:
+            
+            parseCsvFile(csvFileToParse: "EurocodesBlueBookParallelFlangeChannelsSections")
+            
+        case 4:
+            
+            parseCsvFile(csvFileToParse: "EurocodesBlueBookEqualLegAnglesSections")
+            
+        case 5:
+            
+            parseCsvFile(csvFileToParse: "EurocodesBlueBookUnequalLegAnglesSections")
+            
+        case 6:
+            
+            parseCsvFile(csvFileToParse: "EurocodesBlueBookTeesSplitFromUBSections")
+            
+        case 7:
+            
+            parseCsvFile(csvFileToParse: "EurocodesBlueBookTeesSplitFromUCSections")
+            
+        default:
+            
+            parseCsvFile(csvFileToParse: "EurocodesBlueBookUniversalBeamsSections")
+            
+        }
+        
+        // The below code sorts the Data reported from the relevant CSV file using the Parser in Ascending Order by Section Designation by default, every time the view loads-up for the first time. Sort Method below does not create a new Array, it modifies the existing one:
+        
+        sortCsvExtractedSteelSectionsDataInAscendingOrder()
+        
+        // MARK: - Extracting all Steel Sections Serial Numbers from originalUniversalBeamsArrayDataExtractedFromTheCSVFileUsingTheParserContainingAllData Array (sorted in ascending order) and plugging them into universalBeamsArrayContainingAllSectionSerialNumberOnlyDefault:
+        
+        // The below line of code extracts only the sectionSerialNumber Dictionary from the extractedSteelSectionsDataArrayFromThePassedCsvFileUsingTheParser as well as remove any duplicates from it. This data extracted will be sorted in Ascending order by default. The below will be used later on to decide how many sections we need to have inside our table, when the data gets sorted by Section Designation:
+        
+        steelSectionsDataArrayContainingOnlyInfoAboutSectionsSerialNumberSortedInAscendingOrder = extractedSteelSectionsDataArrayFromThePassedCsvFileUsingTheParser.map({ return $0.sectionSerialNumber }).removingDuplicates()
+        
+    }
+    
+    // MARK: - viewDidLayoutSubViews():
+    
+    override func viewDidLayoutSubviews() {
+        
+        // MARK: - Applying constraints to Navigation Bar, Search Bar and Table View:
+        
+        setupConstraints()
+        
+        // The below code is needed in order to dismiss the keyboard if the searchBar is empty:
+        
+        if searchBar.text?.isEmpty == true {
+            
+            searchBar.endEditing(true)
+            
+        }
+        
+    }
+    
+    // MARK: - viewDidAppear():
+    
+    override func viewDidAppear(_ animated: Bool) {
+        
+        // Below code is required in order to scroll back inside the tableView to the last selected Row inside of its relevant Section by the user when they go back from the SelectedSteelSectionSummaryPage to this View Controller:
+        
+        self.steelSectionsTableView.scrollToRow(at: IndexPath.init(row: userLastSelectedTableCellRowNumberBeforeTheSelectedSteelSectionSummaryPageViewControllerWasDisplayed, section: userLastSelectedTableCellSectionNumberBeforeTheSelectedSteelSectionSummaryPageViewControllerWasDisplayed), at: UITableView.ScrollPosition.none, animated: true)
+        
+    }
+    
+    // MARK: - dismissKeyboard Method used by tapGesture:
+    
+    @objc func dismissKeyboard() {
+        
+        // Causes the view (or one of its embedded text fields) to resign the first responder status.
+        
+        view.endEditing(true)
+        
+    }
+    
+    // MARK: - function that is needed to sort data array extracted from the CSV parser in Ascending order:
+    
+    func sortCsvExtractedSteelSectionsDataInAscendingOrder() {
+        
+        extractedSteelSectionsDataArrayFromThePassedCsvFileUsingTheParser.sort {
+            
+            // If the user selected Tees section from the previous viewController (i.e. OpenRolledSteelSectionsCollectionViewController.swift file) then the sorting criteria will be according to the cross-section the T-section has been cut from rather than the actual full sectin designation itself:
+            
+            if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 6 || userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 7 {
+                
+                return $0.firstSectionSeriesNumber
+                
+            }
+            
+             // Otherwise the sorting criteria will be carried out according to :
+                
+            else {
+                
+                if $0.firstSectionSeriesNumber != $1.firstSectionSeriesNumber {
+                    
+                    return $0.firstSectionSeriesNumber < $1.firstSectionSeriesNumber
+                    
+                } else if $0.sectionSerialNumber != $1.sectionSerialNumber {
+                    
+                    return $0.sectionSerialNumber < $1.sectionSerialNumber
+                    
+                } else {
+                    
+                    return $0.lastSectionSeriesNumber < $1.lastSectionSeriesNumber
+                    
+                }
+                
+            }
+        }
+        
+    }
+    
+    // MARK: - Setup tableView:
+    
+    func setupTableView() {
+        
+        steelSectionsTableView.dataSource = self
+        
+        steelSectionsTableView.delegate = self
+        
+        // The below line of code is needed in order to flash the tableViewScrollIndicator when this viewController loads up for the first time, in order to draw the user's attention that data can be scrolled through vertically:
+        
+        steelSectionsTableView.flashScrollIndicators()
+        
+        steelSectionsTableView.translatesAutoresizingMaskIntoConstraints = false
+        
+        steelSectionsTableView.allowsSelection = false
+        
+        // The below line of code is needed in order to avoid displaying extra empty cells inside of our tableView:
+        
+        steelSectionsTableView.tableFooterView = UIView()
+        
+        steelSectionsTableView.backgroundColor = UIColor(named: "Table View Background Colour")
+        
+        steelSectionsTableView.separatorColor = UIColor(named: "Table View Cells Separation Line Colour")
+        
+        // It is very important to note that the below code, which calculates the dynamic height of a TableView Cell only works when all the required constrains (i.e., Top, Right, Bottom and Left) for all subViews to be displayed inside the tableView Cell are defined:
+        
+        steelSectionsTableView.estimatedRowHeight = 120
+        
+        steelSectionsTableView.rowHeight = UITableView.automaticDimension
+        
+        // The below IF STATEMENT is needed in order to decide which custom tableView cell should be used depending on the selected collectionViewCell from the ClosedSteelSectionsCollectionViewController:
+        
+        if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 4 || userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 5 {
+            
+            steelSectionsTableView.register(LegSteelSectionCustomTableViewCell.self, forCellReuseIdentifier: "LegSteelSectionCustomTableViewCell")
+            
+        } else {
+            
+            steelSectionsTableView.register(CustomTableViewCellForIandPFCandTsteelSections.self, forCellReuseIdentifier: "CustomTableViewCellForIandPFCandTsteelSections")
+            
+        }
+        
+    }
+    
+    // MARK: - Setup SearchBar:
+    
+    func setupSearchBar() {
+        
+        searchBar.delegate = self
+        
+        searchBar.showsBookmarkButton = true
+        
+        // The below line of code sets the image to be used for the filter results button as well as asks Xcode to render the image in its original conditions without applying any additional effects:
+        
+        let searchBarFilterImageForNormalState = UIImage(named:"searchBarFilterButtonIcon - Normal State")?.withRenderingMode(.alwaysOriginal)
+        
+        let searchBarFilterImageForHighlightedState = UIImage(named:"searchBarFilterButtonIcon - Highlighted State")?.withRenderingMode(.alwaysOriginal)
+        
+        searchBar.setImage(searchBarFilterImageForNormalState, for: .bookmark, state: .normal)
+        
+        searchBar.setImage(searchBarFilterImageForHighlightedState, for: .bookmark, state: .highlighted)
+        
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
+        
+        searchBar.searchTextField.contentVerticalAlignment = .center
+        
+        searchBar.sizeToFit()
+        
+        searchBar.placeholder = "Search by Section Designation..."
+        
+        // The below line of code make use of the UISearchbar Extension, which allows for quick changes to be made for the colour of the placeholder text inside the UISearchBar text field:
+        
+        searchBar.setPlaceholder(textColor: UIColor(named: "Search Bar Text Field Placeholder Text And Search Icon Colour")!)
+        
+        // The below line of code make use of the UISearchbar Extension, which allows for quick changes to be made for the colour of the search icon (i.e. magnifying glass inside the UISearchBar text field:
+        
+        searchBar.setSearchImage(color: UIColor(named: "Search Bar Text Field Placeholder Text And Search Icon Colour")!)
+        
+        // The below line of code make use of the UISearchbar Extension, which allows for quick changes to be made for the colour of the text that the user will type inside the UISearchBar text field:
+        
+        searchBar.set(textColor: UIColor(named: "Search Bar Text Field Label Text Font Colour")!)
+        
+        // The below line of code make use of the UISearchbar Extension, which allows for quick changes to be made for the background colour of the UISearchBar text field:
+        
+        searchBar.setTextField(color: UIColor(named: "Search Bar Text Field Background Colour")!.withAlphaComponent(0.6))
+        
+        // The below line of code sets the font type and size to be used for the placeholder text as well as the text typed by the user inside the UISearchBar text field:
+        
+        searchBar.searchTextField.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 18)
+        
+        searchBar.barStyle = UIBarStyle.default
+        
+        searchBar.searchBarStyle = UISearchBar.Style.default
+        
+        // The below line of code sets the frame's background colour of the UISearchBar:
+        
+        searchBar.barTintColor = UIColor(named: "Search Bar Background Colour")
+        
+        searchBar.searchTextField.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            
+            searchBar
+                .searchTextField.centerYAnchor.constraint(equalTo: searchBar.centerYAnchor, constant: 0),
+            
+            searchBar.searchTextField.leftAnchor.constraint(equalTo: searchBar.leftAnchor, constant: 5),
+            
+            searchBar.searchTextField.rightAnchor.constraint(equalTo: searchBar.rightAnchor, constant: -5)
+            
+        ])
+        
+        searchBar.isTranslucent = false
+        
+        searchBar.keyboardType = .numberPad
+        
+    }
+    
+    // MARK: Setup Constraints for navigationBar, searchBar and tableView:
+    
+    func setupConstraints() {
+        
+        NSLayoutConstraint.activate([
+            
+            navigationBar.leftAnchor.constraint(equalTo: view.leftAnchor),
+            
+            navigationBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            
+            navigationBar.rightAnchor.constraint(equalTo: view.rightAnchor),
+            
+            searchBar.leftAnchor.constraint(equalTo: view.leftAnchor),
+            
+            searchBar.topAnchor.constraint(equalTo: navigationBar.bottomAnchor),
+            
+            searchBar.rightAnchor.constraint(equalTo: view.rightAnchor),
+            
+            steelSectionsTableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
+            
+            steelSectionsTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            steelSectionsTableView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            
+            steelSectionsTableView.rightAnchor.constraint(equalTo: view.rightAnchor)
+            
+        ])
+        
+    }
+    
+    // MARK: CSV Parser Method:
+    
+    // We want to create a function that will parse the Steel Sections CSV data into a format that is useful:
+    
+    func parseCsvFile(csvFileToParse: String) {
+        
+        // We first need a path for where the CSV file is located. The below can be forced un-wrapped since we know for sure that the path for the file does exist:
+        
+        let path = Bundle.main.path(forResource: csvFileToParse, ofType: "csv")!
+        
+        // Then we need to use the parser (i.e., CsvParser.swift) which can throw an error, thus, we need to use a do catch statement:
+        
+        do {
+            
+            // In the below line of code we are passing the path of the CSV file we are interested in extracting its data and pass it to the CsvParser Class:
+            
+            let csv = try CsvParser(contentOfURL: path)
+            
+            // The below line of code will generate an array of dictionaries, whereby each parsed CSV row represents an Array of Dictionaries:
+            
+            let rows = csv.rows
+            
+            // Now we want to pull out the data that we are interested in out of the parsed csv file generated in the above line of code. As the above code line will spit out the data in an Arrays of Dictionaries format, whereby each line is going to be an Array, which contains multiple dictionaries inside of it, and each Dictionary is going to have a title as its Key and a value as its Value. We need to loop through each row and pull out the data we want. Then each extraced row (Array of Dictionaries) is going to be appended to the big Array (i.e., originalUniversalBeamsArrayDataExtractedFromTheCsvFileUsingTheParserWithAllData) which is going to contain all other Arrays:
+            
+            for row in rows {
+                
+                let firstSectionSeriesNumber = Int(row["First Section Series Number"]!)!
+                
+                let secondSectionSeriesNumber = Int(row["Second Section Series Number"]!)!
+                
+                let lastSectionSeriesNumber = Double(row["Last Section Series Number"]!)!
+                
+                let sectionSerialNumber = row["Section Serial Number"]!
+                
+                let fullSectionDesignation = row["Full Section Designation"]!
+                
+                let sectionCutFromUniversalBeam = row["Cut from Universal Beams"]!
+                
+                let sectionCutFromUniversalColumn = row["Cut from Universal Columns"]!
+                
+                let sectionMassPerMetre = Double(row["Mass Per Metre (kg/m)"]!)!
+                
+                let sectionLegLength = Double(row["Leg Length [h] (mm)"]!)!
+                
+                let sectionTotalDepth = Double(row["Depth of Section [h] (mm)"]!)!
+                
+                let sectionWidth = Double(row["Width of Section [b] (mm)"]!)!
+                
+                let sectionLegThickness = Double(row["Leg Thickness [t] (mm)"]!)!
+                
+                let sectionWebThickness = Double(row["Web Thickness [tw] (mm)"]!)!
+                
+                let sectionFlangeThickness = Double(row["Flange Thickness [tf] (mm)"]!)!
+                
+                let sectionRootRadiusOne = Double(row["Root Radius [r1] (mm)"]!)!
+                
+                let sectionRootRadiusTwo = Double(row["Toe Radius [r2] (mm)"]!)!
+                
+                let sectionDepthBetweenFillets = Double(row["Depth between Fillets [d] (mm)"]!)!
+                
+                let sectionLocalDiameterBucklingRatio = Double(row["Ratio for local Buckling [d/t]"]!)!
+                
+                let sectionLocalWebBucklingRatio = Double(row["Ratio for Local Web Buckling [cw/tw] (mm)"]!)!
+                
+                let sectionLocalFlangeBucklingRatio = Double(row["Ratio for Local Flange Buckling [cf/tf] (mm)"]!)!
+                
+                let sectionShearCentreFromWebCentreline = Double(row["Shear Centre from Web Centreline [e0] (cm)"]!)!
+                
+                let sectionCentreOfGravityXdirection = Double(row["Centre of Gravity X-direction (cm)"]!)!
+                
+                let sectionCentreOfGravityYdirection = Double(row["Centre of Gravity y-direction (cm)"]!)!
+                
+                let sectionEndClearanceDimensionForDetailing = Int(row["End Clearance [C] (mm)"]!)!
+                
+                let sectionNotchNdimensionForDetailing = Int(row["Dimension for Detailing Notch [N] (mm)"]!)!
+                
+                let sectionNotchnDimensionForDetailing = Int(row["Dimension for Detailing Notch [n] (mm)"]!)!
+                
+                let sectionSurfaceAreaPerMetre = Double(row["Surface Area per Metre (m2)"]!)!
+                
+                let sectionSurfaceAreaPerTonne = Double(row["Surface Area per Tonne (m2)"]!)!
+                
+                let sectionMajorSecondMomentOfAreaAboutYYaxis = Double(row["Second Moment of Area yy axis Major [cm4]"]!)!
+                
+                let sectionMinorSecondMomentOfAreaAboutZZaxis = Double(row["Second Moment of Area zz axis Minor [cm4]"]!)!
+                
+                let sectionMajorSecondMomentOfAreaAboutUUaxis = Double(row["Second Moment of Area uu axis  [cm4]"]!)!
+                
+                let sectionMinorSecondMomentOfAreaAboutVVaxis = Double(row["Second Moment of Area vv axis Minor [cm4]"]!)!
+                
+                let sectionMajorRadiusOfGyrationAboutYYaxis = Double(row["Radius of Gyration yy axis Major [cm]"]!)!
+                
+                let sectionMinorRadiusOfGyrationAboutZZaxis = Double(row["Radius of Gyration zz axis Minor [cm]"]!)!
+                
+                let sectionMajorRadiusOfGyrationAboutUUaxis = Double(row["Radius of Gyration uu axis Major [cm]"]!)!
+                
+                let sectionMinorRadiusOfGyrationAboutVVaxis = Double(row["Radius of Gyration vv axis Minor [cm]"]!)!
+                
+                let sectionMajorElasticModulusAboutYYaxis = Double(row["Elastic Modulus yy axis Major [cm3]"]!)!
+                
+                let sectionMinorElasticModulusAboutZZaxis = Double(row["Elastic Modulus zz axis Minor [cm3]"]!)!
+                
+                let sectionMajorFlangeElasticModulusAboutYYaxis = Double(row["Elastic Modulus Flange yy axis Major [cm3]"]!)!
+                
+                let sectionMajorToeElasticModulusAboutYYaxis = Double(row["Elastic Modulus Toe yy axis Major [cm3]"]!)!
+                
+                let sectionMinorToeElasticModulusAboutZZaxis = Double(row["Elastic Modulus Toe zz axis Minor [cm3]"]!)!
+                
+                let sectionMajorPlasticModulusAboutYYaxis = Double(row["Plastic Modulus yy axis Major [cm3]"]!)!
+                
+                let sectionMinorPlasticModulusAboutZZaxis = Double(row["Plastic Modulus zz axis Minor [cm3]"]!)!
+                
+                let sectionAngleAxisYYtoAxisUUtanAlpha = Double(row["Angle Axis yy to Axis uu Tanα"]!)!
+                
+                let sectionBucklingParameterU = Double(row["Buckling Parameter (U)"]!)!
+                
+                let sectionTorsionalIndexX = Double(row["Torsional Index (X)"]!)!
+                
+                let sectionWarpingConstantIwInDm6 = Double(row["Warping Constant (Iw) [dm6]"]!)!
+                
+                let sectionWarpingConstantIwInCm6 = Double(row["Warping Constant (Iw) [cm6]"]!)!
+                
+                let sectionTorsionalConstantIt = Double(row["Torsional Constant (IT) [cm4]"]!)!
+                
+                let sectionTorsionalConstantWt = Double(row["Torsional Constant (Wt) [cm3]"]!)!
+                
+                let sectionEquivalentSlendernessCoefficient = Double(row["Equivalent Slenderness Coefficient (ϕa)"]!)!
+                
+                let sectionMinimumEquivalentSlendernessCoefficient = Double(row["Equivalent Slenderness Coefficient Min.  (ϕa)"]!)!
+                
+                let sectionMaximumEquivalentSlendernessCoefficient = Double(row["Equivalent Slenderness Coefficient Max.  (ϕa)"]!)!
+                
+                let sectionMonoSymmetryIndexPsiA = Double(row["Mono-symmetry Index (ψa)"]!)!
+                
+                let sectionMonoSymmetryIndexPsi = Double(row["Mono-symmetry Index (ψ)"]!)!
+                
+                let sectionArea = Double(row["Area of Section [cm2]"]!)!
+                
+                let individualSteelSectionArrayOfDictionaries = SteelSectionParameters(firstSectionSeriesNumber: firstSectionSeriesNumber, secondSectionSeriesNumber: secondSectionSeriesNumber, lastSectionSeriesNumber: lastSectionSeriesNumber, sectionSerialNumber: sectionSerialNumber, fullSectionDesignation: fullSectionDesignation, sectionCutFromUniversalBeam: sectionCutFromUniversalBeam, sectionCutFromUniversalColumn: sectionCutFromUniversalColumn, sectionMassPerMetre: sectionMassPerMetre, sectionLegLength: sectionLegLength, sectionTotalDepth: sectionTotalDepth, sectionWidth: sectionWidth, sectionLegThickness: sectionLegThickness, sectionWebThickness: sectionWebThickness, sectionFlangeThickness: sectionFlangeThickness, sectionRootRadiusOne: sectionRootRadiusOne, sectionRootRadiusTwo: sectionRootRadiusTwo, sectionDepthBetweenFillets: sectionDepthBetweenFillets, sectionLocalDiameterBucklingRatio: sectionLocalDiameterBucklingRatio, sectionLocalWebBucklingRatio: sectionLocalWebBucklingRatio, sectionLocalFlangeBucklingRatio: sectionLocalFlangeBucklingRatio, sectionShearCentreFromWebCentreline: sectionShearCentreFromWebCentreline, sectionCentreOfGravityXdirection: sectionCentreOfGravityXdirection, sectionCentreOfGravityYdirection: sectionCentreOfGravityYdirection, sectionEndClearanceDimensionForDetailing: sectionEndClearanceDimensionForDetailing, sectionNotchNdimensionForDetailing: sectionNotchNdimensionForDetailing, sectionNotchnDimensionForDetailing: sectionNotchnDimensionForDetailing, sectionSurfaceAreaPerMetre: sectionSurfaceAreaPerMetre, sectionSurfaceAreaPerTonne: sectionSurfaceAreaPerTonne, sectionMajorSecondMomentOfAreaAboutYYaxis: sectionMajorSecondMomentOfAreaAboutYYaxis, sectionMinorSecondMomentOfAreaAboutZZaxis: sectionMinorSecondMomentOfAreaAboutZZaxis, sectionMajorSecondMomentOfAreaAboutUUaxis: sectionMajorSecondMomentOfAreaAboutUUaxis, sectionMinorSecondMomentOfAreaAboutVVaxis: sectionMinorSecondMomentOfAreaAboutVVaxis, sectionMajorRadiusOfGyrationAboutYYaxis: sectionMajorRadiusOfGyrationAboutYYaxis, sectionMinorRadiusOfGyrationAboutZZaxis: sectionMinorRadiusOfGyrationAboutZZaxis, sectionMajorRadiusOfGyrationAboutUUaxis: sectionMajorRadiusOfGyrationAboutUUaxis, sectionMinorRadiusOfGyrationAboutVVaxis: sectionMinorRadiusOfGyrationAboutVVaxis, sectionMajorElasticModulusAboutYYaxis: sectionMajorElasticModulusAboutYYaxis, sectionMinorElasticModulusAboutZZaxis: sectionMinorElasticModulusAboutZZaxis, sectionMajorFlangeElasticModulusAboutYYaxis: sectionMajorFlangeElasticModulusAboutYYaxis, sectionMajorToeElasticModulusAboutYYaxis: sectionMajorToeElasticModulusAboutYYaxis, sectionMinorToeElasticModulusAboutZZaxis: sectionMinorToeElasticModulusAboutZZaxis, sectionMajorPlasticModulusAboutYYaxis: sectionMajorPlasticModulusAboutYYaxis, sectionMinorPlasticModulusAboutZZaxis: sectionMinorPlasticModulusAboutZZaxis, sectionAngleAxisYYtoAxisUUtanAlpha: sectionAngleAxisYYtoAxisUUtanAlpha, sectionBucklingParameterU: sectionBucklingParameterU, sectionTorsionalIndexX: sectionTorsionalIndexX, sectionWarpingConstantIwInDm6: sectionWarpingConstantIwInDm6, sectionWarpingConstantIwInCm6: sectionWarpingConstantIwInCm6, sectionTorsionalConstantIt: sectionTorsionalConstantIt, sectionTorsionalConstantWt: sectionTorsionalConstantWt, sectionEquivalentSlendernessCoefficient: sectionEquivalentSlendernessCoefficient, sectionMinimumEquivalentSlendernessCoefficient: sectionMinimumEquivalentSlendernessCoefficient, sectionMaximumEquivalentSlendernessCoefficient: sectionMaximumEquivalentSlendernessCoefficient, sectionMonoSymmetryIndexPsiA: sectionMonoSymmetryIndexPsiA, sectionMonoSymmetryIndexPsi: sectionMonoSymmetryIndexPsi, sectionArea: sectionArea)
+                
+                // Then we need to append each of the above created Array of Dictionaries to the main Array declared above:
+                
+                extractedSteelSectionsDataArrayFromThePassedCsvFileUsingTheParser.append(individualSteelSectionArrayOfDictionaries)
+                
+            }
+            
+        } catch let err as NSError {
+            
+            print(err.debugDescription)
+            
+        }
+        
+    }
+    
+}
+
+// MARK: - UINavigationBarDelegate Extension:
+
+extension SteelSectionsTableViewController: UINavigationBarDelegate {
+    
+    // MARK: Navigation Bar Left button pressed (back button):
+    
+    @objc func navigationBarLeftButtonPressed(sender : UIButton) {
+        
+        let previousViewControllerToGoTo = main.instantiateViewController(withIdentifier: "OpenAndClosedSteelSectionsTabViewController")
+        
+        self.present(previousViewControllerToGoTo, animated: true, completion: nil)
+        
+    }
+    
+    // MARK: - Navigaton Bar Right button pressed (Sort Data button):
+    
+    @objc func navigationBarRightButtonPressed(sender : UIButton) {
+        
+        tableViewSteelSectionsSortByOptionsViewController.modalPresentationStyle = .popover
+        
+        let popover = tableViewSteelSectionsSortByOptionsViewController.popoverPresentationController!
+        
+        popover.delegate = self
+        
+        popover.permittedArrowDirections = .up
+        
+        // The below code is needed in order to set the size of the pop-over view controller:
+        
+        tableViewSteelSectionsSortByOptionsViewController.preferredContentSize = CGSize(width: 320, height: 150)
+        
+        // The sourceView in the below code line represents the view containing the anchor rectangle for the popover:
+        
+        popover.sourceView = navigationBar.navigationBarRightButtonView
+        
+        // The sourceRect in the below code line represents The rectangle in the specified view in which to anchor the popover:
+        
+        popover.sourceRect = navigationBar.navigationBarRightButtonView.bounds
+        
+        let viewControllerToPassDataTo = tableViewSteelSectionsSortByOptionsViewController as! TableViewSteelSectionsSortByOptionsPopoverViewController
+        
+        viewControllerToPassDataTo.delegate = self
+        
+        // Below we are passing the Variables sortBy, isSearching and filtersApplied from this View Controller onto the TableViewSteelSectionsSortByOptionsPopoverViewController:
+        
+        viewControllerToPassDataTo.sortBy = self.sortBy
+        
+        viewControllerToPassDataTo.isSearching = self.isSearching
+        
+        viewControllerToPassDataTo.filtersApplied = self.filtersApplied
+        
+        // Below we are passing the extracted CSV steel sections data array from this View Controller onto the TableViewSteelSectionsSortByOptionsPopoverViewController:
+        
+        viewControllerToPassDataTo.receivedSteelSectionsDataArrayFromSteelSectionsTableViewController = extractedSteelSectionsDataArrayFromThePassedCsvFileUsingTheParser
+        
+        present(viewControllerToPassDataTo, animated: true, completion:{
+            
+            self.view.alpha = 0.5
+            
+            self.dismissKeyboard()
+            
+        })
+        
+    }
+    
+    // The below function is needed in order for the Navigation Bar to be attached directly underneath the bottom of the top Status Bar:
+    
+    func position(for bar: UIBarPositioning) -> UIBarPosition {
+        
+        return UIBarPosition.topAttached
+        
+    }
+    
+}
+
+// MARK: - UITableViewDataSource Extension:
+
+// Below is the tableViewDataSource extension onto this viewController. The methods inside this extension will provide all needed data for the tableView:
+
+extension SteelSectionsTableViewController: UITableViewDataSource {
+    
+    // MARK: - numberOfSection:
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        
+        // The below lines of code check the values of the sortBy, filtersApplied and isSearching Variables in order to decide on how many sections the tableView should contains. The tableView will only displays multiple sections when the data is sorted by Section Designation in an ascending or descending order, and isSearching as well as filtersApplied variables are both equal to false:
+        
+        if sortBy == "Sorted by: Section Designation in ascending order" || sortBy == "Sorted by: Section Designation in descending order" {
+            
+            return steelSectionsDataArrayContainingOnlyInfoAboutSectionsSerialNumberSortedInAscendingOrDescendingOrder.count
+            
+        } else if sortBy == "None" && filtersApplied == false && isSearching == false {
+            
+            return steelSectionsDataArrayContainingOnlyInfoAboutSectionsSerialNumberSortedInAscendingOrder.count
+            
+        }
+            
+            // In the case where the data to be displayed inside the tableView are not sorted by Section Designation in Ascending or Descending Order then we are only going to have one Section Header for our tableView, which will cotains the title:
+            
+        else  {
+            
+            return 1
+            
+        }
+        
+    }
+    
+    // MARK: - viewForHeaderInSection:
+    
+    // The below function defines the properties of section headers as well as what should be displayed inside them:
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        
+        let sectionHeaderView = UIView()
+        
+        let sectionHeaderTitle = UILabel()
+        
+        sectionHeaderTitle.translatesAutoresizingMaskIntoConstraints = false
+        
+        sectionHeaderTitle.font = UIFont(name: "AppleSDGothicNeo-SemiBold", size: 20)
+        
+        sectionHeaderView.backgroundColor = UIColor(named: "Table View Sections Header Background Colour")
+        
+        sectionHeaderTitle.textColor = UIColor(named: "Table View Section Header Text Colour")
+        
+        sectionHeaderTitle.textAlignment = .left
+        
+        sectionHeaderTitle.baselineAdjustment = .alignCenters
+        
+        sectionHeaderTitle.numberOfLines = 0
+        
+        if sortBy == "Sorted by: Section Designation in ascending order" || sortBy == "Sorted by: Section Designation in descending order" {
+            
+            // In this case the title for each section header is equal to each section serial number (thus, we will have multiple Section Headers for each set of Section Serial Number):
+            
+            sectionHeaderTitle.text = steelSectionsDataArrayContainingOnlyInfoAboutSectionsSerialNumberSortedInAscendingOrDescendingOrder[section] + " Series"
+            
+        }
+            
+        else if sortBy == "None" && isSearching == false && filtersApplied == false {
+            
+            sectionHeaderTitle.text = steelSectionsDataArrayContainingOnlyInfoAboutSectionsSerialNumberSortedInAscendingOrder [section] + " Series"
+            
+        }
+            
+            // If the below case is true then we are only going to have one Section Header:
+            
+        else if sortBy == "Sorted by: Depth of Section in ascending order" || sortBy == "Sorted by: Width of Section in ascending order" || sortBy == "Sorted by: Section Area in ascending order" || sortBy == "Sorted by: Depth of Section in descending order" || sortBy == "Sorted by: Width of Section in descending order" || sortBy == "Sorted by: Section Area in descending order" {
+            
+            sectionHeaderTitle.text = self.sortBy
+            
+        } else if isSearching == true {
+            
+            sectionHeaderTitle.text = "Searched results:"
+            
+        } else if filtersApplied == true {
+            
+            sectionHeaderTitle.text = "Filtered data:"
+            
+        }
+        
+        sectionHeaderView.addSubview(sectionHeaderTitle)
+        
+        NSLayoutConstraint.activate([
+            
+            sectionHeaderTitle.leftAnchor.constraint(equalTo: sectionHeaderView.leftAnchor, constant: 20),
+            
+            sectionHeaderTitle.rightAnchor.constraint(equalTo: sectionHeaderView.rightAnchor, constant: -20),
+            
+            sectionHeaderTitle.topAnchor.constraint(equalTo: sectionHeaderView.topAnchor),
+            
+            sectionHeaderTitle.bottomAnchor.constraint(equalTo: sectionHeaderView.bottomAnchor)
+            
+        ])
+        
+        return sectionHeaderView
+        
+    }
+    
+    // MARK: - numberOfRowsInSection:
+    
+    // The below method will be used in order to decide how many rows each tableView section is going to have:
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        // The below two arrays will be filled depending on the value of the exchanged Variables namely; sortBy, filtersApplied and isSearching. In turn these Arrays will be used in order to decide how many rows each tableView section is going to have:
+        
+        var extractedSteelSectionsDataArrayFromThePassedCsvFileUsingTheParserConvertedIntoKeyValuePairsTuples = [(String, Int)]()
+        
+        var numberOfRowsRequiredForEachSteelSectionSerialNumber = [String : Int]()
+        
+        if sortBy == "Sorted by: Section Designation in ascending order" || sortBy == "Sorted by: Section Designation in descending order" {
+            
+            // The below line of code will convert the extractedSteelSectionsDataArrayFromThePassedCsvFileUsingTheParser Array into an Array of key-value pairs using tuples, where each value has the number 1. This is needed in order to enable us to count how many times a specific serial number occurs to know how many rows its relevant section needs to have:
+            
+            extractedSteelSectionsDataArrayFromThePassedCsvFileUsingTheParserConvertedIntoKeyValuePairsTuples = steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsSortByOptionsPopoverViewController.map { ($0.sectionSerialNumber, 1) }
+            
+            // The below line of code create a Dictionary from the above tuple array, asking it to add the 1s together every time it finds a duplicate key:
+            
+            numberOfRowsRequiredForEachSteelSectionSerialNumber = Dictionary(extractedSteelSectionsDataArrayFromThePassedCsvFileUsingTheParserConvertedIntoKeyValuePairsTuples, uniquingKeysWith: +)
+            
+            return numberOfRowsRequiredForEachSteelSectionSerialNumber["\(steelSectionsDataArrayContainingOnlyInfoAboutSectionsSerialNumberSortedInAscendingOrDescendingOrder[section])"]!
+            
+        } else if sortBy == "None" && filtersApplied == false && isSearching == false {
+            
+            extractedSteelSectionsDataArrayFromThePassedCsvFileUsingTheParserConvertedIntoKeyValuePairsTuples = extractedSteelSectionsDataArrayFromThePassedCsvFileUsingTheParser.map { ($0.sectionSerialNumber, 1) }
+            
+            // The below line of code create a Dictionary from the above tuple array, asking it to add the 1s together every time it finds a duplicate key:
+            
+            numberOfRowsRequiredForEachSteelSectionSerialNumber = Dictionary(extractedSteelSectionsDataArrayFromThePassedCsvFileUsingTheParserConvertedIntoKeyValuePairsTuples, uniquingKeysWith: +)
+            
+            return numberOfRowsRequiredForEachSteelSectionSerialNumber["\(steelSectionsDataArrayContainingOnlyInfoAboutSectionsSerialNumberSortedInAscendingOrder[section])"]!
+            
+        } else if filtersApplied == true {
+            
+            // Below we are first checking whether any steel section has been found as per the user's filters criteria, if there is then the number of rows to be displayed will be equal to the number of steel sections filtered. Otherwise, if there is not, then we will only display one row which will contain the message saying that "no section has been found as per the applied filters, try again":
+            
+            if steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsDataFilterOptionsViewController.count > 0 {
+                
+                return steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsDataFilterOptionsViewController.count
+                
+            } else {
+                
+                return 1
+                
+            }
+            
+        } else if sortBy == "Sorted by: Depth of Section in ascending order" || sortBy == "Sorted by: Width of Section in ascending order" || sortBy == "Sorted by: Section Area in ascending order" || sortBy == "Sorted by: Depth of Section in descending order" || sortBy == "Sorted by: Width of Section in descending order" || sortBy == "Sorted by: Section Area in descending order" {
+            
+            return steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsSortByOptionsPopoverViewController.count
+            
+        } else if isSearching == true {
+            
+            // Below we are first checking whether any steel section has been found as per the user's searched criteria, if there is then the number of rows to be displayed will be equal to the number of steel sections found. Otherwise, if there is not, then we will only display one row which will contain the message saying that "no section has been found, try again":
+            
+            if steelSectionsDataArrayAsPerSearchedCriteria.count > 0 {
+                
+                return steelSectionsDataArrayAsPerSearchedCriteria.count
+                
+            } else {
+                
+                return 1
+                
+            }
+            
+        } else {
+            
+            return 1
+            
+        }
+        
+    }
+    
+    // MARK: - cellForRowAtIndexPath:
+    
+    // The below function will be used in order to populate the required data for each tableView cell:
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        // The below custom tableView cell will be used to display data related to the following steel sections, UBs, UCs, UBPs, PFCs or T-sections:
+        
+        let cutomTableViewCellForIandPFCandTsteelSections = Bundle.main.loadNibNamed("CustomTableViewCellForIandPFCandTsteelSections", owner: self, options: nil)?.first as! CustomTableViewCellForIandPFCandTsteelSections
+        
+        // The below custom tableView cell will be used to display data related to L-profile steel section such as; Equal Leg Angles and Unequal Leg Angles:
+        
+        let customTableViewCellForLshapedSections = Bundle.main.loadNibNamed("LegSteelSectionCustomTableViewCell", owner: self, options: nil)?.first as! LegSteelSectionCustomTableViewCell
+        
+        // The below custom tableView cell will be used to display specific messages to the user, for example when specific search criteria by the user couldn't find relevant data:
+        
+        let tableViewErrorMessageCell = Bundle.main.loadNibNamed("CustomTableViewMessageCell", owner: self, options: nil)?.first as! CustomTableViewMessageCell
+        
+        // The below arrays will be filled depending on the outcome of the below IF STATEMENTS:
+        
+        var arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView = [SteelSectionParameters]()
+        
+        var arrayContainingDataRelatedOnlyToSectionsSerialNumbers: [String] = [""]
+        
+        if (sortBy == "None" && filtersApplied == false && isSearching == false) || sortBy == "Sorted by: Section Designation in ascending order" ||  sortBy == "Sorted by: Section Designation in descending order" {
+            
+            // The below represents the default case as soon as the tableView gets loaded for the first time:
+            
+            if (sortBy == "None" && filtersApplied == false && isSearching == false) {
+                
+                arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView = extractedSteelSectionsDataArrayFromThePassedCsvFileUsingTheParser
+                
+                arrayContainingDataRelatedOnlyToSectionsSerialNumbers = steelSectionsDataArrayContainingOnlyInfoAboutSectionsSerialNumberSortedInAscendingOrder
+                
+            }
+                
+                // The below IF STATEMENT represents the case when the user select to sort results either by Section Designation in Ascending or Descending order:
+                
+            else {
+                
+                arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView = steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsSortByOptionsPopoverViewController
+                
+                arrayContainingDataRelatedOnlyToSectionsSerialNumbers = steelSectionsDataArrayContainingOnlyInfoAboutSectionsSerialNumberSortedInAscendingOrDescendingOrder
+                
+            }
+            
+            // The below lines of code are needed in order to fill the tableView cells with needed data:
+            
+            // The below checks whether ther user has selected Universal Beams, Universal Columns, Universal Bearing Piles, Parallel Flange Channels or T-sections from the OpenRolledSteelSectionsCollectionViewController, and if so then the customTableViewCellForIandPFCandTsteelSections will be used to display relevant data:
+            
+            if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 0 || userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 1 || userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 2 || userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 3 || userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 6 || userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 7 {
+                
+                // The below is needed in order to display information related to the Section Designation:
+                
+                cutomTableViewCellForIandPFCandTsteelSections.sectionDesignationLabel.text = "Section Designation: \(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.filter({ $0.sectionSerialNumber == arrayContainingDataRelatedOnlyToSectionsSerialNumbers[indexPath.section] }).map({ $0.fullSectionDesignation })[indexPath.row])"
+                
+                // The below is needed in order to display information related to the Total Depth of the Section:
+                
+                cutomTableViewCellForIandPFCandTsteelSections.depthOfSectionLabel.attributedText = cutomTableViewCellForIandPFCandTsteelSections.depthOfSectionLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Depth", cellSubLabelText: "Depth, h [mm] = " + String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.filter({ $0.sectionSerialNumber == "\(arrayContainingDataRelatedOnlyToSectionsSerialNumbers[indexPath.section])" }).map({ $0.sectionTotalDepth })[indexPath.row]), containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 7, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+                
+                // The below is needed in order to display information related to the Width of the Section:
+                
+                cutomTableViewCellForIandPFCandTsteelSections.widthOfSectionLabel.attributedText = cutomTableViewCellForIandPFCandTsteelSections.widthOfSectionLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Width", cellSubLabelText: "Width, b [mm] = " + String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.filter({ $0.sectionSerialNumber == "\(arrayContainingDataRelatedOnlyToSectionsSerialNumbers[indexPath.section])" }).map({ $0.sectionWidth })[indexPath.row]), containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 7, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+                
+                // The below is needed in order to display information related to the Flange Thickness of the Section:
+                
+                cutomTableViewCellForIandPFCandTsteelSections.flangeThicknessLabel.attributedText = cutomTableViewCellForIandPFCandTsteelSections.flangeThicknessLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Flange Thickness", cellSubLabelText: "Flange Thickness, tf [mm] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.filter({ $0.sectionSerialNumber == "\(arrayContainingDataRelatedOnlyToSectionsSerialNumbers[indexPath.section])" }).map({ $0.sectionFlangeThickness })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 18, abbreviationLettersLength: 2, containsSubscriptLetters: true, subScriptLettersStartingLocation: 19, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+                
+                // The below is needed in order to display information related to the Web Thickness of the Section:
+                
+                cutomTableViewCellForIandPFCandTsteelSections.webThicknessLabel.attributedText = cutomTableViewCellForIandPFCandTsteelSections.webThicknessLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Web Thickness", cellSubLabelText: "Web Thickness, tw [mm] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.filter({ $0.sectionSerialNumber == "\(arrayContainingDataRelatedOnlyToSectionsSerialNumbers[indexPath.section])" }).map({ $0.sectionWebThickness })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 15, abbreviationLettersLength: 2, containsSubscriptLetters: true, subScriptLettersStartingLocation: 16, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+                
+                // The below is needed in order to display information related to the Mass per Metre of the Section:
+                
+                cutomTableViewCellForIandPFCandTsteelSections.massPerMetreLabel.attributedText = cutomTableViewCellForIandPFCandTsteelSections.massPerMetreLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Mass", cellSubLabelText: "Mass per Metre [kg/m] = " + String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.filter({ $0.sectionSerialNumber == "\(arrayContainingDataRelatedOnlyToSectionsSerialNumbers[indexPath.section])" }).map({ $0.sectionMassPerMetre })[indexPath.row]), containsAbbreviationLetters: false, abbreviationLettersStartingLocation: 0, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+                
+                // The below is needed in order to display information related to the Area of the Section:
+                
+                cutomTableViewCellForIandPFCandTsteelSections.areaOfSectionLabel.attributedText = cutomTableViewCellForIandPFCandTsteelSections.areaOfSectionLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Area", cellSubLabelText: "Area of Section, A [cm2] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.filter({ $0.sectionSerialNumber == "\(arrayContainingDataRelatedOnlyToSectionsSerialNumbers[indexPath.section])" }).map({ $0.sectionArea })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 17, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 0, containsSuperScriptLetters: true, superScriptLettersStartingLocation: 22, superScriptLettersLength: 1)
+                
+                return cutomTableViewCellForIandPFCandTsteelSections
+                
+            }
+                
+                // The below checks whether ther user has selected Equal Leg Angles or Unequal Leg Angles from the OpenRolledSteelSectionsCollectionViewController, and if so then the customTableViewCellForLshapedSections will be used to display relevant data:
+                
+            else if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 4 || userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 5 {
+                
+                // The below is needed in order to display information related to the Section Designation:
+                
+                customTableViewCellForLshapedSections.steelAngleSectionDesignationLabel.text = "Section Designation: \(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.filter({ $0.sectionSerialNumber == arrayContainingDataRelatedOnlyToSectionsSerialNumbers[indexPath.section] }).map({ $0.fullSectionDesignation })[indexPath.row])"
+                
+                // The below is needed in order to display information related to the Total Depth of the Section:
+                
+                customTableViewCellForLshapedSections.steelAngleDepthLabel.attributedText = customTableViewCellForLshapedSections.steelAngleDepthLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Depth", cellSubLabelText: "Depth, h [mm] = " + String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.filter({ $0.sectionSerialNumber == "\(arrayContainingDataRelatedOnlyToSectionsSerialNumbers[indexPath.section])" }).map({ $0.sectionTotalDepth })[indexPath.row]), containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 7, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+                
+                // The below is needed in order to display information related to the Width of the Section:
+                
+                customTableViewCellForLshapedSections.steelAngleWidthLabel.attributedText = customTableViewCellForLshapedSections.steelAngleWidthLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Width", cellSubLabelText: "Width, b [mm] = " + String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.filter({ $0.sectionSerialNumber == "\(arrayContainingDataRelatedOnlyToSectionsSerialNumbers[indexPath.section])" }).map({ $0.sectionWidth })[indexPath.row]), containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 7, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+                
+                // The below is needed in order to display information related to the Thickness of the Section:
+                
+                customTableViewCellForLshapedSections.steelAngleThicknessLabel.attributedText = customTableViewCellForLshapedSections.steelAngleThicknessLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Leg Thickness", cellSubLabelText: "Leg Thickness, t [mm] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.filter({ $0.sectionSerialNumber == "\(arrayContainingDataRelatedOnlyToSectionsSerialNumbers[indexPath.section])" }).map({ $0.sectionLegThickness })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 15, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+                
+                // The below is needed in order to display information related to the Mass per Metre of the Section:
+                
+                customTableViewCellForLshapedSections.steelAngleMassPerMetre.attributedText = customTableViewCellForLshapedSections.steelAngleMassPerMetre.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Mass", cellSubLabelText: "Mass per Metre [kg/m] = " + String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.filter({ $0.sectionSerialNumber == "\(arrayContainingDataRelatedOnlyToSectionsSerialNumbers[indexPath.section])" }).map({ $0.sectionMassPerMetre })[indexPath.row]), containsAbbreviationLetters: false, abbreviationLettersStartingLocation: 0, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+                
+                // The below is needed in order to display information related to the Area of the Section:
+                
+                customTableViewCellForLshapedSections.steelAngleSectionArea.attributedText = customTableViewCellForLshapedSections.steelAngleSectionArea.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Area", cellSubLabelText: "Area of Section, A [cm2] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.filter({ $0.sectionSerialNumber == "\(arrayContainingDataRelatedOnlyToSectionsSerialNumbers[indexPath.section])" }).map({ $0.sectionArea })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 17, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 0, containsSuperScriptLetters: true, superScriptLettersStartingLocation: 22, superScriptLettersLength: 1)
+                
+                return customTableViewCellForLshapedSections
+                
+            }
+            
+        }
+            
+            // The below catches the cases where the user sorted data by any criteria other than "None", Section Designation in Ascending or Descending order or filters or searches are applied:
+            
+        else {
+            
+            if (sortBy == "Sorted by: Depth of Section in ascending order" || sortBy == "Sorted by: Width of Section in ascending order" || sortBy == "Sorted by: Section Area in ascending order" || sortBy == "Sorted by: Depth of Section in descending order" || sortBy == "Sorted by: Width of Section in descending order" || sortBy == "Sorted by: Section Area in descending order") {
+                
+                arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView = steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsSortByOptionsPopoverViewController
+                
+            } else if isSearching == true {
+                
+                arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView = steelSectionsDataArrayAsPerSearchedCriteria
+                
+                // The below IF STATEMENT catches the case where there are no results to be displayed due to invalid searched criteria:
+                
+                if arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.count == 0 {
+                    
+                    tableViewErrorMessageCell.messageLabel.text = "Invalid search criteria, please try again..."
+                    
+                    return tableViewErrorMessageCell
+                    
+                }
+                
+            } else if filtersApplied == true {
+                
+                arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView = steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsDataFilterOptionsViewController
+                
+                if arrayContainingDataRelatedOnlyToSectionsSerialNumbers.count == 0 {
+                    
+                    tableViewErrorMessageCell.messageLabel.text = "No results matched applied filters, try again."
+                    
+                    return tableViewErrorMessageCell
+                    
+                }
+                
+            }
+            
+            cutomTableViewCellForIandPFCandTsteelSections.sectionDesignationLabel.text = "Section Designation: \(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.fullSectionDesignation })[indexPath.row])"
+            
+            cutomTableViewCellForIandPFCandTsteelSections.depthOfSectionLabel.attributedText = cutomTableViewCellForIandPFCandTsteelSections.depthOfSectionLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Depth", cellSubLabelText: "Depth, h [mm] = " + String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionTotalDepth })[indexPath.row]), containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 7, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+            
+            cutomTableViewCellForIandPFCandTsteelSections.widthOfSectionLabel.attributedText = cutomTableViewCellForIandPFCandTsteelSections.widthOfSectionLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Width", cellSubLabelText: "Width, b [mm] = " + String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionWidth })[indexPath.row]), containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 7, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+            
+            cutomTableViewCellForIandPFCandTsteelSections.flangeThicknessLabel.attributedText = cutomTableViewCellForIandPFCandTsteelSections.flangeThicknessLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Flange Thickness", cellSubLabelText: "Flange Thickness, tf [mm] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionFlangeThickness })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 18, abbreviationLettersLength: 2, containsSubscriptLetters: true, subScriptLettersStartingLocation: 19, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+            
+            cutomTableViewCellForIandPFCandTsteelSections.webThicknessLabel.attributedText = cutomTableViewCellForIandPFCandTsteelSections.webThicknessLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Web Thickness", cellSubLabelText: "Web Thickness, tw [mm] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionWebThickness })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 15, abbreviationLettersLength: 2, containsSubscriptLetters: true, subScriptLettersStartingLocation: 16, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+            
+            cutomTableViewCellForIandPFCandTsteelSections.massPerMetreLabel.attributedText = cutomTableViewCellForIandPFCandTsteelSections.massPerMetreLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Mass", cellSubLabelText: "Mass per Metre [kg/m] = " + String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionMassPerMetre })[indexPath.row]), containsAbbreviationLetters: false, abbreviationLettersStartingLocation: 0, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+            
+            cutomTableViewCellForIandPFCandTsteelSections.areaOfSectionLabel.attributedText = cutomTableViewCellForIandPFCandTsteelSections.areaOfSectionLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Area", cellSubLabelText: "Area of Section, A [cm2] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionArea })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 17, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 0, containsSuperScriptLetters: true, superScriptLettersStartingLocation: 22, superScriptLettersLength: 1)
+            
+            return cutomTableViewCellForIandPFCandTsteelSections
+            
+        }
+        
+        return cutomTableViewCellForIandPFCandTsteelSections
+        
+    }
+    
+}
+
+// MARK: - UITableViewDelegate Extension:
+
+extension SteelSectionsTableViewController: UITableViewDelegate {
+    
+    // The below method is needed in order to decide what should happen when the user taps on a specific disclosure tableView cell icon:
+    
+    func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+        
+        var steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom = [SteelSectionParameters]()
+        
+        var sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom = [String]()
+        
+        // In order to de-initialize/de-allocate the viewController (i.e. SelectedSteelSectionSummaryPage) that gets displayed depending on which tableView cell disclosure icon the user tapped, once it gets dismissed. So that a new one gets initialised when the user taps on a different tableView cell disclosure icon, and therefore, its navigationBar title as well as relevant information about the selected section get displayed. The below is needed in order to avoid having a Strong Reference to the viewController that will be displayed once the user hit on a particular tableView Cell Disclosure Icon. This is achieved by making the reference to the viewController that will be displayed once the user hit on a particular tableView cell inside this method (i.e. a Local Variable) as opposed to outside this methid (Global Variable):
+        
+        let selectedSteelSectionSummaryPageViewControllerInstance = main.instantiateViewController(withIdentifier: "SelectedSteelSectionSummaryPage") as! SelectedSteelSectionSummaryPage
+        
+        selectedSteelSectionSummaryPageViewControllerInstance.delegate = self
+        
+        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController = self.userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController
+        
+        // Below we are sending the sortBy, isSearching and filtersApplied Variables from this viewController to the next one:
+        
+        selectedSteelSectionSummaryPageViewControllerInstance.sortBy = self.sortBy
+        
+        selectedSteelSectionSummaryPageViewControllerInstance.isSearching = self.isSearching
+        
+        selectedSteelSectionSummaryPageViewControllerInstance.filtersApplied = self.filtersApplied
+        
+        selectedSteelSectionSummaryPageViewControllerInstance.receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController = indexPath.section
+        
+        selectedSteelSectionSummaryPageViewControllerInstance.receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController = indexPath.row
+        
+        if sortBy == "None" && isSearching == false && filtersApplied == false {
+            
+            selectedSteelSectionSummaryPageViewControllerInstance.receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData = extractedSteelSectionsDataArrayFromThePassedCsvFileUsingTheParser
+            
+            steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom = extractedSteelSectionsDataArrayFromThePassedCsvFileUsingTheParser
+            
+            selectedSteelSectionSummaryPageViewControllerInstance.receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly = steelSectionsDataArrayContainingOnlyInfoAboutSectionsSerialNumberSortedInAscendingOrder
+            
+            sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom = steelSectionsDataArrayContainingOnlyInfoAboutSectionsSerialNumberSortedInAscendingOrder
+            
+        } else if (sortBy == "Sorted by: Section Designation in ascending order" || sortBy == "Sorted by: Depth of Section in ascending order" || sortBy == "Sorted by: Width of Section in ascending order" || sortBy == "Srted by: Area of Section in ascending order" || sortBy == "Sorted by: Section Designation in descending order" || sortBy == "Sorted by: Depth of Section in descending order" || sortBy == "Sorted by: Width of Section in descending order" || sortBy == "Srted by: Area of Section in descending order") && isSearching == false && filtersApplied == false {
+            
+            selectedSteelSectionSummaryPageViewControllerInstance.receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData = steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsSortByOptionsPopoverViewController
+            
+            steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom = steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsSortByOptionsPopoverViewController
+            
+            selectedSteelSectionSummaryPageViewControllerInstance.receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly = steelSectionsDataArrayContainingOnlyInfoAboutSectionsSerialNumberSortedInAscendingOrDescendingOrder
+            
+            sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom = steelSectionsDataArrayContainingOnlyInfoAboutSectionsSerialNumberSortedInAscendingOrDescendingOrder
+            
+        } else if sortBy == "None" && isSearching == false && filtersApplied == true {
+            
+            selectedSteelSectionSummaryPageViewControllerInstance.receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData = steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsDataFilterOptionsViewController
+            
+            steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom = steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsDataFilterOptionsViewController
+            
+        } else if sortBy == "None" && isSearching == true && filtersApplied == false {
+            
+            selectedSteelSectionSummaryPageViewControllerInstance.receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData = steelSectionsDataArrayAsPerSearchedCriteria
+            
+            steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom = steelSectionsDataArrayAsPerSearchedCriteria
+            
+        }
+        
+        // Declaring an empty ISectionsDimensionsParameters array that will later be filled with the appropriate values:
+        
+        //        var arrayWithAllDataRelatedToUbsSections = [IsectionsDimensionsParameters]()
+        
+        //        if (sortBy == "None" && filtersApplied == false && isSearching == false) || sortBy == "Sorted by: Section Designation in ascending order" ||  sortBy == "Sorted by: Section Designation in descending order" {
+        //
+        //            // If this is the case then there will be a different section for each UB series, thus, below we are creating an empty array that will host all the relevant Sections later on depending on whether Sections need to be sorted in Ascending or Descending order which in turn depends on the SortBy parameters the user has chosen:
+        //
+        //            var arrayWithAllSectionsSerialNumbers: [String]
+        //
+        //            // Below case represents the default case when the tableView first loads up (i.e., sortBy Variable is set to None):
+        //
+        //            if (sortBy == "None" && filtersApplied == false && isSearching == false) {
+        //
+        //                arrayWithAllDataRelatedToUbsSections = originalUniversalBeamsArrayDataExtractedFromTheCSVFileUsingTheParserContainingAllData
+        //
+        //                arrayWithAllSectionsSerialNumbers = universalBeamsArrayContainingAllSectionSerialNumberOnlyDefault
+        //
+        //                // The below represents the case when sortBy Variable is set to anything else apart from None, in Ascending Order or Descending Order (i.e., there will always be one section):
+        //
+        //            } else {
+        //
+        //                arrayWithAllDataRelatedToUbsSections = universalBeamsDataArrayReceivedFromSortDataVCViaProtocol
+        //
+        //                arrayWithAllSectionsSerialNumbers = universalBeamsArrayContainingAllSectionSerialNumberOnlySortedInAscendingOrDescendingOrder
+        //
+        //            }
+        
+        // Below we are sending the properties of the Universal Beam row that its disclouse detail button has been tapped on onto the next view controller which is BlueBookUniversalBeamDataSummaryViewController:
+        
+        switch userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController {
+            
+            // The below case is when the user selected Universal Beams collectionView cell from the previous viewController:
+            
+        case 0:
+            
+            selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionFullSectionDesignationReceivedFromPreviousViewController = "UB \(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.fullSectionDesignation })[indexPath.row])"
+            
+            // The below case is when the user selected Universal Columns collectionView cell from the previous viewController:
+            
+            
+        case 1:
+            
+            selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionFullSectionDesignationReceivedFromPreviousViewController = "UC \(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.fullSectionDesignation })[indexPath.row])"
+            
+            // The below case is when the user selected Universal Bearing Piles collectionView cell from the previous viewController:
+            
+            
+        case 2:
+            
+            selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionFullSectionDesignationReceivedFromPreviousViewController = "UBP \(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.fullSectionDesignation })[indexPath.row])"
+            
+        default:
+            
+            selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionFullSectionDesignationReceivedFromPreviousViewController = "UB \(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.fullSectionDesignation })[indexPath.row])"
+            
+        }
+        
+        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionDepthReceivedFromPreviousViewController = CGFloat(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionTotalDepth })[indexPath.row])
+        
+        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionWidthReceivedFromPreviousViewController = CGFloat(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionWidth })[indexPath.row])
+        
+        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionWebThicknessReceivedFromPreviousViewController = CGFloat(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionWebThickness })[indexPath.row])
+        
+        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionFlangeThicknessReceivedFromPreviousViewController = CGFloat(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionFlangeThickness })[indexPath.row])
+        
+        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionRootRadiusReceivedFromPreviousViewController = CGFloat(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionRootRadiusOne })[indexPath.row])
+        
+        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionDepthBetweenFilletsReceivedFromPreviousViewController = Double(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionDepthBetweenFillets })[indexPath.row])
+        
+        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionAreaReceivedFromPreviousViewController = Double(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionArea })[indexPath.row])
+        
+        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionMassPerMetreReceivedFromPreviousViewController = Double(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionMassPerMetre })[indexPath.row])
+        
+        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionEndClearanceDetailingDimensionReceivedFromPreviousViewController = Int(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionEndClearanceDimensionForDetailing })[indexPath.row])
+        
+        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionNotchNdetailingDimensionReceivedFromPreviousViewController = Int(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionNotchNdimensionForDetailing })[indexPath.row])
+        
+        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionNotchnDetailingDimensionReceivedFromPreviousViewController = Int(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionNotchnDimensionForDetailing })[indexPath.row])
+        
+        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionSecondMomentOfAreaAboutMajorAxisReceivedFromPreviousViewController = Double(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionMajorSecondMomentOfAreaAboutYYaxis })[indexPath.row])
+        
+        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionSecondMomentOfAreaAboutMinorAxisReceivedFromPreviousViewController = Double(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionMinorSecondMomentOfAreaAboutZZaxis })[indexPath.row])
+        
+        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionRadiusOfGyrationAboutMajorAxisReceivedFromPreviousViewController = Double(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionMajorRadiusOfGyrationAboutYYaxis })[indexPath.row])
+        
+        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionRadiusOfGyrationAboutMinorAxisReceivedFromPreviousViewController = Double(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionMinorRadiusOfGyrationAboutZZaxis })[indexPath.row])
+        
+        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionElasticModulusAboutMajorAxisReceivedFromPreviousViewController = Double(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionMajorElasticModulusAboutYYaxis })[indexPath.row])
+        
+        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionElasticModulusAboutMinorAxisReceivedFromPreviousViewController = Double(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionMinorElasticModulusAboutZZaxis })[indexPath.row])
+        
+        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionPlasticModulusAboutMajorAxisReceivedFromPreviousViewController = steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionMajorPlasticModulusAboutYYaxis })[indexPath.row]
+        
+        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionPlasticModulusAboutMinorAxisReceivedFromPreviousViewController = steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionMinorPlasticModulusAboutZZaxis })[indexPath.row]
+        
+        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionBucklingParameterReceivedFromPreviousViewController = steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionBucklingParameterU })[indexPath.row]
+        
+        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionTorsionalIndexReceivedFromPreviousViewController = steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionTorsionalIndexX })[indexPath.row]
+        
+        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionWarpingConstantReceivedFromPreviousViewController = steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionWarpingConstantIwInDm6 })[indexPath.row]
+        
+        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionTorsionalConstantReceivedFromPreviousViewController = steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionTorsionalConstantIt })[indexPath.row]
+        
+        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionSurfaceAreaPerMetreReceivedFromPreviousViewController = steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionSurfaceAreaPerMetre })[indexPath.row]
+        
+        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionSurfaceAreaPerTonneReceivedFromPreviousViewController = steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionSurfaceAreaPerTonne })[indexPath.row]
+        
+        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionRatioForWebLocalBucklingReceivedFromPreviousViewController = steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionLocalWebBucklingRatio })[indexPath.row]
+        
+        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionRatioForFlangeLocalBucklingReceivedFromPreviousViewController = steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionLocalFlangeBucklingRatio })[indexPath.row]
+        
+        self.present(selectedSteelSectionSummaryPageViewControllerInstance, animated: true, completion: nil)
+        
+    }
+    
+    
+    // Otherwise, if sortedBy Variable is set to something other than None, in Ascending or Descending order. Then, there is going to be only one section for all of our data:
+    
+    //        else {
+    //
+    //            if (sortBy == "Sorted by: Depth of Section in ascending order" || sortBy == "Sorted by: Width of Section in ascending order" || sortBy == "Sorted by: Section Area in ascending order" || sortBy == "Sorted by: Depth of Section in descending order" || sortBy == "Sorted by: Width of Section in descending order" || sortBy == "Sorted by: Section Area in descending order") {
+    //
+    //                arrayWithAllDataRelatedToUbsSections = universalBeamsDataArrayReceivedFromSortDataVCViaProtocol
+    //
+    //            } else if isSearching == true {
+    //
+    //                arrayWithAllDataRelatedToUbsSections = universalBeamsDataArrayAsPerTypedSearchCriteria
+    //
+    //            } else if filtersApplied == true {
+    //
+    //                arrayWithAllDataRelatedToUbsSections = universalBeamsDataArrayReceivedFromFilterDataVCViaProtocol
+    //
+    //            }
+    //
+    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamDepthOfSection = CGFloat(arrayWithAllDataRelatedToUbsSections.map({ $0.depthOfSection })[indexPath.row])
+    //
+    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamWidthOfSection = CGFloat(arrayWithAllDataRelatedToUbsSections.map({ $0.widthOfSection })[indexPath.row])
+    //
+    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamWebThickness = CGFloat(arrayWithAllDataRelatedToUbsSections.map({ $0.sectionWebThickness })[indexPath.row])
+    //
+    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamFlangeThickness = CGFloat(arrayWithAllDataRelatedToUbsSections.map({ $0.sectionFlangeThickness })[indexPath.row])
+    //
+    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamRootRadius = CGFloat(arrayWithAllDataRelatedToUbsSections.map({ $0.sectionRootRadius })[indexPath.row])
+    //
+    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamDepthBetweenFillets = Double(arrayWithAllDataRelatedToUbsSections.map({ $0.depthOfSectionBetweenFillets })[indexPath.row])
+    //
+    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamAreaOfSection = Double(arrayWithAllDataRelatedToUbsSections.map({ $0.areaOfSection })[indexPath.row])
+    //
+    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamMassPerMetre = Double(arrayWithAllDataRelatedToUbsSections.map({ $0.sectionMassPerMetre })[indexPath.row])
+    //
+    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamEndClearanceDetailingDimension = Int(arrayWithAllDataRelatedToUbsSections.map({ $0.dimensionForDetailingEndClearance })[indexPath.row])
+    //
+    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamNotchNdetailingDimension = Int(arrayWithAllDataRelatedToUbsSections.map({ $0.dimensionForDetailingNotchN })[indexPath.row])
+    //
+    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamNotchnDetailingDimension = Int(arrayWithAllDataRelatedToUbsSections.map({ $0.dimensionForDetailingNotchn })[indexPath.row])
+    //
+    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamSecondMomentOfAreaAboutMajorAxis = Double(arrayWithAllDataRelatedToUbsSections.map({ $0.secondMomentOfAreaMajorAxis })[indexPath.row])
+    //
+    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamSecondMomentOfAreaAboutMinorAxis = Double(arrayWithAllDataRelatedToUbsSections.map({ $0.secondMomentOfAreaMinorAxis })[indexPath.row])
+    //
+    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamRadiusOfGyrationAboutMajorAxis = Double(arrayWithAllDataRelatedToUbsSections.map({ $0.radiusOfGyrationMajorAxis })[indexPath.row])
+    //
+    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamRadiusOfGyrationAboutMinorAxis = Double(arrayWithAllDataRelatedToUbsSections.map({ $0.radiusOfGyrationMinorAxis })[indexPath.row])
+    //
+    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamElasticModulusAboutMajorAxis = Double(arrayWithAllDataRelatedToUbsSections.map({ $0.elasticModulusMajorAxis })[indexPath.row])
+    //
+    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamElasticModulusAboutMinorAxis = Double(arrayWithAllDataRelatedToUbsSections.map({ $0.elasticModulusMinorAxis })[indexPath.row])
+    //
+    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamPlasticModulusAboutMajorAxis = arrayWithAllDataRelatedToUbsSections.map({ $0.plasticModulusMajorAxis })[indexPath.row]
+    //
+    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamPlasticModulusAboutMinorAxis = arrayWithAllDataRelatedToUbsSections.map({ $0.plasticModulusMinorAxis })[indexPath.row]
+    //
+    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamBucklingParameter = arrayWithAllDataRelatedToUbsSections.map({ $0.bucklingParameter })[indexPath.row]
+    //
+    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamTorsionalIndex = arrayWithAllDataRelatedToUbsSections.map({ $0.torsionalIndex })[indexPath.row]
+    //
+    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamWarpingConstant = arrayWithAllDataRelatedToUbsSections.map({ $0.wrapingConstant })[indexPath.row]
+    //
+    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamTorsionalConstant = arrayWithAllDataRelatedToUbsSections.map({ $0.torsionalConstant })[indexPath.row]
+    //
+    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamSurfaceAreaPerMetre = arrayWithAllDataRelatedToUbsSections.map({ $0.surfaceAreaPerMetre })[indexPath.row]
+    //
+    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamSurfaceAreaPerTonne = arrayWithAllDataRelatedToUbsSections.map({ $0.surfaceAreaPerTonne })[indexPath.row]
+    //
+    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamRatioForWebLocalBuckling = arrayWithAllDataRelatedToUbsSections.map({ $0.ratioForLocalWebBuckling })[indexPath.row]
+    //
+    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamRatioForFlangeLocalBuckling = arrayWithAllDataRelatedToUbsSections.map({ $0.ratioForLocalFlangeBuckling })[indexPath.row]
+    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamSectionDesignation = arrayWithAllDataRelatedToUbsSections.map({ $0.fullSectionDesignation })[indexPath.row]
+    //
+    //        }
+    
+    
+    
+    //    }
+    
+}
+
+// The below extension is needed in order to extend the Array's functionalities so that any duplicate item inside Arrays can be removed:
+
+extension Array where Element: Hashable {
+    
+    func removingDuplicates() -> [Element] {
+        
+        var addedDict = [Element: Bool]()
+        
+        return filter {
+            
+            addedDict.updateValue(true, forKey: $0) == nil
+            
+        }
+        
+    }
+    
+    mutating func removeDuplicates() {
+        
+        self = self.removingDuplicates()
+        
+    }
+    
+}
+
+// MARK: - Extension for UISearchBar:
+
+// The below extension is needed in order to make the process of changing UISearchBar parameters much more easier and accessible:
+
+extension SteelSectionsTableViewController: UISearchBarDelegate {
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
+        let newText: NSMutableString = NSMutableString(string: searchText)
+        
+        // If the below case is true then the user selected Universal Beams from the previous viewController:
+        
+        if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 0 {
+            
+            if searchText.isEmpty == false {
+                
+                // "101" is excluded from the below line of code, since if the first three entered digits by the user are 101 then there is the possible that the section the user is looking for is UB 1016 x 305 x ...:
+                
+                if searchText.count == 3 && searchText != "101" {
+                    
+                    newText.append(" x ")
+                    
+                    searchBar.text = String(newText)
+                    
+                } else if searchText.count == 4 && searchText == "1016" {
+                    
+                    newText.append(" x ")
+                    
+                    searchBar.text = String(newText)
+                    
+                } else if searchText.count == 8 && ( searchText.contains("127") == true || searchText.contains("152") == true ) {
+                    
+                    newText.append(" x ")
+                    
+                    searchBar.text = String(newText)
+                    
+                } else if searchText.count == 9 && searchText.contains("1016") == false && ( searchText.contains("127") == false || searchText.contains("152") == false ) {
+                    
+                    newText.append(" x ")
+                    
+                    searchBar.text = String(newText)
+                    
+                } else if searchText.count == 10 && searchText.contains("1016") == true {
+                    
+                    newText.append(" x ")
+                    
+                    searchBar.text = String(newText)
+                    
+                } else if searchText.count == 11 && searchText.contains("1016") == false && searchText.contains("127") == false && searchText.contains("152") == false {
+                    
+                    newText.deleteCharacters(in: NSRange(location: 8, length: 3))
+                    
+                    searchBar.text = String(newText)
+                    
+                } else if searchText.count == 5 && searchText.contains("1016") == false {
+                    
+                    newText.deleteCharacters(in: NSRange(location: 2, length: 3))
+                    
+                    searchBar.text = String(newText)
+                    
+                } else if searchText.count == 6 && searchText.contains("1016") == true {
+                    
+                    newText.deleteCharacters(in: NSRange(location: 2, length: 4))
+                    
+                    searchBar.text = String(newText)
+                    
+                } else if searchText.count == 10 && (searchText.contains("127") == true || searchText.contains("152") == true) {
+                    
+                    newText.deleteCharacters(in: NSRange(location: 7, length: 3))
+                    
+                    searchBar.text = String(newText)
+                    
+                }
+                    
+                    // If the below case is true then the user selected Universal Columns from the previous viewController:
+                    
+                else if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 1 {
+                    
+                    
+                } else if searchText.count == 12 && searchText.contains("1016") == true {
+                    
+                    newText.deleteCharacters(in: NSRange(location: 9, length: 3))
+                    
+                    searchBar.text = String(newText)
+                    
+                }
+                
+                steelSectionsDataArrayAsPerSearchedCriteria = extractedSteelSectionsDataArrayFromThePassedCsvFileUsingTheParser.filter({ $0.fullSectionDesignation.lowercased().prefix(searchText.count) == searchText.lowercased() })
+                
+                isSearching = true
+                
+                sortBy = "None"
+                
+                filtersApplied = false
+                
+                self.steelSectionsTableView.reloadData()
+                
+            }
+            
+        }
+            
+        else {
+            
+            isSearching = false
+            
+            self.steelSectionsTableView.reloadData()
+            
+        }
+        
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        
+        let totalCharacters = (searchBar.text?.appending(text).count ?? 0) - range.length
+        
+        // The below allow the user to input only numbers in the Search Bar:
+        
+        if searchBar.keyboardType == .numberPad {
+            
+            // The below does not allow the user to input number 0 as a first character inside the searchBar:
+            
+            if searchBar.text?.count == 0 && text == "0" {
+                
+                return false
+                
+            }
+                
+                // Check for invalid input characters:
+                
+            else if CharacterSet(charactersIn: "0123456789").isSuperset(of: CharacterSet(charactersIn: text)) {
+                
+                return totalCharacters <= 16 && true
+                
+            } else {
+                
+                return false
+                
+            }
+            
+        }
+        
+        return true
+        
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        isSearching = false
+        
+        // The below line of code is needed in order to make the on-screen keyboard disappears when the search field is empty:
+        
+        self.searchBar.endEditing(true)
+        
+    }
+    
+    // MARK: - Filter Data button pressed:
+    
+    func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {
+        
+        // Below we are passing sortBy, isSearching and filtersApplied variables onto TableViewSteelSectionsDataFilterOptions:
+        
+        tableViewSteelSectionsDataFilterOptionsViewController.sortBy = self.sortBy
+        
+        tableViewSteelSectionsDataFilterOptionsViewController.isSearching = self.isSearching
+        
+        tableViewSteelSectionsDataFilterOptionsViewController.filtersApplied = self.filtersApplied
+        
+        tableViewSteelSectionsDataFilterOptionsViewController.delegate = self
+        
+        tableViewSteelSectionsDataFilterOptionsViewController.receivedSteelSectionsDataArrayFromSteelSectionsTableViewController = extractedSteelSectionsDataArrayFromThePassedCsvFileUsingTheParser
+        
+        self.present(tableViewSteelSectionsDataFilterOptionsViewController, animated: true, completion: nil)
+        
+    }
+    
+}
+
+// MARK: - Protocol extension in order to receive data from SortDataPopOverVC or FilterDataVC:
+
+extension SteelSectionsTableViewController: PassingDataBackwardsBetweenViewControllersProtocol {
+    func dataToBePassedUsingProtocol(datComingFromViewController: String, configuredArrayContainingSteelSectionsData: [SteelSectionParameters], configuredArrayContainingSteelSectionsSerialNumbersOnly: [String], configuredSortByVariable: String, configuredFiltersAppliedVariable: Bool, configuredIsSearchingVariable: Bool, exchangedUserSelectedTableCellSectionNumber: Int, exchangedUserSelectedTableCellRowNumber: Int) {
+        self.sortBy = configuredSortByVariable
+        
+    }
+    
+    
+    //    func dataToBePassedUsingProtocol(configuredArrayContainingSteelSectionsData: [IsectionsDimensionsParameters], configuredArrayContainingSteelSectionsSerialNumbersOnly: [String], configuredSortByVariable: String, configuredFiltersAppliedVariable: Bool, configuredIsSearchingVariable: Bool, exchangedUserSelectedTableCellSectionNumber: Int, exchangedUserSelectedTableCellRowNumber: Int) {
+    //
+    //        self.sortBy = configuredSortByVariable
+    //
+    //        self.filtersApplied = configuredFiltersAppliedVariable
+    //
+    //        self.isSearching = configuredIsSearchingVariable
+    //
+    //        searchBar.text = ""
+    //
+    //        if isSearching == false && filtersApplied == false && (sortBy == "Sorted by: Section Designation in ascending order" || sortBy == "Sorted by: Section Designation in descending order" || sortBy == "Sorted by: Depth of Section in ascending order" || sortBy == "Sorted by: Width of Section in ascending order" || sortBy == "Sorted by: Section Area in ascending order" || sortBy == "Sorted by: Depth of Section in descending order" || sortBy == "Sorted by: Width of Section in descending order" || sortBy == "Sorted by: Section Area in descending order") {
+    //
+    //            self.steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsSortByOptionsPopoverViewController = configuredArrayContainingSteelSectionsData
+    //
+    //            self.steelSectionsDataArrayContainingOnlyInfoAboutSectionsSerialNumberSortedInAscendingOrDescendingOrder = configuredArrayContainingSteelSectionsSerialNumbersOnly
+    //
+    //        } else if filtersApplied == true {
+    //
+    //            self.steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsDataFilterOptionsViewController = configuredArrayContainingSteelSectionsData
+    //
+    //        }
+    //
+    //            self.steelSectionsTableView.scrollToRow(at: IndexPath.init(row: 0, section: 0), at: UITableView.ScrollPosition.top, animated: true)
+    //
+    //            self.view.alpha = 1.0
+    //
+    //            self.steelSectionsTableView.reloadData()
+    //
+    //    }
+    
+    //    func dataToBePassedUsingProtocol(modifiedArrayToBePassed: [IsectionsDimensionsParameters], sortBy: String, filtersApplied: Bool, isSearching: Bool) {
+    //
+    //        self.sortBy = sortBy
+    //
+    //        self.filtersApplied = filtersApplied
+    //
+    //        self.isSearching = isSearching
+    //
+    //        searchBar.text = ""
+    //
+    //        if isSearching == false && filtersApplied == false && (sortBy == "Sorted by: Section Designation in ascending order" || sortBy == "Sorted by: Section Designation in descending order" || sortBy == "Sorted by: Depth of Section in ascending order" || sortBy == "Sorted by: Width of Section in ascending order" || sortBy == "Sorted by: Section Area in ascending order" || sortBy == "Sorted by: Depth of Section in descending order" || sortBy == "Sorted by: Width of Section in descending order" || sortBy == "Sorted by: Section Area in descending order") {
+    //
+    //            // In this case the title for each section header is equal to each section serial number:
+    //
+    //            self.steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsSortByOptionsPopoverViewController = modifiedArrayToBePassed
+    //
+    //            self.steelSectionsDataArrayContainingOnlyInfoAboutSectionsSerialNumberSortedInAscendingOrDescendingOrder = modifiedArrayToBePassed.map({ return $0.sectionSerialNumber }).removingDuplicates()
+    //
+    //        } else if filtersApplied == true {
+    //
+    //            self.steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsDataFilterOptionsViewController = modifiedArrayToBePassed
+    //
+    //        }
+    //
+    //        self.steelSectionsTableView.scrollToRow(at: IndexPath.init(row: 0, section: 0), at: UITableView.ScrollPosition.top, animated: true)
+    //
+    //        self.view.alpha = 1.0
+    //
+    //        self.steelSectionsTableView.reloadData()
+    //
+    //    }
+    
+}
+
+// MARK: - Protocol extension in order to receive data from BlueBookUniversalBeamDataSummaryVC:
+
+//extension SteelSectionsTableViewController: ProtocolToPassDataBackwardsFromDataSummaryVcToPreviousVc {
+//
+//    func dataToBePassedUsingProtocol(modifiedArrayContainingAllUBsDataToBePassed: [IsectionsDimensionsParameters], modifiedArrayContainingSectionSerialNumbersDataToBePassed: [String], passedSortBy: String, passedFiltersApplied: Bool, passedIsSearching: Bool, passedSelectedTableSectionNumberFromPreviousVc: Int, passedSelectedTableRowNumberFromPreviousVc: Int) {
+//
+//        self.sortBy = passedSortBy
+//
+//        self.isSearching = passedIsSearching
+//
+//        self.filtersApplied = passedFiltersApplied
+//
+//        self.lastSelectedTableRowByTheUser = passedSelectedTableRowNumberFromPreviousVc
+//
+//        self.lastSelectedTableSectionByTheUser = passedSelectedTableSectionNumberFromPreviousVc
+//
+//        if sortBy == "None" && isSearching == false && filtersApplied == false {
+//
+//            originalUniversalBeamsArrayDataExtractedFromTheCSVFileUsingTheParserContainingAllData = modifiedArrayContainingAllUBsDataToBePassed
+//
+//            universalBeamsArrayContainingAllSectionSerialNumberOnlyDefault = modifiedArrayContainingSectionSerialNumbersDataToBePassed
+//
+//        } else if (sortBy == "Sorted by: Section Designation in ascending order" || sortBy == "Sorted by: Depth of Section in ascending order" || sortBy == "Sorted by: Width of Section in ascending order" || sortBy == "Srted by: Area of Section in ascending order" || sortBy == "Sorted by: Section Designation in descending order" || sortBy == "Sorted by: Depth of Section in descending order" || sortBy == "Sorted by: Width of Section in descending order" || sortBy == "Srted by: Area of Section in descending order") && isSearching == false && filtersApplied == false {
+//
+//            universalBeamsDataArrayReceivedFromSortDataVCViaProtocol = modifiedArrayContainingAllUBsDataToBePassed
+//
+//            universalBeamsArrayContainingAllSectionSerialNumberOnlySortedInAscendingOrDescendingOrder = modifiedArrayContainingSectionSerialNumbersDataToBePassed
+//
+//        } else if sortBy == "None" && isSearching == false && filtersApplied == true {
+//            universalBeamsDataArrayReceivedFromFilterDataVCViaProtocol = modifiedArrayContainingAllUBsDataToBePassed
+//
+//        } else if sortBy == "None" && isSearching == true && filtersApplied == false {
+//
+//            universalBeamsDataArrayAsPerTypedSearchCriteria = modifiedArrayContainingAllUBsDataToBePassed
+//
+//        }
+//
+//    }
+//
+//}
+
+// MARK: - UIPopoverPresentationControllerDelegate Extension:
+
+extension SteelSectionsTableViewController: UIPopoverPresentationControllerDelegate {
+    
+    func prepareForPopoverPresentation(_ popoverPresentationController: UIPopoverPresentationController) {
+        
+    }
+    
+    //UIPopoverPresentationControllerDelegate inherits from UIAdaptivePresentationControllerDelegate, we will use this method to define the presentation style for popover presentation controller
+    
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        
+        return .none
+        
+    }
+    
+    // The below function gets called whenever the SortDataPopOverVC gets dismissed:
+    
+    func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
+        
+        self.view.alpha = 1.0
+        
+    }
+    
+    func popoverPresentationControllerShouldDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) -> Bool {
+        
+        return true
+        
+    }
+    
+}
+
+// MARK: - UISearchBar Extension to allow for quick changes to be made for placeholder text, text typed by the user inside the UISearchBar textfield and search manifying glass icon colourv:
+
+extension UISearchBar {
+    
+    func getTextField() -> UITextField? { return value(forKey: "searchField") as? UITextField }
+    
+    func set(textColor: UIColor) { if let textField = getTextField() { textField.textColor = textColor } }
+    
+    func setPlaceholder(textColor: UIColor) { getTextField()?.setPlaceholder(textColor: textColor) }
+    
+    func setClearButton(color: UIColor) { getTextField()?.setClearButton(color: color) }
+    
+    func setTextField(color: UIColor) {
+        
+        guard let textField = getTextField() else { return }
+        
+        switch searchBarStyle {
+            
+        case .minimal:
+            
+            textField.layer.backgroundColor = color.cgColor
+            
+            textField.layer.cornerRadius = 6
+            
+        case .prominent, .default: textField.backgroundColor = color
+            
+        @unknown default: break
+            
+        }
+        
+    }
+    
+    func setSearchImage(color: UIColor) {
+        
+        guard let imageView = getTextField()?.leftView as? UIImageView else { return }
+        
+        imageView.tintColor = color
+        
+        imageView.image = imageView.image?.withRenderingMode(.alwaysTemplate)
+        
+    }
+    
+}
+
+private extension UITextField {
+    
+    private class Label: UILabel {
+        
+        private var _textColor = UIColor.lightGray
+        
+        override var textColor: UIColor! {
+            
+            set { super.textColor = _textColor }
+            
+            get { return _textColor }
+            
+        }
+        
+        init(label: UILabel, textColor: UIColor = .lightGray) {
+            
+            _textColor = textColor
+            
+            super.init(frame: label.frame)
+            
+            self.text = label.text
+            
+            self.font = label.font
+            
+        }
+        
+        required init?(coder: NSCoder) { super.init(coder: coder) }
+        
+    }
+    
+    private class ClearButtonImage {
+        
+        static private var _image: UIImage?
+        
+        static private var semaphore = DispatchSemaphore(value: 1)
+        
+        static func getImage(closure: @escaping (UIImage?)->()) {
+            
+            DispatchQueue.global(qos: .userInteractive).async {
+                
+                semaphore.wait()
+                
+                DispatchQueue.main.async {
+                    
+                    if let image = _image { closure(image); semaphore.signal(); return }
+                    
+                    guard let window = UIApplication.shared.windows.first else { semaphore.signal(); return }
+                    
+                    let searchBar = UISearchBar(frame: CGRect(x: 0, y: -200, width: UIScreen.main.bounds.width, height: 44))
+                    window.rootViewController?.view.addSubview(searchBar)
+                    
+                    searchBar.text = "txt"
+                    
+                    searchBar.layoutIfNeeded()
+                    
+                    _image = searchBar.getTextField()?.getClearButton()?.image(for: .normal)
+                    
+                    closure(_image)
+                    
+                    searchBar.removeFromSuperview()
+                    
+                    semaphore.signal()
+                    
+                }
+                
+            }
+            
+        }
+        
+    }
+    
+    func setClearButton(color: UIColor) {
+        
+        ClearButtonImage.getImage { [weak self] image in
+            guard   let image = image,
+                let button = self?.getClearButton() else { return }
+            
+            button.imageView?.tintColor = color
+            button.setImage(image.withRenderingMode(.alwaysTemplate), for: .normal)
+        }
+        
+    }
+    
+    var placeholderLabel: UILabel? { return value(forKey: "placeholderLabel") as? UILabel }
+    
+    func setPlaceholder(textColor: UIColor) {
+        
+        guard let placeholderLabel = placeholderLabel else { return }
+        
+        let label = Label(label: placeholderLabel, textColor: textColor)
+        
+        setValue(label, forKey: "placeholderLabel")
+        
+    }
+    
+    func getClearButton() -> UIButton? { return value(forKey: "clearButton") as? UIButton }
+    
+}
+
+private extension UILabel {
+    
+    func returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: String, cellTitleRelatedTo: String, cellSubLabelText: String, containsAbbreviationLetters: Bool, abbreviationLettersStartingLocation: Int, abbreviationLettersLength: Int, containsSubscriptLetters: Bool, subScriptLettersStartingLocation: Int, subScriptLettersLength: Int, containsSuperScriptLetters: Bool, superScriptLettersStartingLocation: Int, superScriptLettersLength: Int) -> NSAttributedString {
+        
+        let tableViewCellSubLabelText: String = cellSubLabelText
+        
+        let checkIfSortByCriteriaForUserToChooseFromExistInSortByCriteriaChosenByUser = dataSortedBy.contains(cellTitleRelatedTo)
+        
+        let cellSubLabelAttributedString: NSMutableAttributedString = NSMutableAttributedString(string: tableViewCellSubLabelText)
+        
+        let cellSubLabelGeneralAttributes: [NSAttributedString.Key: Any] = [
+            
+            .font: UIFont(name: "AppleSDGothicNeo-Regular", size: 15)!,
+            
+            .foregroundColor: UIColor(named: "Table View Cell Sub-Label Text Colour")!,
+            
+        ]
+        
+        let cellSubLabelAbbrivationLettersAttributes: [NSAttributedString.Key: Any] = [
+            
+            .font: UIFont(name: "AppleSDGothicNeo-Medium", size: 16)!,
+            
+            .foregroundColor: UIColor(named: "Table View Cell Sub-Label Abbreviation Letter Text Colour")!,
+            
+        ]
+        
+        let cellSubLabelSubScriptLettersAttributes: [NSAttributedString.Key: Any] = [
+            
+            .baselineOffset: -7,
+            
+        ]
+        
+        let cellSubLabelSuperScriptLettersAttributes: [NSAttributedString.Key: Any] = [
+            
+            .baselineOffset: 7,
+            
+            .font: UIFont(name: "AppleSDGothicNeo-Regular", size: 12)!
+            
+        ]
+        
+        let cellTextUnderlineAttributes: [NSAttributedString.Key: Any] = [
+            
+            .underlineStyle: NSUnderlineStyle.single.rawValue
+            
+        ]
+        cellSubLabelAttributedString.addAttributes(cellSubLabelGeneralAttributes, range: NSRange(location: 0, length: cellSubLabelAttributedString.length))
+        
+        if checkIfSortByCriteriaForUserToChooseFromExistInSortByCriteriaChosenByUser == true {
+            cellSubLabelAttributedString.addAttributes(cellTextUnderlineAttributes, range: NSRange(location: 0, length: cellSubLabelAttributedString.length))
+            
+        }
+        
+        if containsAbbreviationLetters == true && containsSubscriptLetters == false && containsSuperScriptLetters == false {
+            cellSubLabelAttributedString.addAttributes(cellSubLabelAbbrivationLettersAttributes, range: NSRange(location: abbreviationLettersStartingLocation, length: abbreviationLettersLength))
+            
+        } else if containsAbbreviationLetters == true && containsSubscriptLetters == true && containsSuperScriptLetters == false {
+            
+            cellSubLabelAttributedString.addAttributes(cellSubLabelAbbrivationLettersAttributes, range: NSRange(location: abbreviationLettersStartingLocation, length: abbreviationLettersLength))
+            
+            cellSubLabelAttributedString.addAttributes(cellSubLabelSubScriptLettersAttributes, range: NSRange(location: subScriptLettersStartingLocation, length: subScriptLettersLength))
+            
+            
+        } else if containsAbbreviationLetters == true && containsSuperScriptLetters == true && containsSubscriptLetters == false {
+            
+            cellSubLabelAttributedString.addAttributes(cellSubLabelAbbrivationLettersAttributes, range: NSRange(location: abbreviationLettersStartingLocation, length: abbreviationLettersLength))
+            
+            cellSubLabelAttributedString.addAttributes(cellSubLabelSuperScriptLettersAttributes, range: NSRange(location: superScriptLettersStartingLocation, length: superScriptLettersLength))
+            
+        } else if containsAbbreviationLetters == true && containsSubscriptLetters == true && containsSuperScriptLetters == true {
+            
+            cellSubLabelAttributedString.addAttributes(cellSubLabelAbbrivationLettersAttributes, range: NSRange(location: abbreviationLettersStartingLocation, length: abbreviationLettersLength))
+            
+            cellSubLabelAttributedString.addAttributes(cellSubLabelSubScriptLettersAttributes, range: NSRange(location: subScriptLettersStartingLocation, length: subScriptLettersLength))
+            
+            cellSubLabelAttributedString.addAttributes(cellSubLabelSuperScriptLettersAttributes, range: NSRange(location: superScriptLettersStartingLocation, length: superScriptLettersLength))
+            
+        }
+            
+        else {
+            
+            return cellSubLabelAttributedString
+            
+        }
+        
+        return cellSubLabelAttributedString
+        
+    }
+    
+}

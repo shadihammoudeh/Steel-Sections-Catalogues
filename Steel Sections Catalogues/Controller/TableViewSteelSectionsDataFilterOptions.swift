@@ -10,12 +10,12 @@ import UIKit
 
 import RangeSeekSlider
 
-class BlueBookUniversalBeamsSectionsToEurocodesFilterByViewController: UIViewController {
+class TableViewSteelSectionsDataFilterOptions: UIViewController {
     
     // MARK: - Assigning protocol delegate:
     
-    var delegate: PassingDataBackwardsProtocol?
-    
+    weak var delegate: PassingDataBackwardsBetweenViewControllersProtocol?
+
     // MARK: - Instance scope variables and constants declarations:
     
     // The below variables (i.e., sortBy, isSearching and filtersApplied) will be passed from BlueBookUniversalBeamsVC, and when this ViewController gets dismissed, any made changes to these variables will be sent back to BlueBookUniversalBeamsVC using the Protocol:
@@ -26,7 +26,7 @@ class BlueBookUniversalBeamsSectionsToEurocodesFilterByViewController: UIViewCon
     
     var filtersApplied: Bool = false
     
-    var universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC = [IsectionsDimensionsParameters]()
+    var receivedSteelSectionsDataArrayFromSteelSectionsTableViewController = [SteelSectionParameters]()
     
     let rangeSliderTitleTopPaddingFromNavigationBarBottom: CGFloat = 20
     
@@ -186,15 +186,15 @@ class BlueBookUniversalBeamsSectionsToEurocodesFilterByViewController: UIViewCon
         
         // MARK: - Extracting appropriate Arrays data for Range Sliders:
         
-        extractedDepthOfSection = universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC.map({ return $0.depthOfSection })
+        extractedDepthOfSection = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionTotalDepth })
         
-        extractedWidthOfSection = universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC.map({ return $0.widthOfSection })
+        extractedWidthOfSection = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionWidth })
         
-        extractedSectionWebThickness = universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC.map({ return $0.sectionWebThickness })
+        extractedSectionWebThickness = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionWebThickness })
         
-        extractedSectionFlangeThickness = universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC.map({ return $0.sectionFlangeThickness })
+        extractedSectionFlangeThickness = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionFlangeThickness })
         
-        extractedSectionArea = universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC.map({ return $0.areaOfSection })
+        extractedSectionArea = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionArea })
         
         // MARK: - Declaring range sliders:
         
@@ -266,15 +266,8 @@ class BlueBookUniversalBeamsSectionsToEurocodesFilterByViewController: UIViewCon
         
         scrollView.addSubview(applyFiltersButton)
         
+    }
         
-
-    }
-    
-    
-    override func viewWillAppear(_ animated: Bool) {
-                
-    }
-    
     // MARK: - viewWillLayoutSubviews():
     
     override func viewWillLayoutSubviews() {
@@ -343,22 +336,20 @@ class BlueBookUniversalBeamsSectionsToEurocodesFilterByViewController: UIViewCon
             
         else if sender.tag == 2 {
             
-            var filteredArrayToBeSentBack = [IsectionsDimensionsParameters]()
+            var filteredArrayToBeSentBack = [SteelSectionParameters]()
             
             if customDepthOfSectionRangeSlider?.selectedMinValue == CGFloat(minimumDepthOfSection!) && customDepthOfSectionRangeSlider?.selectedMaxValue == CGFloat(maximumDepthOfSection!) && customWidthOfSectionRangeSlider?.selectedMinValue == CGFloat(minimumWidthOfSection!) && customWidthOfSectionRangeSlider?.selectedMaxValue == CGFloat(maximumWidthOfSection!) && customSectionWebThicknessSlider?.selectedMinValue == CGFloat(minimumSectionWebThickness!) && customSectionWebThicknessSlider?.selectedMaxValue == CGFloat(maximumSectionWebThickness!) && customSectionFlangeThicknessSlider?.selectedMinValue == CGFloat(minimumSectionFlangeThickness!) && customSectionFlangeThicknessSlider?.selectedMaxValue == CGFloat(maximumSectionFlangeThickness!) && customSectionAreaSlider?.selectedMinValue == CGFloat(minimumAreaOfSection!) && customSectionAreaSlider?.selectedMaxValue == CGFloat(maximumAreaOfSection!) {
                 
-                filteredArrayToBeSentBack = universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC
+                filteredArrayToBeSentBack = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController
                 
-                delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: filteredArrayToBeSentBack, sortBy: "None", filtersApplied: false, isSearching: false)
-                
+                delegate?.dataToBePassedUsingProtocol(datComingFromViewController: "TableViewSteelSectionsDataFilterOptions", configuredArrayContainingSteelSectionsData: filteredArrayToBeSentBack, configuredArrayContainingSteelSectionsSerialNumbersOnly: [""], configuredSortByVariable: "None", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
+            
             } else {
-                
-                if delegate != nil {
+
+                    filteredArrayToBeSentBack = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.filter( { return (($0.sectionTotalDepth >= Double(customDepthOfSectionRangeSlider!.selectedMinValue)) && ($0.sectionTotalDepth <= Double(customDepthOfSectionRangeSlider!.selectedMaxValue)) && ($0.sectionWidth >= Double(customWidthOfSectionRangeSlider!.selectedMinValue)) && ($0.sectionWidth <= Double(customWidthOfSectionRangeSlider!.selectedMaxValue)) && ($0.sectionWebThickness >= Double(customSectionWebThicknessSlider!.selectedMinValue)) && ($0.sectionWebThickness <= Double(customSectionWebThicknessSlider!.selectedMaxValue)) && ($0.sectionFlangeThickness >= Double(customSectionFlangeThicknessSlider!.selectedMinValue)) && ($0.sectionFlangeThickness <= Double(customSectionFlangeThicknessSlider!.selectedMaxValue)) && ($0.sectionArea >= Double(customSectionAreaSlider!.selectedMinValue)) && ($0.sectionArea <= Double(customSectionAreaSlider!.selectedMaxValue))) } )
                     
-                    filteredArrayToBeSentBack = universalBeamsDataArrayReceivedFromBlueBookUniversalBeamsVC.filter( { return (($0.depthOfSection >= Double(customDepthOfSectionRangeSlider!.selectedMinValue)) && ($0.depthOfSection <= Double(customDepthOfSectionRangeSlider!.selectedMaxValue)) && ($0.widthOfSection >= Double(customWidthOfSectionRangeSlider!.selectedMinValue)) && ($0.widthOfSection <= Double(customWidthOfSectionRangeSlider!.selectedMaxValue)) && ($0.sectionWebThickness >= Double(customSectionWebThicknessSlider!.selectedMinValue)) && ($0.sectionWebThickness <= Double(customSectionWebThicknessSlider!.selectedMaxValue)) && ($0.sectionFlangeThickness >= Double(customSectionFlangeThicknessSlider!.selectedMinValue)) && ($0.sectionFlangeThickness <= Double(customSectionFlangeThicknessSlider!.selectedMaxValue)) && ($0.areaOfSection >= Double(customSectionAreaSlider!.selectedMinValue)) && ($0.areaOfSection <= Double(customSectionAreaSlider!.selectedMaxValue))) } )
-                    
-                    delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: filteredArrayToBeSentBack, sortBy: "None", filtersApplied: true, isSearching: false)
-                    
+                    delegate?.dataToBePassedUsingProtocol(datComingFromViewController: "TableViewSteelSectionsDataFilterOptions", configuredArrayContainingSteelSectionsData: filteredArrayToBeSentBack, configuredArrayContainingSteelSectionsSerialNumbersOnly: [""], configuredSortByVariable: "None", configuredFiltersAppliedVariable: true, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
+
                 }
                 
             }
@@ -368,8 +359,6 @@ class BlueBookUniversalBeamsSectionsToEurocodesFilterByViewController: UIViewCon
             dismiss(animated: true, completion: {})
             
         }
-        
-    }
     
     // MARK: - Defining the setupConstraints function:
     
@@ -468,13 +457,13 @@ class BlueBookUniversalBeamsSectionsToEurocodesFilterByViewController: UIViewCon
 
 // MARK: - Extensions:
 
-extension BlueBookUniversalBeamsSectionsToEurocodesFilterByViewController: UINavigationBarDelegate {
+extension TableViewSteelSectionsDataFilterOptions: UINavigationBarDelegate {
     
     @objc func navigationBarLeftButtonPressed(sender : UIButton) {
         
         let main = UIStoryboard(name: "Main", bundle: nil)
         
-        let previousViewControllerToGoTo = main.instantiateViewController(withIdentifier: "BlueBookUniversalBeamsSectionsToEurocodesViewController")
+        let previousViewControllerToGoTo = main.instantiateViewController(withIdentifier: "SteelSectionsTableViewController")
         
         self.present(previousViewControllerToGoTo, animated: true, completion: nil)
         
@@ -488,24 +477,18 @@ extension BlueBookUniversalBeamsSectionsToEurocodesFilterByViewController: UINav
     
 }
 
-extension BlueBookUniversalBeamsSectionsToEurocodesFilterByViewController: RangeSeekSliderDelegate {
+extension TableViewSteelSectionsDataFilterOptions: RangeSeekSliderDelegate {
     
     func rangeSeekSlider(_ slider: RangeSeekSlider, didChange minValue: CGFloat, maxValue: CGFloat) {
-        
-        print("Standard slider updated. Min Value: \(minValue) Max Value: \(maxValue)")
-        
+                
     }
     
     func didStartTouches(in slider: RangeSeekSlider) {
-        
-        print("did start touches")
-        
+                
     }
     
     func didEndTouches(in slider: RangeSeekSlider) {
-        
-        print("did end touches")
-        
+                
     }
     
     func rangeSeekSlider(_ slider: RangeSeekSlider, stringForMinValue minValue: CGFloat) -> String? {

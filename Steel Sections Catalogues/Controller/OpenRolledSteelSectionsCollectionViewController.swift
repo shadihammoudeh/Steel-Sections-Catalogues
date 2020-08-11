@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BlueBookOpenRolledSectionsVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+class OpenRolledSteelSectionsCollectionViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
     // The below Variables obtain their values from the BlueBookTabController Class when viewDidLayoutSubviews cycle gets initiated:
     
@@ -84,15 +84,15 @@ class BlueBookOpenRolledSectionsVC: UIViewController, UICollectionViewDelegate, 
             
             }), completion: nil)
         
-        if indexPath.row == 0 {
-                                                
-            let main = UIStoryboard(name: "Main", bundle: nil)
-            
-            let viewControllerToGoTo = main.instantiateViewController(identifier: "BlueBookUniversalBeamsVC")
-            
-            self.present(viewControllerToGoTo, animated: true, completion: nil)
-            
-            }
+        let main = UIStoryboard(name: "Main", bundle: nil)
+        
+        let viewControllerToGoTo = main.instantiateViewController(identifier: "SteelSectionsTableViewController") as! SteelSectionsTableViewController
+        
+        viewControllerToGoTo.receivedNavigatioBarTitleFromPreviousViewController = cellTitleArray[indexPath.row]
+        
+        viewControllerToGoTo.userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController = indexPath.row
+        
+        self.present(viewControllerToGoTo, animated: true, completion: nil)
         
     }
     

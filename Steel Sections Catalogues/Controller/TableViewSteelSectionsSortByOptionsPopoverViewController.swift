@@ -1,26 +1,26 @@
 //
-//  BlueBookUniversalColumnsSectionsToEurocodesSortByDataViewController.swift
+//  PopoverViewController.swift
 //  Steel Sections Catalogues
 //
-//  Created by Shadi Hammoudeh on 31/03/2020.
-//  Copyright © 2020 Bespoke Engineering. All rights reserved.
+//  Created by Shadi Hammoudeh on 8/5/19.
+//  Copyright © 2019 Bespoke Engineering. All rights reserved.
 //
 
 import UIKit
 
 import ChameleonFramework
 
-class BlueBookUniversalColumnsSectionsToEurocodesSortByDataViewController: UIViewController {
+class TableViewSteelSectionsSortByOptionsPopoverViewController: UIViewController {
     
     // MARK: - Assigning protocol delegate:
     
-    // Here we are setting a delegate inside the SortDataPopOverVC in order to be able to access all the methods inside the Protocol:
-    
-    var delegate: PassingDataBackwardsProtocol?
-    
+    // Here we are setting a delegate inside this View Controller in order to be able to access all the methods inside the Protocol. Notice that the delegate is defined as a "weak" one, as in most cases you do not want a child object maintaining a string reference to a parent object:
+
+    weak var delegate: PassingDataBackwardsBetweenViewControllersProtocol?
+
     // MARK: - Instance scope variables and constants declarations:
     
-    // The below variables (i.e., sortBy, isSearching and filtersApplied) will be passed from BlueBookUniversalBeamsVC, and when this ViewController gets dismissed, any made changes to these variables will be sent back to BlueBookUniversalBeamsVC using the Protocol:
+    // The below variables (i.e., sortBy, isSearching and filtersApplied) will get their values from the previous viewController (i.e. SteelSectionsTableViewController), and when this ViewController gets dismissed, any made changes to these variables will be sent back again to SteelSectionsTableViewController using the Protocol:
     
     var sortBy: String = "None"
 
@@ -28,7 +28,7 @@ class BlueBookUniversalColumnsSectionsToEurocodesSortByDataViewController: UIVie
 
     var filtersApplied: Bool = false
     
-    var universalColumnsDataArrayReceivedFromBlueBookUniversalColumnsVC = [IsectionsDimensionsParameters]()
+    var receivedSteelSectionsDataArrayFromSteelSectionsTableViewController = [SteelSectionParameters]()
     
     // Below we are creating an instance from the UIPickerView class:
     
@@ -126,7 +126,7 @@ class BlueBookUniversalColumnsSectionsToEurocodesSortByDataViewController: UIVie
     
     // MARK: - ToolBar button pressed (i.e., Apply button):
     
-    // The below function will be triggered when the user taps on the Apply button contained inside the ToolBar. It is going to check the sort criteria the user is after and send the sorted Array back to the previous ViewController (i.e., BlueBookUniversalBeamsVC) in order to display data accordingly:
+    // The below function will be triggered when the user taps on the Apply button contained inside the ToolBar. It is going to check the sort criteria the user is after and send the sorted Array back to the previous ViewController (i.e., SteelSectionsTableViewController) in order to display data accordingly:
     
     @objc func toolBarButtonPressed(sender: UIBarButtonItem) {
         
@@ -136,7 +136,7 @@ class BlueBookUniversalColumnsSectionsToEurocodesSortByDataViewController: UIVie
             
         case (0, 0):
             
-            universalColumnsDataArrayReceivedFromBlueBookUniversalColumnsVC.sort {
+            receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.sort {
                 
                 if $0.firstSectionSeriesNumber != $1.firstSectionSeriesNumber {
                     
@@ -153,24 +153,20 @@ class BlueBookUniversalColumnsSectionsToEurocodesSortByDataViewController: UIVie
                 }
                 
             }
+                                            
+                delegate?.dataToBePassedUsingProtocol(datComingFromViewController: "TableViewSteelSectionsSortByOptionsPopoverViewController", configuredArrayContainingSteelSectionsData: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController, configuredArrayContainingSteelSectionsSerialNumbersOnly: [""], configuredSortByVariable: "Sorted by: Section Designation in ascending order", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
             
-            if delegate != nil {
-                                
-                delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: universalColumnsDataArrayReceivedFromBlueBookUniversalColumnsVC, sortBy: "Sorted by: Section Designation in ascending order", filtersApplied: false, isSearching: false)
-                                
-            }
-                        
             dismiss(animated: true, completion: {})
             
         // MARK: - PickerView switch case for Sorting data inside Array by Depth of Section in Ascending Order:
             
         case (0, 1):
             
-            universalColumnsDataArrayReceivedFromBlueBookUniversalColumnsVC.sort {
+            receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.sort {
                 
-                if $0.depthOfSection != $1.depthOfSection {
+                if $0.sectionTotalDepth != $1.sectionTotalDepth {
                     
-                    return $0.depthOfSection < $1.depthOfSection
+                    return $0.sectionTotalDepth < $1.sectionTotalDepth
                     
                 } else {
                     
@@ -192,11 +188,7 @@ class BlueBookUniversalColumnsSectionsToEurocodesSortByDataViewController: UIVie
                 
             }
             
-            if delegate != nil {
-                
-                delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: universalColumnsDataArrayReceivedFromBlueBookUniversalColumnsVC, sortBy: "Sorted by: Depth of Section in ascending order", filtersApplied: false, isSearching: false)
-               
-            }
+            delegate?.dataToBePassedUsingProtocol(datComingFromViewController: "TableViewSteelSectionsSortByOptionsPopoverViewController", configuredArrayContainingSteelSectionsData: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController, configuredArrayContainingSteelSectionsSerialNumbersOnly: [""], configuredSortByVariable: "Sorted by: Depth of Section in ascending order", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
             
             dismiss(animated: true, completion: {})
             
@@ -204,11 +196,11 @@ class BlueBookUniversalColumnsSectionsToEurocodesSortByDataViewController: UIVie
             
         case (0, 2):
             
-            universalColumnsDataArrayReceivedFromBlueBookUniversalColumnsVC.sort {
+            receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.sort {
                 
-                if $0.widthOfSection != $1.widthOfSection {
+                if $0.sectionWidth != $1.sectionWidth {
                     
-                    return $0.widthOfSection < $1.widthOfSection
+                    return $0.sectionWidth < $1.sectionWidth
                     
                 } else {
                     
@@ -230,11 +222,7 @@ class BlueBookUniversalColumnsSectionsToEurocodesSortByDataViewController: UIVie
                 
             }
             
-            if delegate != nil {
-                
-                delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: universalColumnsDataArrayReceivedFromBlueBookUniversalColumnsVC, sortBy: "Sorted by: Width of Section in ascending order", filtersApplied: false, isSearching: false)
-                
-            }
+            delegate?.dataToBePassedUsingProtocol(datComingFromViewController: "TableViewSteelSectionsSortByOptionsPopoverViewController", configuredArrayContainingSteelSectionsData: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController, configuredArrayContainingSteelSectionsSerialNumbersOnly: [""], configuredSortByVariable: "Sorted by: Width of Section in ascending order", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
             
             dismiss(animated: true, completion: {})
             
@@ -242,11 +230,11 @@ class BlueBookUniversalColumnsSectionsToEurocodesSortByDataViewController: UIVie
             
         case(0, 3):
             
-            universalColumnsDataArrayReceivedFromBlueBookUniversalColumnsVC.sort {
+            receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.sort {
                 
-                if $0.areaOfSection != $1.areaOfSection {
+                if $0.sectionArea != $1.sectionArea {
                     
-                    return $0.areaOfSection < $1.areaOfSection
+                    return $0.sectionArea < $1.sectionArea
                     
                 } else {
                     
@@ -268,12 +256,7 @@ class BlueBookUniversalColumnsSectionsToEurocodesSortByDataViewController: UIVie
                 
             }
             
-            
-            if delegate != nil {
-                
-                delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: universalColumnsDataArrayReceivedFromBlueBookUniversalColumnsVC, sortBy: "Sorted by: Section Area in ascending order", filtersApplied: false, isSearching: false)
-                
-            }
+            delegate?.dataToBePassedUsingProtocol(datComingFromViewController: "TableViewSteelSectionsSortByOptionsPopoverViewController", configuredArrayContainingSteelSectionsData: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController, configuredArrayContainingSteelSectionsSerialNumbersOnly: [""], configuredSortByVariable: "Sorted by: Section Area in ascending order", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
             
             dismiss(animated: true, completion: {})
             
@@ -281,7 +264,7 @@ class BlueBookUniversalColumnsSectionsToEurocodesSortByDataViewController: UIVie
             
         case(1, 0):
             
-            universalColumnsDataArrayReceivedFromBlueBookUniversalColumnsVC.sort {
+            receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.sort {
                 
                 if $0.firstSectionSeriesNumber != $1.firstSectionSeriesNumber {
                     
@@ -299,23 +282,19 @@ class BlueBookUniversalColumnsSectionsToEurocodesSortByDataViewController: UIVie
                 
             }
             
-            if delegate != nil {
-                
-                delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: universalColumnsDataArrayReceivedFromBlueBookUniversalColumnsVC, sortBy: "Sorted by: Section Designation in descending order", filtersApplied: false, isSearching: false)
-                
-            }
-            
+            delegate?.dataToBePassedUsingProtocol(datComingFromViewController: "TableViewSteelSectionsSortByOptionsPopoverViewController", configuredArrayContainingSteelSectionsData: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController, configuredArrayContainingSteelSectionsSerialNumbersOnly: [""], configuredSortByVariable: "Sorted by: Section Designation in descending order", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
+        
             dismiss(animated: true, completion: {})
             
         // MARK: - PickerView switch case for Sorting data inside Array by Depth of Section in Descending Order:
             
         case(1, 1):
             
-            universalColumnsDataArrayReceivedFromBlueBookUniversalColumnsVC.sort {
+            receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.sort {
                 
-                if $0.depthOfSection != $1.depthOfSection {
+                if $0.sectionTotalDepth != $1.sectionTotalDepth {
                     
-                    return $0.depthOfSection > $1.depthOfSection
+                    return $0.sectionTotalDepth > $1.sectionTotalDepth
                     
                 } else {
                     
@@ -337,23 +316,19 @@ class BlueBookUniversalColumnsSectionsToEurocodesSortByDataViewController: UIVie
                 
             }
             
-            if delegate != nil {
-                
-                delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: universalColumnsDataArrayReceivedFromBlueBookUniversalColumnsVC, sortBy: "Sorted by: Depth of Section in descending order", filtersApplied: false, isSearching: false)
-                
-            }
-            
+            delegate?.dataToBePassedUsingProtocol(datComingFromViewController: "TableViewSteelSectionsSortByOptionsPopoverViewController", configuredArrayContainingSteelSectionsData: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController, configuredArrayContainingSteelSectionsSerialNumbersOnly: [""], configuredSortByVariable: "Sorted by: Depth of Section in descending order", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
+                                    
             dismiss(animated: true, completion: {})
             
         // MARK: - PickerView switch case for Sorting data inside Array by Width of Section in Descending Order:
             
         case(1, 2):
                         
-            universalColumnsDataArrayReceivedFromBlueBookUniversalColumnsVC.sort {
+            receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.sort {
                 
-                if $0.widthOfSection != $1.widthOfSection {
+                if $0.sectionWidth != $1.sectionWidth {
                     
-                    return $0.widthOfSection > $1.widthOfSection
+                    return $0.sectionWidth > $1.sectionWidth
                     
                 } else {
                     
@@ -375,11 +350,7 @@ class BlueBookUniversalColumnsSectionsToEurocodesSortByDataViewController: UIVie
                 
             }
             
-            if delegate != nil {
-                
-                delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: universalColumnsDataArrayReceivedFromBlueBookUniversalColumnsVC, sortBy: "Sorted by: Width of Section in descending order", filtersApplied: false, isSearching: false)
-                
-            }
+            delegate?.dataToBePassedUsingProtocol(datComingFromViewController: "TableViewSteelSectionsSortByOptionsPopoverViewController", configuredArrayContainingSteelSectionsData: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController, configuredArrayContainingSteelSectionsSerialNumbersOnly: [""], configuredSortByVariable: "Sorted by: Width of Section in descending order", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
             
             dismiss(animated: true, completion: {})
             
@@ -387,11 +358,11 @@ class BlueBookUniversalColumnsSectionsToEurocodesSortByDataViewController: UIVie
 
         case(1, 3):
             
-            universalColumnsDataArrayReceivedFromBlueBookUniversalColumnsVC.sort {
+            receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.sort {
                 
-                if $0.areaOfSection != $1.areaOfSection {
+                if $0.sectionArea != $1.sectionArea {
                     
-                    return $0.areaOfSection > $1.areaOfSection
+                    return $0.sectionArea > $1.sectionArea
                     
                 } else {
                     
@@ -413,11 +384,7 @@ class BlueBookUniversalColumnsSectionsToEurocodesSortByDataViewController: UIVie
                 
             }
             
-            if delegate != nil {
-                
-                delegate?.dataToBePassedUsingProtocol(modifiedArrayToBePassed: universalColumnsDataArrayReceivedFromBlueBookUniversalColumnsVC, sortBy: "Sorted by: Section Area in descending order", filtersApplied: false, isSearching: false)
-                
-            }
+            delegate?.dataToBePassedUsingProtocol(datComingFromViewController: "TableViewSteelSectionsSortByOptionsPopoverViewController", configuredArrayContainingSteelSectionsData: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController, configuredArrayContainingSteelSectionsSerialNumbersOnly: [""], configuredSortByVariable: "Sorted by: Section Area in descending order", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
             
             dismiss(animated: true, completion: {})
 
@@ -435,7 +402,7 @@ class BlueBookUniversalColumnsSectionsToEurocodesSortByDataViewController: UIVie
 
 // It is considered to be a good code practice to place the Delegates and Datasoure protocols required for each element such as UIPickerView and UITableView in their own extension. As this makes things easier to read and easier to figure out where the bugs occured:
 
-extension BlueBookUniversalColumnsSectionsToEurocodesSortByDataViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+extension TableViewSteelSectionsSortByOptionsPopoverViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     
     // The below Method is needed in order to tell the pickerView how many columns it should display. In this case we need two columns, as one column will be used to let the user select whether to sort the data in Ascending or Descending order. And the second column is going to be used to let the user select the data sort criteria such as; Section Designation, Section Area, etc.:
     
@@ -513,4 +480,3 @@ extension BlueBookUniversalColumnsSectionsToEurocodesSortByDataViewController: U
     }
     
 }
-

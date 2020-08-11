@@ -8,12 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		06699DAC6A91810F1FAA21B0 /* Pods_Steel_Sections_Catalogues.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 330ED84E4B7CFDF17C74BA57 /* Pods_Steel_Sections_Catalogues.framework */; };
-		CF07916823513C2000FA530D /* CustomIsectionTableViewCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF07916623513C2000FA530D /* CustomIsectionTableViewCells.swift */; };
-		CF07916923513C2000FA530D /* CustomIsectionTableViewCells.xib in Resources */ = {isa = PBXBuildFile; fileRef = CF07916723513C2000FA530D /* CustomIsectionTableViewCells.xib */; };
+		CF07916823513C2000FA530D /* CustomTableViewCellForIandPFCandTsteelSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF07916623513C2000FA530D /* CustomTableViewCellForIandPFCandTsteelSections.swift */; };
+		CF07916923513C2000FA530D /* CustomTableViewCellForIandPFCandTsteelSections.xib in Resources */ = {isa = PBXBuildFile; fileRef = CF07916723513C2000FA530D /* CustomTableViewCellForIandPFCandTsteelSections.xib */; };
 		CF0CB86322E8F3C800257A91 /* CataloguesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0CB86222E8F3C800257A91 /* CataloguesVC.swift */; };
 		CF0CB86522E8F43B00257A91 /* CustomCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0CB86422E8F43B00257A91 /* CustomCollectionView.swift */; };
 		CF0CB86722E8F4A700257A91 /* CustomCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0CB86622E8F4A700257A91 /* CustomCollectionViewCell.swift */; };
-		CF2A3DC3235CD1A200552C92 /* BlueBookUniversalBeamsSectionsToEurocodesDataSummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF2A3DC2235CD1A200552C92 /* BlueBookUniversalBeamsSectionsToEurocodesDataSummaryViewController.swift */; };
+		CF2A3DC3235CD1A200552C92 /* SelectedSteelSectionSummaryPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF2A3DC2235CD1A200552C92 /* SelectedSteelSectionSummaryPage.swift */; };
 		CF4A6CB1232525D40040F1ED /* CustomRangeSliderUILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4A6CB0232525D40040F1ED /* CustomRangeSliderUILabel.swift */; };
 		CF4C734722E3BEB700923B4C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4C734622E3BEB700923B4C /* AppDelegate.swift */; };
 		CF4C734922E3BEB700923B4C /* CustomUIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4C734822E3BEB700923B4C /* CustomUIButton.swift */; };
@@ -22,40 +22,51 @@
 		CF4C735122E3BEB800923B4C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CF4C735022E3BEB800923B4C /* Assets.xcassets */; };
 		CF4C735422E3BEB800923B4C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF4C735222E3BEB800923B4C /* LaunchScreen.storyboard */; };
 		CF4C735D22E3BF7200923B4C /* MainScreenVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4C735C22E3BF7200923B4C /* MainScreenVC.swift */; };
-		CF4CAC9722F8A9B5007A7BED /* BlueBookUniversalBeamsSectionsToEurocodesSortByDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4CAC9622F8A9B5007A7BED /* BlueBookUniversalBeamsSectionsToEurocodesSortByDataViewController.swift */; };
-		CF5216B224251434007FB00A /* ProtocolToPassDataBackwardsFromDataSummaryVcToPreviousVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5216B124251434007FB00A /* ProtocolToPassDataBackwardsFromDataSummaryVcToPreviousVc.swift */; };
-		CF6EAC3E22EC890600C8AC65 /* BlueBookOpenRolledSectionsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6EAC3D22EC890600C8AC65 /* BlueBookOpenRolledSectionsVC.swift */; };
-		CF6EAC4022ECEFC000C8AC65 /* BlueBookUniversalBeamsSectionsToEurocodesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6EAC3F22ECEFC000C8AC65 /* BlueBookUniversalBeamsSectionsToEurocodesViewController.swift */; };
+		CF4CAC9722F8A9B5007A7BED /* TableViewSteelSectionsSortByOptionsPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4CAC9622F8A9B5007A7BED /* TableViewSteelSectionsSortByOptionsPopoverViewController.swift */; };
+		CF5216B224251434007FB00A /* PassingDataBackwardsBetweenViewControllersProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5216B124251434007FB00A /* PassingDataBackwardsBetweenViewControllersProtocol.swift */; };
+		CF6EAC3E22EC890600C8AC65 /* OpenRolledSteelSectionsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6EAC3D22EC890600C8AC65 /* OpenRolledSteelSectionsCollectionViewController.swift */; };
+		CF6EAC4022ECEFC000C8AC65 /* SteelSectionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6EAC3F22ECEFC000C8AC65 /* SteelSectionsTableViewController.swift */; };
 		CF6EAC4222ECF0A000C8AC65 /* CsvParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6EAC4122ECF0A000C8AC65 /* CsvParser.swift */; };
 		CF6EAC4422ECF13700C8AC65 /* CustomTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6EAC4322ECF13700C8AC65 /* CustomTableView.swift */; };
 		CF6EAC4622ECF17900C8AC65 /* IsectionsCustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6EAC4522ECF17900C8AC65 /* IsectionsCustomTableViewCell.swift */; };
-		CF6EAC4822ECF1B900C8AC65 /* IsectionsDimensionsParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6EAC4722ECF1B900C8AC65 /* IsectionsDimensionsParameters.swift */; };
+		CF6EAC4822ECF1B900C8AC65 /* SteelSectionParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6EAC4722ECF1B900C8AC65 /* SteelSectionParameters.swift */; };
 		CF71D78C22E47FF3000FDDE9 /* CustomUINavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF71D78B22E47FF3000FDDE9 /* CustomUINavigationBar.swift */; };
 		CF74C62D232580B400807E7A /* CustomRangeSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF74C62C232580B400807E7A /* CustomRangeSlider.swift */; };
-		CFA8E86E2433B42500D42C27 /* BlueBookUniversalColumnsSectionsToEurocodesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFA8E86D2433B42500D42C27 /* BlueBookUniversalColumnsSectionsToEurocodesViewController.swift */; };
-		CFA8E8702433B81600D42C27 /* BlueBookUniversalColumnsSectionsToEurocodesSortByDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFA8E86F2433B81600D42C27 /* BlueBookUniversalColumnsSectionsToEurocodesSortByDataViewController.swift */; };
-		CFA8E8722433B8A300D42C27 /* BlueBookUniversalColumnsSectionsToEurocodesFilterByViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFA8E8712433B8A300D42C27 /* BlueBookUniversalColumnsSectionsToEurocodesFilterByViewController.swift */; };
-		CFA8E8742433D5DD00D42C27 /* UniversalBeamsDimensionsToEurocodes.csv in Resources */ = {isa = PBXBuildFile; fileRef = CFA8E8732433D5DD00D42C27 /* UniversalBeamsDimensionsToEurocodes.csv */; };
-		CFA8E8762433D60400D42C27 /* UniversalColumnsDimensionsToEurocodes.csv in Resources */ = {isa = PBXBuildFile; fileRef = CFA8E8752433D60400D42C27 /* UniversalColumnsDimensionsToEurocodes.csv */; };
-		CFA8E8782433D99600D42C27 /* BlueBookUniversalColumnsSectionsToEurocodesDataSummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFA8E8772433D99600D42C27 /* BlueBookUniversalColumnsSectionsToEurocodesDataSummaryViewController.swift */; };
-		CFABFD29231C1E00009F923A /* BlueBookUniversalBeamsSectionsToEurocodesFilterByViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFABFD28231C1E00009F923A /* BlueBookUniversalBeamsSectionsToEurocodesFilterByViewController.swift */; };
+		CFABFD29231C1E00009F923A /* TableViewSteelSectionsDataFilterOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFABFD28231C1E00009F923A /* TableViewSteelSectionsDataFilterOptions.swift */; };
 		CFB7B1C62346B27900BBCE3B /* PassingDataBackwardsProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB7B1C52346B27900BBCE3B /* PassingDataBackwardsProtocol.swift */; };
+		CFC5CB3C247AD24E008C5D62 /* LegSteelSectionCustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC5CB3A247AD24E008C5D62 /* LegSteelSectionCustomTableViewCell.swift */; };
+		CFC5CB3D247AD24E008C5D62 /* LegSteelSectionCustomTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CFC5CB3B247AD24E008C5D62 /* LegSteelSectionCustomTableViewCell.xib */; };
+		CFC5CB3F247C60C7008C5D62 /* EurocodesBlueBookEqualLegAnglesSections.csv in Resources */ = {isa = PBXBuildFile; fileRef = CFC5CB3E247C60C7008C5D62 /* EurocodesBlueBookEqualLegAnglesSections.csv */; };
 		CFD1010A2353890B004E84C1 /* CustomTableViewMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD101082353890B004E84C1 /* CustomTableViewMessageCell.swift */; };
 		CFD1010B2353890B004E84C1 /* CustomTableViewMessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CFD101092353890B004E84C1 /* CustomTableViewMessageCell.xib */; };
-		CFD9228822EC81F500DC9757 /* BlueBookTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD9228722EC81F500DC9757 /* BlueBookTabController.swift */; };
-		CFD9228C22EC846900DC9757 /* BlueBookClosedSectionsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD9228B22EC846900DC9757 /* BlueBookClosedSectionsVC.swift */; };
+		CFD9228822EC81F500DC9757 /* OpenAndClosedSteelSectionsTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD9228722EC81F500DC9757 /* OpenAndClosedSteelSectionsTabViewController.swift */; };
+		CFD9228C22EC846900DC9757 /* ClosedSteelSectionsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD9228B22EC846900DC9757 /* ClosedSteelSectionsCollectionViewController.swift */; };
+		CFDFB22E24755C84005DDA2B /* EurocodesBlueBookUniversalColumnsSections.csv in Resources */ = {isa = PBXBuildFile; fileRef = CFDFB22D24755C84005DDA2B /* EurocodesBlueBookUniversalColumnsSections.csv */; };
+		CFDFB23024755C95005DDA2B /* EurocodesBlueBookUnequalLegAnglesSections.csv in Resources */ = {isa = PBXBuildFile; fileRef = CFDFB22F24755C95005DDA2B /* EurocodesBlueBookUnequalLegAnglesSections.csv */; };
+		CFDFB23224755D0E005DDA2B /* EurocodesBlueBookUniversalBearingPilesSections.csv in Resources */ = {isa = PBXBuildFile; fileRef = CFDFB23124755D0E005DDA2B /* EurocodesBlueBookUniversalBearingPilesSections.csv */; };
+		CFDFB23424755D1A005DDA2B /* EurocodesBlueBookUniversalBeamsSections.csv in Resources */ = {isa = PBXBuildFile; fileRef = CFDFB23324755D1A005DDA2B /* EurocodesBlueBookUniversalBeamsSections.csv */; };
+		CFDFB23624755D31005DDA2B /* EurocodesBlueBookTeesSplitFromUCSections.csv in Resources */ = {isa = PBXBuildFile; fileRef = CFDFB23524755D31005DDA2B /* EurocodesBlueBookTeesSplitFromUCSections.csv */; };
+		CFDFB23824755D3D005DDA2B /* EurocodesBlueBookTeesSplitFromUBSections.csv in Resources */ = {isa = PBXBuildFile; fileRef = CFDFB23724755D3D005DDA2B /* EurocodesBlueBookTeesSplitFromUBSections.csv */; };
+		CFDFB23A24755D48005DDA2B /* EurocodesBlueBookHotFinishedSquareHollowSections.csv in Resources */ = {isa = PBXBuildFile; fileRef = CFDFB23924755D48005DDA2B /* EurocodesBlueBookHotFinishedSquareHollowSections.csv */; };
+		CFDFB23C24755D6C005DDA2B /* EurocodesBlueBookHotFinishedRectangularHollowSections.csv in Resources */ = {isa = PBXBuildFile; fileRef = CFDFB23B24755D6C005DDA2B /* EurocodesBlueBookHotFinishedRectangularHollowSections.csv */; };
+		CFDFB23E24755D9C005DDA2B /* EurocodesBlueBookParallelFlangeChannelsSections.csv in Resources */ = {isa = PBXBuildFile; fileRef = CFDFB23D24755D9C005DDA2B /* EurocodesBlueBookParallelFlangeChannelsSections.csv */; };
+		CFDFB24024755E6B005DDA2B /* EurocodesBlueBookHotFinishedEllipticalHollowSections.csv in Resources */ = {isa = PBXBuildFile; fileRef = CFDFB23F24755E6B005DDA2B /* EurocodesBlueBookHotFinishedEllipticalHollowSections.csv */; };
+		CFDFB24424755E85005DDA2B /* EurocodesBlueBookColdFormedSquareHollowSections.csv in Resources */ = {isa = PBXBuildFile; fileRef = CFDFB24324755E85005DDA2B /* EurocodesBlueBookColdFormedSquareHollowSections.csv */; };
+		CFDFB24624755E92005DDA2B /* EurocodesBlueBookColdFormedRectangularHollowSections.csv in Resources */ = {isa = PBXBuildFile; fileRef = CFDFB24524755E92005DDA2B /* EurocodesBlueBookColdFormedRectangularHollowSections.csv */; };
+		CFDFB24824755EA2005DDA2B /* EurocodesBlueBookColdFormedCircularHollowSections.csv in Resources */ = {isa = PBXBuildFile; fileRef = CFDFB24724755EA2005DDA2B /* EurocodesBlueBookColdFormedCircularHollowSections.csv */; };
+		CFDFB24A24755EAD005DDA2B /* EurocodesBlueBookHotFinishedCircularHollowSections.csv in Resources */ = {isa = PBXBuildFile; fileRef = CFDFB24924755EAD005DDA2B /* EurocodesBlueBookHotFinishedCircularHollowSections.csv */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		330ED84E4B7CFDF17C74BA57 /* Pods_Steel_Sections_Catalogues.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Steel_Sections_Catalogues.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		429D476114C979D468DC1846 /* Pods-Steel Sections Catalogues.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Steel Sections Catalogues.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Steel Sections Catalogues/Pods-Steel Sections Catalogues.debug.xcconfig"; sourceTree = "<group>"; };
 		603849ACBFC18C601234F57C /* Pods-Steel Sections Catalogues.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Steel Sections Catalogues.release.xcconfig"; path = "Pods/Target Support Files/Pods-Steel Sections Catalogues/Pods-Steel Sections Catalogues.release.xcconfig"; sourceTree = "<group>"; };
-		CF07916623513C2000FA530D /* CustomIsectionTableViewCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomIsectionTableViewCells.swift; sourceTree = "<group>"; };
-		CF07916723513C2000FA530D /* CustomIsectionTableViewCells.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomIsectionTableViewCells.xib; sourceTree = "<group>"; };
+		CF07916623513C2000FA530D /* CustomTableViewCellForIandPFCandTsteelSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewCellForIandPFCandTsteelSections.swift; sourceTree = "<group>"; };
+		CF07916723513C2000FA530D /* CustomTableViewCellForIandPFCandTsteelSections.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomTableViewCellForIandPFCandTsteelSections.xib; sourceTree = "<group>"; };
 		CF0CB86222E8F3C800257A91 /* CataloguesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CataloguesVC.swift; sourceTree = "<group>"; };
 		CF0CB86422E8F43B00257A91 /* CustomCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionView.swift; sourceTree = "<group>"; };
 		CF0CB86622E8F4A700257A91 /* CustomCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewCell.swift; sourceTree = "<group>"; };
-		CF2A3DC2235CD1A200552C92 /* BlueBookUniversalBeamsSectionsToEurocodesDataSummaryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BlueBookUniversalBeamsSectionsToEurocodesDataSummaryViewController.swift; path = "Steel Sections Catalogues/View/BlueBookUniversalBeamsSectionsToEurocodesDataSummaryViewController.swift"; sourceTree = SOURCE_ROOT; };
+		CF2A3DC2235CD1A200552C92 /* SelectedSteelSectionSummaryPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SelectedSteelSectionSummaryPage.swift; path = "Steel Sections Catalogues/View/SelectedSteelSectionSummaryPage.swift"; sourceTree = SOURCE_ROOT; };
 		CF4A6CB0232525D40040F1ED /* CustomRangeSliderUILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomRangeSliderUILabel.swift; sourceTree = "<group>"; };
 		CF4C734322E3BEB700923B4C /* Steel Sections Catalogues.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Steel Sections Catalogues.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF4C734622E3BEB700923B4C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -66,28 +77,39 @@
 		CF4C735322E3BEB800923B4C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CF4C735522E3BEB800923B4C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CF4C735C22E3BF7200923B4C /* MainScreenVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainScreenVC.swift; sourceTree = "<group>"; };
-		CF4CAC9622F8A9B5007A7BED /* BlueBookUniversalBeamsSectionsToEurocodesSortByDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlueBookUniversalBeamsSectionsToEurocodesSortByDataViewController.swift; sourceTree = "<group>"; };
-		CF5216B124251434007FB00A /* ProtocolToPassDataBackwardsFromDataSummaryVcToPreviousVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProtocolToPassDataBackwardsFromDataSummaryVcToPreviousVc.swift; sourceTree = "<group>"; };
-		CF6EAC3D22EC890600C8AC65 /* BlueBookOpenRolledSectionsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlueBookOpenRolledSectionsVC.swift; sourceTree = "<group>"; };
-		CF6EAC3F22ECEFC000C8AC65 /* BlueBookUniversalBeamsSectionsToEurocodesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlueBookUniversalBeamsSectionsToEurocodesViewController.swift; sourceTree = "<group>"; };
+		CF4CAC9622F8A9B5007A7BED /* TableViewSteelSectionsSortByOptionsPopoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewSteelSectionsSortByOptionsPopoverViewController.swift; sourceTree = "<group>"; };
+		CF5216B124251434007FB00A /* PassingDataBackwardsBetweenViewControllersProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassingDataBackwardsBetweenViewControllersProtocol.swift; sourceTree = "<group>"; };
+		CF6EAC3D22EC890600C8AC65 /* OpenRolledSteelSectionsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenRolledSteelSectionsCollectionViewController.swift; sourceTree = "<group>"; };
+		CF6EAC3F22ECEFC000C8AC65 /* SteelSectionsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SteelSectionsTableViewController.swift; sourceTree = "<group>"; };
 		CF6EAC4122ECF0A000C8AC65 /* CsvParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CsvParser.swift; sourceTree = "<group>"; };
 		CF6EAC4322ECF13700C8AC65 /* CustomTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableView.swift; sourceTree = "<group>"; };
 		CF6EAC4522ECF17900C8AC65 /* IsectionsCustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IsectionsCustomTableViewCell.swift; sourceTree = "<group>"; };
-		CF6EAC4722ECF1B900C8AC65 /* IsectionsDimensionsParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IsectionsDimensionsParameters.swift; sourceTree = "<group>"; };
+		CF6EAC4722ECF1B900C8AC65 /* SteelSectionParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SteelSectionParameters.swift; sourceTree = "<group>"; };
 		CF71D78B22E47FF3000FDDE9 /* CustomUINavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomUINavigationBar.swift; sourceTree = "<group>"; };
 		CF74C62C232580B400807E7A /* CustomRangeSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomRangeSlider.swift; sourceTree = "<group>"; };
-		CFA8E86D2433B42500D42C27 /* BlueBookUniversalColumnsSectionsToEurocodesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlueBookUniversalColumnsSectionsToEurocodesViewController.swift; sourceTree = "<group>"; };
-		CFA8E86F2433B81600D42C27 /* BlueBookUniversalColumnsSectionsToEurocodesSortByDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlueBookUniversalColumnsSectionsToEurocodesSortByDataViewController.swift; sourceTree = "<group>"; };
-		CFA8E8712433B8A300D42C27 /* BlueBookUniversalColumnsSectionsToEurocodesFilterByViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlueBookUniversalColumnsSectionsToEurocodesFilterByViewController.swift; sourceTree = "<group>"; };
-		CFA8E8732433D5DD00D42C27 /* UniversalBeamsDimensionsToEurocodes.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = UniversalBeamsDimensionsToEurocodes.csv; sourceTree = "<group>"; };
-		CFA8E8752433D60400D42C27 /* UniversalColumnsDimensionsToEurocodes.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = UniversalColumnsDimensionsToEurocodes.csv; sourceTree = "<group>"; };
-		CFA8E8772433D99600D42C27 /* BlueBookUniversalColumnsSectionsToEurocodesDataSummaryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlueBookUniversalColumnsSectionsToEurocodesDataSummaryViewController.swift; sourceTree = "<group>"; };
-		CFABFD28231C1E00009F923A /* BlueBookUniversalBeamsSectionsToEurocodesFilterByViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlueBookUniversalBeamsSectionsToEurocodesFilterByViewController.swift; sourceTree = "<group>"; };
+		CFABFD28231C1E00009F923A /* TableViewSteelSectionsDataFilterOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewSteelSectionsDataFilterOptions.swift; sourceTree = "<group>"; };
 		CFB7B1C52346B27900BBCE3B /* PassingDataBackwardsProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassingDataBackwardsProtocol.swift; sourceTree = "<group>"; };
+		CFC5CB3A247AD24E008C5D62 /* LegSteelSectionCustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegSteelSectionCustomTableViewCell.swift; sourceTree = "<group>"; };
+		CFC5CB3B247AD24E008C5D62 /* LegSteelSectionCustomTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LegSteelSectionCustomTableViewCell.xib; sourceTree = "<group>"; };
+		CFC5CB3E247C60C7008C5D62 /* EurocodesBlueBookEqualLegAnglesSections.csv */ = {isa = PBXFileReference; lastKnownFileType = file; name = EurocodesBlueBookEqualLegAnglesSections.csv; path = "Catalogues CSV Files/BlueBook/Equal leg angles (L)/EurocodesBlueBookEqualLegAnglesSections.csv"; sourceTree = SOURCE_ROOT; };
 		CFD101082353890B004E84C1 /* CustomTableViewMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewMessageCell.swift; sourceTree = "<group>"; };
 		CFD101092353890B004E84C1 /* CustomTableViewMessageCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomTableViewMessageCell.xib; sourceTree = "<group>"; };
-		CFD9228722EC81F500DC9757 /* BlueBookTabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlueBookTabController.swift; sourceTree = "<group>"; };
-		CFD9228B22EC846900DC9757 /* BlueBookClosedSectionsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlueBookClosedSectionsVC.swift; sourceTree = "<group>"; };
+		CFD9228722EC81F500DC9757 /* OpenAndClosedSteelSectionsTabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAndClosedSteelSectionsTabViewController.swift; sourceTree = "<group>"; };
+		CFD9228B22EC846900DC9757 /* ClosedSteelSectionsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClosedSteelSectionsCollectionViewController.swift; sourceTree = "<group>"; };
+		CFDFB22D24755C84005DDA2B /* EurocodesBlueBookUniversalColumnsSections.csv */ = {isa = PBXFileReference; lastKnownFileType = text; name = EurocodesBlueBookUniversalColumnsSections.csv; path = "Catalogues CSV Files/BlueBook/UC/EurocodesBlueBookUniversalColumnsSections.csv"; sourceTree = SOURCE_ROOT; };
+		CFDFB22F24755C95005DDA2B /* EurocodesBlueBookUnequalLegAnglesSections.csv */ = {isa = PBXFileReference; lastKnownFileType = text; name = EurocodesBlueBookUnequalLegAnglesSections.csv; path = "Catalogues CSV Files/BlueBook/Unequal leg angles (L)/EurocodesBlueBookUnequalLegAnglesSections.csv"; sourceTree = SOURCE_ROOT; };
+		CFDFB23124755D0E005DDA2B /* EurocodesBlueBookUniversalBearingPilesSections.csv */ = {isa = PBXFileReference; lastKnownFileType = text; name = EurocodesBlueBookUniversalBearingPilesSections.csv; path = "Catalogues CSV Files/BlueBook/UBP/EurocodesBlueBookUniversalBearingPilesSections.csv"; sourceTree = SOURCE_ROOT; };
+		CFDFB23324755D1A005DDA2B /* EurocodesBlueBookUniversalBeamsSections.csv */ = {isa = PBXFileReference; lastKnownFileType = text; name = EurocodesBlueBookUniversalBeamsSections.csv; path = "Catalogues CSV Files/BlueBook/UB/EurocodesBlueBookUniversalBeamsSections.csv"; sourceTree = SOURCE_ROOT; };
+		CFDFB23524755D31005DDA2B /* EurocodesBlueBookTeesSplitFromUCSections.csv */ = {isa = PBXFileReference; lastKnownFileType = text; name = EurocodesBlueBookTeesSplitFromUCSections.csv; path = "Catalogues CSV Files/BlueBook/Tees (T) split from UC/EurocodesBlueBookTeesSplitFromUCSections.csv"; sourceTree = SOURCE_ROOT; };
+		CFDFB23724755D3D005DDA2B /* EurocodesBlueBookTeesSplitFromUBSections.csv */ = {isa = PBXFileReference; lastKnownFileType = text; name = EurocodesBlueBookTeesSplitFromUBSections.csv; path = "Catalogues CSV Files/BlueBook/Tees (T) split from UB/EurocodesBlueBookTeesSplitFromUBSections.csv"; sourceTree = SOURCE_ROOT; };
+		CFDFB23924755D48005DDA2B /* EurocodesBlueBookHotFinishedSquareHollowSections.csv */ = {isa = PBXFileReference; lastKnownFileType = text; name = EurocodesBlueBookHotFinishedSquareHollowSections.csv; path = "Catalogues CSV Files/BlueBook/SHS/EurocodesBlueBookHotFinishedSquareHollowSections.csv"; sourceTree = SOURCE_ROOT; };
+		CFDFB23B24755D6C005DDA2B /* EurocodesBlueBookHotFinishedRectangularHollowSections.csv */ = {isa = PBXFileReference; lastKnownFileType = text; name = EurocodesBlueBookHotFinishedRectangularHollowSections.csv; path = "Catalogues CSV Files/BlueBook/RHS/EurocodesBlueBookHotFinishedRectangularHollowSections.csv"; sourceTree = SOURCE_ROOT; };
+		CFDFB23D24755D9C005DDA2B /* EurocodesBlueBookParallelFlangeChannelsSections.csv */ = {isa = PBXFileReference; lastKnownFileType = text; name = EurocodesBlueBookParallelFlangeChannelsSections.csv; path = "Catalogues CSV Files/BlueBook/PFC/EurocodesBlueBookParallelFlangeChannelsSections.csv"; sourceTree = SOURCE_ROOT; };
+		CFDFB23F24755E6B005DDA2B /* EurocodesBlueBookHotFinishedEllipticalHollowSections.csv */ = {isa = PBXFileReference; lastKnownFileType = text; name = EurocodesBlueBookHotFinishedEllipticalHollowSections.csv; path = "Catalogues CSV Files/BlueBook/Hot Finished Elliptical Hollow Sections/EurocodesBlueBookHotFinishedEllipticalHollowSections.csv"; sourceTree = SOURCE_ROOT; };
+		CFDFB24324755E85005DDA2B /* EurocodesBlueBookColdFormedSquareHollowSections.csv */ = {isa = PBXFileReference; lastKnownFileType = text; name = EurocodesBlueBookColdFormedSquareHollowSections.csv; path = "Catalogues CSV Files/BlueBook/Cold Formed Square Hollow Sections/EurocodesBlueBookColdFormedSquareHollowSections.csv"; sourceTree = SOURCE_ROOT; };
+		CFDFB24524755E92005DDA2B /* EurocodesBlueBookColdFormedRectangularHollowSections.csv */ = {isa = PBXFileReference; lastKnownFileType = text; name = EurocodesBlueBookColdFormedRectangularHollowSections.csv; path = "Catalogues CSV Files/BlueBook/Cold Formed Rectangular Hollow Sections/EurocodesBlueBookColdFormedRectangularHollowSections.csv"; sourceTree = SOURCE_ROOT; };
+		CFDFB24724755EA2005DDA2B /* EurocodesBlueBookColdFormedCircularHollowSections.csv */ = {isa = PBXFileReference; lastKnownFileType = text; name = EurocodesBlueBookColdFormedCircularHollowSections.csv; path = "Catalogues CSV Files/BlueBook/Cold Formed Circular Hollow Sections/EurocodesBlueBookColdFormedCircularHollowSections.csv"; sourceTree = SOURCE_ROOT; };
+		CFDFB24924755EAD005DDA2B /* EurocodesBlueBookHotFinishedCircularHollowSections.csv */ = {isa = PBXFileReference; lastKnownFileType = text; name = EurocodesBlueBookHotFinishedCircularHollowSections.csv; path = "Catalogues CSV Files/BlueBook/CHS/EurocodesBlueBookHotFinishedCircularHollowSections.csv"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,10 +186,12 @@
 				CF6EAC4322ECF13700C8AC65 /* CustomTableView.swift */,
 				CFD101082353890B004E84C1 /* CustomTableViewMessageCell.swift */,
 				CFD101092353890B004E84C1 /* CustomTableViewMessageCell.xib */,
-				CF07916623513C2000FA530D /* CustomIsectionTableViewCells.swift */,
-				CF07916723513C2000FA530D /* CustomIsectionTableViewCells.xib */,
+				CF07916623513C2000FA530D /* CustomTableViewCellForIandPFCandTsteelSections.swift */,
+				CF07916723513C2000FA530D /* CustomTableViewCellForIandPFCandTsteelSections.xib */,
+				CFC5CB3A247AD24E008C5D62 /* LegSteelSectionCustomTableViewCell.swift */,
+				CFC5CB3B247AD24E008C5D62 /* LegSteelSectionCustomTableViewCell.xib */,
 				CF6EAC4522ECF17900C8AC65 /* IsectionsCustomTableViewCell.swift */,
-				CF6EAC4722ECF1B900C8AC65 /* IsectionsDimensionsParameters.swift */,
+				CF6EAC4722ECF1B900C8AC65 /* SteelSectionParameters.swift */,
 				CF74C62C232580B400807E7A /* CustomRangeSlider.swift */,
 				CF6EAC4122ECF0A000C8AC65 /* CsvParser.swift */,
 			);
@@ -179,17 +203,13 @@
 			children = (
 				CF4C735C22E3BF7200923B4C /* MainScreenVC.swift */,
 				CF0CB86222E8F3C800257A91 /* CataloguesVC.swift */,
-				CFD9228722EC81F500DC9757 /* BlueBookTabController.swift */,
-				CF6EAC3D22EC890600C8AC65 /* BlueBookOpenRolledSectionsVC.swift */,
-				CFD9228B22EC846900DC9757 /* BlueBookClosedSectionsVC.swift */,
-				CF6EAC3F22ECEFC000C8AC65 /* BlueBookUniversalBeamsSectionsToEurocodesViewController.swift */,
-				CF4CAC9622F8A9B5007A7BED /* BlueBookUniversalBeamsSectionsToEurocodesSortByDataViewController.swift */,
-				CFABFD28231C1E00009F923A /* BlueBookUniversalBeamsSectionsToEurocodesFilterByViewController.swift */,
-				CF2A3DC2235CD1A200552C92 /* BlueBookUniversalBeamsSectionsToEurocodesDataSummaryViewController.swift */,
-				CFA8E86D2433B42500D42C27 /* BlueBookUniversalColumnsSectionsToEurocodesViewController.swift */,
-				CFA8E86F2433B81600D42C27 /* BlueBookUniversalColumnsSectionsToEurocodesSortByDataViewController.swift */,
-				CFA8E8712433B8A300D42C27 /* BlueBookUniversalColumnsSectionsToEurocodesFilterByViewController.swift */,
-				CFA8E8772433D99600D42C27 /* BlueBookUniversalColumnsSectionsToEurocodesDataSummaryViewController.swift */,
+				CFD9228722EC81F500DC9757 /* OpenAndClosedSteelSectionsTabViewController.swift */,
+				CF6EAC3D22EC890600C8AC65 /* OpenRolledSteelSectionsCollectionViewController.swift */,
+				CFD9228B22EC846900DC9757 /* ClosedSteelSectionsCollectionViewController.swift */,
+				CF6EAC3F22ECEFC000C8AC65 /* SteelSectionsTableViewController.swift */,
+				CF4CAC9622F8A9B5007A7BED /* TableViewSteelSectionsSortByOptionsPopoverViewController.swift */,
+				CFABFD28231C1E00009F923A /* TableViewSteelSectionsDataFilterOptions.swift */,
+				CF2A3DC2235CD1A200552C92 /* SelectedSteelSectionSummaryPage.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -207,7 +227,7 @@
 			isa = PBXGroup;
 			children = (
 				CFB7B1C52346B27900BBCE3B /* PassingDataBackwardsProtocol.swift */,
-				CF5216B124251434007FB00A /* ProtocolToPassDataBackwardsFromDataSummaryVcToPreviousVc.swift */,
+				CF5216B124251434007FB00A /* PassingDataBackwardsBetweenViewControllersProtocol.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -215,8 +235,21 @@
 		CFD9228622EC693000DC9757 /* CSV Files */ = {
 			isa = PBXGroup;
 			children = (
-				CFA8E8732433D5DD00D42C27 /* UniversalBeamsDimensionsToEurocodes.csv */,
-				CFA8E8752433D60400D42C27 /* UniversalColumnsDimensionsToEurocodes.csv */,
+				CFDFB23324755D1A005DDA2B /* EurocodesBlueBookUniversalBeamsSections.csv */,
+				CFDFB22D24755C84005DDA2B /* EurocodesBlueBookUniversalColumnsSections.csv */,
+				CFDFB23124755D0E005DDA2B /* EurocodesBlueBookUniversalBearingPilesSections.csv */,
+				CFDFB23D24755D9C005DDA2B /* EurocodesBlueBookParallelFlangeChannelsSections.csv */,
+				CFC5CB3E247C60C7008C5D62 /* EurocodesBlueBookEqualLegAnglesSections.csv */,
+				CFDFB22F24755C95005DDA2B /* EurocodesBlueBookUnequalLegAnglesSections.csv */,
+				CFDFB23724755D3D005DDA2B /* EurocodesBlueBookTeesSplitFromUBSections.csv */,
+				CFDFB23524755D31005DDA2B /* EurocodesBlueBookTeesSplitFromUCSections.csv */,
+				CFDFB24924755EAD005DDA2B /* EurocodesBlueBookHotFinishedCircularHollowSections.csv */,
+				CFDFB24724755EA2005DDA2B /* EurocodesBlueBookColdFormedCircularHollowSections.csv */,
+				CFDFB24524755E92005DDA2B /* EurocodesBlueBookColdFormedRectangularHollowSections.csv */,
+				CFDFB24324755E85005DDA2B /* EurocodesBlueBookColdFormedSquareHollowSections.csv */,
+				CFDFB23F24755E6B005DDA2B /* EurocodesBlueBookHotFinishedEllipticalHollowSections.csv */,
+				CFDFB23B24755D6C005DDA2B /* EurocodesBlueBookHotFinishedRectangularHollowSections.csv */,
+				CFDFB23924755D48005DDA2B /* EurocodesBlueBookHotFinishedSquareHollowSections.csv */,
 			);
 			name = "CSV Files";
 			path = Model;
@@ -282,13 +315,27 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CF07916923513C2000FA530D /* CustomIsectionTableViewCells.xib in Resources */,
+				CFDFB23824755D3D005DDA2B /* EurocodesBlueBookTeesSplitFromUBSections.csv in Resources */,
+				CFDFB23A24755D48005DDA2B /* EurocodesBlueBookHotFinishedSquareHollowSections.csv in Resources */,
+				CFDFB24824755EA2005DDA2B /* EurocodesBlueBookColdFormedCircularHollowSections.csv in Resources */,
+				CFDFB24A24755EAD005DDA2B /* EurocodesBlueBookHotFinishedCircularHollowSections.csv in Resources */,
+				CFDFB24024755E6B005DDA2B /* EurocodesBlueBookHotFinishedEllipticalHollowSections.csv in Resources */,
+				CFDFB23C24755D6C005DDA2B /* EurocodesBlueBookHotFinishedRectangularHollowSections.csv in Resources */,
+				CF07916923513C2000FA530D /* CustomTableViewCellForIandPFCandTsteelSections.xib in Resources */,
+				CFDFB22E24755C84005DDA2B /* EurocodesBlueBookUniversalColumnsSections.csv in Resources */,
+				CFDFB23024755C95005DDA2B /* EurocodesBlueBookUnequalLegAnglesSections.csv in Resources */,
+				CFDFB24624755E92005DDA2B /* EurocodesBlueBookColdFormedRectangularHollowSections.csv in Resources */,
 				CFD1010B2353890B004E84C1 /* CustomTableViewMessageCell.xib in Resources */,
 				CF4C735422E3BEB800923B4C /* LaunchScreen.storyboard in Resources */,
 				CF4C735122E3BEB800923B4C /* Assets.xcassets in Resources */,
-				CFA8E8742433D5DD00D42C27 /* UniversalBeamsDimensionsToEurocodes.csv in Resources */,
-				CFA8E8762433D60400D42C27 /* UniversalColumnsDimensionsToEurocodes.csv in Resources */,
+				CFDFB23E24755D9C005DDA2B /* EurocodesBlueBookParallelFlangeChannelsSections.csv in Resources */,
+				CFC5CB3F247C60C7008C5D62 /* EurocodesBlueBookEqualLegAnglesSections.csv in Resources */,
+				CFDFB23424755D1A005DDA2B /* EurocodesBlueBookUniversalBeamsSections.csv in Resources */,
+				CFDFB23624755D31005DDA2B /* EurocodesBlueBookTeesSplitFromUCSections.csv in Resources */,
+				CFDFB24424755E85005DDA2B /* EurocodesBlueBookColdFormedSquareHollowSections.csv in Resources */,
+				CFDFB23224755D0E005DDA2B /* EurocodesBlueBookUniversalBearingPilesSections.csv in Resources */,
 				CF4C734C22E3BEB700923B4C /* Main.storyboard in Resources */,
+				CFC5CB3D247AD24E008C5D62 /* LegSteelSectionCustomTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -341,34 +388,31 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CF6EAC4822ECF1B900C8AC65 /* IsectionsDimensionsParameters.swift in Sources */,
+				CF6EAC4822ECF1B900C8AC65 /* SteelSectionParameters.swift in Sources */,
 				CF6EAC4622ECF17900C8AC65 /* IsectionsCustomTableViewCell.swift in Sources */,
 				CF0CB86522E8F43B00257A91 /* CustomCollectionView.swift in Sources */,
-				CFA8E8722433B8A300D42C27 /* BlueBookUniversalColumnsSectionsToEurocodesFilterByViewController.swift in Sources */,
 				CF0CB86722E8F4A700257A91 /* CustomCollectionViewCell.swift in Sources */,
-				CF07916823513C2000FA530D /* CustomIsectionTableViewCells.swift in Sources */,
-				CF2A3DC3235CD1A200552C92 /* BlueBookUniversalBeamsSectionsToEurocodesDataSummaryViewController.swift in Sources */,
-				CF4CAC9722F8A9B5007A7BED /* BlueBookUniversalBeamsSectionsToEurocodesSortByDataViewController.swift in Sources */,
-				CF5216B224251434007FB00A /* ProtocolToPassDataBackwardsFromDataSummaryVcToPreviousVc.swift in Sources */,
-				CFA8E8702433B81600D42C27 /* BlueBookUniversalColumnsSectionsToEurocodesSortByDataViewController.swift in Sources */,
-				CFA8E8782433D99600D42C27 /* BlueBookUniversalColumnsSectionsToEurocodesDataSummaryViewController.swift in Sources */,
+				CF07916823513C2000FA530D /* CustomTableViewCellForIandPFCandTsteelSections.swift in Sources */,
+				CF2A3DC3235CD1A200552C92 /* SelectedSteelSectionSummaryPage.swift in Sources */,
+				CF4CAC9722F8A9B5007A7BED /* TableViewSteelSectionsSortByOptionsPopoverViewController.swift in Sources */,
+				CF5216B224251434007FB00A /* PassingDataBackwardsBetweenViewControllersProtocol.swift in Sources */,
 				CF4C734922E3BEB700923B4C /* CustomUIButton.swift in Sources */,
 				CF71D78C22E47FF3000FDDE9 /* CustomUINavigationBar.swift in Sources */,
 				CF4C734722E3BEB700923B4C /* AppDelegate.swift in Sources */,
-				CFABFD29231C1E00009F923A /* BlueBookUniversalBeamsSectionsToEurocodesFilterByViewController.swift in Sources */,
-				CFA8E86E2433B42500D42C27 /* BlueBookUniversalColumnsSectionsToEurocodesViewController.swift in Sources */,
+				CFABFD29231C1E00009F923A /* TableViewSteelSectionsDataFilterOptions.swift in Sources */,
 				CF74C62D232580B400807E7A /* CustomRangeSlider.swift in Sources */,
-				CF6EAC3E22EC890600C8AC65 /* BlueBookOpenRolledSectionsVC.swift in Sources */,
+				CF6EAC3E22EC890600C8AC65 /* OpenRolledSteelSectionsCollectionViewController.swift in Sources */,
 				CF4C734F22E3BEB700923B4C /* Steel_Sections_Catalogues.xcdatamodeld in Sources */,
 				CF0CB86322E8F3C800257A91 /* CataloguesVC.swift in Sources */,
 				CF4C735D22E3BF7200923B4C /* MainScreenVC.swift in Sources */,
 				CFD1010A2353890B004E84C1 /* CustomTableViewMessageCell.swift in Sources */,
 				CF6EAC4222ECF0A000C8AC65 /* CsvParser.swift in Sources */,
-				CFD9228822EC81F500DC9757 /* BlueBookTabController.swift in Sources */,
+				CFD9228822EC81F500DC9757 /* OpenAndClosedSteelSectionsTabViewController.swift in Sources */,
 				CFB7B1C62346B27900BBCE3B /* PassingDataBackwardsProtocol.swift in Sources */,
-				CF6EAC4022ECEFC000C8AC65 /* BlueBookUniversalBeamsSectionsToEurocodesViewController.swift in Sources */,
+				CFC5CB3C247AD24E008C5D62 /* LegSteelSectionCustomTableViewCell.swift in Sources */,
+				CF6EAC4022ECEFC000C8AC65 /* SteelSectionsTableViewController.swift in Sources */,
 				CF6EAC4422ECF13700C8AC65 /* CustomTableView.swift in Sources */,
-				CFD9228C22EC846900DC9757 /* BlueBookClosedSectionsVC.swift in Sources */,
+				CFD9228C22EC846900DC9757 /* ClosedSteelSectionsCollectionViewController.swift in Sources */,
 				CF4A6CB1232525D40040F1ED /* CustomRangeSliderUILabel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
