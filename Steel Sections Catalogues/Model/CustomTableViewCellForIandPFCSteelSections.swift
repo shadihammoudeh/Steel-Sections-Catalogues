@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CustomTableViewCellForIandPFCandTsteelSections: UITableViewCell {
+class CustomTableViewCellForIandPFCSteelSections: UITableViewCell {
     
     @IBOutlet weak var sectionDesignationLabel: UILabel!
     

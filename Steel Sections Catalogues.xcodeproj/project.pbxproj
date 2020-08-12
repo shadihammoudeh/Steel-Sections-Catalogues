@@ -8,8 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		06699DAC6A91810F1FAA21B0 /* Pods_Steel_Sections_Catalogues.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 330ED84E4B7CFDF17C74BA57 /* Pods_Steel_Sections_Catalogues.framework */; };
-		CF07916823513C2000FA530D /* CustomTableViewCellForIandPFCandTsteelSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF07916623513C2000FA530D /* CustomTableViewCellForIandPFCandTsteelSections.swift */; };
-		CF07916923513C2000FA530D /* CustomTableViewCellForIandPFCandTsteelSections.xib in Resources */ = {isa = PBXBuildFile; fileRef = CF07916723513C2000FA530D /* CustomTableViewCellForIandPFCandTsteelSections.xib */; };
+		CF07916823513C2000FA530D /* CustomTableViewCellForIandPFCSteelSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF07916623513C2000FA530D /* CustomTableViewCellForIandPFCSteelSections.swift */; };
+		CF07916923513C2000FA530D /* CustomTableViewCellForIandPFCSteelSections.xib in Resources */ = {isa = PBXBuildFile; fileRef = CF07916723513C2000FA530D /* CustomTableViewCellForIandPFCSteelSections.xib */; };
 		CF0CB86322E8F3C800257A91 /* CataloguesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0CB86222E8F3C800257A91 /* CataloguesVC.swift */; };
 		CF0CB86522E8F43B00257A91 /* CustomCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0CB86422E8F43B00257A91 /* CustomCollectionView.swift */; };
 		CF0CB86722E8F4A700257A91 /* CustomCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0CB86622E8F4A700257A91 /* CustomCollectionViewCell.swift */; };
@@ -33,6 +33,8 @@
 		CF71D78C22E47FF3000FDDE9 /* CustomUINavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF71D78B22E47FF3000FDDE9 /* CustomUINavigationBar.swift */; };
 		CF74C62D232580B400807E7A /* CustomRangeSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF74C62C232580B400807E7A /* CustomRangeSlider.swift */; };
 		CFABFD29231C1E00009F923A /* TableViewSteelSectionsDataFilterOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFABFD28231C1E00009F923A /* TableViewSteelSectionsDataFilterOptions.swift */; };
+		CFAF8AA324E47EEF00BBFFA3 /* CustomTableViewCellForTeeSteelSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAF8AA124E47EEF00BBFFA3 /* CustomTableViewCellForTeeSteelSections.swift */; };
+		CFAF8AA424E47EEF00BBFFA3 /* CustomTableViewCellForTeeSteelSections.xib in Resources */ = {isa = PBXBuildFile; fileRef = CFAF8AA224E47EEF00BBFFA3 /* CustomTableViewCellForTeeSteelSections.xib */; };
 		CFB7B1C62346B27900BBCE3B /* PassingDataBackwardsProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB7B1C52346B27900BBCE3B /* PassingDataBackwardsProtocol.swift */; };
 		CFC5CB3C247AD24E008C5D62 /* LegSteelSectionCustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC5CB3A247AD24E008C5D62 /* LegSteelSectionCustomTableViewCell.swift */; };
 		CFC5CB3D247AD24E008C5D62 /* LegSteelSectionCustomTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CFC5CB3B247AD24E008C5D62 /* LegSteelSectionCustomTableViewCell.xib */; };
@@ -61,8 +63,8 @@
 		330ED84E4B7CFDF17C74BA57 /* Pods_Steel_Sections_Catalogues.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Steel_Sections_Catalogues.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		429D476114C979D468DC1846 /* Pods-Steel Sections Catalogues.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Steel Sections Catalogues.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Steel Sections Catalogues/Pods-Steel Sections Catalogues.debug.xcconfig"; sourceTree = "<group>"; };
 		603849ACBFC18C601234F57C /* Pods-Steel Sections Catalogues.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Steel Sections Catalogues.release.xcconfig"; path = "Pods/Target Support Files/Pods-Steel Sections Catalogues/Pods-Steel Sections Catalogues.release.xcconfig"; sourceTree = "<group>"; };
-		CF07916623513C2000FA530D /* CustomTableViewCellForIandPFCandTsteelSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewCellForIandPFCandTsteelSections.swift; sourceTree = "<group>"; };
-		CF07916723513C2000FA530D /* CustomTableViewCellForIandPFCandTsteelSections.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomTableViewCellForIandPFCandTsteelSections.xib; sourceTree = "<group>"; };
+		CF07916623513C2000FA530D /* CustomTableViewCellForIandPFCSteelSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewCellForIandPFCSteelSections.swift; sourceTree = "<group>"; };
+		CF07916723513C2000FA530D /* CustomTableViewCellForIandPFCSteelSections.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomTableViewCellForIandPFCSteelSections.xib; sourceTree = "<group>"; };
 		CF0CB86222E8F3C800257A91 /* CataloguesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CataloguesVC.swift; sourceTree = "<group>"; };
 		CF0CB86422E8F43B00257A91 /* CustomCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionView.swift; sourceTree = "<group>"; };
 		CF0CB86622E8F4A700257A91 /* CustomCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -88,10 +90,12 @@
 		CF71D78B22E47FF3000FDDE9 /* CustomUINavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomUINavigationBar.swift; sourceTree = "<group>"; };
 		CF74C62C232580B400807E7A /* CustomRangeSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomRangeSlider.swift; sourceTree = "<group>"; };
 		CFABFD28231C1E00009F923A /* TableViewSteelSectionsDataFilterOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewSteelSectionsDataFilterOptions.swift; sourceTree = "<group>"; };
+		CFAF8AA124E47EEF00BBFFA3 /* CustomTableViewCellForTeeSteelSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewCellForTeeSteelSections.swift; sourceTree = "<group>"; };
+		CFAF8AA224E47EEF00BBFFA3 /* CustomTableViewCellForTeeSteelSections.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomTableViewCellForTeeSteelSections.xib; sourceTree = "<group>"; };
 		CFB7B1C52346B27900BBCE3B /* PassingDataBackwardsProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassingDataBackwardsProtocol.swift; sourceTree = "<group>"; };
 		CFC5CB3A247AD24E008C5D62 /* LegSteelSectionCustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegSteelSectionCustomTableViewCell.swift; sourceTree = "<group>"; };
 		CFC5CB3B247AD24E008C5D62 /* LegSteelSectionCustomTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LegSteelSectionCustomTableViewCell.xib; sourceTree = "<group>"; };
-		CFC5CB3E247C60C7008C5D62 /* EurocodesBlueBookEqualLegAnglesSections.csv */ = {isa = PBXFileReference; lastKnownFileType = file; name = EurocodesBlueBookEqualLegAnglesSections.csv; path = "Catalogues CSV Files/BlueBook/Equal leg angles (L)/EurocodesBlueBookEqualLegAnglesSections.csv"; sourceTree = SOURCE_ROOT; };
+		CFC5CB3E247C60C7008C5D62 /* EurocodesBlueBookEqualLegAnglesSections.csv */ = {isa = PBXFileReference; lastKnownFileType = text; name = EurocodesBlueBookEqualLegAnglesSections.csv; path = "Catalogues CSV Files/BlueBook/Equal leg angles (L)/EurocodesBlueBookEqualLegAnglesSections.csv"; sourceTree = SOURCE_ROOT; };
 		CFD101082353890B004E84C1 /* CustomTableViewMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewMessageCell.swift; sourceTree = "<group>"; };
 		CFD101092353890B004E84C1 /* CustomTableViewMessageCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomTableViewMessageCell.xib; sourceTree = "<group>"; };
 		CFD9228722EC81F500DC9757 /* OpenAndClosedSteelSectionsTabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAndClosedSteelSectionsTabViewController.swift; sourceTree = "<group>"; };
@@ -186,8 +190,10 @@
 				CF6EAC4322ECF13700C8AC65 /* CustomTableView.swift */,
 				CFD101082353890B004E84C1 /* CustomTableViewMessageCell.swift */,
 				CFD101092353890B004E84C1 /* CustomTableViewMessageCell.xib */,
-				CF07916623513C2000FA530D /* CustomTableViewCellForIandPFCandTsteelSections.swift */,
-				CF07916723513C2000FA530D /* CustomTableViewCellForIandPFCandTsteelSections.xib */,
+				CF07916623513C2000FA530D /* CustomTableViewCellForIandPFCSteelSections.swift */,
+				CF07916723513C2000FA530D /* CustomTableViewCellForIandPFCSteelSections.xib */,
+				CFAF8AA124E47EEF00BBFFA3 /* CustomTableViewCellForTeeSteelSections.swift */,
+				CFAF8AA224E47EEF00BBFFA3 /* CustomTableViewCellForTeeSteelSections.xib */,
 				CFC5CB3A247AD24E008C5D62 /* LegSteelSectionCustomTableViewCell.swift */,
 				CFC5CB3B247AD24E008C5D62 /* LegSteelSectionCustomTableViewCell.xib */,
 				CF6EAC4522ECF17900C8AC65 /* IsectionsCustomTableViewCell.swift */,
@@ -321,7 +327,8 @@
 				CFDFB24A24755EAD005DDA2B /* EurocodesBlueBookHotFinishedCircularHollowSections.csv in Resources */,
 				CFDFB24024755E6B005DDA2B /* EurocodesBlueBookHotFinishedEllipticalHollowSections.csv in Resources */,
 				CFDFB23C24755D6C005DDA2B /* EurocodesBlueBookHotFinishedRectangularHollowSections.csv in Resources */,
-				CF07916923513C2000FA530D /* CustomTableViewCellForIandPFCandTsteelSections.xib in Resources */,
+				CF07916923513C2000FA530D /* CustomTableViewCellForIandPFCSteelSections.xib in Resources */,
+				CFAF8AA424E47EEF00BBFFA3 /* CustomTableViewCellForTeeSteelSections.xib in Resources */,
 				CFDFB22E24755C84005DDA2B /* EurocodesBlueBookUniversalColumnsSections.csv in Resources */,
 				CFDFB23024755C95005DDA2B /* EurocodesBlueBookUnequalLegAnglesSections.csv in Resources */,
 				CFDFB24624755E92005DDA2B /* EurocodesBlueBookColdFormedRectangularHollowSections.csv in Resources */,
@@ -392,12 +399,13 @@
 				CF6EAC4622ECF17900C8AC65 /* IsectionsCustomTableViewCell.swift in Sources */,
 				CF0CB86522E8F43B00257A91 /* CustomCollectionView.swift in Sources */,
 				CF0CB86722E8F4A700257A91 /* CustomCollectionViewCell.swift in Sources */,
-				CF07916823513C2000FA530D /* CustomTableViewCellForIandPFCandTsteelSections.swift in Sources */,
+				CF07916823513C2000FA530D /* CustomTableViewCellForIandPFCSteelSections.swift in Sources */,
 				CF2A3DC3235CD1A200552C92 /* SelectedSteelSectionSummaryPage.swift in Sources */,
 				CF4CAC9722F8A9B5007A7BED /* TableViewSteelSectionsSortByOptionsPopoverViewController.swift in Sources */,
 				CF5216B224251434007FB00A /* PassingDataBackwardsBetweenViewControllersProtocol.swift in Sources */,
 				CF4C734922E3BEB700923B4C /* CustomUIButton.swift in Sources */,
 				CF71D78C22E47FF3000FDDE9 /* CustomUINavigationBar.swift in Sources */,
+				CFAF8AA324E47EEF00BBFFA3 /* CustomTableViewCellForTeeSteelSections.swift in Sources */,
 				CF4C734722E3BEB700923B4C /* AppDelegate.swift in Sources */,
 				CFABFD29231C1E00009F923A /* TableViewSteelSectionsDataFilterOptions.swift in Sources */,
 				CF74C62D232580B400807E7A /* CustomRangeSlider.swift in Sources */,

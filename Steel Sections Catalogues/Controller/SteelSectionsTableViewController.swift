@@ -218,15 +218,27 @@ class SteelSectionsTableViewController: UIViewController {
         
         extractedSteelSectionsDataArrayFromThePassedCsvFileUsingTheParser.sort {
             
-            // If the user selected Tees section from the previous viewController (i.e. OpenRolledSteelSectionsCollectionViewController.swift file) then the sorting criteria will be according to the cross-section the T-section has been cut from rather than the actual full sectin designation itself:
+            // If the user selected Tee sections cut from Universal Beams or Columns Sections from the previous viewController (i.e. OpenRolledSteelSectionsCollectionViewController.swift file) then the sorting criteria will be according to the Universal Beam or Columns cross-section the T-section has been cut from rather than the actual full section designation itself:
             
             if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 6 || userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 7 {
                 
-                return $0.firstSectionSeriesNumber
+                if $0.firstSectionSeriesNumberCrossSectionIsCutFrom != $1.firstSectionSeriesNumberCrossSectionIsCutFrom {
+                    
+                    return $0.firstSectionSeriesNumberCrossSectionIsCutFrom < $1.firstSectionSeriesNumberCrossSectionIsCutFrom
+                    
+                } else if $0.secondSectionSeriesNumberCrossSectionIsCutFrom != $1.secondSectionSeriesNumberCrossSectionIsCutFrom {
+                    
+                    return $0.secondSectionSeriesNumberCrossSectionIsCutFrom < $1.secondSectionSeriesNumberCrossSectionIsCutFrom
+                    
+                } else {
+                    
+                    return $0.thirdSectionSeriesNumberCrossSectionIsCutFrom < $1.thirdSectionSeriesNumberCrossSectionIsCutFrom
+                    
+                }
                 
             }
             
-             // Otherwise the sorting criteria will be carried out according to :
+             // Otherwise the sorting criteria will be carried out according to the actual full section designation of the selected cross-section from the previous viewController (i.e. OpenRolledSteelSectionsCollectionViewController.swift file):
                 
             else {
                 
@@ -245,6 +257,7 @@ class SteelSectionsTableViewController: UIViewController {
                 }
                 
             }
+                        
         }
         
     }
@@ -281,14 +294,28 @@ class SteelSectionsTableViewController: UIViewController {
         
         // The below IF STATEMENT is needed in order to decide which custom tableView cell should be used depending on the selected collectionViewCell from the ClosedSteelSectionsCollectionViewController:
         
+        // Below code gets executed if the user selected an equal or unequal leg section:
+        
         if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 4 || userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 5 {
             
             steelSectionsTableView.register(LegSteelSectionCustomTableViewCell.self, forCellReuseIdentifier: "LegSteelSectionCustomTableViewCell")
             
-        } else {
+        }
+        
+        // Below code gets executed if the user selected either a Tee section cut from a UB or UC:
+        
+        else if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 6 || userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 7 {
             
-            steelSectionsTableView.register(CustomTableViewCellForIandPFCandTsteelSections.self, forCellReuseIdentifier: "CustomTableViewCellForIandPFCandTsteelSections")
+            steelSectionsTableView.register(CustomTableViewCellForTeeSteelSections.self, forCellReuseIdentifier: "CustomTableViewCellForTeeSteelSections")
             
+        }
+        
+        // Below code gets executed for all other selections:
+            
+        else {
+            
+            steelSectionsTableView.register(CustomTableViewCellForIandPFCSteelSections.self, forCellReuseIdentifier: "CustomTableViewCellForIandPFCSteelSections")
+
         }
         
     }
@@ -432,6 +459,14 @@ class SteelSectionsTableViewController: UIViewController {
                 
                 let fullSectionDesignation = row["Full Section Designation"]!
                 
+                let firstSectionSeriesNumberCrossSectionIsCutFrom = Int(row["First Section Series Number Cross-Section is Cut From"]!)!
+                
+                let secondSectionSeriesNumberCrossSectionIsCutFrom = Int(row["Second Section Series Number Cross-Section is Cut From"]!)!
+                
+                let thirdSectionSeriesNumberCrossSectionIsCutFrom = Int(row["Third Section Series Number Cross-Section is Cut From"]!)!
+                
+                let sectionSerialNumberCrossSectionIsCutFrom = row["Section Serial Number Cross-Section is Cut From"]!
+                
                 let sectionCutFromUniversalBeam = row["Cut from Universal Beams"]!
                 
                 let sectionCutFromUniversalColumn = row["Cut from Universal Columns"]!
@@ -534,7 +569,7 @@ class SteelSectionsTableViewController: UIViewController {
                 
                 let sectionArea = Double(row["Area of Section [cm2]"]!)!
                 
-                let individualSteelSectionArrayOfDictionaries = SteelSectionParameters(firstSectionSeriesNumber: firstSectionSeriesNumber, secondSectionSeriesNumber: secondSectionSeriesNumber, lastSectionSeriesNumber: lastSectionSeriesNumber, sectionSerialNumber: sectionSerialNumber, fullSectionDesignation: fullSectionDesignation, sectionCutFromUniversalBeam: sectionCutFromUniversalBeam, sectionCutFromUniversalColumn: sectionCutFromUniversalColumn, sectionMassPerMetre: sectionMassPerMetre, sectionLegLength: sectionLegLength, sectionTotalDepth: sectionTotalDepth, sectionWidth: sectionWidth, sectionLegThickness: sectionLegThickness, sectionWebThickness: sectionWebThickness, sectionFlangeThickness: sectionFlangeThickness, sectionRootRadiusOne: sectionRootRadiusOne, sectionRootRadiusTwo: sectionRootRadiusTwo, sectionDepthBetweenFillets: sectionDepthBetweenFillets, sectionLocalDiameterBucklingRatio: sectionLocalDiameterBucklingRatio, sectionLocalWebBucklingRatio: sectionLocalWebBucklingRatio, sectionLocalFlangeBucklingRatio: sectionLocalFlangeBucklingRatio, sectionShearCentreFromWebCentreline: sectionShearCentreFromWebCentreline, sectionCentreOfGravityXdirection: sectionCentreOfGravityXdirection, sectionCentreOfGravityYdirection: sectionCentreOfGravityYdirection, sectionEndClearanceDimensionForDetailing: sectionEndClearanceDimensionForDetailing, sectionNotchNdimensionForDetailing: sectionNotchNdimensionForDetailing, sectionNotchnDimensionForDetailing: sectionNotchnDimensionForDetailing, sectionSurfaceAreaPerMetre: sectionSurfaceAreaPerMetre, sectionSurfaceAreaPerTonne: sectionSurfaceAreaPerTonne, sectionMajorSecondMomentOfAreaAboutYYaxis: sectionMajorSecondMomentOfAreaAboutYYaxis, sectionMinorSecondMomentOfAreaAboutZZaxis: sectionMinorSecondMomentOfAreaAboutZZaxis, sectionMajorSecondMomentOfAreaAboutUUaxis: sectionMajorSecondMomentOfAreaAboutUUaxis, sectionMinorSecondMomentOfAreaAboutVVaxis: sectionMinorSecondMomentOfAreaAboutVVaxis, sectionMajorRadiusOfGyrationAboutYYaxis: sectionMajorRadiusOfGyrationAboutYYaxis, sectionMinorRadiusOfGyrationAboutZZaxis: sectionMinorRadiusOfGyrationAboutZZaxis, sectionMajorRadiusOfGyrationAboutUUaxis: sectionMajorRadiusOfGyrationAboutUUaxis, sectionMinorRadiusOfGyrationAboutVVaxis: sectionMinorRadiusOfGyrationAboutVVaxis, sectionMajorElasticModulusAboutYYaxis: sectionMajorElasticModulusAboutYYaxis, sectionMinorElasticModulusAboutZZaxis: sectionMinorElasticModulusAboutZZaxis, sectionMajorFlangeElasticModulusAboutYYaxis: sectionMajorFlangeElasticModulusAboutYYaxis, sectionMajorToeElasticModulusAboutYYaxis: sectionMajorToeElasticModulusAboutYYaxis, sectionMinorToeElasticModulusAboutZZaxis: sectionMinorToeElasticModulusAboutZZaxis, sectionMajorPlasticModulusAboutYYaxis: sectionMajorPlasticModulusAboutYYaxis, sectionMinorPlasticModulusAboutZZaxis: sectionMinorPlasticModulusAboutZZaxis, sectionAngleAxisYYtoAxisUUtanAlpha: sectionAngleAxisYYtoAxisUUtanAlpha, sectionBucklingParameterU: sectionBucklingParameterU, sectionTorsionalIndexX: sectionTorsionalIndexX, sectionWarpingConstantIwInDm6: sectionWarpingConstantIwInDm6, sectionWarpingConstantIwInCm6: sectionWarpingConstantIwInCm6, sectionTorsionalConstantIt: sectionTorsionalConstantIt, sectionTorsionalConstantWt: sectionTorsionalConstantWt, sectionEquivalentSlendernessCoefficient: sectionEquivalentSlendernessCoefficient, sectionMinimumEquivalentSlendernessCoefficient: sectionMinimumEquivalentSlendernessCoefficient, sectionMaximumEquivalentSlendernessCoefficient: sectionMaximumEquivalentSlendernessCoefficient, sectionMonoSymmetryIndexPsiA: sectionMonoSymmetryIndexPsiA, sectionMonoSymmetryIndexPsi: sectionMonoSymmetryIndexPsi, sectionArea: sectionArea)
+                let individualSteelSectionArrayOfDictionaries = SteelSectionParameters(firstSectionSeriesNumber: firstSectionSeriesNumber, secondSectionSeriesNumber: secondSectionSeriesNumber, lastSectionSeriesNumber: lastSectionSeriesNumber, sectionSerialNumber: sectionSerialNumber, fullSectionDesignation: fullSectionDesignation, firstSectionSerialNumberCrossSectionIsCutFrom: firstSectionSeriesNumberCrossSectionIsCutFrom, secondSectionSerialNumberCrossSectionIsCutFrom: secondSectionSeriesNumberCrossSectionIsCutFrom, thirdSectionSerialNumberCrossSectionIsCutFrom: thirdSectionSeriesNumberCrossSectionIsCutFrom, sectionSerialNumberCrossSectionIsCutFrom: sectionSerialNumberCrossSectionIsCutFrom, sectionCutFromUniversalBeam: sectionCutFromUniversalBeam, sectionCutFromUniversalColumn: sectionCutFromUniversalColumn, sectionMassPerMetre: sectionMassPerMetre, sectionLegLength: sectionLegLength, sectionTotalDepth: sectionTotalDepth, sectionWidth: sectionWidth, sectionLegThickness: sectionLegThickness, sectionWebThickness: sectionWebThickness, sectionFlangeThickness: sectionFlangeThickness, sectionRootRadiusOne: sectionRootRadiusOne, sectionRootRadiusTwo: sectionRootRadiusTwo, sectionDepthBetweenFillets: sectionDepthBetweenFillets, sectionLocalDiameterBucklingRatio: sectionLocalDiameterBucklingRatio, sectionLocalWebBucklingRatio: sectionLocalWebBucklingRatio, sectionLocalFlangeBucklingRatio: sectionLocalFlangeBucklingRatio, sectionShearCentreFromWebCentreline: sectionShearCentreFromWebCentreline, sectionCentreOfGravityXdirection: sectionCentreOfGravityXdirection, sectionCentreOfGravityYdirection: sectionCentreOfGravityYdirection, sectionEndClearanceDimensionForDetailing: sectionEndClearanceDimensionForDetailing, sectionNotchNdimensionForDetailing: sectionNotchNdimensionForDetailing, sectionNotchnDimensionForDetailing: sectionNotchnDimensionForDetailing, sectionSurfaceAreaPerMetre: sectionSurfaceAreaPerMetre, sectionSurfaceAreaPerTonne: sectionSurfaceAreaPerTonne, sectionMajorSecondMomentOfAreaAboutYYaxis: sectionMajorSecondMomentOfAreaAboutYYaxis, sectionMinorSecondMomentOfAreaAboutZZaxis: sectionMinorSecondMomentOfAreaAboutZZaxis, sectionMajorSecondMomentOfAreaAboutUUaxis: sectionMajorSecondMomentOfAreaAboutUUaxis, sectionMinorSecondMomentOfAreaAboutVVaxis: sectionMinorSecondMomentOfAreaAboutVVaxis, sectionMajorRadiusOfGyrationAboutYYaxis: sectionMajorRadiusOfGyrationAboutYYaxis, sectionMinorRadiusOfGyrationAboutZZaxis: sectionMinorRadiusOfGyrationAboutZZaxis, sectionMajorRadiusOfGyrationAboutUUaxis: sectionMajorRadiusOfGyrationAboutUUaxis, sectionMinorRadiusOfGyrationAboutVVaxis: sectionMinorRadiusOfGyrationAboutVVaxis, sectionMajorElasticModulusAboutYYaxis: sectionMajorElasticModulusAboutYYaxis, sectionMinorElasticModulusAboutZZaxis: sectionMinorElasticModulusAboutZZaxis, sectionMajorFlangeElasticModulusAboutYYaxis: sectionMajorFlangeElasticModulusAboutYYaxis, sectionMajorToeElasticModulusAboutYYaxis: sectionMajorToeElasticModulusAboutYYaxis, sectionMinorToeElasticModulusAboutZZaxis: sectionMinorToeElasticModulusAboutZZaxis, sectionMajorPlasticModulusAboutYYaxis: sectionMajorPlasticModulusAboutYYaxis, sectionMinorPlasticModulusAboutZZaxis: sectionMinorPlasticModulusAboutZZaxis, sectionAngleAxisYYtoAxisUUtanAlpha: sectionAngleAxisYYtoAxisUUtanAlpha, sectionBucklingParameterU: sectionBucklingParameterU, sectionTorsionalIndexX: sectionTorsionalIndexX, sectionWarpingConstantIwInDm6: sectionWarpingConstantIwInDm6, sectionWarpingConstantIwInCm6: sectionWarpingConstantIwInCm6, sectionTorsionalConstantIt: sectionTorsionalConstantIt, sectionTorsionalConstantWt: sectionTorsionalConstantWt, sectionEquivalentSlendernessCoefficient: sectionEquivalentSlendernessCoefficient, sectionMinimumEquivalentSlendernessCoefficient: sectionMinimumEquivalentSlendernessCoefficient, sectionMaximumEquivalentSlendernessCoefficient: sectionMaximumEquivalentSlendernessCoefficient, sectionMonoSymmetryIndexPsiA: sectionMonoSymmetryIndexPsiA, sectionMonoSymmetryIndexPsi: sectionMonoSymmetryIndexPsi, sectionArea: sectionArea)
                 
                 // Then we need to append each of the above created Array of Dictionaries to the main Array declared above:
                 
@@ -810,14 +845,18 @@ extension SteelSectionsTableViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        // The below custom tableView cell will be used to display data related to the following steel sections, UBs, UCs, UBPs, PFCs or T-sections:
+        // The below custom tableView cell will be used to display data related to the following steel sections, UBs, UCs, UBPs or PFCs:
         
-        let cutomTableViewCellForIandPFCandTsteelSections = Bundle.main.loadNibNamed("CustomTableViewCellForIandPFCandTsteelSections", owner: self, options: nil)?.first as! CustomTableViewCellForIandPFCandTsteelSections
+        let cutomTableViewCellForIandPFCSteelSections = Bundle.main.loadNibNamed("CustomTableViewCellForIandPFCSteelSections", owner: self, options: nil)?.first as! CustomTableViewCellForIandPFCSteelSections
         
         // The below custom tableView cell will be used to display data related to L-profile steel section such as; Equal Leg Angles and Unequal Leg Angles:
         
         let customTableViewCellForLshapedSections = Bundle.main.loadNibNamed("LegSteelSectionCustomTableViewCell", owner: self, options: nil)?.first as! LegSteelSectionCustomTableViewCell
         
+        // The below custom tableView cell will be used to display data related to Tee steel sections:
+        
+        let customTableViewCellForTeeShapedSteelSections = Bundle.main.loadNibNamed("CustomTableViewCellForTeeSteelSections", owner: self, options: nil)?.first as! CustomTableViewCellForTeeSteelSections
+
         // The below custom tableView cell will be used to display specific messages to the user, for example when specific search criteria by the user couldn't find relevant data:
         
         let tableViewErrorMessageCell = Bundle.main.loadNibNamed("CustomTableViewMessageCell", owner: self, options: nil)?.first as! CustomTableViewMessageCell
@@ -852,43 +891,43 @@ extension SteelSectionsTableViewController: UITableViewDataSource {
             
             // The below lines of code are needed in order to fill the tableView cells with needed data:
             
-            // The below checks whether ther user has selected Universal Beams, Universal Columns, Universal Bearing Piles, Parallel Flange Channels or T-sections from the OpenRolledSteelSectionsCollectionViewController, and if so then the customTableViewCellForIandPFCandTsteelSections will be used to display relevant data:
+            // The below checks whether ther user has selected Universal Beams, Universal Columns, Universal Bearing Piles or Parallel Flange Channels from the OpenRolledSteelSectionsCollectionViewController, and if so then the customTableViewCellForIandPFCandTsteelSections will be used to display relevant data:
             
-            if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 0 || userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 1 || userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 2 || userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 3 || userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 6 || userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 7 {
+            if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 0 || userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 1 || userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 2 || userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 3 {
                 
                 // The below is needed in order to display information related to the Section Designation:
                 
-                cutomTableViewCellForIandPFCandTsteelSections.sectionDesignationLabel.text = "Section Designation: \(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.filter({ $0.sectionSerialNumber == arrayContainingDataRelatedOnlyToSectionsSerialNumbers[indexPath.section] }).map({ $0.fullSectionDesignation })[indexPath.row])"
+                cutomTableViewCellForIandPFCSteelSections.sectionDesignationLabel.text = "Section Designation: \(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.filter({ $0.sectionSerialNumber == arrayContainingDataRelatedOnlyToSectionsSerialNumbers[indexPath.section] }).map({ $0.fullSectionDesignation })[indexPath.row])"
                 
                 // The below is needed in order to display information related to the Total Depth of the Section:
                 
-                cutomTableViewCellForIandPFCandTsteelSections.depthOfSectionLabel.attributedText = cutomTableViewCellForIandPFCandTsteelSections.depthOfSectionLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Depth", cellSubLabelText: "Depth, h [mm] = " + String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.filter({ $0.sectionSerialNumber == "\(arrayContainingDataRelatedOnlyToSectionsSerialNumbers[indexPath.section])" }).map({ $0.sectionTotalDepth })[indexPath.row]), containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 7, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+                cutomTableViewCellForIandPFCSteelSections.depthOfSectionLabel.attributedText = cutomTableViewCellForIandPFCSteelSections.depthOfSectionLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Depth", cellSubLabelText: "Depth, h [mm] = " + String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.filter({ $0.sectionSerialNumber == "\(arrayContainingDataRelatedOnlyToSectionsSerialNumbers[indexPath.section])" }).map({ $0.sectionTotalDepth })[indexPath.row]), containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 7, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
                 
                 // The below is needed in order to display information related to the Width of the Section:
                 
-                cutomTableViewCellForIandPFCandTsteelSections.widthOfSectionLabel.attributedText = cutomTableViewCellForIandPFCandTsteelSections.widthOfSectionLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Width", cellSubLabelText: "Width, b [mm] = " + String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.filter({ $0.sectionSerialNumber == "\(arrayContainingDataRelatedOnlyToSectionsSerialNumbers[indexPath.section])" }).map({ $0.sectionWidth })[indexPath.row]), containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 7, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+                cutomTableViewCellForIandPFCSteelSections.widthOfSectionLabel.attributedText = cutomTableViewCellForIandPFCSteelSections.widthOfSectionLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Width", cellSubLabelText: "Width, b [mm] = " + String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.filter({ $0.sectionSerialNumber == "\(arrayContainingDataRelatedOnlyToSectionsSerialNumbers[indexPath.section])" }).map({ $0.sectionWidth })[indexPath.row]), containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 7, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
                 
                 // The below is needed in order to display information related to the Flange Thickness of the Section:
                 
-                cutomTableViewCellForIandPFCandTsteelSections.flangeThicknessLabel.attributedText = cutomTableViewCellForIandPFCandTsteelSections.flangeThicknessLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Flange Thickness", cellSubLabelText: "Flange Thickness, tf [mm] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.filter({ $0.sectionSerialNumber == "\(arrayContainingDataRelatedOnlyToSectionsSerialNumbers[indexPath.section])" }).map({ $0.sectionFlangeThickness })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 18, abbreviationLettersLength: 2, containsSubscriptLetters: true, subScriptLettersStartingLocation: 19, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+                cutomTableViewCellForIandPFCSteelSections.flangeThicknessLabel.attributedText = cutomTableViewCellForIandPFCSteelSections.flangeThicknessLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Flange Thickness", cellSubLabelText: "Flange Thickness, tf [mm] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.filter({ $0.sectionSerialNumber == "\(arrayContainingDataRelatedOnlyToSectionsSerialNumbers[indexPath.section])" }).map({ $0.sectionFlangeThickness })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 18, abbreviationLettersLength: 2, containsSubscriptLetters: true, subScriptLettersStartingLocation: 19, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
                 
                 // The below is needed in order to display information related to the Web Thickness of the Section:
                 
-                cutomTableViewCellForIandPFCandTsteelSections.webThicknessLabel.attributedText = cutomTableViewCellForIandPFCandTsteelSections.webThicknessLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Web Thickness", cellSubLabelText: "Web Thickness, tw [mm] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.filter({ $0.sectionSerialNumber == "\(arrayContainingDataRelatedOnlyToSectionsSerialNumbers[indexPath.section])" }).map({ $0.sectionWebThickness })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 15, abbreviationLettersLength: 2, containsSubscriptLetters: true, subScriptLettersStartingLocation: 16, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+                cutomTableViewCellForIandPFCSteelSections.webThicknessLabel.attributedText = cutomTableViewCellForIandPFCSteelSections.webThicknessLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Web Thickness", cellSubLabelText: "Web Thickness, tw [mm] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.filter({ $0.sectionSerialNumber == "\(arrayContainingDataRelatedOnlyToSectionsSerialNumbers[indexPath.section])" }).map({ $0.sectionWebThickness })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 15, abbreviationLettersLength: 2, containsSubscriptLetters: true, subScriptLettersStartingLocation: 16, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
                 
                 // The below is needed in order to display information related to the Mass per Metre of the Section:
                 
-                cutomTableViewCellForIandPFCandTsteelSections.massPerMetreLabel.attributedText = cutomTableViewCellForIandPFCandTsteelSections.massPerMetreLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Mass", cellSubLabelText: "Mass per Metre [kg/m] = " + String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.filter({ $0.sectionSerialNumber == "\(arrayContainingDataRelatedOnlyToSectionsSerialNumbers[indexPath.section])" }).map({ $0.sectionMassPerMetre })[indexPath.row]), containsAbbreviationLetters: false, abbreviationLettersStartingLocation: 0, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+                cutomTableViewCellForIandPFCSteelSections.massPerMetreLabel.attributedText = cutomTableViewCellForIandPFCSteelSections.massPerMetreLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Mass", cellSubLabelText: "Mass per Metre [kg/m] = " + String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.filter({ $0.sectionSerialNumber == "\(arrayContainingDataRelatedOnlyToSectionsSerialNumbers[indexPath.section])" }).map({ $0.sectionMassPerMetre })[indexPath.row]), containsAbbreviationLetters: false, abbreviationLettersStartingLocation: 0, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
                 
                 // The below is needed in order to display information related to the Area of the Section:
                 
-                cutomTableViewCellForIandPFCandTsteelSections.areaOfSectionLabel.attributedText = cutomTableViewCellForIandPFCandTsteelSections.areaOfSectionLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Area", cellSubLabelText: "Area of Section, A [cm2] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.filter({ $0.sectionSerialNumber == "\(arrayContainingDataRelatedOnlyToSectionsSerialNumbers[indexPath.section])" }).map({ $0.sectionArea })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 17, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 0, containsSuperScriptLetters: true, superScriptLettersStartingLocation: 22, superScriptLettersLength: 1)
+                cutomTableViewCellForIandPFCSteelSections.areaOfSectionLabel.attributedText = cutomTableViewCellForIandPFCSteelSections.areaOfSectionLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Area", cellSubLabelText: "Area of Section, A [cm2] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.filter({ $0.sectionSerialNumber == "\(arrayContainingDataRelatedOnlyToSectionsSerialNumbers[indexPath.section])" }).map({ $0.sectionArea })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 17, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 0, containsSuperScriptLetters: true, superScriptLettersStartingLocation: 22, superScriptLettersLength: 1)
                 
-                return cutomTableViewCellForIandPFCandTsteelSections
+                return cutomTableViewCellForIandPFCSteelSections
                 
             }
                 
-                // The below checks whether ther user has selected Equal Leg Angles or Unequal Leg Angles from the OpenRolledSteelSectionsCollectionViewController, and if so then the customTableViewCellForLshapedSections will be used to display relevant data:
+            // The below checks whether ther user has selected Equal Leg Angles or Unequal Leg Angles from the OpenRolledSteelSectionsCollectionViewController, and if so then the customTableViewCellForLshapedSections will be used to display relevant data:
                 
             else if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 4 || userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 5 {
                 
@@ -917,6 +956,52 @@ extension SteelSectionsTableViewController: UITableViewDataSource {
                 customTableViewCellForLshapedSections.steelAngleSectionArea.attributedText = customTableViewCellForLshapedSections.steelAngleSectionArea.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Area", cellSubLabelText: "Area of Section, A [cm2] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.filter({ $0.sectionSerialNumber == "\(arrayContainingDataRelatedOnlyToSectionsSerialNumbers[indexPath.section])" }).map({ $0.sectionArea })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 17, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 0, containsSuperScriptLetters: true, superScriptLettersStartingLocation: 22, superScriptLettersLength: 1)
                 
                 return customTableViewCellForLshapedSections
+                
+            }
+            
+            // The below code will use the customTableViewCell for Tee Steel Sections:
+                
+            else if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 6 || userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 7 {
+                
+                // The below is needed in order to display information related to the Section Designation:
+                
+                customTableViewCellForTeeShapedSteelSections.actualSectionDesignationLabel.text = "Section Designation: \(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.filter({ $0.sectionSerialNumber == arrayContainingDataRelatedOnlyToSectionsSerialNumbers[indexPath.section] }).map({ $0.fullSectionDesignation })[indexPath.row])"
+                
+                if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 6 {
+                    
+                    customTableViewCellForTeeShapedSteelSections.crossSectionTeeSectionCutFromLabel.text = "Section Cut from: UB \(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.filter({ $0.sectionSerialNumber == arrayContainingDataRelatedOnlyToSectionsSerialNumbers[indexPath.section] }).map({ $0.sectionCutFromUniversalBeam })[indexPath.row])"
+                    
+                } else {
+                    
+                    customTableViewCellForTeeShapedSteelSections.crossSectionTeeSectionCutFromLabel.text = "Section Cut from: UC \(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.filter({ $0.sectionSerialNumber == arrayContainingDataRelatedOnlyToSectionsSerialNumbers[indexPath.section] }).map({ $0.sectionCutFromUniversalColumn })[indexPath.row])"
+                    
+                }
+                
+                // The below is needed in order to display information related to the Total Depth of the Section:
+                
+                customTableViewCellForTeeShapedSteelSections.depthOfSectionLabel.attributedText = customTableViewCellForTeeShapedSteelSections.depthOfSectionLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Depth", cellSubLabelText: "Depth, h [mm] = " + String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.filter({ $0.sectionSerialNumber == "\(arrayContainingDataRelatedOnlyToSectionsSerialNumbers[indexPath.section])" }).map({ $0.sectionTotalDepth })[indexPath.row]), containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 7, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+                
+                // The below is needed in order to display information related to the Width of the Section:
+                
+                customTableViewCellForTeeShapedSteelSections.widthOfSectionLabel.attributedText = customTableViewCellForTeeShapedSteelSections.widthOfSectionLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Width", cellSubLabelText: "Width, b [mm] = " + String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.filter({ $0.sectionSerialNumber == "\(arrayContainingDataRelatedOnlyToSectionsSerialNumbers[indexPath.section])" }).map({ $0.sectionWidth })[indexPath.row]), containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 7, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+                
+                // The below is needed in order to display information related to the Flange Thickness of the Section:
+                
+                customTableViewCellForTeeShapedSteelSections.sectionFlangeSectionLabel.attributedText = customTableViewCellForTeeShapedSteelSections.sectionFlangeSectionLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Flange Thickness", cellSubLabelText: "Flange Thickness, tf [mm] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.filter({ $0.sectionSerialNumber == "\(arrayContainingDataRelatedOnlyToSectionsSerialNumbers[indexPath.section])" }).map({ $0.sectionFlangeThickness })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 18, abbreviationLettersLength: 2, containsSubscriptLetters: true, subScriptLettersStartingLocation: 19, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+                
+                // The below is needed in order to display information related to the Web Thickness of the Section:
+                
+                customTableViewCellForTeeShapedSteelSections.sectionWebThicknessLabel.attributedText = customTableViewCellForTeeShapedSteelSections.sectionWebThicknessLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Web Thickness", cellSubLabelText: "Web Thickness, tw [mm] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.filter({ $0.sectionSerialNumber == "\(arrayContainingDataRelatedOnlyToSectionsSerialNumbers[indexPath.section])" }).map({ $0.sectionWebThickness })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 15, abbreviationLettersLength: 2, containsSubscriptLetters: true, subScriptLettersStartingLocation: 16, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+                
+                // The below is needed in order to display information related to the Mass per Metre of the Section:
+                
+                customTableViewCellForTeeShapedSteelSections.sectionMassPerMetreLabel.attributedText = customTableViewCellForTeeShapedSteelSections.sectionMassPerMetreLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Mass", cellSubLabelText: "Mass per Metre [kg/m] = " + String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.filter({ $0.sectionSerialNumber == "\(arrayContainingDataRelatedOnlyToSectionsSerialNumbers[indexPath.section])" }).map({ $0.sectionMassPerMetre })[indexPath.row]), containsAbbreviationLetters: false, abbreviationLettersStartingLocation: 0, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+                
+                // The below is needed in order to display information related to the Area of the Section:
+                
+                customTableViewCellForTeeShapedSteelSections.sectionAreaLabel.attributedText = customTableViewCellForTeeShapedSteelSections.sectionAreaLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Area", cellSubLabelText: "Area of Section, A [cm2] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.filter({ $0.sectionSerialNumber == "\(arrayContainingDataRelatedOnlyToSectionsSerialNumbers[indexPath.section])" }).map({ $0.sectionArea })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 17, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 0, containsSuperScriptLetters: true, superScriptLettersStartingLocation: 22, superScriptLettersLength: 1)
+                
+                return customTableViewCellForTeeShapedSteelSections
                 
             }
             
@@ -958,25 +1043,25 @@ extension SteelSectionsTableViewController: UITableViewDataSource {
                 
             }
             
-            cutomTableViewCellForIandPFCandTsteelSections.sectionDesignationLabel.text = "Section Designation: \(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.fullSectionDesignation })[indexPath.row])"
+            cutomTableViewCellForIandPFCSteelSections.sectionDesignationLabel.text = "Section Designation: \(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.fullSectionDesignation })[indexPath.row])"
             
-            cutomTableViewCellForIandPFCandTsteelSections.depthOfSectionLabel.attributedText = cutomTableViewCellForIandPFCandTsteelSections.depthOfSectionLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Depth", cellSubLabelText: "Depth, h [mm] = " + String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionTotalDepth })[indexPath.row]), containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 7, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+            cutomTableViewCellForIandPFCSteelSections.depthOfSectionLabel.attributedText = cutomTableViewCellForIandPFCSteelSections.depthOfSectionLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Depth", cellSubLabelText: "Depth, h [mm] = " + String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionTotalDepth })[indexPath.row]), containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 7, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
             
-            cutomTableViewCellForIandPFCandTsteelSections.widthOfSectionLabel.attributedText = cutomTableViewCellForIandPFCandTsteelSections.widthOfSectionLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Width", cellSubLabelText: "Width, b [mm] = " + String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionWidth })[indexPath.row]), containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 7, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+            cutomTableViewCellForIandPFCSteelSections.widthOfSectionLabel.attributedText = cutomTableViewCellForIandPFCSteelSections.widthOfSectionLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Width", cellSubLabelText: "Width, b [mm] = " + String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionWidth })[indexPath.row]), containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 7, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
             
-            cutomTableViewCellForIandPFCandTsteelSections.flangeThicknessLabel.attributedText = cutomTableViewCellForIandPFCandTsteelSections.flangeThicknessLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Flange Thickness", cellSubLabelText: "Flange Thickness, tf [mm] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionFlangeThickness })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 18, abbreviationLettersLength: 2, containsSubscriptLetters: true, subScriptLettersStartingLocation: 19, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+            cutomTableViewCellForIandPFCSteelSections.flangeThicknessLabel.attributedText = cutomTableViewCellForIandPFCSteelSections.flangeThicknessLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Flange Thickness", cellSubLabelText: "Flange Thickness, tf [mm] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionFlangeThickness })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 18, abbreviationLettersLength: 2, containsSubscriptLetters: true, subScriptLettersStartingLocation: 19, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
             
-            cutomTableViewCellForIandPFCandTsteelSections.webThicknessLabel.attributedText = cutomTableViewCellForIandPFCandTsteelSections.webThicknessLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Web Thickness", cellSubLabelText: "Web Thickness, tw [mm] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionWebThickness })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 15, abbreviationLettersLength: 2, containsSubscriptLetters: true, subScriptLettersStartingLocation: 16, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+            cutomTableViewCellForIandPFCSteelSections.webThicknessLabel.attributedText = cutomTableViewCellForIandPFCSteelSections.webThicknessLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Web Thickness", cellSubLabelText: "Web Thickness, tw [mm] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionWebThickness })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 15, abbreviationLettersLength: 2, containsSubscriptLetters: true, subScriptLettersStartingLocation: 16, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
             
-            cutomTableViewCellForIandPFCandTsteelSections.massPerMetreLabel.attributedText = cutomTableViewCellForIandPFCandTsteelSections.massPerMetreLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Mass", cellSubLabelText: "Mass per Metre [kg/m] = " + String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionMassPerMetre })[indexPath.row]), containsAbbreviationLetters: false, abbreviationLettersStartingLocation: 0, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+            cutomTableViewCellForIandPFCSteelSections.massPerMetreLabel.attributedText = cutomTableViewCellForIandPFCSteelSections.massPerMetreLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Mass", cellSubLabelText: "Mass per Metre [kg/m] = " + String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionMassPerMetre })[indexPath.row]), containsAbbreviationLetters: false, abbreviationLettersStartingLocation: 0, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
             
-            cutomTableViewCellForIandPFCandTsteelSections.areaOfSectionLabel.attributedText = cutomTableViewCellForIandPFCandTsteelSections.areaOfSectionLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Area", cellSubLabelText: "Area of Section, A [cm2] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionArea })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 17, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 0, containsSuperScriptLetters: true, superScriptLettersStartingLocation: 22, superScriptLettersLength: 1)
+            cutomTableViewCellForIandPFCSteelSections.areaOfSectionLabel.attributedText = cutomTableViewCellForIandPFCSteelSections.areaOfSectionLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Area", cellSubLabelText: "Area of Section, A [cm2] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionArea })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 17, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 0, containsSuperScriptLetters: true, superScriptLettersStartingLocation: 22, superScriptLettersLength: 1)
             
-            return cutomTableViewCellForIandPFCandTsteelSections
+            return cutomTableViewCellForIandPFCSteelSections
             
         }
         
-        return cutomTableViewCellForIandPFCandTsteelSections
+        return cutomTableViewCellForIandPFCSteelSections
         
     }
     

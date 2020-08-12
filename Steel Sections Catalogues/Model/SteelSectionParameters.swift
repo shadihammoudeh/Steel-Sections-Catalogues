@@ -22,6 +22,14 @@ class SteelSectionParameters {
     
     var _fullSectionDesignation: String!
     
+    var _firstSectionSeriesNumberCrossSectionIsCutFrom: Int!
+    
+    var _secondSectionSeriesNumberCrossSectionIsCutFrom: Int!
+    
+    var _thirdSectionSeriesNumberCrossSectionIsCutFrom: Int!
+    
+    var _sectionSerialNumberCrossSectionIsCutFrom: String!
+        
     var _sectionCutFromUniversalBeam: String!
     
     var _sectionCutFromUniversalColumn: String!
@@ -151,6 +159,30 @@ class SteelSectionParameters {
     var fullSectionDesignation: String {
         
         return _fullSectionDesignation
+        
+    }
+    
+    var firstSectionSeriesNumberCrossSectionIsCutFrom: Int {
+        
+        return _firstSectionSeriesNumberCrossSectionIsCutFrom
+        
+    }
+    
+    var secondSectionSeriesNumberCrossSectionIsCutFrom: Int {
+        
+        return _secondSectionSeriesNumberCrossSectionIsCutFrom
+        
+    }
+    
+    var thirdSectionSeriesNumberCrossSectionIsCutFrom: Int {
+        
+        return _thirdSectionSeriesNumberCrossSectionIsCutFrom
+        
+    }
+    
+    var sectionSerialNumberCrossSectionIsCutFrom: String {
+        
+        return _sectionSerialNumberCrossSectionIsCutFrom
         
     }
     
@@ -459,7 +491,7 @@ class SteelSectionParameters {
         
     }
     
-    init(firstSectionSeriesNumber: Int, secondSectionSeriesNumber: Int, lastSectionSeriesNumber: Double, sectionSerialNumber: String, fullSectionDesignation: String, sectionCutFromUniversalBeam: String, sectionCutFromUniversalColumn: String, sectionMassPerMetre: Double, sectionLegLength: Double, sectionTotalDepth: Double, sectionWidth: Double, sectionLegThickness: Double, sectionWebThickness: Double, sectionFlangeThickness: Double, sectionRootRadiusOne: Double, sectionRootRadiusTwo: Double, sectionDepthBetweenFillets: Double, sectionLocalDiameterBucklingRatio: Double, sectionLocalWebBucklingRatio: Double, sectionLocalFlangeBucklingRatio: Double, sectionShearCentreFromWebCentreline: Double, sectionCentreOfGravityXdirection: Double, sectionCentreOfGravityYdirection: Double, sectionEndClearanceDimensionForDetailing: Int, sectionNotchNdimensionForDetailing: Int, sectionNotchnDimensionForDetailing: Int, sectionSurfaceAreaPerMetre: Double, sectionSurfaceAreaPerTonne: Double, sectionMajorSecondMomentOfAreaAboutYYaxis: Double, sectionMinorSecondMomentOfAreaAboutZZaxis: Double, sectionMajorSecondMomentOfAreaAboutUUaxis: Double, sectionMinorSecondMomentOfAreaAboutVVaxis: Double, sectionMajorRadiusOfGyrationAboutYYaxis: Double, sectionMinorRadiusOfGyrationAboutZZaxis: Double, sectionMajorRadiusOfGyrationAboutUUaxis: Double, sectionMinorRadiusOfGyrationAboutVVaxis: Double, sectionMajorElasticModulusAboutYYaxis: Double, sectionMinorElasticModulusAboutZZaxis: Double, sectionMajorFlangeElasticModulusAboutYYaxis: Double, sectionMajorToeElasticModulusAboutYYaxis: Double, sectionMinorToeElasticModulusAboutZZaxis: Double, sectionMajorPlasticModulusAboutYYaxis: Double, sectionMinorPlasticModulusAboutZZaxis: Double, sectionAngleAxisYYtoAxisUUtanAlpha: Double, sectionBucklingParameterU: Double, sectionTorsionalIndexX:Double, sectionWarpingConstantIwInDm6: Double, sectionWarpingConstantIwInCm6: Double, sectionTorsionalConstantIt: Double, sectionTorsionalConstantWt: Double, sectionEquivalentSlendernessCoefficient: Double, sectionMinimumEquivalentSlendernessCoefficient: Double, sectionMaximumEquivalentSlendernessCoefficient: Double, sectionMonoSymmetryIndexPsiA: Double, sectionMonoSymmetryIndexPsi: Double, sectionArea: Double) {
+    init(firstSectionSeriesNumber: Int, secondSectionSeriesNumber: Int, lastSectionSeriesNumber: Double, sectionSerialNumber: String, fullSectionDesignation: String, firstSectionSerialNumberCrossSectionIsCutFrom: Int, secondSectionSerialNumberCrossSectionIsCutFrom: Int, thirdSectionSerialNumberCrossSectionIsCutFrom: Int, sectionSerialNumberCrossSectionIsCutFrom: String,sectionCutFromUniversalBeam: String, sectionCutFromUniversalColumn: String, sectionMassPerMetre: Double, sectionLegLength: Double, sectionTotalDepth: Double, sectionWidth: Double, sectionLegThickness: Double, sectionWebThickness: Double, sectionFlangeThickness: Double, sectionRootRadiusOne: Double, sectionRootRadiusTwo: Double, sectionDepthBetweenFillets: Double, sectionLocalDiameterBucklingRatio: Double, sectionLocalWebBucklingRatio: Double, sectionLocalFlangeBucklingRatio: Double, sectionShearCentreFromWebCentreline: Double, sectionCentreOfGravityXdirection: Double, sectionCentreOfGravityYdirection: Double, sectionEndClearanceDimensionForDetailing: Int, sectionNotchNdimensionForDetailing: Int, sectionNotchnDimensionForDetailing: Int, sectionSurfaceAreaPerMetre: Double, sectionSurfaceAreaPerTonne: Double, sectionMajorSecondMomentOfAreaAboutYYaxis: Double, sectionMinorSecondMomentOfAreaAboutZZaxis: Double, sectionMajorSecondMomentOfAreaAboutUUaxis: Double, sectionMinorSecondMomentOfAreaAboutVVaxis: Double, sectionMajorRadiusOfGyrationAboutYYaxis: Double, sectionMinorRadiusOfGyrationAboutZZaxis: Double, sectionMajorRadiusOfGyrationAboutUUaxis: Double, sectionMinorRadiusOfGyrationAboutVVaxis: Double, sectionMajorElasticModulusAboutYYaxis: Double, sectionMinorElasticModulusAboutZZaxis: Double, sectionMajorFlangeElasticModulusAboutYYaxis: Double, sectionMajorToeElasticModulusAboutYYaxis: Double, sectionMinorToeElasticModulusAboutZZaxis: Double, sectionMajorPlasticModulusAboutYYaxis: Double, sectionMinorPlasticModulusAboutZZaxis: Double, sectionAngleAxisYYtoAxisUUtanAlpha: Double, sectionBucklingParameterU: Double, sectionTorsionalIndexX:Double, sectionWarpingConstantIwInDm6: Double, sectionWarpingConstantIwInCm6: Double, sectionTorsionalConstantIt: Double, sectionTorsionalConstantWt: Double, sectionEquivalentSlendernessCoefficient: Double, sectionMinimumEquivalentSlendernessCoefficient: Double, sectionMaximumEquivalentSlendernessCoefficient: Double, sectionMonoSymmetryIndexPsiA: Double, sectionMonoSymmetryIndexPsi: Double, sectionArea: Double) {
         
         self._firstSectionSeriesNumber = firstSectionSeriesNumber
         
@@ -470,6 +502,14 @@ class SteelSectionParameters {
         self._sectionSerialNumber = sectionSerialNumber
         
         self._fullSectionDesignation = fullSectionDesignation
+        
+        self._firstSectionSeriesNumberCrossSectionIsCutFrom = firstSectionSerialNumberCrossSectionIsCutFrom
+        
+        self._secondSectionSeriesNumberCrossSectionIsCutFrom = secondSectionSerialNumberCrossSectionIsCutFrom
+        
+        self._thirdSectionSeriesNumberCrossSectionIsCutFrom = thirdSectionSerialNumberCrossSectionIsCutFrom
+        
+        self._sectionSerialNumberCrossSectionIsCutFrom = sectionSerialNumberCrossSectionIsCutFrom
         
         self._sectionCutFromUniversalBeam = sectionCutFromUniversalBeam
         
