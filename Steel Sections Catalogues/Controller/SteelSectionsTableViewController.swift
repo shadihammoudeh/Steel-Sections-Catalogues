@@ -237,8 +237,8 @@ class SteelSectionsTableViewController: UIViewController {
                 }
                 
             }
-            
-             // Otherwise the sorting criteria will be carried out according to the actual full section designation of the selected cross-section from the previous viewController (i.e. OpenRolledSteelSectionsCollectionViewController.swift file):
+                
+                // Otherwise the sorting criteria will be carried out according to the actual full section designation of the selected cross-section from the previous viewController (i.e. OpenRolledSteelSectionsCollectionViewController.swift file):
                 
             else {
                 
@@ -257,7 +257,7 @@ class SteelSectionsTableViewController: UIViewController {
                 }
                 
             }
-                        
+            
         }
         
     }
@@ -301,21 +301,21 @@ class SteelSectionsTableViewController: UIViewController {
             steelSectionsTableView.register(LegSteelSectionCustomTableViewCell.self, forCellReuseIdentifier: "LegSteelSectionCustomTableViewCell")
             
         }
-        
-        // Below code gets executed if the user selected either a Tee section cut from a UB or UC:
-        
+            
+            // Below code gets executed if the user selected either a Tee section cut from a UB or UC:
+            
         else if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 6 || userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 7 {
             
             steelSectionsTableView.register(CustomTableViewCellForTeeSteelSections.self, forCellReuseIdentifier: "CustomTableViewCellForTeeSteelSections")
             
         }
-        
-        // Below code gets executed for all other selections:
+            
+            // Below code gets executed for all other selections:
             
         else {
             
             steelSectionsTableView.register(CustomTableViewCellForIandPFCSteelSections.self, forCellReuseIdentifier: "CustomTableViewCellForIandPFCSteelSections")
-
+            
         }
         
     }
@@ -856,7 +856,7 @@ extension SteelSectionsTableViewController: UITableViewDataSource {
         // The below custom tableView cell will be used to display data related to Tee steel sections:
         
         let customTableViewCellForTeeShapedSteelSections = Bundle.main.loadNibNamed("CustomTableViewCellForTeeSteelSections", owner: self, options: nil)?.first as! CustomTableViewCellForTeeSteelSections
-
+        
         // The below custom tableView cell will be used to display specific messages to the user, for example when specific search criteria by the user couldn't find relevant data:
         
         let tableViewErrorMessageCell = Bundle.main.loadNibNamed("CustomTableViewMessageCell", owner: self, options: nil)?.first as! CustomTableViewMessageCell
@@ -927,7 +927,7 @@ extension SteelSectionsTableViewController: UITableViewDataSource {
                 
             }
                 
-            // The below checks whether ther user has selected Equal Leg Angles or Unequal Leg Angles from the OpenRolledSteelSectionsCollectionViewController, and if so then the customTableViewCellForLshapedSections will be used to display relevant data:
+                // The below checks whether ther user has selected Equal Leg Angles or Unequal Leg Angles from the OpenRolledSteelSectionsCollectionViewController, and if so then the customTableViewCellForLshapedSections will be used to display relevant data:
                 
             else if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 4 || userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 5 {
                 
@@ -958,8 +958,8 @@ extension SteelSectionsTableViewController: UITableViewDataSource {
                 return customTableViewCellForLshapedSections
                 
             }
-            
-            // The below code will use the customTableViewCell for Tee Steel Sections:
+                
+                // The below code will use the customTableViewCell for Tee Steel Sections:
                 
             else if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 6 || userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 7 {
                 
@@ -1367,11 +1367,13 @@ extension SteelSectionsTableViewController: UISearchBarDelegate {
         
         // If the below case is true then the user selected Universal Beams from the previous viewController:
         
+        // MARK: - Search Criteria and Auto-Fill for Universal Beams Sections:
+        
         if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 0 {
             
             if searchText.isEmpty == false {
                 
-                // "101" is excluded from the below line of code, since if the first three entered digits by the user are 101 then there is the possible that the section the user is looking for is UB 1016 x 305 x ...:
+                // "101" is excluded from the below line of code, since if the first three entered digits by the user are 101 then there is the possibility that the section the user is looking for is UB 1016 x 305 x ...:
                 
                 if searchText.count == 3 && searchText != "101" {
                     
@@ -1451,6 +1453,38 @@ extension SteelSectionsTableViewController: UISearchBarDelegate {
                 filtersApplied = false
                 
                 self.steelSectionsTableView.reloadData()
+                
+            }
+                
+                // The below code will be triggered whenever the searchBar field is empty, for example this could be the case whenever the user hit the "x" button to the far right end of the searchBar:
+                
+            else {
+                
+                isSearching = false
+                
+                self.steelSectionsTableView.reloadData()
+                
+            }
+            
+        }
+            
+        // The below code gets executed if the user has selected Universal Columns from the previous viewController (i.e. OpenRolledSteelSectionsCollectionViewController.swift):
+            
+        // MARK: - Search Criteria and Auto-Fill for Universal Columns Sections:
+            
+        else if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 1 {
+            
+            // The below code gets executed when the user starts typing something inside the searchBar:
+            
+            if searchText.isEmpty == false {
+                
+                if searchText.count == 3 && searchText != "101" {
+                    
+                    newText.append(" x ")
+                    
+                    searchBar.text = String(newText)
+                    
+                }
                 
             }
             

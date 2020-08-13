@@ -28,7 +28,17 @@ class CustomTableViewCellForTeeSteelSections: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
         // Initialization code
+        
+        actualSectionDesignationLabel.textColor = UIColor(named: "Table View Sections Header Background Colour")
+        
+        actualSectionDesignationLabel.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 16)
+        
+        crossSectionTeeSectionCutFromLabel.textColor = UIColor(named: "Table View Cell Section Cut From Label Text Colour")
+        
+        crossSectionTeeSectionCutFromLabel.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 16)
+        
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
