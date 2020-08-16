@@ -84,6 +84,8 @@ class SteelSectionsTableViewController: UIViewController {
     
     lazy var tableViewSteelSectionsDataFilterOptionsViewController = main.instantiateViewController(withIdentifier: "TableViewSteelSectionsDataFilterOptions") as! TableViewSteelSectionsDataFilterOptions
     
+    lazy var searchBarDropListOptionsPopoverViewController = main.instantiateViewController(identifier: "SearchBarOptionsDropListPopoverViewControllerInsideOfSteelSectionsTableViewController")
+    
     // MARK: - viewDidLoad():
     
     override func viewDidLoad() {
@@ -1064,7 +1066,7 @@ extension SteelSectionsTableViewController: UITableViewDataSource {
         return cutomTableViewCellForIandPFCSteelSections
         
     }
-    
+
 }
 
 // MARK: - UITableViewDelegate Extension:
@@ -1132,36 +1134,6 @@ extension SteelSectionsTableViewController: UITableViewDelegate {
             steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom = steelSectionsDataArrayAsPerSearchedCriteria
             
         }
-        
-        // Declaring an empty ISectionsDimensionsParameters array that will later be filled with the appropriate values:
-        
-        //        var arrayWithAllDataRelatedToUbsSections = [IsectionsDimensionsParameters]()
-        
-        //        if (sortBy == "None" && filtersApplied == false && isSearching == false) || sortBy == "Sorted by: Section Designation in ascending order" ||  sortBy == "Sorted by: Section Designation in descending order" {
-        //
-        //            // If this is the case then there will be a different section for each UB series, thus, below we are creating an empty array that will host all the relevant Sections later on depending on whether Sections need to be sorted in Ascending or Descending order which in turn depends on the SortBy parameters the user has chosen:
-        //
-        //            var arrayWithAllSectionsSerialNumbers: [String]
-        //
-        //            // Below case represents the default case when the tableView first loads up (i.e., sortBy Variable is set to None):
-        //
-        //            if (sortBy == "None" && filtersApplied == false && isSearching == false) {
-        //
-        //                arrayWithAllDataRelatedToUbsSections = originalUniversalBeamsArrayDataExtractedFromTheCSVFileUsingTheParserContainingAllData
-        //
-        //                arrayWithAllSectionsSerialNumbers = universalBeamsArrayContainingAllSectionSerialNumberOnlyDefault
-        //
-        //                // The below represents the case when sortBy Variable is set to anything else apart from None, in Ascending Order or Descending Order (i.e., there will always be one section):
-        //
-        //            } else {
-        //
-        //                arrayWithAllDataRelatedToUbsSections = universalBeamsDataArrayReceivedFromSortDataVCViaProtocol
-        //
-        //                arrayWithAllSectionsSerialNumbers = universalBeamsArrayContainingAllSectionSerialNumberOnlySortedInAscendingOrDescendingOrder
-        //
-        //            }
-        
-        // Below we are sending the properties of the Universal Beam row that its disclouse detail button has been tapped on onto the next view controller which is BlueBookUniversalBeamDataSummaryViewController:
         
         switch userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController {
             
@@ -1248,86 +1220,6 @@ extension SteelSectionsTableViewController: UITableViewDelegate {
         self.present(selectedSteelSectionSummaryPageViewControllerInstance, animated: true, completion: nil)
         
     }
-    
-    
-    // Otherwise, if sortedBy Variable is set to something other than None, in Ascending or Descending order. Then, there is going to be only one section for all of our data:
-    
-    //        else {
-    //
-    //            if (sortBy == "Sorted by: Depth of Section in ascending order" || sortBy == "Sorted by: Width of Section in ascending order" || sortBy == "Sorted by: Section Area in ascending order" || sortBy == "Sorted by: Depth of Section in descending order" || sortBy == "Sorted by: Width of Section in descending order" || sortBy == "Sorted by: Section Area in descending order") {
-    //
-    //                arrayWithAllDataRelatedToUbsSections = universalBeamsDataArrayReceivedFromSortDataVCViaProtocol
-    //
-    //            } else if isSearching == true {
-    //
-    //                arrayWithAllDataRelatedToUbsSections = universalBeamsDataArrayAsPerTypedSearchCriteria
-    //
-    //            } else if filtersApplied == true {
-    //
-    //                arrayWithAllDataRelatedToUbsSections = universalBeamsDataArrayReceivedFromFilterDataVCViaProtocol
-    //
-    //            }
-    //
-    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamDepthOfSection = CGFloat(arrayWithAllDataRelatedToUbsSections.map({ $0.depthOfSection })[indexPath.row])
-    //
-    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamWidthOfSection = CGFloat(arrayWithAllDataRelatedToUbsSections.map({ $0.widthOfSection })[indexPath.row])
-    //
-    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamWebThickness = CGFloat(arrayWithAllDataRelatedToUbsSections.map({ $0.sectionWebThickness })[indexPath.row])
-    //
-    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamFlangeThickness = CGFloat(arrayWithAllDataRelatedToUbsSections.map({ $0.sectionFlangeThickness })[indexPath.row])
-    //
-    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamRootRadius = CGFloat(arrayWithAllDataRelatedToUbsSections.map({ $0.sectionRootRadius })[indexPath.row])
-    //
-    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamDepthBetweenFillets = Double(arrayWithAllDataRelatedToUbsSections.map({ $0.depthOfSectionBetweenFillets })[indexPath.row])
-    //
-    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamAreaOfSection = Double(arrayWithAllDataRelatedToUbsSections.map({ $0.areaOfSection })[indexPath.row])
-    //
-    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamMassPerMetre = Double(arrayWithAllDataRelatedToUbsSections.map({ $0.sectionMassPerMetre })[indexPath.row])
-    //
-    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamEndClearanceDetailingDimension = Int(arrayWithAllDataRelatedToUbsSections.map({ $0.dimensionForDetailingEndClearance })[indexPath.row])
-    //
-    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamNotchNdetailingDimension = Int(arrayWithAllDataRelatedToUbsSections.map({ $0.dimensionForDetailingNotchN })[indexPath.row])
-    //
-    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamNotchnDetailingDimension = Int(arrayWithAllDataRelatedToUbsSections.map({ $0.dimensionForDetailingNotchn })[indexPath.row])
-    //
-    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamSecondMomentOfAreaAboutMajorAxis = Double(arrayWithAllDataRelatedToUbsSections.map({ $0.secondMomentOfAreaMajorAxis })[indexPath.row])
-    //
-    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamSecondMomentOfAreaAboutMinorAxis = Double(arrayWithAllDataRelatedToUbsSections.map({ $0.secondMomentOfAreaMinorAxis })[indexPath.row])
-    //
-    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamRadiusOfGyrationAboutMajorAxis = Double(arrayWithAllDataRelatedToUbsSections.map({ $0.radiusOfGyrationMajorAxis })[indexPath.row])
-    //
-    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamRadiusOfGyrationAboutMinorAxis = Double(arrayWithAllDataRelatedToUbsSections.map({ $0.radiusOfGyrationMinorAxis })[indexPath.row])
-    //
-    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamElasticModulusAboutMajorAxis = Double(arrayWithAllDataRelatedToUbsSections.map({ $0.elasticModulusMajorAxis })[indexPath.row])
-    //
-    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamElasticModulusAboutMinorAxis = Double(arrayWithAllDataRelatedToUbsSections.map({ $0.elasticModulusMinorAxis })[indexPath.row])
-    //
-    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamPlasticModulusAboutMajorAxis = arrayWithAllDataRelatedToUbsSections.map({ $0.plasticModulusMajorAxis })[indexPath.row]
-    //
-    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamPlasticModulusAboutMinorAxis = arrayWithAllDataRelatedToUbsSections.map({ $0.plasticModulusMinorAxis })[indexPath.row]
-    //
-    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamBucklingParameter = arrayWithAllDataRelatedToUbsSections.map({ $0.bucklingParameter })[indexPath.row]
-    //
-    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamTorsionalIndex = arrayWithAllDataRelatedToUbsSections.map({ $0.torsionalIndex })[indexPath.row]
-    //
-    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamWarpingConstant = arrayWithAllDataRelatedToUbsSections.map({ $0.wrapingConstant })[indexPath.row]
-    //
-    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamTorsionalConstant = arrayWithAllDataRelatedToUbsSections.map({ $0.torsionalConstant })[indexPath.row]
-    //
-    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamSurfaceAreaPerMetre = arrayWithAllDataRelatedToUbsSections.map({ $0.surfaceAreaPerMetre })[indexPath.row]
-    //
-    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamSurfaceAreaPerTonne = arrayWithAllDataRelatedToUbsSections.map({ $0.surfaceAreaPerTonne })[indexPath.row]
-    //
-    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamRatioForWebLocalBuckling = arrayWithAllDataRelatedToUbsSections.map({ $0.ratioForLocalWebBuckling })[indexPath.row]
-    //
-    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamRatioForFlangeLocalBuckling = arrayWithAllDataRelatedToUbsSections.map({ $0.ratioForLocalFlangeBuckling })[indexPath.row]
-    //            blueBookUniversalBeamDataSummaryVCProperties.selectedUniversalBeamSectionDesignation = arrayWithAllDataRelatedToUbsSections.map({ $0.fullSectionDesignation })[indexPath.row]
-    //
-    //        }
-    
-    
-    
-    //    }
     
 }
 
@@ -1429,13 +1321,6 @@ extension SteelSectionsTableViewController: UISearchBarDelegate {
                     
                     searchBar.text = String(newText)
                     
-                }
-                    
-                    // If the below case is true then the user selected Universal Columns from the previous viewController:
-                    
-                else if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 1 {
-                    
-                    
                 } else if searchText.count == 12 && searchText.contains("1016") == true {
                     
                     newText.deleteCharacters(in: NSRange(location: 9, length: 3))
@@ -1444,43 +1329,151 @@ extension SteelSectionsTableViewController: UISearchBarDelegate {
                     
                 }
                 
-                steelSectionsDataArrayAsPerSearchedCriteria = extractedSteelSectionsDataArrayFromThePassedCsvFileUsingTheParser.filter({ $0.fullSectionDesignation.lowercased().prefix(searchText.count) == searchText.lowercased() })
-                
-                isSearching = true
-                
-                sortBy = "None"
-                
-                filtersApplied = false
-                
-                self.steelSectionsTableView.reloadData()
-                
             }
+            
+        }
+            
+            // The below code gets executed if the user has selected Universal Columns from the previous viewController (i.e. OpenRolledSteelSectionsCollectionViewController.swift):
+            
+            // MARK: - Search Criteria and Auto-Fill for Universal Columns Sections:
+            
+        else if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 1 {
+            
+            if searchText.isEmpty == false {
                 
-                // The below code will be triggered whenever the searchBar field is empty, for example this could be the case whenever the user hit the "x" button to the far right end of the searchBar:
+                // The below code gets executed when the user starts typing something inside the searchBar:
                 
-            else {
+                // Whenever the user has typed three number, automatically " x " will be added in the search bar:
                 
-                isSearching = false
-                
-                self.steelSectionsTableView.reloadData()
+                if searchText.isEmpty == false {
+                    
+                    if searchText.count == 3 {
+                        
+                        newText.append(" x ")
+                        
+                        searchBar.text = String(newText)
+                        
+                    }
+                        
+                        // The below code will make sure to add " x " automatically if the number of characters inside the searchBar is equal to 9, for example 127 x 527, then automaticall the field will become 127 x 527 x :
+                        
+                    else if searchText.count == 9 {
+                        
+                        newText.append(" x ")
+                        
+                        searchBar.text = String(newText)
+                        
+                    }
+                        
+                        // The below code deletes automatically for the user whenever the number of characters inside the searcBar is equal to 10, 2 characters after the eights character will be deeleted automatically:
+                        
+                    else if searchText.count == 10 {
+                        
+                        newText.deleteCharacters(in: NSRange(location: 8, length: 2))
+                        
+                        searchBar.text = String(newText)
+                        
+                    }
+                        
+                        // The below code deletes automatically for the user whenever the number of characters inside the searcBar is equal to 4, 2 characters after the second character will be deeleted automatically:
+                        
+                    else if searchText.count == 4 {
+                        
+                        newText.deleteCharacters(in: NSRange(location: 2, length: 2))
+                        
+                        searchBar.text = String(newText)
+                        
+                    }
+                    
+                }
                 
             }
             
         }
             
-        // The below code gets executed if the user has selected Universal Columns from the previous viewController (i.e. OpenRolledSteelSectionsCollectionViewController.swift):
+            // MARK: - Search Criteria and Auto-Fill for Universal Bearing Piles Sections:
             
-        // MARK: - Search Criteria and Auto-Fill for Universal Columns Sections:
-            
-        else if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 1 {
-            
-            // The below code gets executed when the user starts typing something inside the searchBar:
+        else if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 2 {
             
             if searchText.isEmpty == false {
                 
-                if searchText.count == 3 && searchText != "101" {
+                if searchText.isEmpty == false {
+                    
+                    if searchText.count == 3 {
+                        
+                        newText.append(" x ")
+                        
+                        searchBar.text = String(newText)
+                        
+                    } else if searchText.count == 9 {
+                        
+                        newText.append(" x ")
+                        
+                        searchBar.text = String(newText)
+                        
+                    } else if searchText.count == 10 {
+                        
+                        newText.deleteCharacters(in: NSRange(location: 8, length: 2))
+                        
+                        searchBar.text = String(newText)
+                        
+                    } else if searchText.count == 4 {
+                        
+                        newText.deleteCharacters(in: NSRange(location: 2, length: 2))
+                        
+                        searchBar.text = String(newText)
+                        
+                    }
+                    
+                }
+                
+                
+            }
+            
+        }
+            // MARK: - Search Criteria and Auto-Fill for Parallel Flange Channels Sections:
+            
+        else if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 3 {
+            
+            if searchText.isEmpty == false {
+                
+                if searchText.count == 3 {
                     
                     newText.append(" x ")
+                    
+                    searchBar.text = String(newText)
+                    
+                } else if searchText.count == 8 && (searchText != "430 x 10" && searchText != "380 x 10" && searchText != "300 x 10") {
+                    
+                    newText.append(" x ")
+                    
+                    searchBar.text = String(newText)
+                    
+                } else if searchText.count == 9 {
+                    
+                    newText.append(" x ")
+                    
+                    searchBar.text = String(newText)
+                    
+                }
+                    
+                else if searchText.count == 10 {
+                    
+                    newText.deleteCharacters(in: NSRange(location: 7, length: 3))
+                    
+                    searchBar.text = String(newText)
+                    
+                }
+                    
+                else if searchText.count == 5 {
+                    
+                    newText.deleteCharacters(in: NSRange(location: 2, length: 3))
+                    
+                    searchBar.text = String(newText)
+                    
+                } else if searchText.count == 11 && (searchText.contains("430 x 100 x") || searchText.contains("380 x 100 x") || searchText.contains("300 x 100 x")) {
+                    
+                    newText.deleteCharacters(in: NSRange(location: 8, length: 3))
                     
                     searchBar.text = String(newText)
                     
@@ -1490,6 +1483,52 @@ extension SteelSectionsTableViewController: UISearchBarDelegate {
             
         }
             
+            // MARK: - Search Criteria and Auto-Fill for Equal Leg Angles Sections:
+            
+        else if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 4 {
+            
+            if searchText.isEmpty == false {
+                
+                if searchText.count == 3 && (searchText == "200" || searchText == "150" || searchText == "120" || searchText == "100") {
+                    
+                    newText.append(" x ")
+                    
+                    searchBar.text = String(newText)
+                    
+                } else if searchText.count == 2 {
+                    
+                    searchBarDropListOptionsPopoverViewController.modalPresentationStyle = .popover
+                    
+                    let popover = searchBarDropListOptionsPopoverViewController.popoverPresentationController!
+                    
+                    popover.delegate = self
+                    
+                    popover.permittedArrowDirections = .up
+                    
+                    searchBarDropListOptionsPopoverViewController.preferredContentSize = CGSize(width: 320, height: 150)
+                    
+                    popover.sourceView = searchBar
+                    
+                    popover.sourceRect = searchBar.bounds
+                    
+                    let viewControlletToPassDataTo = searchBarDropListOptionsPopoverViewController as! SearchBarOptionsDropListPopoverViewControllerInsideOfSteelSectionsTableViewController
+                    
+                    present(viewControlletToPassDataTo, animated: true, completion:{
+                        
+                        self.view.alpha = 0.5
+                        
+                        
+                        
+                    })
+                    
+                }
+                
+            }
+            
+        }
+            
+            // The below code will be triggered whenever the searchBar field is empty, for example this could be the case whenever the user hit the "x" button to the far right end of the searchBar:
+            
         else {
             
             isSearching = false
@@ -1497,6 +1536,16 @@ extension SteelSectionsTableViewController: UISearchBarDelegate {
             self.steelSectionsTableView.reloadData()
             
         }
+        
+        steelSectionsDataArrayAsPerSearchedCriteria = extractedSteelSectionsDataArrayFromThePassedCsvFileUsingTheParser.filter({ $0.fullSectionDesignation.lowercased().prefix(searchText.count) == searchText.lowercased() })
+        
+        isSearching = true
+        
+        sortBy = "None"
+        
+        filtersApplied = false
+        
+        self.steelSectionsTableView.reloadData()
         
     }
     

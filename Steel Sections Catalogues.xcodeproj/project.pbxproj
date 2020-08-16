@@ -43,6 +43,8 @@
 		CFD1010B2353890B004E84C1 /* CustomTableViewMessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CFD101092353890B004E84C1 /* CustomTableViewMessageCell.xib */; };
 		CFD9228822EC81F500DC9757 /* OpenAndClosedSteelSectionsTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD9228722EC81F500DC9757 /* OpenAndClosedSteelSectionsTabViewController.swift */; };
 		CFD9228C22EC846900DC9757 /* ClosedSteelSectionsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD9228B22EC846900DC9757 /* ClosedSteelSectionsCollectionViewController.swift */; };
+		CFDBB59224E973CA00222175 /* SearchBarOptionsDropListPopoverViewControllerInsideOfSteelSectionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFDBB59124E973CA00222175 /* SearchBarOptionsDropListPopoverViewControllerInsideOfSteelSectionsTableViewController.swift */; };
+		CFDBB59424E9D09700222175 /* UIViewExtensionToAppyConstraintsToAnyUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFDBB59324E9D09700222175 /* UIViewExtensionToAppyConstraintsToAnyUIView.swift */; };
 		CFDFB22E24755C84005DDA2B /* EurocodesBlueBookUniversalColumnsSections.csv in Resources */ = {isa = PBXBuildFile; fileRef = CFDFB22D24755C84005DDA2B /* EurocodesBlueBookUniversalColumnsSections.csv */; };
 		CFDFB23024755C95005DDA2B /* EurocodesBlueBookUnequalLegAnglesSections.csv in Resources */ = {isa = PBXBuildFile; fileRef = CFDFB22F24755C95005DDA2B /* EurocodesBlueBookUnequalLegAnglesSections.csv */; };
 		CFDFB23224755D0E005DDA2B /* EurocodesBlueBookUniversalBearingPilesSections.csv in Resources */ = {isa = PBXBuildFile; fileRef = CFDFB23124755D0E005DDA2B /* EurocodesBlueBookUniversalBearingPilesSections.csv */; };
@@ -100,6 +102,8 @@
 		CFD101092353890B004E84C1 /* CustomTableViewMessageCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomTableViewMessageCell.xib; sourceTree = "<group>"; };
 		CFD9228722EC81F500DC9757 /* OpenAndClosedSteelSectionsTabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAndClosedSteelSectionsTabViewController.swift; sourceTree = "<group>"; };
 		CFD9228B22EC846900DC9757 /* ClosedSteelSectionsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClosedSteelSectionsCollectionViewController.swift; sourceTree = "<group>"; };
+		CFDBB59124E973CA00222175 /* SearchBarOptionsDropListPopoverViewControllerInsideOfSteelSectionsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarOptionsDropListPopoverViewControllerInsideOfSteelSectionsTableViewController.swift; sourceTree = "<group>"; };
+		CFDBB59324E9D09700222175 /* UIViewExtensionToAppyConstraintsToAnyUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtensionToAppyConstraintsToAnyUIView.swift; sourceTree = "<group>"; };
 		CFDFB22D24755C84005DDA2B /* EurocodesBlueBookUniversalColumnsSections.csv */ = {isa = PBXFileReference; lastKnownFileType = text; name = EurocodesBlueBookUniversalColumnsSections.csv; path = "Catalogues CSV Files/BlueBook/UC/EurocodesBlueBookUniversalColumnsSections.csv"; sourceTree = SOURCE_ROOT; };
 		CFDFB22F24755C95005DDA2B /* EurocodesBlueBookUnequalLegAnglesSections.csv */ = {isa = PBXFileReference; lastKnownFileType = text; name = EurocodesBlueBookUnequalLegAnglesSections.csv; path = "Catalogues CSV Files/BlueBook/Unequal leg angles (L)/EurocodesBlueBookUnequalLegAnglesSections.csv"; sourceTree = SOURCE_ROOT; };
 		CFDFB23124755D0E005DDA2B /* EurocodesBlueBookUniversalBearingPilesSections.csv */ = {isa = PBXFileReference; lastKnownFileType = text; name = EurocodesBlueBookUniversalBearingPilesSections.csv; path = "Catalogues CSV Files/BlueBook/UBP/EurocodesBlueBookUniversalBearingPilesSections.csv"; sourceTree = SOURCE_ROOT; };
@@ -200,6 +204,7 @@
 				CF6EAC4722ECF1B900C8AC65 /* SteelSectionParameters.swift */,
 				CF74C62C232580B400807E7A /* CustomRangeSlider.swift */,
 				CF6EAC4122ECF0A000C8AC65 /* CsvParser.swift */,
+				CFDBB59324E9D09700222175 /* UIViewExtensionToAppyConstraintsToAnyUIView.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -214,6 +219,7 @@
 				CFD9228B22EC846900DC9757 /* ClosedSteelSectionsCollectionViewController.swift */,
 				CF6EAC3F22ECEFC000C8AC65 /* SteelSectionsTableViewController.swift */,
 				CF4CAC9622F8A9B5007A7BED /* TableViewSteelSectionsSortByOptionsPopoverViewController.swift */,
+				CFDBB59124E973CA00222175 /* SearchBarOptionsDropListPopoverViewControllerInsideOfSteelSectionsTableViewController.swift */,
 				CFABFD28231C1E00009F923A /* TableViewSteelSectionsDataFilterOptions.swift */,
 				CF2A3DC2235CD1A200552C92 /* SelectedSteelSectionSummaryPage.swift */,
 			);
@@ -396,6 +402,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CF6EAC4822ECF1B900C8AC65 /* SteelSectionParameters.swift in Sources */,
+				CFDBB59224E973CA00222175 /* SearchBarOptionsDropListPopoverViewControllerInsideOfSteelSectionsTableViewController.swift in Sources */,
 				CF6EAC4622ECF17900C8AC65 /* IsectionsCustomTableViewCell.swift in Sources */,
 				CF0CB86522E8F43B00257A91 /* CustomCollectionView.swift in Sources */,
 				CF0CB86722E8F4A700257A91 /* CustomCollectionViewCell.swift in Sources */,
@@ -403,6 +410,7 @@
 				CF2A3DC3235CD1A200552C92 /* SelectedSteelSectionSummaryPage.swift in Sources */,
 				CF4CAC9722F8A9B5007A7BED /* TableViewSteelSectionsSortByOptionsPopoverViewController.swift in Sources */,
 				CF5216B224251434007FB00A /* PassingDataBackwardsBetweenViewControllersProtocol.swift in Sources */,
+				CFDBB59424E9D09700222175 /* UIViewExtensionToAppyConstraintsToAnyUIView.swift in Sources */,
 				CF4C734922E3BEB700923B4C /* CustomUIButton.swift in Sources */,
 				CF71D78C22E47FF3000FDDE9 /* CustomUINavigationBar.swift in Sources */,
 				CFAF8AA324E47EEF00BBFFA3 /* CustomTableViewCellForTeeSteelSections.swift in Sources */,
