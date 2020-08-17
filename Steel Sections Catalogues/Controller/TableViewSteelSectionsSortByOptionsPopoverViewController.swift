@@ -82,7 +82,7 @@ class TableViewSteelSectionsSortByOptionsPopoverViewController: UIViewController
     
     func setupPickerView() {
         
-        sortDataByPickerView.backgroundColor = UIColor(named: "SoryBy PopOver Window Picker View Background Colour")
+        sortDataByPickerView.backgroundColor = UIColor(named: "SortBy Popover VC - PickerView Background Colour")
         
         sortDataByPickerView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -94,7 +94,7 @@ class TableViewSteelSectionsSortByOptionsPopoverViewController: UIViewController
         
         // The below line of code will change the colour of the Tool Bar:
         
-        toolBar.barTintColor = UIColor(named: "SortBy PopOver Window Top Toolbar Background Colour")
+        toolBar.barTintColor = UIColor(named: "SortBy Popover VC - Top Toolbar Background Colour")
         
         toolBar.sizeToFit()
         
@@ -460,7 +460,7 @@ extension TableViewSteelSectionsSortByOptionsPopoverViewController: UIPickerView
             
         }
         
-        label.textColor = UIColor(named: "SortBy PopOver Window PickerView Items Text Colour")
+        label.textColor = UIColor(named: "SortBy Popover VC - PickerView Items Text Colour")
         
         label.textAlignment = .center
         

@@ -24,6 +24,7 @@
 		CF4C735D22E3BF7200923B4C /* MainScreenVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4C735C22E3BF7200923B4C /* MainScreenVC.swift */; };
 		CF4CAC9722F8A9B5007A7BED /* TableViewSteelSectionsSortByOptionsPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4CAC9622F8A9B5007A7BED /* TableViewSteelSectionsSortByOptionsPopoverViewController.swift */; };
 		CF5216B224251434007FB00A /* PassingDataBackwardsBetweenViewControllersProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5216B124251434007FB00A /* PassingDataBackwardsBetweenViewControllersProtocol.swift */; };
+		CF68599A24EABC1F00DDB5EB /* SearchBarPopoverTableViewCustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF68599924EABC1F00DDB5EB /* SearchBarPopoverTableViewCustomCell.swift */; };
 		CF6EAC3E22EC890600C8AC65 /* OpenRolledSteelSectionsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6EAC3D22EC890600C8AC65 /* OpenRolledSteelSectionsCollectionViewController.swift */; };
 		CF6EAC4022ECEFC000C8AC65 /* SteelSectionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6EAC3F22ECEFC000C8AC65 /* SteelSectionsTableViewController.swift */; };
 		CF6EAC4222ECF0A000C8AC65 /* CsvParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6EAC4122ECF0A000C8AC65 /* CsvParser.swift */; };
@@ -83,6 +84,7 @@
 		CF4C735C22E3BF7200923B4C /* MainScreenVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainScreenVC.swift; sourceTree = "<group>"; };
 		CF4CAC9622F8A9B5007A7BED /* TableViewSteelSectionsSortByOptionsPopoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewSteelSectionsSortByOptionsPopoverViewController.swift; sourceTree = "<group>"; };
 		CF5216B124251434007FB00A /* PassingDataBackwardsBetweenViewControllersProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassingDataBackwardsBetweenViewControllersProtocol.swift; sourceTree = "<group>"; };
+		CF68599924EABC1F00DDB5EB /* SearchBarPopoverTableViewCustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SearchBarPopoverTableViewCustomCell.swift; path = "Steel Sections Catalogues/View/SearchBarPopoverTableViewCustomCell.swift"; sourceTree = SOURCE_ROOT; };
 		CF6EAC3D22EC890600C8AC65 /* OpenRolledSteelSectionsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenRolledSteelSectionsCollectionViewController.swift; sourceTree = "<group>"; };
 		CF6EAC3F22ECEFC000C8AC65 /* SteelSectionsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SteelSectionsTableViewController.swift; sourceTree = "<group>"; };
 		CF6EAC4122ECF0A000C8AC65 /* CsvParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CsvParser.swift; sourceTree = "<group>"; };
@@ -200,6 +202,7 @@
 				CFAF8AA224E47EEF00BBFFA3 /* CustomTableViewCellForTeeSteelSections.xib */,
 				CFC5CB3A247AD24E008C5D62 /* LegSteelSectionCustomTableViewCell.swift */,
 				CFC5CB3B247AD24E008C5D62 /* LegSteelSectionCustomTableViewCell.xib */,
+				CF68599924EABC1F00DDB5EB /* SearchBarPopoverTableViewCustomCell.swift */,
 				CF6EAC4522ECF17900C8AC65 /* IsectionsCustomTableViewCell.swift */,
 				CF6EAC4722ECF1B900C8AC65 /* SteelSectionParameters.swift */,
 				CF74C62C232580B400807E7A /* CustomRangeSlider.swift */,
@@ -423,6 +426,7 @@
 				CF4C735D22E3BF7200923B4C /* MainScreenVC.swift in Sources */,
 				CFD1010A2353890B004E84C1 /* CustomTableViewMessageCell.swift in Sources */,
 				CF6EAC4222ECF0A000C8AC65 /* CsvParser.swift in Sources */,
+				CF68599A24EABC1F00DDB5EB /* SearchBarPopoverTableViewCustomCell.swift in Sources */,
 				CFD9228822EC81F500DC9757 /* OpenAndClosedSteelSectionsTabViewController.swift in Sources */,
 				CFB7B1C62346B27900BBCE3B /* PassingDataBackwardsProtocol.swift in Sources */,
 				CFC5CB3C247AD24E008C5D62 /* LegSteelSectionCustomTableViewCell.swift in Sources */,

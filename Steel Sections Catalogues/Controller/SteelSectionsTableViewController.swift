@@ -1505,11 +1505,15 @@ extension SteelSectionsTableViewController: UISearchBarDelegate {
                     
                     popover.permittedArrowDirections = .up
                     
-                    searchBarDropListOptionsPopoverViewController.preferredContentSize = CGSize(width: 320, height: 150)
+                    searchBarDropListOptionsPopoverViewController.preferredContentSize = CGSize(width: 270, height: 90)
                     
-                    popover.sourceView = searchBar
+                    // The below specifies the location for the popover view up arrow head to start from the bottom left corner of the magnifying glass icon displayed in the left hand side of the searchBar textField:
                     
-                    popover.sourceRect = searchBar.bounds
+                    popover.sourceView = searchBar.searchTextField.leftView
+                    
+                    // The below code adjust the up arrow head pointer to go down 25 points from the location defined above:
+
+                    popover.sourceRect = CGRect(x: 0, y: 25, width: 0, height: 0)
                     
                     let viewControlletToPassDataTo = searchBarDropListOptionsPopoverViewController as! SearchBarOptionsDropListPopoverViewControllerInsideOfSteelSectionsTableViewController
                     
@@ -1517,7 +1521,7 @@ extension SteelSectionsTableViewController: UISearchBarDelegate {
                         
                         self.view.alpha = 0.5
                         
-                        
+                        print(searchBar.frame.height)
                         
                     })
                     
