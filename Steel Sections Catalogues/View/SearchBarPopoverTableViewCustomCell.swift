@@ -58,14 +58,6 @@ class SearchBarPopoverTableViewCustomCell: UITableViewCell {
         
         tableViewCellTextLabel.numberOfLines = 0
         
-//        tableViewCellTextLabel.adjustsFontSizeToFitWidth = true
-        
-//        tableViewCellTextLabel.layer.borderColor = UIColor.black.cgColor
-//
-//        tableViewCellTextLabel.layer.borderWidth = 0.5
-        
-//        tableViewCellTextLabel.sizeToFit()
-        
     }
     
     func setTableViewCellTextLabelConstraints() {
@@ -78,11 +70,11 @@ class SearchBarPopoverTableViewCustomCell: UITableViewCell {
         
             tableViewCellTextLabel.topAnchor.constraint(equalTo: self.contentView.superview!.topAnchor, constant: 5),
             
-            tableViewCellTextLabel.leftAnchor.constraint(equalTo: self.contentView.superview!.leftAnchor, constant: 5),
+            tableViewCellTextLabel.leftAnchor.constraint(equalTo: self.contentView.superview!.leftAnchor, constant: 8),
             
             tableViewCellTextLabel.bottomAnchor.constraint(equalTo: self.contentView.superview!.bottomAnchor, constant: -5),
             
-            tableViewCellTextLabel.rightAnchor.constraint(equalTo: self.contentView.superview!.rightAnchor, constant: -5)
+            tableViewCellTextLabel.rightAnchor.constraint(equalTo: self.contentView.superview!.rightAnchor, constant: -8)
         
         ])
         

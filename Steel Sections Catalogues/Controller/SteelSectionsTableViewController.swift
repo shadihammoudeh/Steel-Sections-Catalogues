@@ -214,6 +214,48 @@ class SteelSectionsTableViewController: UIViewController {
         
     }
     
+    // MARK: - Method to display Search Bar popover VC whenever the user type two characters inside the searchBar field of an equal and unequal angle sections. In order to know for example whether when the user type 10 whether he would like the first section serial number to be 10 or 100:
+    
+    func displaySearchBarPopoverVC() {
+        
+        searchBarDropListOptionsPopoverViewController.modalPresentationStyle = .popover
+        
+        let popover = searchBarDropListOptionsPopoverViewController.popoverPresentationController!
+        
+        popover.delegate = self
+        
+        popover.permittedArrowDirections = .up
+        
+        searchBarDropListOptionsPopoverViewController.preferredContentSize = CGSize(width: 270, height: 96)
+        
+        // The below specifies the location for the popover view up arrow head to start from the bottom left corner of the magnifying glass icon displayed in the left hand side of the searchBar textField:
+        
+        popover.sourceView = searchBar.searchTextField.leftView
+        
+        // The below code adjust the up arrow head pointer to go down 25 points from the location defined above:
+
+        popover.sourceRect = CGRect(x: 0, y: 25, width: 0, height: 0)
+        
+        let viewControlletToPassDataTo = searchBarDropListOptionsPopoverViewController as! SearchBarOptionsDropListPopoverViewControllerInsideOfSteelSectionsTableViewController
+        
+        present(viewControlletToPassDataTo, animated: true, completion:{
+            
+            self.view.alpha = 0.5
+            
+            self.dismissKeyboard()
+            
+        })
+        
+    }
+    
+    // MARK: - UIAlertHandler Method for searchBar Popover VC. Whenever the user click on the UIAlert "Ok" button, he will be presented again with the searchBar Popover VC in order to force him to make a selection from the available options before proceeding further:
+    
+    func searchBarPopoverVCHandlerMethod(action: UIAlertAction) {
+        
+        displaySearchBarPopoverVC()
+        
+    }
+    
     // MARK: - function that is needed to sort data array extracted from the CSV parser in Ascending order:
     
     func sortCsvExtractedSteelSectionsDataInAscendingOrder() {
@@ -1497,33 +1539,7 @@ extension SteelSectionsTableViewController: UISearchBarDelegate {
                     
                 } else if searchText.count == 2 {
                     
-                    searchBarDropListOptionsPopoverViewController.modalPresentationStyle = .popover
-                    
-                    let popover = searchBarDropListOptionsPopoverViewController.popoverPresentationController!
-                    
-                    popover.delegate = self
-                    
-                    popover.permittedArrowDirections = .up
-                    
-                    searchBarDropListOptionsPopoverViewController.preferredContentSize = CGSize(width: 270, height: 90)
-                    
-                    // The below specifies the location for the popover view up arrow head to start from the bottom left corner of the magnifying glass icon displayed in the left hand side of the searchBar textField:
-                    
-                    popover.sourceView = searchBar.searchTextField.leftView
-                    
-                    // The below code adjust the up arrow head pointer to go down 25 points from the location defined above:
-
-                    popover.sourceRect = CGRect(x: 0, y: 25, width: 0, height: 0)
-                    
-                    let viewControlletToPassDataTo = searchBarDropListOptionsPopoverViewController as! SearchBarOptionsDropListPopoverViewControllerInsideOfSteelSectionsTableViewController
-                    
-                    present(viewControlletToPassDataTo, animated: true, completion:{
-                        
-                        self.view.alpha = 0.5
-                        
-                        print(searchBar.frame.height)
-                        
-                    })
+                   displaySearchBarPopoverVC()
                     
                 }
                 
@@ -1759,7 +1775,21 @@ extension SteelSectionsTableViewController: UIPopoverPresentationControllerDeleg
     
     func popoverPresentationControllerShouldDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) -> Bool {
         
-        return true
+        // Note that in order to be able to display the alert relevant to equal angle sections tableViewController, the first step is to dismiss the already poped up searchBarPopoverVC, which appeared to the user as soon as he typed two characters inside the searchBar textField, in order to know whether for example the user intention is to search for a 10 x ... series or 100 x ... series. Once the searchBarPopoverVC has been dismissed, then the AlertVC can be displayed whenever the user
+        
+        self.searchBarDropListOptionsPopoverViewController.dismiss(animated: true, completion: {
+            
+            let alert = UIAlertController(title: "Alert", message: "Please select from available options to proceed!", preferredStyle: UIAlertController.Style.alert)
+            
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: self.searchBarPopoverVCHandlerMethod(action:)))
+            
+            self.present(alert, animated: true, completion: nil)
+            
+        })
+        
+        // The below will prevent the popover VC from disappearing whenever the user tap anywhere on the screen outside the popover VC itself:
+        
+        return false
         
     }
     

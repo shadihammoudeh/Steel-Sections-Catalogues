@@ -28,7 +28,7 @@ class SearchBarOptionsDropListPopoverViewControllerInsideOfSteelSectionsTableVie
 
         configureTableView()
         
-        view.backgroundColor = .yellow
+        view.backgroundColor = UIColor(named: "Search Bar Popover TableView Controller - VC Background Colour")
         
     }
     
@@ -52,11 +52,11 @@ class SearchBarOptionsDropListPopoverViewControllerInsideOfSteelSectionsTableVie
         
         // In order to have the cells inside of the tableView to automatically adjust their sizes depending on their contents. The first step is to have a rough estimate on how much the cell's height need to be. If the table contains variable height rows, it might be expensive to calculate all their heights when the table loads. Using estimation allows you to defer some of the cost of geometry calculation from load time to scrolling time. When you create a self-sizing table view cell, you need to set this property and use constraints to define the cell’s size:
         
-        dropListOptionsTableViewInsidePopoverView.estimatedRowHeight = 25
+        dropListOptionsTableViewInsidePopoverView.estimatedRowHeight = 50
         
         dropListOptionsTableViewInsidePopoverView.rowHeight = UITableView.automaticDimension
         
-        dropListOptionsTableViewInsidePopoverView.backgroundColor = UIColor.red
+        dropListOptionsTableViewInsidePopoverView.backgroundColor = UIColor(named: "Search Bar Popover TableView Controller - TableView Background Colour")
         
         dropListOptionsTableViewInsidePopoverView.register(SearchBarPopoverTableViewCustomCell.self, forCellReuseIdentifier: "SearchbarPopoverTableViewCustomCell")
         
@@ -66,19 +66,7 @@ class SearchBarOptionsDropListPopoverViewControllerInsideOfSteelSectionsTableVie
     
     func setUpConstraints() {
         
-        dropListOptionsTableViewInsidePopoverView.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-        
-            dropListOptionsTableViewInsidePopoverView.topAnchor.constraint(equalTo: view.topAnchor, constant: 13),
-            
-            dropListOptionsTableViewInsidePopoverView.leftAnchor.constraint(equalTo: view.leftAnchor),
-            
-            dropListOptionsTableViewInsidePopoverView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            
-            dropListOptionsTableViewInsidePopoverView.rightAnchor.constraint(equalTo: view.rightAnchor)
-        
-        ])
+        dropListOptionsTableViewInsidePopoverView.pin(to: self.view, topAnchorConstant: 13, rightAnchorConstant: 0, bottomAnchorConstant: 0, leftAnchorConstant: 0)
         
     }
 
@@ -132,7 +120,19 @@ extension SearchBarOptionsDropListPopoverViewControllerInsideOfSteelSectionsTabl
         
         sectionHeaderTextLabel.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 18)
         
-        sectionHeaderTextLabel.pin(to: sectionHeaderView)
+        sectionHeaderTextLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+        
+            sectionHeaderTextLabel.topAnchor.constraint(equalTo: sectionHeaderView.topAnchor, constant: 5),
+            
+            sectionHeaderTextLabel.rightAnchor.constraint(equalTo: sectionHeaderView.rightAnchor, constant: -5),
+            
+            sectionHeaderTextLabel.bottomAnchor.constraint(equalTo: sectionHeaderView.bottomAnchor, constant: -5),
+            
+            sectionHeaderTextLabel.leftAnchor.constraint(equalTo: sectionHeaderView.leftAnchor, constant: 5)
+        
+        ])
         
         sectionHeaderView.backgroundColor = UIColor(named: "Search Bar Popover TableView Controller - Section Header Background Colour")
         

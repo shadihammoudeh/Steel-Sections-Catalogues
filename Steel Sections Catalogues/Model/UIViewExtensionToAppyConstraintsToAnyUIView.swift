@@ -12,17 +12,21 @@ import UIKit
 
 extension UIView {
     
-    func pin(to superView: UIView) {
+    func pin(to superView: UIView, topAnchorConstant: CGFloat, rightAnchorConstant: CGFloat, bottomAnchorConstant: CGFloat, leftAnchorConstant: CGFloat) {
         
         translatesAutoresizingMaskIntoConstraints = false
         
-        topAnchor.constraint(equalTo: superView.topAnchor).isActive = true
+        NSLayoutConstraint.activate([
         
-        leadingAnchor.constraint(equalTo: superView.leadingAnchor).isActive = true
-
-        trailingAnchor.constraint(equalTo: superView.trailingAnchor).isActive = true
-
-        bottomAnchor.constraint(equalTo: superView.bottomAnchor).isActive = true
+            topAnchor.constraint(equalTo: superView.topAnchor, constant: topAnchorConstant),
+            
+            rightAnchor.constraint(equalTo: superView.rightAnchor, constant: rightAnchorConstant),
+            
+            bottomAnchor.constraint(equalTo: superView.bottomAnchor, constant: bottomAnchorConstant),
+            
+            leftAnchor.constraint(equalTo: superView.leftAnchor, constant: leftAnchorConstant)
+        
+        ])
         
     }
     
