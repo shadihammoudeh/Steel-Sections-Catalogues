@@ -10,26 +10,30 @@ import UIKit
 
 class SearchBarOptionsDropListPopoverViewControllerInsideOfSteelSectionsTableViewController: UIViewController {
 
-    var userLastSelectedCollectionViewCellReceivedFromSteelSectionsTableViewController: Int = 0
+    var userSelectedCollectionViewCellFromOpenRolledSteelSectionsCollectionViewController: Int = 0
     
     var userTypedCharactersInsideSteelSectionsTableViewControllerSearchBarField: String = ""
     
     var dropListOptionsTableViewInsidePopoverView = UITableView()
     
-    var tableViewCellLabelData: [String] = ["10 x ...", "100 x ..."]
+    var firstTwoCharactersUserTypedInsideOfSteelSectionsTableViewVCSearchBarTextField: String = ""
+    
+    var tableViewDataArray: [String] = []
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        
+        setDataArrayToBeDisplayedInTableView()
             
         // Do any additional setup after loading the view.
-        
+                        
         // Below we code is where the data will be passed from the previous viewController (i.e. SteelSectionsTableViewController) to this VC depending on which collectionViewCell the user has selected (i.e. UB, UB, UBP, etc..) as well as what the user typed into the searchBar so far:
 
         configureTableView()
         
         view.backgroundColor = UIColor(named: "Search Bar Popover TableView Controller - VC Background Colour")
-        
+                
     }
     
     override func viewDidLayoutSubviews() {
@@ -69,6 +73,22 @@ class SearchBarOptionsDropListPopoverViewControllerInsideOfSteelSectionsTableVie
         dropListOptionsTableViewInsidePopoverView.pin(to: self.view, topAnchorConstant: 13, rightAnchorConstant: 0, bottomAnchorConstant: 0, leftAnchorConstant: 0)
         
     }
+    
+    func setDataArrayToBeDisplayedInTableView() {
+        
+        // The below code will be executed if the user selected Equal Angle Sections from the OpenRolledSteelSectionsCollectionVC:
+        
+        if userSelectedCollectionViewCellFromOpenRolledSteelSectionsCollectionViewController == 4 {
+            
+            if firstTwoCharactersUserTypedInsideOfSteelSectionsTableViewVCSearchBarTextField == "20" {
+                
+                tableViewDataArray = ["20 x ...", "200 x ..."]
+                
+            }
+            
+        }
+        
+    }
 
 }
 
@@ -83,18 +103,18 @@ extension SearchBarOptionsDropListPopoverViewControllerInsideOfSteelSectionsTabl
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         // The number of rows that need to be displayed inside the tableView depends on how many items are there inside of the tableViewCellLabelData array:
-        
-        return tableViewCellLabelData.count
+                
+        return tableViewDataArray.count
         
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
+                
         // The reason we need to cast the below as! SearchBarPopoverTableViewCustomCell is to be able to get access to the methods inside of it:
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "SearchbarPopoverTableViewCustomCell") as! SearchBarPopoverTableViewCustomCell
         
-        let cellLabelTextContents = tableViewCellLabelData[indexPath.row]
+        let cellLabelTextContents = tableViewDataArray[indexPath.row]
         
         cell.set(textLabel: cellLabelTextContents)
         

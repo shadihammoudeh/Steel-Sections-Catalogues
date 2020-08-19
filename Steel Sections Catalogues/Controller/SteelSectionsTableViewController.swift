@@ -84,7 +84,7 @@ class SteelSectionsTableViewController: UIViewController {
     
     lazy var tableViewSteelSectionsDataFilterOptionsViewController = main.instantiateViewController(withIdentifier: "TableViewSteelSectionsDataFilterOptions") as! TableViewSteelSectionsDataFilterOptions
     
-    lazy var searchBarDropListOptionsPopoverViewController = main.instantiateViewController(identifier: "SearchBarOptionsDropListPopoverViewControllerInsideOfSteelSectionsTableViewController")
+    lazy var searchBarDropListOptionsPopoverViewController = main.instantiateViewController(identifier: "SearchBarOptionsDropListPopoverViewControllerInsideOfSteelSectionsTableViewController") as! SearchBarOptionsDropListPopoverViewControllerInsideOfSteelSectionsTableViewController
     
     // MARK: - viewDidLoad():
     
@@ -236,9 +236,9 @@ class SteelSectionsTableViewController: UIViewController {
 
         popover.sourceRect = CGRect(x: 0, y: 25, width: 0, height: 0)
         
-        let viewControlletToPassDataTo = searchBarDropListOptionsPopoverViewController as! SearchBarOptionsDropListPopoverViewControllerInsideOfSteelSectionsTableViewController
+//        let viewControlletToPassDataTo = searchBarDropListOptionsPopoverViewController as! SearchBarOptionsDropListPopoverViewControllerInsideOfSteelSectionsTableViewController
         
-        present(viewControlletToPassDataTo, animated: true, completion:{
+        present(self.searchBarDropListOptionsPopoverViewController, animated: true, completion:{
             
             self.view.alpha = 0.5
             
@@ -1539,7 +1539,23 @@ extension SteelSectionsTableViewController: UISearchBarDelegate {
                     
                 } else if searchText.count == 2 {
                     
-                   displaySearchBarPopoverVC()
+                    // The reason "20" is chosen is because from the available Equal Angle Section stated in the BlueBook, the used could be looking for 20 x ... or 200 x ... series as both do exist in the BlueBook catalogue manual:
+                    
+                    if searchText.description == "20" {
+                        
+                        searchBarDropListOptionsPopoverViewController.firstTwoCharactersUserTypedInsideOfSteelSectionsTableViewVCSearchBarTextField = searchText.description
+                         
+                         searchBarDropListOptionsPopoverViewController.userSelectedCollectionViewCellFromOpenRolledSteelSectionsCollectionViewController = self.userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController
+                         
+                        displaySearchBarPopoverVC()
+                        
+                    } else {
+                        
+                        newText.append(" x ")
+                        
+                        searchBar.text = String(newText)
+                        
+                    }
                     
                 }
                 
@@ -1775,17 +1791,25 @@ extension SteelSectionsTableViewController: UIPopoverPresentationControllerDeleg
     
     func popoverPresentationControllerShouldDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) -> Bool {
         
-        // Note that in order to be able to display the alert relevant to equal angle sections tableViewController, the first step is to dismiss the already poped up searchBarPopoverVC, which appeared to the user as soon as he typed two characters inside the searchBar textField, in order to know whether for example the user intention is to search for a 10 x ... series or 100 x ... series. Once the searchBarPopoverVC has been dismissed, then the AlertVC can be displayed whenever the user
-        
-        self.searchBarDropListOptionsPopoverViewController.dismiss(animated: true, completion: {
+        if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 4 {
             
-            let alert = UIAlertController(title: "Alert", message: "Please select from available options to proceed!", preferredStyle: UIAlertController.Style.alert)
+            // Note that in order to be able to display the alert relevant to equal angle sections tableViewController, the first step is to dismiss the already poped up searchBarPopoverVC, which appeared to the user as soon as he typed two characters inside the searchBar textField, in order to know whether for example the user intention is to search for a 10 x ... series or 100 x ... series. Once the searchBarPopoverVC has been dismissed, then the AlertVC can be displayed whenever the user tap amywhere on the screen outside of the UIAlert dialogue box.
             
-            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: self.searchBarPopoverVCHandlerMethod(action:)))
+            self.searchBarDropListOptionsPopoverViewController.dismiss(animated: true, completion: {
+                
+                let alert = UIAlertController(title: "Alert", message: "Please select from available options to proceed!", preferredStyle: UIAlertController.Style.alert)
+                
+                // The below title represents the title of the button that will be displayed inside the UIAlert, which the user needs to click on in order to dismiss the alert. The below handler contains the previously defined UIAlertAction, which is required in order to display again the searchBar Popover VC when the user click on the "Ok" button displayed inside the UIAlert. Basically the alert will be dismissed and the searchBarPopoverVC will be displayed again:
+                
+                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: self.searchBarPopoverVCHandlerMethod(action:)))
+                
+                // The below line of code is needed in order to display the UIAlert:
+                
+                self.present(alert, animated: true, completion: nil)
+                
+            })
             
-            self.present(alert, animated: true, completion: nil)
-            
-        })
+        }
         
         // The below will prevent the popover VC from disappearing whenever the user tap anywhere on the screen outside the popover VC itself:
         
