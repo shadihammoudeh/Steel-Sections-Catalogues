@@ -25,6 +25,7 @@
 		CF4CAC9722F8A9B5007A7BED /* TableViewSteelSectionsSortByOptionsPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4CAC9622F8A9B5007A7BED /* TableViewSteelSectionsSortByOptionsPopoverViewController.swift */; };
 		CF5216B224251434007FB00A /* PassingDataBackwardsBetweenViewControllersProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5216B124251434007FB00A /* PassingDataBackwardsBetweenViewControllersProtocol.swift */; };
 		CF68599A24EABC1F00DDB5EB /* SearchBarPopoverTableViewCustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF68599924EABC1F00DDB5EB /* SearchBarPopoverTableViewCustomCell.swift */; };
+		CF69330824EEADE300FE6C74 /* PassingDataBackwardsFromSearchBarOptionsDropListPopoverVCToSteelSectionsTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF69330724EEADE300FE6C74 /* PassingDataBackwardsFromSearchBarOptionsDropListPopoverVCToSteelSectionsTableVC.swift */; };
 		CF6EAC3E22EC890600C8AC65 /* OpenRolledSteelSectionsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6EAC3D22EC890600C8AC65 /* OpenRolledSteelSectionsCollectionViewController.swift */; };
 		CF6EAC4022ECEFC000C8AC65 /* SteelSectionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6EAC3F22ECEFC000C8AC65 /* SteelSectionsTableViewController.swift */; };
 		CF6EAC4222ECF0A000C8AC65 /* CsvParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6EAC4122ECF0A000C8AC65 /* CsvParser.swift */; };
@@ -85,6 +86,7 @@
 		CF4CAC9622F8A9B5007A7BED /* TableViewSteelSectionsSortByOptionsPopoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewSteelSectionsSortByOptionsPopoverViewController.swift; sourceTree = "<group>"; };
 		CF5216B124251434007FB00A /* PassingDataBackwardsBetweenViewControllersProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassingDataBackwardsBetweenViewControllersProtocol.swift; sourceTree = "<group>"; };
 		CF68599924EABC1F00DDB5EB /* SearchBarPopoverTableViewCustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SearchBarPopoverTableViewCustomCell.swift; path = "Steel Sections Catalogues/View/SearchBarPopoverTableViewCustomCell.swift"; sourceTree = SOURCE_ROOT; };
+		CF69330724EEADE300FE6C74 /* PassingDataBackwardsFromSearchBarOptionsDropListPopoverVCToSteelSectionsTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassingDataBackwardsFromSearchBarOptionsDropListPopoverVCToSteelSectionsTableVC.swift; sourceTree = "<group>"; };
 		CF6EAC3D22EC890600C8AC65 /* OpenRolledSteelSectionsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenRolledSteelSectionsCollectionViewController.swift; sourceTree = "<group>"; };
 		CF6EAC3F22ECEFC000C8AC65 /* SteelSectionsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SteelSectionsTableViewController.swift; sourceTree = "<group>"; };
 		CF6EAC4122ECF0A000C8AC65 /* CsvParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CsvParser.swift; sourceTree = "<group>"; };
@@ -243,6 +245,7 @@
 			children = (
 				CFB7B1C52346B27900BBCE3B /* PassingDataBackwardsProtocol.swift */,
 				CF5216B124251434007FB00A /* PassingDataBackwardsBetweenViewControllersProtocol.swift */,
+				CF69330724EEADE300FE6C74 /* PassingDataBackwardsFromSearchBarOptionsDropListPopoverVCToSteelSectionsTableVC.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -416,6 +419,7 @@
 				CFDBB59424E9D09700222175 /* UIViewExtensionToAppyConstraintsToAnyUIView.swift in Sources */,
 				CF4C734922E3BEB700923B4C /* CustomUIButton.swift in Sources */,
 				CF71D78C22E47FF3000FDDE9 /* CustomUINavigationBar.swift in Sources */,
+				CF69330824EEADE300FE6C74 /* PassingDataBackwardsFromSearchBarOptionsDropListPopoverVCToSteelSectionsTableVC.swift in Sources */,
 				CFAF8AA324E47EEF00BBFFA3 /* CustomTableViewCellForTeeSteelSections.swift in Sources */,
 				CF4C734722E3BEB700923B4C /* AppDelegate.swift in Sources */,
 				CFABFD29231C1E00009F923A /* TableViewSteelSectionsDataFilterOptions.swift in Sources */,

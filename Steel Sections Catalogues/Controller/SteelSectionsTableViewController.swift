@@ -10,6 +10,8 @@ import UIKit
 
 class SteelSectionsTableViewController: UIViewController {
     
+    var searchBarAutoCompleteBasedOnUserSelectionFromSearchBarOptionsDropListPopoverVC: String = ""
+    
     // MARK: - Data received from previous View Controller (i.e. OpenRolledSteelSectionsCollectionViewController):
     
     // The below is important in order to set the title of the NavigatioBar on this page, whether it is going to be Universal Beams (UB), Universal Columns (UC), Universal Bearing Piles (UBP), Parallel Flange Channels (PFC), Equal Leg Angles (L), Unequal Leg Angles (L), Tees (T) splift from UB or Tees (T) splift from UC:
@@ -228,19 +230,19 @@ class SteelSectionsTableViewController: UIViewController {
         
         searchBarDropListOptionsPopoverViewController.preferredContentSize = CGSize(width: 270, height: 96)
         
+        // The below code is needed in order for the backwards protocol which pass data backwards from the seachBarDropListOptionsPopoverViewController to this ViewController to work, since this this where we are assigning this viewController as the delegate for the searchBarDropListOptionsPopoverViewController (i.e. this is the viewController in charge):
+        
+        searchBarDropListOptionsPopoverViewController.delegate = self
+        
         // The below specifies the location for the popover view up arrow head to start from the bottom left corner of the magnifying glass icon displayed in the left hand side of the searchBar textField:
         
         popover.sourceView = searchBar.searchTextField.leftView
         
         // The below code adjust the up arrow head pointer to go down 25 points from the location defined above:
-
+        
         popover.sourceRect = CGRect(x: 0, y: 25, width: 0, height: 0)
         
-//        let viewControlletToPassDataTo = searchBarDropListOptionsPopoverViewController as! SearchBarOptionsDropListPopoverViewControllerInsideOfSteelSectionsTableViewController
-        
         present(self.searchBarDropListOptionsPopoverViewController, animated: true, completion:{
-            
-            self.view.alpha = 0.5
             
             self.dismissKeyboard()
             
@@ -1087,28 +1089,112 @@ extension SteelSectionsTableViewController: UITableViewDataSource {
                 
             }
             
-            cutomTableViewCellForIandPFCSteelSections.sectionDesignationLabel.text = "Section Designation: \(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.fullSectionDesignation })[indexPath.row])"
+            // The below lines of code are needed in order to fill the tableView cells with needed data:
             
-            cutomTableViewCellForIandPFCSteelSections.depthOfSectionLabel.attributedText = cutomTableViewCellForIandPFCSteelSections.depthOfSectionLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Depth", cellSubLabelText: "Depth, h [mm] = " + String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionTotalDepth })[indexPath.row]), containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 7, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+            // The below checks whether ther user has selected Universal Beams, Universal Columns, Universal Bearing Piles or Parallel Flange Channels from the OpenRolledSteelSectionsCollectionViewController, and if so then the customTableViewCellForIandPFCandTsteelSections will be used to display relevant data:
             
-            cutomTableViewCellForIandPFCSteelSections.widthOfSectionLabel.attributedText = cutomTableViewCellForIandPFCSteelSections.widthOfSectionLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Width", cellSubLabelText: "Width, b [mm] = " + String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionWidth })[indexPath.row]), containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 7, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
-            
-            cutomTableViewCellForIandPFCSteelSections.flangeThicknessLabel.attributedText = cutomTableViewCellForIandPFCSteelSections.flangeThicknessLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Flange Thickness", cellSubLabelText: "Flange Thickness, tf [mm] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionFlangeThickness })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 18, abbreviationLettersLength: 2, containsSubscriptLetters: true, subScriptLettersStartingLocation: 19, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
-            
-            cutomTableViewCellForIandPFCSteelSections.webThicknessLabel.attributedText = cutomTableViewCellForIandPFCSteelSections.webThicknessLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Web Thickness", cellSubLabelText: "Web Thickness, tw [mm] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionWebThickness })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 15, abbreviationLettersLength: 2, containsSubscriptLetters: true, subScriptLettersStartingLocation: 16, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
-            
-            cutomTableViewCellForIandPFCSteelSections.massPerMetreLabel.attributedText = cutomTableViewCellForIandPFCSteelSections.massPerMetreLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Mass", cellSubLabelText: "Mass per Metre [kg/m] = " + String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionMassPerMetre })[indexPath.row]), containsAbbreviationLetters: false, abbreviationLettersStartingLocation: 0, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
-            
-            cutomTableViewCellForIandPFCSteelSections.areaOfSectionLabel.attributedText = cutomTableViewCellForIandPFCSteelSections.areaOfSectionLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Area", cellSubLabelText: "Area of Section, A [cm2] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionArea })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 17, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 0, containsSuperScriptLetters: true, superScriptLettersStartingLocation: 22, superScriptLettersLength: 1)
-            
-            return cutomTableViewCellForIandPFCSteelSections
+            if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 0 || userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 1 || userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 2 || userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 3 {
+                
+                cutomTableViewCellForIandPFCSteelSections.sectionDesignationLabel.text = "Section Designation: \(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.fullSectionDesignation })[indexPath.row])"
+                
+                cutomTableViewCellForIandPFCSteelSections.depthOfSectionLabel.attributedText = cutomTableViewCellForIandPFCSteelSections.depthOfSectionLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Depth", cellSubLabelText: "Depth, h [mm] = " + String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionTotalDepth })[indexPath.row]), containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 7, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+                
+                cutomTableViewCellForIandPFCSteelSections.widthOfSectionLabel.attributedText = cutomTableViewCellForIandPFCSteelSections.widthOfSectionLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Width", cellSubLabelText: "Width, b [mm] = " + String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionWidth })[indexPath.row]), containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 7, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+                
+                cutomTableViewCellForIandPFCSteelSections.flangeThicknessLabel.attributedText = cutomTableViewCellForIandPFCSteelSections.flangeThicknessLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Flange Thickness", cellSubLabelText: "Flange Thickness, tf [mm] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionFlangeThickness })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 18, abbreviationLettersLength: 2, containsSubscriptLetters: true, subScriptLettersStartingLocation: 19, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+                
+                cutomTableViewCellForIandPFCSteelSections.webThicknessLabel.attributedText = cutomTableViewCellForIandPFCSteelSections.webThicknessLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Web Thickness", cellSubLabelText: "Web Thickness, tw [mm] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionWebThickness })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 15, abbreviationLettersLength: 2, containsSubscriptLetters: true, subScriptLettersStartingLocation: 16, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+                
+                cutomTableViewCellForIandPFCSteelSections.massPerMetreLabel.attributedText = cutomTableViewCellForIandPFCSteelSections.massPerMetreLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Mass", cellSubLabelText: "Mass per Metre [kg/m] = " + String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionMassPerMetre })[indexPath.row]), containsAbbreviationLetters: false, abbreviationLettersStartingLocation: 0, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+                
+                cutomTableViewCellForIandPFCSteelSections.areaOfSectionLabel.attributedText = cutomTableViewCellForIandPFCSteelSections.areaOfSectionLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Area", cellSubLabelText: "Area of Section, A [cm2] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionArea })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 17, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 0, containsSuperScriptLetters: true, superScriptLettersStartingLocation: 22, superScriptLettersLength: 1)
+                
+                return cutomTableViewCellForIandPFCSteelSections
+                
+            } // The below checks whether ther user has selected Equal Leg Angles or Unequal Leg Angles from the OpenRolledSteelSectionsCollectionViewController, and if so then the customTableViewCellForLshapedSections will be used to display relevant data:
+                
+            else if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 4 || userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 5 {
+                
+                // The below is needed in order to display information related to the Section Designation:
+                
+                customTableViewCellForLshapedSections.steelAngleSectionDesignationLabel.text = "Section Designation: \(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.fullSectionDesignation })[indexPath.row])"
+                
+                // The below is needed in order to display information related to the Total Depth of the Section:
+                
+                customTableViewCellForLshapedSections.steelAngleDepthLabel.attributedText = customTableViewCellForLshapedSections.steelAngleDepthLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Depth", cellSubLabelText: "Depth, h [mm] = " + String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionTotalDepth })[indexPath.row]), containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 7, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+                
+                // The below is needed in order to display information related to the Width of the Section:
+                
+                customTableViewCellForLshapedSections.steelAngleWidthLabel.attributedText = customTableViewCellForLshapedSections.steelAngleWidthLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Width", cellSubLabelText: "Width, b [mm] = " + String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionWidth })[indexPath.row]), containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 7, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+                
+                // The below is needed in order to display information related to the Thickness of the Section:
+                
+                customTableViewCellForLshapedSections.steelAngleThicknessLabel.attributedText = customTableViewCellForLshapedSections.steelAngleThicknessLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Leg Thickness", cellSubLabelText: "Leg Thickness, t [mm] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionLegThickness })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 15, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+                
+                // The below is needed in order to display information related to the Mass per Metre of the Section:
+                
+                customTableViewCellForLshapedSections.steelAngleMassPerMetre.attributedText = customTableViewCellForLshapedSections.steelAngleMassPerMetre.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Mass", cellSubLabelText: "Mass per Metre [kg/m] = " + String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionMassPerMetre })[indexPath.row]), containsAbbreviationLetters: false, abbreviationLettersStartingLocation: 0, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+                
+                // The below is needed in order to display information related to the Area of the Section:
+                
+                customTableViewCellForLshapedSections.steelAngleSectionArea.attributedText = customTableViewCellForLshapedSections.steelAngleSectionArea.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Area", cellSubLabelText: "Area of Section, A [cm2] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionArea })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 17, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 0, containsSuperScriptLetters: true, superScriptLettersStartingLocation: 22, superScriptLettersLength: 1)
+                
+                return customTableViewCellForLshapedSections
+                
+            }
+                
+                // The below code will use the customTableViewCell for Tee Steel Sections:
+                
+            else if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 6 || userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 7 {
+                
+                // The below is needed in order to display information related to the Section Designation:
+
+                customTableViewCellForTeeShapedSteelSections.actualSectionDesignationLabel.text = "Section Designation: \(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.fullSectionDesignation })[indexPath.row])"
+                
+                if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 6 {
+                    
+                    customTableViewCellForTeeShapedSteelSections.crossSectionTeeSectionCutFromLabel.text = "Section Cut from: UB \(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionCutFromUniversalBeam })[indexPath.row])"
+                    
+                } else {
+                    
+                    customTableViewCellForTeeShapedSteelSections.crossSectionTeeSectionCutFromLabel.text = "Section Cut from: UC \(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionCutFromUniversalColumn })[indexPath.row])"
+                    
+                }
+                
+                // The below is needed in order to display information related to the Total Depth of the Section:
+
+                customTableViewCellForTeeShapedSteelSections.depthOfSectionLabel.attributedText = customTableViewCellForTeeShapedSteelSections.depthOfSectionLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Depth", cellSubLabelText: "Depth, h [mm] = " + String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionTotalDepth })[indexPath.row]), containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 7, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+                
+                // The below is needed in order to display information related to the Width of the Section:
+
+                customTableViewCellForTeeShapedSteelSections.widthOfSectionLabel.attributedText = customTableViewCellForTeeShapedSteelSections.widthOfSectionLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Width", cellSubLabelText: "Width, b [mm] = " + String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionWidth })[indexPath.row]), containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 7, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+                
+                // The below is needed in order to display information related to the Flange Thickness of the Section:
+
+                customTableViewCellForTeeShapedSteelSections.sectionFlangeSectionLabel.attributedText = customTableViewCellForTeeShapedSteelSections.sectionFlangeSectionLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Flange Thickness", cellSubLabelText: "Flange Thickness, tf [mm] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionLegThickness })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 18, abbreviationLettersLength: 2, containsSubscriptLetters: true, subScriptLettersStartingLocation: 19, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+                
+                // The below is needed in order to display information related to the Web Thickness of the Section:
+
+                customTableViewCellForTeeShapedSteelSections.sectionWebThicknessLabel.attributedText = customTableViewCellForTeeShapedSteelSections.sectionWebThicknessLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Web Thickness", cellSubLabelText: "Web Thickness, tw [mm] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionLegThickness })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 15, abbreviationLettersLength: 2, containsSubscriptLetters: true, subScriptLettersStartingLocation: 16, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+                
+                // The below is needed in order to display information related to the Mass per Metre of the Section:
+
+                customTableViewCellForTeeShapedSteelSections.sectionMassPerMetreLabel.attributedText = customTableViewCellForTeeShapedSteelSections.sectionMassPerMetreLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Mass", cellSubLabelText: "Mass per Metre [kg/m] = " + String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionMassPerMetre })[indexPath.row]), containsAbbreviationLetters: false, abbreviationLettersStartingLocation: 0, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+                
+                // The below is needed in order to display information related to the Area of the Section:
+
+                customTableViewCellForTeeShapedSteelSections.sectionAreaLabel.attributedText = customTableViewCellForTeeShapedSteelSections.sectionAreaLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Area", cellSubLabelText: "Area of Section, A [cm2] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionArea })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 17, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 0, containsSuperScriptLetters: true, superScriptLettersStartingLocation: 22, superScriptLettersLength: 1)
+                
+                return customTableViewCellForTeeShapedSteelSections
+                
+            }
             
         }
         
         return cutomTableViewCellForIandPFCSteelSections
         
     }
-
+    
 }
 
 // MARK: - UITableViewDelegate Extension:
@@ -1544,9 +1630,9 @@ extension SteelSectionsTableViewController: UISearchBarDelegate {
                     if searchText.description == "20" {
                         
                         searchBarDropListOptionsPopoverViewController.firstTwoCharactersUserTypedInsideOfSteelSectionsTableViewVCSearchBarTextField = searchText.description
-                         
-                         searchBarDropListOptionsPopoverViewController.userSelectedCollectionViewCellFromOpenRolledSteelSectionsCollectionViewController = self.userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController
-                         
+                        
+                        searchBarDropListOptionsPopoverViewController.userSelectedCollectionViewCellFromOpenRolledSteelSectionsCollectionViewController = self.userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController
+                        
                         displaySearchBarPopoverVC()
                         
                     } else {
@@ -1659,117 +1745,35 @@ extension SteelSectionsTableViewController: PassingDataBackwardsBetweenViewContr
         
     }
     
-    
-    //    func dataToBePassedUsingProtocol(configuredArrayContainingSteelSectionsData: [IsectionsDimensionsParameters], configuredArrayContainingSteelSectionsSerialNumbersOnly: [String], configuredSortByVariable: String, configuredFiltersAppliedVariable: Bool, configuredIsSearchingVariable: Bool, exchangedUserSelectedTableCellSectionNumber: Int, exchangedUserSelectedTableCellRowNumber: Int) {
-    //
-    //        self.sortBy = configuredSortByVariable
-    //
-    //        self.filtersApplied = configuredFiltersAppliedVariable
-    //
-    //        self.isSearching = configuredIsSearchingVariable
-    //
-    //        searchBar.text = ""
-    //
-    //        if isSearching == false && filtersApplied == false && (sortBy == "Sorted by: Section Designation in ascending order" || sortBy == "Sorted by: Section Designation in descending order" || sortBy == "Sorted by: Depth of Section in ascending order" || sortBy == "Sorted by: Width of Section in ascending order" || sortBy == "Sorted by: Section Area in ascending order" || sortBy == "Sorted by: Depth of Section in descending order" || sortBy == "Sorted by: Width of Section in descending order" || sortBy == "Sorted by: Section Area in descending order") {
-    //
-    //            self.steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsSortByOptionsPopoverViewController = configuredArrayContainingSteelSectionsData
-    //
-    //            self.steelSectionsDataArrayContainingOnlyInfoAboutSectionsSerialNumberSortedInAscendingOrDescendingOrder = configuredArrayContainingSteelSectionsSerialNumbersOnly
-    //
-    //        } else if filtersApplied == true {
-    //
-    //            self.steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsDataFilterOptionsViewController = configuredArrayContainingSteelSectionsData
-    //
-    //        }
-    //
-    //            self.steelSectionsTableView.scrollToRow(at: IndexPath.init(row: 0, section: 0), at: UITableView.ScrollPosition.top, animated: true)
-    //
-    //            self.view.alpha = 1.0
-    //
-    //            self.steelSectionsTableView.reloadData()
-    //
-    //    }
-    
-    //    func dataToBePassedUsingProtocol(modifiedArrayToBePassed: [IsectionsDimensionsParameters], sortBy: String, filtersApplied: Bool, isSearching: Bool) {
-    //
-    //        self.sortBy = sortBy
-    //
-    //        self.filtersApplied = filtersApplied
-    //
-    //        self.isSearching = isSearching
-    //
-    //        searchBar.text = ""
-    //
-    //        if isSearching == false && filtersApplied == false && (sortBy == "Sorted by: Section Designation in ascending order" || sortBy == "Sorted by: Section Designation in descending order" || sortBy == "Sorted by: Depth of Section in ascending order" || sortBy == "Sorted by: Width of Section in ascending order" || sortBy == "Sorted by: Section Area in ascending order" || sortBy == "Sorted by: Depth of Section in descending order" || sortBy == "Sorted by: Width of Section in descending order" || sortBy == "Sorted by: Section Area in descending order") {
-    //
-    //            // In this case the title for each section header is equal to each section serial number:
-    //
-    //            self.steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsSortByOptionsPopoverViewController = modifiedArrayToBePassed
-    //
-    //            self.steelSectionsDataArrayContainingOnlyInfoAboutSectionsSerialNumberSortedInAscendingOrDescendingOrder = modifiedArrayToBePassed.map({ return $0.sectionSerialNumber }).removingDuplicates()
-    //
-    //        } else if filtersApplied == true {
-    //
-    //            self.steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsDataFilterOptionsViewController = modifiedArrayToBePassed
-    //
-    //        }
-    //
-    //        self.steelSectionsTableView.scrollToRow(at: IndexPath.init(row: 0, section: 0), at: UITableView.ScrollPosition.top, animated: true)
-    //
-    //        self.view.alpha = 1.0
-    //
-    //        self.steelSectionsTableView.reloadData()
-    //
-    //    }
-    
 }
 
-// MARK: - Protocol extension in order to receive data from BlueBookUniversalBeamDataSummaryVC:
+// MARK: -Protocol to pass data backwards from SearchBarOptionsDropListPopoverVC to this VC:
 
-//extension SteelSectionsTableViewController: ProtocolToPassDataBackwardsFromDataSummaryVcToPreviousVc {
-//
-//    func dataToBePassedUsingProtocol(modifiedArrayContainingAllUBsDataToBePassed: [IsectionsDimensionsParameters], modifiedArrayContainingSectionSerialNumbersDataToBePassed: [String], passedSortBy: String, passedFiltersApplied: Bool, passedIsSearching: Bool, passedSelectedTableSectionNumberFromPreviousVc: Int, passedSelectedTableRowNumberFromPreviousVc: Int) {
-//
-//        self.sortBy = passedSortBy
-//
-//        self.isSearching = passedIsSearching
-//
-//        self.filtersApplied = passedFiltersApplied
-//
-//        self.lastSelectedTableRowByTheUser = passedSelectedTableRowNumberFromPreviousVc
-//
-//        self.lastSelectedTableSectionByTheUser = passedSelectedTableSectionNumberFromPreviousVc
-//
-//        if sortBy == "None" && isSearching == false && filtersApplied == false {
-//
-//            originalUniversalBeamsArrayDataExtractedFromTheCSVFileUsingTheParserContainingAllData = modifiedArrayContainingAllUBsDataToBePassed
-//
-//            universalBeamsArrayContainingAllSectionSerialNumberOnlyDefault = modifiedArrayContainingSectionSerialNumbersDataToBePassed
-//
-//        } else if (sortBy == "Sorted by: Section Designation in ascending order" || sortBy == "Sorted by: Depth of Section in ascending order" || sortBy == "Sorted by: Width of Section in ascending order" || sortBy == "Srted by: Area of Section in ascending order" || sortBy == "Sorted by: Section Designation in descending order" || sortBy == "Sorted by: Depth of Section in descending order" || sortBy == "Sorted by: Width of Section in descending order" || sortBy == "Srted by: Area of Section in descending order") && isSearching == false && filtersApplied == false {
-//
-//            universalBeamsDataArrayReceivedFromSortDataVCViaProtocol = modifiedArrayContainingAllUBsDataToBePassed
-//
-//            universalBeamsArrayContainingAllSectionSerialNumberOnlySortedInAscendingOrDescendingOrder = modifiedArrayContainingSectionSerialNumbersDataToBePassed
-//
-//        } else if sortBy == "None" && isSearching == false && filtersApplied == true {
-//            universalBeamsDataArrayReceivedFromFilterDataVCViaProtocol = modifiedArrayContainingAllUBsDataToBePassed
-//
-//        } else if sortBy == "None" && isSearching == true && filtersApplied == false {
-//
-//            universalBeamsDataArrayAsPerTypedSearchCriteria = modifiedArrayContainingAllUBsDataToBePassed
-//
-//        }
-//
-//    }
-//
-//}
+extension SteelSectionsTableViewController: PassingDataBackwardsFromSearchBarOptionsDropListPopoverVCToSteelSectionsTableVC {
+    
+    func dataToBePassedBackwards(userSelectedTableViewCellContent: String) {
+        
+        self.searchBarAutoCompleteBasedOnUserSelectionFromSearchBarOptionsDropListPopoverVC = userSelectedTableViewCellContent
+        
+        print(self.searchBarAutoCompleteBasedOnUserSelectionFromSearchBarOptionsDropListPopoverVC)
+        
+        // The below line of code is needed in order to set this viewController back to its full brightness (instead of 0.5) as soon as the searchBarOptionsDropListVC has been dismissed:
+        
+        self.view.alpha = 1
+        
+    }
+    
+}
 
 // MARK: - UIPopoverPresentationControllerDelegate Extension:
 
 extension SteelSectionsTableViewController: UIPopoverPresentationControllerDelegate {
     
     func prepareForPopoverPresentation(_ popoverPresentationController: UIPopoverPresentationController) {
+        
+        // The below line of code will set the brightness of this VC to 50% whenever the popover view either the one related to sortData or searchBarOptionsDropList is about to get displayed on screen:
+        
+        self.view.alpha = 0.50
         
     }
     
@@ -1781,13 +1785,13 @@ extension SteelSectionsTableViewController: UIPopoverPresentationControllerDeleg
         
     }
     
-    // The below function gets called whenever the SortDataPopOverVC gets dismissed:
+    // The below function gets called whenever the SortDataPopOverVC or searchBarOptionsDropListVC gets dismissed:
     
     func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
         
-        self.view.alpha = 1.0
-        
     }
+    
+    // The below method get called whenever the user try to tap anywhere on the screen outside the popover view boundaries:
     
     func popoverPresentationControllerShouldDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) -> Bool {
         

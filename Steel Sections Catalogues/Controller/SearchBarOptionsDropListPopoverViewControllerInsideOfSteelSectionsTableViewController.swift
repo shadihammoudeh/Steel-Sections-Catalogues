@@ -9,6 +9,10 @@
 import UIKit
 
 class SearchBarOptionsDropListPopoverViewControllerInsideOfSteelSectionsTableViewController: UIViewController {
+    
+    // MARK: - Assigning protocol delegate:
+    
+    weak var delegate: PassingDataBackwardsFromSearchBarOptionsDropListPopoverVCToSteelSectionsTableVC?
 
     var userSelectedCollectionViewCellFromOpenRolledSteelSectionsCollectionViewController: Int = 0
     
@@ -62,7 +66,7 @@ class SearchBarOptionsDropListPopoverViewControllerInsideOfSteelSectionsTableVie
         
         dropListOptionsTableViewInsidePopoverView.backgroundColor = UIColor(named: "Search Bar Popover TableView Controller - TableView Background Colour")
         
-        dropListOptionsTableViewInsidePopoverView.register(SearchBarPopoverTableViewCustomCell.self, forCellReuseIdentifier: "SearchbarPopoverTableViewCustomCell")
+        dropListOptionsTableViewInsidePopoverView.register(SearchBarPopoverTableViewCustomCell.self, forCellReuseIdentifier: "SearchBarPopoverTableViewCustomCell")
         
         view.addSubview(dropListOptionsTableViewInsidePopoverView)
         
@@ -112,7 +116,7 @@ extension SearchBarOptionsDropListPopoverViewControllerInsideOfSteelSectionsTabl
                 
         // The reason we need to cast the below as! SearchBarPopoverTableViewCustomCell is to be able to get access to the methods inside of it:
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "SearchbarPopoverTableViewCustomCell") as! SearchBarPopoverTableViewCustomCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SearchBarPopoverTableViewCustomCell") as! SearchBarPopoverTableViewCustomCell
         
         let cellLabelTextContents = tableViewDataArray[indexPath.row]
         
@@ -158,6 +162,14 @@ extension SearchBarOptionsDropListPopoverViewControllerInsideOfSteelSectionsTabl
         
         return sectionHeaderView
         
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        delegate?.dataToBePassedBackwards(userSelectedTableViewCellContent: tableViewDataArray[indexPath.row])
+        
+        dismiss(animated: true, completion: {})
+                
     }
     
 }
