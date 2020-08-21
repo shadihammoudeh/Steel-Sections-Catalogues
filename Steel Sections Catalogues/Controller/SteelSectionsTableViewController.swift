@@ -1148,7 +1148,7 @@ extension SteelSectionsTableViewController: UITableViewDataSource {
             else if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 6 || userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 7 {
                 
                 // The below is needed in order to display information related to the Section Designation:
-
+                
                 customTableViewCellForTeeShapedSteelSections.actualSectionDesignationLabel.text = "Section Designation: \(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.fullSectionDesignation })[indexPath.row])"
                 
                 if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 6 {
@@ -1162,27 +1162,27 @@ extension SteelSectionsTableViewController: UITableViewDataSource {
                 }
                 
                 // The below is needed in order to display information related to the Total Depth of the Section:
-
+                
                 customTableViewCellForTeeShapedSteelSections.depthOfSectionLabel.attributedText = customTableViewCellForTeeShapedSteelSections.depthOfSectionLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Depth", cellSubLabelText: "Depth, h [mm] = " + String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionTotalDepth })[indexPath.row]), containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 7, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
                 
                 // The below is needed in order to display information related to the Width of the Section:
-
+                
                 customTableViewCellForTeeShapedSteelSections.widthOfSectionLabel.attributedText = customTableViewCellForTeeShapedSteelSections.widthOfSectionLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Width", cellSubLabelText: "Width, b [mm] = " + String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionWidth })[indexPath.row]), containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 7, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
                 
                 // The below is needed in order to display information related to the Flange Thickness of the Section:
-
-                customTableViewCellForTeeShapedSteelSections.sectionFlangeSectionLabel.attributedText = customTableViewCellForTeeShapedSteelSections.sectionFlangeSectionLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Flange Thickness", cellSubLabelText: "Flange Thickness, tf [mm] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionLegThickness })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 18, abbreviationLettersLength: 2, containsSubscriptLetters: true, subScriptLettersStartingLocation: 19, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+                
+                customTableViewCellForTeeShapedSteelSections.sectionFlangeSectionLabel.attributedText = customTableViewCellForTeeShapedSteelSections.sectionFlangeSectionLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Flange Thickness", cellSubLabelText: "Flange Thickness, tf [mm] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionFlangeThickness })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 18, abbreviationLettersLength: 2, containsSubscriptLetters: true, subScriptLettersStartingLocation: 19, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
                 
                 // The below is needed in order to display information related to the Web Thickness of the Section:
-
-                customTableViewCellForTeeShapedSteelSections.sectionWebThicknessLabel.attributedText = customTableViewCellForTeeShapedSteelSections.sectionWebThicknessLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Web Thickness", cellSubLabelText: "Web Thickness, tw [mm] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionLegThickness })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 15, abbreviationLettersLength: 2, containsSubscriptLetters: true, subScriptLettersStartingLocation: 16, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
+                
+                customTableViewCellForTeeShapedSteelSections.sectionWebThicknessLabel.attributedText = customTableViewCellForTeeShapedSteelSections.sectionWebThicknessLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Web Thickness", cellSubLabelText: "Web Thickness, tw [mm] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionWebThickness })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 15, abbreviationLettersLength: 2, containsSubscriptLetters: true, subScriptLettersStartingLocation: 16, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
                 
                 // The below is needed in order to display information related to the Mass per Metre of the Section:
-
+                
                 customTableViewCellForTeeShapedSteelSections.sectionMassPerMetreLabel.attributedText = customTableViewCellForTeeShapedSteelSections.sectionMassPerMetreLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Mass", cellSubLabelText: "Mass per Metre [kg/m] = " + String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionMassPerMetre })[indexPath.row]), containsAbbreviationLetters: false, abbreviationLettersStartingLocation: 0, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 1, containsSuperScriptLetters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 1)
                 
                 // The below is needed in order to display information related to the Area of the Section:
-
+                
                 customTableViewCellForTeeShapedSteelSections.sectionAreaLabel.attributedText = customTableViewCellForTeeShapedSteelSections.sectionAreaLabel.returnedSubTableViewCellLabelNSAttributedString(dataSortedBy: self.sortBy, cellTitleRelatedTo: "Area", cellSubLabelText: "Area of Section, A [cm2] = \(String(arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.map({ $0.sectionArea })[indexPath.row]))", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 17, abbreviationLettersLength: 1, containsSubscriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 0, containsSuperScriptLetters: true, superScriptLettersStartingLocation: 22, superScriptLettersLength: 1)
                 
                 return customTableViewCellForTeeShapedSteelSections
@@ -1389,9 +1389,9 @@ extension SteelSectionsTableViewController: UISearchBarDelegate {
         
         // MARK: - Search Criteria and Auto-Fill for Universal Beams Sections:
         
-        if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 0 {
+        if searchText.isEmpty == false {
             
-            if searchText.isEmpty == false {
+            if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 0 {
                 
                 // "101" is excluded from the below line of code, since if the first three entered digits by the user are 101 then there is the possibility that the section the user is looking for is UB 1016 x 305 x ...:
                 
@@ -1458,16 +1458,12 @@ extension SteelSectionsTableViewController: UISearchBarDelegate {
                 }
                 
             }
-            
-        }
-            
-            // The below code gets executed if the user has selected Universal Columns from the previous viewController (i.e. OpenRolledSteelSectionsCollectionViewController.swift):
-            
-            // MARK: - Search Criteria and Auto-Fill for Universal Columns Sections:
-            
-        else if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 1 {
-            
-            if searchText.isEmpty == false {
+                
+                // The below code gets executed if the user has selected Universal Columns from the previous viewController (i.e. OpenRolledSteelSectionsCollectionViewController.swift):
+                
+                // MARK: - Search Criteria and Auto-Fill for Universal Columns Sections:
+                
+            else if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 1 {
                 
                 // The below code gets executed when the user starts typing something inside the searchBar:
                 
@@ -1516,14 +1512,10 @@ extension SteelSectionsTableViewController: UISearchBarDelegate {
                 }
                 
             }
-            
-        }
-            
-            // MARK: - Search Criteria and Auto-Fill for Universal Bearing Piles Sections:
-            
-        else if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 2 {
-            
-            if searchText.isEmpty == false {
+                
+                // MARK: - Search Criteria and Auto-Fill for Universal Bearing Piles Sections:
+                
+            else if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 2 {
                 
                 if searchText.isEmpty == false {
                     
@@ -1555,15 +1547,10 @@ extension SteelSectionsTableViewController: UISearchBarDelegate {
                     
                 }
                 
-                
             }
-            
-        }
-            // MARK: - Search Criteria and Auto-Fill for Parallel Flange Channels Sections:
-            
-        else if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 3 {
-            
-            if searchText.isEmpty == false {
+                // MARK: - Search Criteria and Auto-Fill for Parallel Flange Channels Sections:
+                
+            else if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 3 {
                 
                 if searchText.count == 3 {
                     
@@ -1608,14 +1595,10 @@ extension SteelSectionsTableViewController: UISearchBarDelegate {
                 }
                 
             }
-            
-        }
-            
-            // MARK: - Search Criteria and Auto-Fill for Equal Leg Angles Sections:
-            
-        else if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 4 {
-            
-            if searchText.isEmpty == false {
+                
+                // MARK: - Search Criteria and Auto-Fill for Equal Leg Angles Sections:
+                
+            else if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 4 {
                 
                 if searchText.count == 3 && (searchText == "200" || searchText == "150" || searchText == "120" || searchText == "100") {
                     
@@ -1623,7 +1606,7 @@ extension SteelSectionsTableViewController: UISearchBarDelegate {
                     
                     searchBar.text = String(newText)
                     
-                } else if searchText.count == 2 {
+                } else if searchText.count == 2 && (searchText != "15" && searchText != "12" && searchText != "10"){
                     
                     // The reason "20" is chosen is because from the available Equal Angle Section stated in the BlueBook, the used could be looking for 20 x ... or 200 x ... series as both do exist in the BlueBook catalogue manual:
                     
@@ -1643,9 +1626,193 @@ extension SteelSectionsTableViewController: UISearchBarDelegate {
                         
                     }
                     
+                } else if searchText.count == 9 && (searchText == "200 x 200" || searchText == "150 x 150" || searchText == "120 x 120" || searchText == "100 x 100") {
+                    
+                    newText.append(" x ")
+                    
+                    searchBar.text = String(newText)
+                    
+                } else if searchText.count == 7 && (searchText != "200 x 2" && searchText != "150 x 1" && searchText != "120 x 1" && searchText != "100 x 1") {
+                    
+                    newText.append(" x ")
+                    
+                    searchBar.text = String(newText)
+                    
+                } else if searchText.count == 11 && (searchText == "200 x 200 x" || searchText == "150 x 150 x" || searchText == "120 x 120 x" || searchText == "100 x 100 x"){
+                    
+                    newText.deleteCharacters(in: NSRange(location: 8, length: 3))
+                    
+                    searchBar.text = String(newText)
+                    
+                } else if searchText.count == 9 {
+                    
+                    newText.deleteCharacters(in: NSRange(location: 6, length: 3))
+                    
+                    searchBar.text = String(newText)
+                    
+                } else if searchText.count == 4 {
+                    
+                    newText.deleteCharacters(in: NSRange(location: 1, length: 3))
+                    
+                    searchBar.text = String(newText)
+                    
                 }
                 
             }
+            
+                // MARK: - Search Criteria and Auto-Fill for Un-equal Leg Angles Sections:
+            
+            else if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 5 {
+                
+                if searchText.count == 3 {
+                    
+                    newText.append(" x ")
+                    
+                    searchBar.text = String(newText)
+                    
+                } else if searchText.count == 2 && (searchText != "20" && searchText != "15" && searchText != "12" && searchText != "10") {
+                    
+                    newText.append(" x ")
+                    
+                    searchBar.text = String(newText)
+                    
+                } else if searchText.count == 9 && (searchText == "200 x 150" || searchText == "200 x 100"){
+                    
+                    newText.append(" x ")
+                    
+                    searchBar.text = String(newText)
+                    
+                } else if searchText.count == 8 && (searchText != "200 x 15" && searchText != "200 x 10") {
+                    
+                    newText.append(" x ")
+                    
+                    searchBar.text = String(newText)
+                    
+                } else if searchText.count == 7 && (searchText == "80 x 60" || searchText == "80 x 40" || searchText == "75 x 50" || searchText == "70 x 50" || searchText == "65 x 50" || searchText == "60 x 40" || searchText == "60 x 30" || searchText == "50 x 30" || searchText == "45 x 30" || searchText == "40 x 25" || searchText == "40 x 20" || searchText == "30 x 20") {
+                    
+                    newText.append(" x ")
+                    
+                    searchBar.text = String(newText)
+                    
+                } else if searchText.count == 11 && (searchText == "200 x 150 x" || searchText == "200 x 100 x"){
+                    
+                    newText.deleteCharacters(in: NSRange(location: 7, length: 4))
+                    
+                    searchBar.text = String(newText)
+                    
+                } else if searchText.count == 10 && (searchText != "200 x 150 " && searchText != "200 x 100 " && searchText != "80 x 60 x " && searchText != "80 x 40 x " && searchText != "75 x 50 x " && searchText != "70 x 50 x " && searchText != "65 x 50 x " && searchText != "60 x 40 x " && searchText != "60 x 30 x " && searchText != "50 x 30 x " && searchText != "45 x 30 x " && searchText != "40 x 25 x " && searchText != "40 x 20 x " && searchText != "30 x 20 x ") {
+                    
+                    newText.deleteCharacters(in: NSRange(location: 7, length: 3))
+                    
+                    searchBar.text = String(newText)
+                    
+                } else if searchText.count == 9 {
+                     
+                    newText.deleteCharacters(in: NSRange(location: 6, length: 3))
+                    
+                    searchBar.text = String(newText)
+                    
+                } else if searchText.count == 5 && (searchText == "200 x" || searchText == "150 x") || searchText == "125 x" || searchText == "100 x" {
+                    
+                    newText.deleteCharacters(in: NSRange(location: 1, length: 4))
+                    
+                    searchBar.text = String(newText)
+                    
+                } else if searchText.count == 4 {
+                    
+                    newText.deleteCharacters(in: NSRange(location: 1, length: 3))
+                    
+                    searchBar.text = String(newText)
+                    
+                }
+                
+            }
+            
+                // MARK: - Search Criteria and Auto-Fill for Tees (T) split from UB Sections:
+
+            else if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 6 {
+                
+                if searchText.count == 3 {
+                    
+                    newText.append(" x ")
+                    
+                    searchBar.text = String(newText)
+                    
+                } else if searchText.count == 9 {
+                    
+                    newText.append(" x ")
+                    
+                    searchBar.text = String(newText)
+                    
+                } else if searchText.count == 11 {
+                    
+                    newText.deleteCharacters(in: NSRange(location: 8, length: 3))
+                    
+                    searchBar.text = String(newText)
+                    
+                } else if searchText.count == 5 {
+                    
+                    newText.deleteCharacters(in: NSRange(location: 2, length: 3))
+                    
+                    searchBar.text = String(newText)
+                    
+                }
+                
+            }
+                
+                // MARK: - Search Criteria and Auto-Fill for Tees (T) split from UC Sections:
+
+            else if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 7 {
+                
+                if searchText.count == 3 {
+                    
+                    newText.append(" x ")
+                    
+                    searchBar.text = String(newText)
+                    
+                } else if searchText.count == 9 {
+                    
+                    newText.append(" x ")
+                    
+                    searchBar.text = String(newText)
+                    
+                } else if searchText.count == 8 && searchText == "152 x 76" {
+                    
+                    newText.append(" x ")
+                    
+                    searchBar.text = String(newText)
+                    
+                } else if searchText.count == 11 {
+                    
+                    newText.deleteCharacters(in: NSRange(location: 8, length: 3))
+                    
+                    searchBar.text = String(newText)
+                    
+                } else if searchText.count == 10 && searchText == "152 x 76 x" {
+                    
+                    newText.deleteCharacters(in: NSRange(location: 7, length: 3))
+                    
+                    searchBar.text = String(newText)
+                    
+                } else if searchText.count == 5 {
+                    
+                    newText.deleteCharacters(in: NSRange(location: 2, length: 3))
+                    
+                    searchBar.text = String(newText)
+                    
+                }
+                
+            }
+            
+            steelSectionsDataArrayAsPerSearchedCriteria = extractedSteelSectionsDataArrayFromThePassedCsvFileUsingTheParser.filter({ $0.fullSectionDesignation.lowercased().prefix(searchText.count) == searchText.lowercased() })
+            
+            isSearching = true
+            
+            sortBy = "None"
+            
+            filtersApplied = false
+            
+            self.steelSectionsTableView.reloadData()
             
         }
             
@@ -1655,19 +1822,13 @@ extension SteelSectionsTableViewController: UISearchBarDelegate {
             
             isSearching = false
             
+            sortBy = "None"
+            
+            filtersApplied = false
+            
             self.steelSectionsTableView.reloadData()
             
         }
-        
-        steelSectionsDataArrayAsPerSearchedCriteria = extractedSteelSectionsDataArrayFromThePassedCsvFileUsingTheParser.filter({ $0.fullSectionDesignation.lowercased().prefix(searchText.count) == searchText.lowercased() })
-        
-        isSearching = true
-        
-        sortBy = "None"
-        
-        filtersApplied = false
-        
-        self.steelSectionsTableView.reloadData()
         
     }
     
@@ -1755,7 +1916,7 @@ extension SteelSectionsTableViewController: PassingDataBackwardsFromSearchBarOpt
         
         self.searchBarAutoCompleteBasedOnUserSelectionFromSearchBarOptionsDropListPopoverVC = userSelectedTableViewCellContent
         
-        print(self.searchBarAutoCompleteBasedOnUserSelectionFromSearchBarOptionsDropListPopoverVC)
+        searchBar.text = searchBarAutoCompleteBasedOnUserSelectionFromSearchBarOptionsDropListPopoverVC
         
         // The below line of code is needed in order to set this viewController back to its full brightness (instead of 0.5) as soon as the searchBarOptionsDropListVC has been dismissed:
         

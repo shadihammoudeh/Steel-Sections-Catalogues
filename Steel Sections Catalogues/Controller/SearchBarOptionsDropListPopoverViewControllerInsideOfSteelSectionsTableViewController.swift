@@ -27,7 +27,7 @@ class SearchBarOptionsDropListPopoverViewControllerInsideOfSteelSectionsTableVie
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        
+                
         setDataArrayToBeDisplayedInTableView()
             
         // Do any additional setup after loading the view.
@@ -43,6 +43,18 @@ class SearchBarOptionsDropListPopoverViewControllerInsideOfSteelSectionsTableVie
     override func viewDidLayoutSubviews() {
         
         setUpConstraints()
+        
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        
+        // The below line of code is needed in order to de-select (i.e. remove highlight from cell) the previously select tableViewCell, once the tableView have been dismissed and displayed again:
+        
+        if let indexPath = self.dropListOptionsTableViewInsidePopoverView.indexPathForSelectedRow {
+            
+            dropListOptionsTableViewInsidePopoverView.deselectRow(at: indexPath, animated: true)
+            
+        }
         
     }
     
@@ -86,7 +98,7 @@ class SearchBarOptionsDropListPopoverViewControllerInsideOfSteelSectionsTableVie
             
             if firstTwoCharactersUserTypedInsideOfSteelSectionsTableViewVCSearchBarTextField == "20" {
                 
-                tableViewDataArray = ["20 x ...", "200 x ..."]
+                tableViewDataArray = ["20 x ", "200 x "]
                 
             }
             
@@ -117,7 +129,7 @@ extension SearchBarOptionsDropListPopoverViewControllerInsideOfSteelSectionsTabl
         // The reason we need to cast the below as! SearchBarPopoverTableViewCustomCell is to be able to get access to the methods inside of it:
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "SearchBarPopoverTableViewCustomCell") as! SearchBarPopoverTableViewCustomCell
-        
+                
         let cellLabelTextContents = tableViewDataArray[indexPath.row]
         
         cell.set(textLabel: cellLabelTextContents)

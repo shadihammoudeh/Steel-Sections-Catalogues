@@ -108,9 +108,9 @@ class TableViewSteelSectionsSortByOptionsPopoverViewController: UIViewController
         
         doneButton.setTitle("Apply", for: .normal)
         
-        doneButton.setTitleColor(UIColor(named: "Navigation Bar and SortBy Bar Button Text Colour - Normal State"), for: .normal)
+        doneButton.setTitleColor(UIColor(named: "SortBy Popover VC - Top Toolbar Apply Button Text Colour - Normal"), for: .normal)
         
-        doneButton.setTitleColor(UIColor(named: "Navigation Bar and SortBy Bar Button Text Colour - Highlighted State"), for: .highlighted)
+        doneButton.setTitleColor(UIColor(named: "SortBy Popover VC - Top Toolbar Apply Button Text Colour - Highlighted State"), for: .highlighted)
         
         doneButton.addTarget(self, action: #selector(toolBarButtonPressed(sender:)), for: .touchUpInside)
         
