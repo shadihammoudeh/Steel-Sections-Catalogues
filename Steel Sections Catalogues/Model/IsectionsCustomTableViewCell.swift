@@ -63,9 +63,7 @@ class IsectionsCustomTableViewCell: UITableViewCell {
         label.numberOfLines = 0
         
         label.lineBreakMode = NSLineBreakMode.byWordWrapping
-        
-        //        label.backgroundColor = UIColor.yellow
-        
+                
         label.textAlignment = .left
         
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -81,9 +79,7 @@ class IsectionsCustomTableViewCell: UITableViewCell {
         let label = UILabel()
         
         label.numberOfLines = 0
-        
-        //        label.backgroundColor = UIColor.blue
-        
+                
         label.textAlignment = .left
         
         label.lineBreakMode = NSLineBreakMode.byWordWrapping
@@ -109,9 +105,7 @@ class IsectionsCustomTableViewCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         
         label.textColor = UIColor(hexString: "#F27E63")
-        
-        //        label.backgroundColor = UIColor.gray
-        
+                
         return label
         
     }()
@@ -123,9 +117,7 @@ class IsectionsCustomTableViewCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         
         label.textColor = UIColor(hexString: "#F27E63")
-        
-        //        label.backgroundColor = UIColor.cyan
-        
+                
         label.textAlignment = .left
         
         label.numberOfLines = 0
@@ -149,9 +141,7 @@ class IsectionsCustomTableViewCell: UITableViewCell {
         label.numberOfLines = 0
         
         label.textAlignment = .left
-        
-        //        label.backgroundColor = UIColor.green
-        
+                
         return label
         
     }()
@@ -169,9 +159,7 @@ class IsectionsCustomTableViewCell: UITableViewCell {
         label.numberOfLines = 0
         
         label.textAlignment = .left
-        
-        //        label.backgroundColor = UIColor.white
-        
+                
         return label
         
     }()
@@ -189,9 +177,7 @@ class IsectionsCustomTableViewCell: UITableViewCell {
         label.numberOfLines = 0
         
         label.textAlignment = .left
-        
-        //        label.backgroundColor = UIColor.white
-        
+                
         return label
         
     }()

@@ -8,8 +8,6 @@
 
 import UIKit
 
-import ChameleonFramework
-
 class TableViewSteelSectionsSortByOptionsPopoverViewController: UIViewController {
     
     // MARK: - Assigning protocol delegate:
@@ -29,6 +27,8 @@ class TableViewSteelSectionsSortByOptionsPopoverViewController: UIViewController
     var filtersApplied: Bool = false
     
     var receivedSteelSectionsDataArrayFromSteelSectionsTableViewController = [SteelSectionParameters]()
+    
+    var userLastSelectedCollectionViewCellNumber: Int = 0
     
     // Below we are creating an instance from the UIPickerView class:
     
@@ -154,7 +154,7 @@ class TableViewSteelSectionsSortByOptionsPopoverViewController: UIViewController
                 
             }
                                             
-                delegate?.dataToBePassedUsingProtocol(datComingFromViewController: "TableViewSteelSectionsSortByOptionsPopoverViewController", configuredArrayContainingSteelSectionsData: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController, configuredArrayContainingSteelSectionsSerialNumbersOnly: [""], configuredSortByVariable: "Sorted by: Section Designation in ascending order", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
+            delegate?.dataToBePassedUsingProtocol(userLastSelectedCollectionViewCellNumber: self.userLastSelectedCollectionViewCellNumber, configuredArrayContainingSteelSectionsData: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController, configuredArrayContainingSteelSectionsSerialNumbersOnly: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionSerialNumber }).removingDuplicates(), configuredSortByVariable: "Sorted by: Section designation in ascending order", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
             
             dismiss(animated: true, completion: {})
             
@@ -188,7 +188,7 @@ class TableViewSteelSectionsSortByOptionsPopoverViewController: UIViewController
                 
             }
             
-            delegate?.dataToBePassedUsingProtocol(datComingFromViewController: "TableViewSteelSectionsSortByOptionsPopoverViewController", configuredArrayContainingSteelSectionsData: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController, configuredArrayContainingSteelSectionsSerialNumbersOnly: [""], configuredSortByVariable: "Sorted by: Depth of Section in ascending order", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
+            delegate?.dataToBePassedUsingProtocol(userLastSelectedCollectionViewCellNumber: self.userLastSelectedCollectionViewCellNumber, configuredArrayContainingSteelSectionsData: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController, configuredArrayContainingSteelSectionsSerialNumbersOnly: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionSerialNumber }).removingDuplicates(), configuredSortByVariable: "Sorted by: Depth of section in ascending order", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
             
             dismiss(animated: true, completion: {})
             
@@ -222,7 +222,7 @@ class TableViewSteelSectionsSortByOptionsPopoverViewController: UIViewController
                 
             }
             
-            delegate?.dataToBePassedUsingProtocol(datComingFromViewController: "TableViewSteelSectionsSortByOptionsPopoverViewController", configuredArrayContainingSteelSectionsData: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController, configuredArrayContainingSteelSectionsSerialNumbersOnly: [""], configuredSortByVariable: "Sorted by: Width of Section in ascending order", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
+            delegate?.dataToBePassedUsingProtocol(userLastSelectedCollectionViewCellNumber: self.userLastSelectedCollectionViewCellNumber, configuredArrayContainingSteelSectionsData: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController, configuredArrayContainingSteelSectionsSerialNumbersOnly: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionSerialNumber }).removingDuplicates(), configuredSortByVariable: "Sorted by: Width of section in ascending order", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
             
             dismiss(animated: true, completion: {})
             
@@ -256,7 +256,7 @@ class TableViewSteelSectionsSortByOptionsPopoverViewController: UIViewController
                 
             }
             
-            delegate?.dataToBePassedUsingProtocol(datComingFromViewController: "TableViewSteelSectionsSortByOptionsPopoverViewController", configuredArrayContainingSteelSectionsData: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController, configuredArrayContainingSteelSectionsSerialNumbersOnly: [""], configuredSortByVariable: "Sorted by: Section Area in ascending order", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
+            delegate?.dataToBePassedUsingProtocol(userLastSelectedCollectionViewCellNumber: self.userLastSelectedCollectionViewCellNumber, configuredArrayContainingSteelSectionsData: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController, configuredArrayContainingSteelSectionsSerialNumbersOnly: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionSerialNumber }).removingDuplicates(), configuredSortByVariable: "Sorted by: Area of section in ascending order", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
             
             dismiss(animated: true, completion: {})
             
@@ -282,7 +282,7 @@ class TableViewSteelSectionsSortByOptionsPopoverViewController: UIViewController
                 
             }
             
-            delegate?.dataToBePassedUsingProtocol(datComingFromViewController: "TableViewSteelSectionsSortByOptionsPopoverViewController", configuredArrayContainingSteelSectionsData: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController, configuredArrayContainingSteelSectionsSerialNumbersOnly: [""], configuredSortByVariable: "Sorted by: Section Designation in descending order", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
+            delegate?.dataToBePassedUsingProtocol(userLastSelectedCollectionViewCellNumber: self.userLastSelectedCollectionViewCellNumber, configuredArrayContainingSteelSectionsData: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController, configuredArrayContainingSteelSectionsSerialNumbersOnly: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionSerialNumber }).removingDuplicates(), configuredSortByVariable: "Sorted by: Section designation in descending order", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
         
             dismiss(animated: true, completion: {})
             
@@ -316,7 +316,7 @@ class TableViewSteelSectionsSortByOptionsPopoverViewController: UIViewController
                 
             }
             
-            delegate?.dataToBePassedUsingProtocol(datComingFromViewController: "TableViewSteelSectionsSortByOptionsPopoverViewController", configuredArrayContainingSteelSectionsData: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController, configuredArrayContainingSteelSectionsSerialNumbersOnly: [""], configuredSortByVariable: "Sorted by: Depth of Section in descending order", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
+            delegate?.dataToBePassedUsingProtocol(userLastSelectedCollectionViewCellNumber: self.userLastSelectedCollectionViewCellNumber, configuredArrayContainingSteelSectionsData: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController, configuredArrayContainingSteelSectionsSerialNumbersOnly: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionSerialNumber }).removingDuplicates(), configuredSortByVariable: "Sorted by: Depth of section in descending order", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
                                     
             dismiss(animated: true, completion: {})
             
@@ -350,7 +350,7 @@ class TableViewSteelSectionsSortByOptionsPopoverViewController: UIViewController
                 
             }
             
-            delegate?.dataToBePassedUsingProtocol(datComingFromViewController: "TableViewSteelSectionsSortByOptionsPopoverViewController", configuredArrayContainingSteelSectionsData: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController, configuredArrayContainingSteelSectionsSerialNumbersOnly: [""], configuredSortByVariable: "Sorted by: Width of Section in descending order", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
+            delegate?.dataToBePassedUsingProtocol(userLastSelectedCollectionViewCellNumber: self.userLastSelectedCollectionViewCellNumber, configuredArrayContainingSteelSectionsData: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController, configuredArrayContainingSteelSectionsSerialNumbersOnly: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionSerialNumber }).removingDuplicates(), configuredSortByVariable: "Sorted by: Width of section in descending order", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
             
             dismiss(animated: true, completion: {})
             
@@ -384,7 +384,7 @@ class TableViewSteelSectionsSortByOptionsPopoverViewController: UIViewController
                 
             }
             
-            delegate?.dataToBePassedUsingProtocol(datComingFromViewController: "TableViewSteelSectionsSortByOptionsPopoverViewController", configuredArrayContainingSteelSectionsData: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController, configuredArrayContainingSteelSectionsSerialNumbersOnly: [""], configuredSortByVariable: "Sorted by: Section Area in descending order", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
+            delegate?.dataToBePassedUsingProtocol(userLastSelectedCollectionViewCellNumber: self.userLastSelectedCollectionViewCellNumber, configuredArrayContainingSteelSectionsData: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController, configuredArrayContainingSteelSectionsSerialNumbersOnly: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionSerialNumber }).removingDuplicates(), configuredSortByVariable: "Sorted by: Area of section in descending order", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
             
             dismiss(animated: true, completion: {})
 

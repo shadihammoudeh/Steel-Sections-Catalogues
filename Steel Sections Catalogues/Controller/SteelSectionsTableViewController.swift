@@ -12,6 +12,10 @@ class SteelSectionsTableViewController: UIViewController {
     
     var searchBarAutoCompleteBasedOnUserSelectionFromSearchBarOptionsDropListPopoverVC: String = ""
     
+    // The below variable is needed whenever the user select Equal Angle Sections tableViewController to be displayed, in order to figure out whether the searchBarDropListOptionsViewController is currently displayed or not, since if it is displayed then it should not be dismissed unless the user select from the available options inside the searchBarDropListOptionsViewController. If it is not displayed, and let's say the user displayed the sortByPopoverViewController instead, and the user tapped anywhere on the screen outside the popOver area, then the popOverViewController should dismiss:
+    
+    var searcgBarDropListOptionsPopoverViewControllerIsCurrentlyPresentedOnScreen: Bool = false
+    
     // MARK: - Data received from previous View Controller (i.e. OpenRolledSteelSectionsCollectionViewController):
     
     // The below is important in order to set the title of the NavigatioBar on this page, whether it is going to be Universal Beams (UB), Universal Columns (UC), Universal Bearing Piles (UBP), Parallel Flange Channels (PFC), Equal Leg Angles (L), Unequal Leg Angles (L), Tees (T) splift from UB or Tees (T) splift from UC:
@@ -245,6 +249,8 @@ class SteelSectionsTableViewController: UIViewController {
         present(self.searchBarDropListOptionsPopoverViewController, animated: true, completion:{
             
             self.dismissKeyboard()
+            
+            self.searcgBarDropListOptionsPopoverViewControllerIsCurrentlyPresentedOnScreen = true
             
         })
         
@@ -687,9 +693,9 @@ extension SteelSectionsTableViewController: UINavigationBarDelegate {
         
         viewControllerToPassDataTo.receivedSteelSectionsDataArrayFromSteelSectionsTableViewController = extractedSteelSectionsDataArrayFromThePassedCsvFileUsingTheParser
         
+        viewControllerToPassDataTo.userLastSelectedCollectionViewCellNumber = self.userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController
+        
         present(viewControllerToPassDataTo, animated: true, completion:{
-            
-            self.view.alpha = 0.5
             
             self.dismissKeyboard()
             
@@ -719,7 +725,7 @@ extension SteelSectionsTableViewController: UITableViewDataSource {
         
         // The below lines of code check the values of the sortBy, filtersApplied and isSearching Variables in order to decide on how many sections the tableView should contains. The tableView will only displays multiple sections when the data is sorted by Section Designation in an ascending or descending order, and isSearching as well as filtersApplied variables are both equal to false:
         
-        if sortBy == "Sorted by: Section Designation in ascending order" || sortBy == "Sorted by: Section Designation in descending order" {
+        if sortBy == "Sorted by: Section designation in ascending order" || sortBy == "Sorted by: Section designation in descending order" {
             
             return steelSectionsDataArrayContainingOnlyInfoAboutSectionsSerialNumberSortedInAscendingOrDescendingOrder.count
             
@@ -763,7 +769,7 @@ extension SteelSectionsTableViewController: UITableViewDataSource {
         
         sectionHeaderTitle.numberOfLines = 0
         
-        if sortBy == "Sorted by: Section Designation in ascending order" || sortBy == "Sorted by: Section Designation in descending order" {
+        if sortBy == "Sorted by: Section designation in ascending order" || sortBy == "Sorted by: Section designation in descending order" {
             
             // In this case the title for each section header is equal to each section serial number (thus, we will have multiple Section Headers for each set of Section Serial Number):
             
@@ -779,7 +785,7 @@ extension SteelSectionsTableViewController: UITableViewDataSource {
             
             // If the below case is true then we are only going to have one Section Header:
             
-        else if sortBy == "Sorted by: Depth of Section in ascending order" || sortBy == "Sorted by: Width of Section in ascending order" || sortBy == "Sorted by: Section Area in ascending order" || sortBy == "Sorted by: Depth of Section in descending order" || sortBy == "Sorted by: Width of Section in descending order" || sortBy == "Sorted by: Section Area in descending order" {
+        else if sortBy == "Sorted by: Depth of section in ascending order" || sortBy == "Sorted by: Width of section in ascending order" || sortBy == "Sorted by: Area of section in ascending order" || sortBy == "Sorted by: Depth of section in descending order" || sortBy == "Sorted by: Width of section in descending order" || sortBy == "Sorted by: Area of section in descending order" {
             
             sectionHeaderTitle.text = self.sortBy
             
@@ -823,7 +829,7 @@ extension SteelSectionsTableViewController: UITableViewDataSource {
         
         var numberOfRowsRequiredForEachSteelSectionSerialNumber = [String : Int]()
         
-        if sortBy == "Sorted by: Section Designation in ascending order" || sortBy == "Sorted by: Section Designation in descending order" {
+        if sortBy == "Sorted by: Section designation in ascending order" || sortBy == "Sorted by: Section designation in descending order" {
             
             // The below line of code will convert the extractedSteelSectionsDataArrayFromThePassedCsvFileUsingTheParser Array into an Array of key-value pairs using tuples, where each value has the number 1. This is needed in order to enable us to count how many times a specific serial number occurs to know how many rows its relevant section needs to have:
             
@@ -859,7 +865,7 @@ extension SteelSectionsTableViewController: UITableViewDataSource {
                 
             }
             
-        } else if sortBy == "Sorted by: Depth of Section in ascending order" || sortBy == "Sorted by: Width of Section in ascending order" || sortBy == "Sorted by: Section Area in ascending order" || sortBy == "Sorted by: Depth of Section in descending order" || sortBy == "Sorted by: Width of Section in descending order" || sortBy == "Sorted by: Section Area in descending order" {
+        } else if sortBy == "Sorted by: Depth of section in ascending order" || sortBy == "Sorted by: Width of section in ascending order" || sortBy == "Sorted by: Area of section in ascending order" || sortBy == "Sorted by: Depth of section in descending order" || sortBy == "Sorted by: Width of section in descending order" || sortBy == "Sorted by: Area of section in descending order" {
             
             return steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsSortByOptionsPopoverViewController.count
             
@@ -913,7 +919,7 @@ extension SteelSectionsTableViewController: UITableViewDataSource {
         
         var arrayContainingDataRelatedOnlyToSectionsSerialNumbers: [String] = [""]
         
-        if (sortBy == "None" && filtersApplied == false && isSearching == false) || sortBy == "Sorted by: Section Designation in ascending order" ||  sortBy == "Sorted by: Section Designation in descending order" {
+        if (sortBy == "None" && filtersApplied == false && isSearching == false) || sortBy == "Sorted by: Section designation in ascending order" ||  sortBy == "Sorted by: Section designation in descending order" {
             
             // The below represents the default case as soon as the tableView gets loaded for the first time:
             
@@ -1057,7 +1063,7 @@ extension SteelSectionsTableViewController: UITableViewDataSource {
             
         else {
             
-            if (sortBy == "Sorted by: Depth of Section in ascending order" || sortBy == "Sorted by: Width of Section in ascending order" || sortBy == "Sorted by: Section Area in ascending order" || sortBy == "Sorted by: Depth of Section in descending order" || sortBy == "Sorted by: Width of Section in descending order" || sortBy == "Sorted by: Section Area in descending order") {
+            if (sortBy == "Sorted by: Depth of section in ascending order" || sortBy == "Sorted by: Width of section in ascending order" || sortBy == "Sorted by: Area of section in ascending order" || sortBy == "Sorted by: Depth of section in descending order" || sortBy == "Sorted by: Width of section in descending order" || sortBy == "Sorted by: Area of section in descending order") {
                 
                 arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView = steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsSortByOptionsPopoverViewController
                 
@@ -1239,7 +1245,7 @@ extension SteelSectionsTableViewController: UITableViewDelegate {
             
             sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom = steelSectionsDataArrayContainingOnlyInfoAboutSectionsSerialNumberSortedInAscendingOrder
             
-        } else if (sortBy == "Sorted by: Section Designation in ascending order" || sortBy == "Sorted by: Depth of Section in ascending order" || sortBy == "Sorted by: Width of Section in ascending order" || sortBy == "Srted by: Area of Section in ascending order" || sortBy == "Sorted by: Section Designation in descending order" || sortBy == "Sorted by: Depth of Section in descending order" || sortBy == "Sorted by: Width of Section in descending order" || sortBy == "Srted by: Area of Section in descending order") && isSearching == false && filtersApplied == false {
+        } else if (sortBy == "Sorted by: Section designation in ascending order" || sortBy == "Sorted by: Depth of section in ascending order" || sortBy == "Sorted by: Width of section in ascending order" || sortBy == "Sorted by: Area of section in ascending order" || sortBy == "Sorted by: Section designation in descending order" || sortBy == "Sorted by: Depth of section in descending order" || sortBy == "Sorted by: Width of section in descending order" || sortBy == "Sorted by: Area of section in descending order") && isSearching == false && filtersApplied == false {
             
             selectedSteelSectionSummaryPageViewControllerInstance.receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData = steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsSortByOptionsPopoverViewController
             
@@ -1901,9 +1907,31 @@ extension SteelSectionsTableViewController: UISearchBarDelegate {
 // MARK: - Protocol extension in order to receive data from SortDataPopOverVC or FilterDataVC:
 
 extension SteelSectionsTableViewController: PassingDataBackwardsBetweenViewControllersProtocol {
-    func dataToBePassedUsingProtocol(datComingFromViewController: String, configuredArrayContainingSteelSectionsData: [SteelSectionParameters], configuredArrayContainingSteelSectionsSerialNumbersOnly: [String], configuredSortByVariable: String, configuredFiltersAppliedVariable: Bool, configuredIsSearchingVariable: Bool, exchangedUserSelectedTableCellSectionNumber: Int, exchangedUserSelectedTableCellRowNumber: Int) {
+    
+    func dataToBePassedUsingProtocol(userLastSelectedCollectionViewCellNumber: Int, configuredArrayContainingSteelSectionsData: [SteelSectionParameters], configuredArrayContainingSteelSectionsSerialNumbersOnly: [String], configuredSortByVariable: String, configuredFiltersAppliedVariable: Bool, configuredIsSearchingVariable: Bool, exchangedUserSelectedTableCellSectionNumber: Int, exchangedUserSelectedTableCellRowNumber: Int) {
+        
+        self.userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController = userLastSelectedCollectionViewCellNumber
+        
+        self.steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsSortByOptionsPopoverViewController = configuredArrayContainingSteelSectionsData
+        
+        self.steelSectionsDataArrayContainingOnlyInfoAboutSectionsSerialNumberSortedInAscendingOrDescendingOrder = configuredArrayContainingSteelSectionsSerialNumbersOnly
+                
         self.sortBy = configuredSortByVariable
         
+        self.filtersApplied = configuredFiltersAppliedVariable
+        
+        self.isSearching = configuredIsSearchingVariable
+        
+        // The below line of code will be triggered once the user tap on the Apply button inside the sortDataPopoverVC (i.e. as soon as the passingDataBackwardsProtocol gets triggered). The below line of code will also be executed whenever the PassingDataBackwardsBetweenViewControllersProtocol gets triggered, whether that is from the sortByDataVC, filtersVC and/or hitting the backwards button on the NavigationBar:
+        
+        self.view.alpha = 1
+        
+        self.steelSectionsTableView.reloadData()
+        
+        // The below code is needed in order to scroll back to a specific section and row inside a tableView once it has been reloaded, in this case we are scrolling back to the very top of the table (i.e. section: 0, row: 0):
+        
+        self.steelSectionsTableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+                
     }
     
 }
@@ -1921,6 +1949,8 @@ extension SteelSectionsTableViewController: PassingDataBackwardsFromSearchBarOpt
         // The below line of code is needed in order to set this viewController back to its full brightness (instead of 0.5) as soon as the searchBarOptionsDropListVC has been dismissed:
         
         self.view.alpha = 1
+        
+        self.searcgBarDropListOptionsPopoverViewControllerIsCurrentlyPresentedOnScreen = false
         
     }
     
@@ -1950,6 +1980,10 @@ extension SteelSectionsTableViewController: UIPopoverPresentationControllerDeleg
     
     func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
         
+        // The below line of code will set the brightness of this viewController back to 100% as soon as the sortByPopoverViewController has been dismissed, whenever the user tap anywhere on the screen outside the sortByPopoverVC area. Note that the below line of code will only work for the sortByPopoverViewController and not for the searchBarDropListVC, when the user tap anywhere outside the sortByPopoverVC area. Since this viewController is in charge of dismissing the sortByPopoverViewController, thus, triggers this method. However, since the searchBarDropListOptionsVC will only be dimissed once the user make a selection from the displayed popOverVC (as whenever the user taps anywhere outside the searchBarDropListOptionsVC area, an Alert will be displayed forcing the user to make a selection from the available options before having the popOverVC dismissed), thus, the searchBarDropListOptionsVC is in charge of dismissing itself, thus, will not trigger this function:
+        
+        self.view.alpha = 1
+        
     }
     
     // The below method get called whenever the user try to tap anywhere on the screen outside the popover view boundaries:
@@ -1958,28 +1992,41 @@ extension SteelSectionsTableViewController: UIPopoverPresentationControllerDeleg
         
         if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 4 {
             
-            // Note that in order to be able to display the alert relevant to equal angle sections tableViewController, the first step is to dismiss the already poped up searchBarPopoverVC, which appeared to the user as soon as he typed two characters inside the searchBar textField, in order to know whether for example the user intention is to search for a 10 x ... series or 100 x ... series. Once the searchBarPopoverVC has been dismissed, then the AlertVC can be displayed whenever the user tap amywhere on the screen outside of the UIAlert dialogue box.
+            if searcgBarDropListOptionsPopoverViewControllerIsCurrentlyPresentedOnScreen == true {
+                
+                    // Note that in order to be able to display the alert relevant to equal angle sections tableViewController, the first step is to dismiss the already poped up searchBarPopoverVC, which appeared to the user as soon as he typed two characters inside the searchBar textField, in order to know whether for example the user intention is to search for a 10 x ... series or 100 x ... series. Once the searchBarPopoverVC has been dismissed, then the AlertVC can be displayed whenever the user tap amywhere on the screen outside of the UIAlert dialogue box.
+                    
+                    self.searchBarDropListOptionsPopoverViewController.dismiss(animated: true, completion: {
+                        
+                        let alert = UIAlertController(title: "Alert", message: "Please select from available options to proceed!", preferredStyle: UIAlertController.Style.alert)
+                        
+                        // The below title represents the title of the button that will be displayed inside the UIAlert, which the user needs to click on in order to dismiss the alert. The below handler contains the previously defined UIAlertAction, which is required in order to display again the searchBar Popover VC when the user click on the "Ok" button displayed inside the UIAlert. Basically the alert will be dismissed and the searchBarPopoverVC will be displayed again:
+                        
+                        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: self.searchBarPopoverVCHandlerMethod(action:)))
+                        
+                        // The below line of code is needed in order to display the UIAlert:
+                        
+                        self.present(alert, animated: true, completion: nil)
+                        
+                    })
+                    
+                    // The below will prevent the popover VC from disappearing whenever the user tap anywhere on the screen outside the popover VC itself:
+
+                    
+                    return false
+
+            } else {
+                
+                return true
+                
+            }
             
-            self.searchBarDropListOptionsPopoverViewController.dismiss(animated: true, completion: {
+        } else {
                 
-                let alert = UIAlertController(title: "Alert", message: "Please select from available options to proceed!", preferredStyle: UIAlertController.Style.alert)
+                return true
                 
-                // The below title represents the title of the button that will be displayed inside the UIAlert, which the user needs to click on in order to dismiss the alert. The below handler contains the previously defined UIAlertAction, which is required in order to display again the searchBar Popover VC when the user click on the "Ok" button displayed inside the UIAlert. Basically the alert will be dismissed and the searchBarPopoverVC will be displayed again:
-                
-                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: self.searchBarPopoverVCHandlerMethod(action:)))
-                
-                // The below line of code is needed in order to display the UIAlert:
-                
-                self.present(alert, animated: true, completion: nil)
-                
-            })
-            
-        }
-        
-        // The below will prevent the popover VC from disappearing whenever the user tap anywhere on the screen outside the popover VC itself:
-        
-        return false
-        
+            }
+    
     }
     
 }
