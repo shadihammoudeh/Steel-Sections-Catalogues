@@ -42,7 +42,9 @@ class TableViewSteelSectionsSortByOptionsPopoverViewController: UIViewController
     
     let sortDataByPickerViewComponentZeroArray = ["Ascending Order:", "Descending Order:"]
     
-    let sortDataByPickerViewComponentOneArray = ["Section Designation","Depth, d","Width, b","Area of Section, A"]
+    // The below array represents the sorting options:
+    
+    let sortDataByPickerViewComponentOneArray = ["Section Designation","Depth, h","Width, b","Area of Section, A"]
     
     // MARK: - viewDidLoad():
     
@@ -142,9 +144,9 @@ class TableViewSteelSectionsSortByOptionsPopoverViewController: UIViewController
                     
                     return $0.firstSectionSeriesNumber < $1.firstSectionSeriesNumber
                     
-                } else if $0.sectionSerialNumber != $1.sectionSerialNumber {
+                } else if $0.secondSectionSeriesNumber != $1.secondSectionSeriesNumber && $0.firstSectionSeriesNumber == $1.firstSectionSeriesNumber {
                     
-                    return $0.sectionSerialNumber < $1.sectionSerialNumber
+                    return $0.secondSectionSeriesNumber < $1.secondSectionSeriesNumber
                     
                 } else {
                     
@@ -158,105 +160,105 @@ class TableViewSteelSectionsSortByOptionsPopoverViewController: UIViewController
             
             dismiss(animated: true, completion: {})
             
-        // MARK: - PickerView switch case for Sorting data inside Array by Depth of Section in Ascending Order:
-            
-        case (0, 1):
-            
-            receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.sort {
-                
-                if $0.sectionTotalDepth != $1.sectionTotalDepth {
-                    
-                    return $0.sectionTotalDepth < $1.sectionTotalDepth
-                    
-                } else {
-                    
-                    if $0.firstSectionSeriesNumber != $1.firstSectionSeriesNumber {
+            // MARK: - PickerView switch case for Sorting data inside Array by Depth of Section in Ascending Order for all open steel profiles:
                         
-                        return $0.firstSectionSeriesNumber < $1.firstSectionSeriesNumber
+            case (0, 1):
+                                
+                receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.sort {
+                    
+                    if $0.sectionTotalDepth != $1.sectionTotalDepth {
                         
-                    } else if $0.sectionSerialNumber != $1.sectionSerialNumber {
-                        
-                        return $0.sectionSerialNumber < $1.sectionSerialNumber
+                        return $0.sectionTotalDepth < $1.sectionTotalDepth
                         
                     } else {
                         
-                        return $0.lastSectionSeriesNumber < $1.lastSectionSeriesNumber
+                        if $0.firstSectionSeriesNumber != $1.firstSectionSeriesNumber {
+                            
+                            return $0.firstSectionSeriesNumber < $1.firstSectionSeriesNumber
+                            
+                        } else if $0.secondSectionSeriesNumber != $1.secondSectionSeriesNumber && $0.firstSectionSeriesNumber == $1.firstSectionSeriesNumber {
+                            
+                            return $0.secondSectionSeriesNumber < $1.secondSectionSeriesNumber
+                            
+                        } else {
+                            
+                            return $0.lastSectionSeriesNumber < $1.lastSectionSeriesNumber
+                            
+                        }
                         
                     }
                     
                 }
                 
-            }
-            
-            delegate?.dataToBePassedUsingProtocol(userLastSelectedCollectionViewCellNumber: self.userLastSelectedCollectionViewCellNumber, configuredArrayContainingSteelSectionsData: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController, configuredArrayContainingSteelSectionsSerialNumbersOnly: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionSerialNumber }).removingDuplicates(), configuredSortByVariable: "Sorted by: Depth of section in ascending order", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
+                delegate?.dataToBePassedUsingProtocol(userLastSelectedCollectionViewCellNumber: self.userLastSelectedCollectionViewCellNumber, configuredArrayContainingSteelSectionsData: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController, configuredArrayContainingSteelSectionsSerialNumbersOnly: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionSerialNumber }).removingDuplicates(), configuredSortByVariable: "Sorted by: Depth of section in ascending order", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
             
             dismiss(animated: true, completion: {})
             
-        // MARK: - PickerView switch case for Sorting data inside Array by Width of Section in Ascending Order:
+            // MARK: - PickerView switch case for Sorting data inside Array by Width of Section in Ascending Order for all open steel profiles:
             
         case (0, 2):
-            
-            receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.sort {
-                
-                if $0.sectionWidth != $1.sectionWidth {
+                         
+                receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.sort {
                     
-                    return $0.sectionWidth < $1.sectionWidth
-                    
-                } else {
-                    
-                    if $0.firstSectionSeriesNumber != $1.firstSectionSeriesNumber {
+                    if $0.sectionWidth != $1.sectionWidth {
                         
-                        return $0.firstSectionSeriesNumber < $1.firstSectionSeriesNumber
-                        
-                    } else if $0.sectionSerialNumber != $1.sectionSerialNumber {
-                        
-                        return $0.sectionSerialNumber < $1.sectionSerialNumber
+                        return $0.sectionWidth < $1.sectionWidth
                         
                     } else {
                         
-                        return $0.lastSectionSeriesNumber < $1.lastSectionSeriesNumber
+                        if $0.firstSectionSeriesNumber != $1.firstSectionSeriesNumber {
+                            
+                            return $0.firstSectionSeriesNumber < $1.firstSectionSeriesNumber
+                            
+                        } else if $0.secondSectionSeriesNumber != $1.secondSectionSeriesNumber && $0.firstSectionSeriesNumber == $1.firstSectionSeriesNumber {
+                            
+                            return $0.secondSectionSeriesNumber < $1.secondSectionSeriesNumber
+                            
+                        } else {
+                            
+                            return $0.lastSectionSeriesNumber < $1.lastSectionSeriesNumber
+                            
+                        }
                         
                     }
                     
                 }
                 
-            }
-            
-            delegate?.dataToBePassedUsingProtocol(userLastSelectedCollectionViewCellNumber: self.userLastSelectedCollectionViewCellNumber, configuredArrayContainingSteelSectionsData: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController, configuredArrayContainingSteelSectionsSerialNumbersOnly: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionSerialNumber }).removingDuplicates(), configuredSortByVariable: "Sorted by: Width of section in ascending order", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
+                delegate?.dataToBePassedUsingProtocol(userLastSelectedCollectionViewCellNumber: self.userLastSelectedCollectionViewCellNumber, configuredArrayContainingSteelSectionsData: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController, configuredArrayContainingSteelSectionsSerialNumbersOnly: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionSerialNumber }).removingDuplicates(), configuredSortByVariable: "Sorted by: Width of section in ascending order", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
             
             dismiss(animated: true, completion: {})
-            
-        // MARK: - PickerView switch case for Sorting data inside Array by Area of Section in Ascending Order:
-            
+        
+        // MARK: - PickerView switch case for Sorting data inside Array by Area of Section in Ascending Order for all open steel profiles:
+        
         case(0, 3):
-            
-            receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.sort {
-                
-                if $0.sectionArea != $1.sectionArea {
+                            
+                receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.sort {
                     
-                    return $0.sectionArea < $1.sectionArea
-                    
-                } else {
-                    
-                    if $0.firstSectionSeriesNumber != $1.firstSectionSeriesNumber {
+                    if $0.sectionArea != $1.sectionArea {
                         
-                        return $0.firstSectionSeriesNumber < $1.firstSectionSeriesNumber
-                        
-                    } else if $0.sectionSerialNumber != $1.sectionSerialNumber {
-                        
-                        return $0.sectionSerialNumber < $1.sectionSerialNumber
+                        return $0.sectionArea < $1.sectionArea
                         
                     } else {
                         
-                        return $0.lastSectionSeriesNumber < $1.lastSectionSeriesNumber
+                        if $0.firstSectionSeriesNumber != $1.firstSectionSeriesNumber {
+                            
+                            return $0.firstSectionSeriesNumber < $1.firstSectionSeriesNumber
+                            
+                        } else if $0.secondSectionSeriesNumber != $1.secondSectionSeriesNumber && $0.firstSectionSeriesNumber == $1.firstSectionSeriesNumber {
+                            
+                            return $0.secondSectionSeriesNumber < $1.secondSectionSeriesNumber
+                            
+                        } else {
+                            
+                            return $0.lastSectionSeriesNumber < $1.lastSectionSeriesNumber
+                            
+                        }
                         
                     }
                     
                 }
                 
-            }
-            
-            delegate?.dataToBePassedUsingProtocol(userLastSelectedCollectionViewCellNumber: self.userLastSelectedCollectionViewCellNumber, configuredArrayContainingSteelSectionsData: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController, configuredArrayContainingSteelSectionsSerialNumbersOnly: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionSerialNumber }).removingDuplicates(), configuredSortByVariable: "Sorted by: Area of section in ascending order", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
+                delegate?.dataToBePassedUsingProtocol(userLastSelectedCollectionViewCellNumber: self.userLastSelectedCollectionViewCellNumber, configuredArrayContainingSteelSectionsData: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController, configuredArrayContainingSteelSectionsSerialNumbersOnly: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionSerialNumber }).removingDuplicates(), configuredSortByVariable: "Sorted by: Area of section in ascending order", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
             
             dismiss(animated: true, completion: {})
             
@@ -270,9 +272,9 @@ class TableViewSteelSectionsSortByOptionsPopoverViewController: UIViewController
                     
                     return $0.firstSectionSeriesNumber > $1.firstSectionSeriesNumber
                     
-                } else if $0.sectionSerialNumber != $1.sectionSerialNumber {
+                } else if $0.secondSectionSeriesNumber != $1.secondSectionSeriesNumber && $0.firstSectionSeriesNumber == $1.firstSectionSeriesNumber {
                     
-                    return $0.sectionSerialNumber > $1.sectionSerialNumber
+                    return $0.secondSectionSeriesNumber > $1.secondSectionSeriesNumber
                     
                 } else {
                     
@@ -286,108 +288,108 @@ class TableViewSteelSectionsSortByOptionsPopoverViewController: UIViewController
         
             dismiss(animated: true, completion: {})
             
-        // MARK: - PickerView switch case for Sorting data inside Array by Depth of Section in Descending Order:
-            
+            // MARK: - PickerView switch case for Sorting data inside Array by Depth of Section in Descending Order for all open steel profiles:
+                        
         case(1, 1):
-            
-            receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.sort {
-                
-                if $0.sectionTotalDepth != $1.sectionTotalDepth {
+                                        
+                receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.sort {
                     
-                    return $0.sectionTotalDepth > $1.sectionTotalDepth
-                    
-                } else {
-                    
-                    if $0.firstSectionSeriesNumber != $1.firstSectionSeriesNumber {
+                    if $0.sectionTotalDepth != $1.sectionTotalDepth {
                         
-                        return $0.firstSectionSeriesNumber > $1.firstSectionSeriesNumber
-                        
-                    } else if $0.sectionSerialNumber != $1.sectionSerialNumber {
-                        
-                        return $0.sectionSerialNumber > $1.sectionSerialNumber
+                        return $0.sectionTotalDepth > $1.sectionTotalDepth
                         
                     } else {
                         
-                        return $0.lastSectionSeriesNumber > $1.lastSectionSeriesNumber
+                        if $0.firstSectionSeriesNumber != $1.firstSectionSeriesNumber {
+                            
+                            return $0.firstSectionSeriesNumber > $1.firstSectionSeriesNumber
+                            
+                        } else if $0.secondSectionSeriesNumber != $1.secondSectionSeriesNumber && $0.firstSectionSeriesNumber == $1.firstSectionSeriesNumber {
+                            
+                            return $0.secondSectionSeriesNumber > $1.secondSectionSeriesNumber
+                            
+                        } else {
+                            
+                            return $0.lastSectionSeriesNumber > $1.lastSectionSeriesNumber
+                            
+                        }
                         
                     }
                     
                 }
                 
-            }
-            
-            delegate?.dataToBePassedUsingProtocol(userLastSelectedCollectionViewCellNumber: self.userLastSelectedCollectionViewCellNumber, configuredArrayContainingSteelSectionsData: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController, configuredArrayContainingSteelSectionsSerialNumbersOnly: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionSerialNumber }).removingDuplicates(), configuredSortByVariable: "Sorted by: Depth of section in descending order", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
-                                    
+                delegate?.dataToBePassedUsingProtocol(userLastSelectedCollectionViewCellNumber: self.userLastSelectedCollectionViewCellNumber, configuredArrayContainingSteelSectionsData: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController, configuredArrayContainingSteelSectionsSerialNumbersOnly: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionSerialNumber }).removingDuplicates(), configuredSortByVariable: "Sorted by: Depth of section in descending order", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
+    
             dismiss(animated: true, completion: {})
             
-        // MARK: - PickerView switch case for Sorting data inside Array by Width of Section in Descending Order:
-            
+            // MARK: - PickerView switch case for Sorting data inside Array by Width of Section in Descending Order for all open steel profiles:
+                        
         case(1, 2):
-                        
-            receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.sort {
-                
-                if $0.sectionWidth != $1.sectionWidth {
+            
+                receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.sort {
                     
-                    return $0.sectionWidth > $1.sectionWidth
-                    
-                } else {
-                    
-                    if $0.firstSectionSeriesNumber != $1.firstSectionSeriesNumber {
+                    if $0.sectionWidth != $1.sectionWidth {
                         
-                        return $0.firstSectionSeriesNumber > $1.firstSectionSeriesNumber
-                        
-                    } else if $0.sectionSerialNumber != $1.sectionSerialNumber {
-                        
-                        return $0.sectionSerialNumber > $1.sectionSerialNumber
+                        return $0.sectionWidth > $1.sectionWidth
                         
                     } else {
                         
-                        return $0.lastSectionSeriesNumber > $1.lastSectionSeriesNumber
-                        
+                        if $0.firstSectionSeriesNumber != $1.firstSectionSeriesNumber {
+                            
+                            return $0.firstSectionSeriesNumber > $1.firstSectionSeriesNumber
+                            
+                        } else if $0.secondSectionSeriesNumber != $1.secondSectionSeriesNumber && $0.firstSectionSeriesNumber == $1.firstSectionSeriesNumber {
+                            
+                            return $0.secondSectionSeriesNumber > $1.secondSectionSeriesNumber
+                            
+                        } else {
+                            
+                            return $0.lastSectionSeriesNumber > $1.lastSectionSeriesNumber
+                            
+                        }
+
                     }
                     
                 }
                 
-            }
-            
-            delegate?.dataToBePassedUsingProtocol(userLastSelectedCollectionViewCellNumber: self.userLastSelectedCollectionViewCellNumber, configuredArrayContainingSteelSectionsData: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController, configuredArrayContainingSteelSectionsSerialNumbersOnly: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionSerialNumber }).removingDuplicates(), configuredSortByVariable: "Sorted by: Width of section in descending order", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
-            
+                delegate?.dataToBePassedUsingProtocol(userLastSelectedCollectionViewCellNumber: self.userLastSelectedCollectionViewCellNumber, configuredArrayContainingSteelSectionsData: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController, configuredArrayContainingSteelSectionsSerialNumbersOnly: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionSerialNumber }).removingDuplicates(), configuredSortByVariable: "Sorted by: Width of section in descending order", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
+                        
             dismiss(animated: true, completion: {})
             
-        // MARK: - PickerView switch case for Sorting data inside Array by Area of Section in Descending Order:
-
+            // MARK: - PickerView switch case for Sorting data inside Array by Area of Section in Descending Order for all open steel profiles:
+            
         case(1, 3):
-            
-            receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.sort {
-                
-                if $0.sectionArea != $1.sectionArea {
+
+                receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.sort {
                     
-                    return $0.sectionArea > $1.sectionArea
-                    
-                } else {
-                    
-                    if $0.firstSectionSeriesNumber != $1.firstSectionSeriesNumber {
+                    if $0.sectionArea != $1.sectionArea {
                         
-                        return $0.firstSectionSeriesNumber > $1.firstSectionSeriesNumber
-                        
-                    } else if $0.sectionSerialNumber != $1.sectionSerialNumber {
-                        
-                        return $0.sectionSerialNumber > $1.sectionSerialNumber
+                        return $0.sectionArea > $1.sectionArea
                         
                     } else {
                         
-                        return $0.lastSectionSeriesNumber > $1.lastSectionSeriesNumber
-                        
+                        if $0.firstSectionSeriesNumber != $1.firstSectionSeriesNumber {
+                            
+                            return $0.firstSectionSeriesNumber > $1.firstSectionSeriesNumber
+                            
+                        } else if $0.secondSectionSeriesNumber != $1.secondSectionSeriesNumber && $0.firstSectionSeriesNumber == $1.firstSectionSeriesNumber {
+                            
+                            return $0.secondSectionSeriesNumber > $1.secondSectionSeriesNumber
+                            
+                        } else {
+                            
+                            return $0.lastSectionSeriesNumber > $1.lastSectionSeriesNumber
+                            
+                        }
+
                     }
                     
                 }
                 
-            }
-            
-            delegate?.dataToBePassedUsingProtocol(userLastSelectedCollectionViewCellNumber: self.userLastSelectedCollectionViewCellNumber, configuredArrayContainingSteelSectionsData: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController, configuredArrayContainingSteelSectionsSerialNumbersOnly: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionSerialNumber }).removingDuplicates(), configuredSortByVariable: "Sorted by: Area of section in descending order", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
+                delegate?.dataToBePassedUsingProtocol(userLastSelectedCollectionViewCellNumber: self.userLastSelectedCollectionViewCellNumber, configuredArrayContainingSteelSectionsData: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController, configuredArrayContainingSteelSectionsSerialNumbersOnly: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionSerialNumber }).removingDuplicates(), configuredSortByVariable: "Sorted by: Area of section in descending order", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
             
             dismiss(animated: true, completion: {})
-
+            
         case (_, _):
             
             print("Not in list of selection")
@@ -419,8 +421,8 @@ extension TableViewSteelSectionsSortByOptionsPopoverViewController: UIPickerView
             return sortDataByPickerViewComponentZeroArray.count
             
         } else {
-            
-            return sortDataByPickerViewComponentOneArray.count
+                            
+                return sortDataByPickerViewComponentOneArray.count
             
         }
         
@@ -434,7 +436,7 @@ extension TableViewSteelSectionsSortByOptionsPopoverViewController: UIPickerView
             
         } else {
             
-            return sortDataByPickerViewComponentOneArray[row]
+                return sortDataByPickerViewComponentOneArray[row]
             
         }
         
@@ -470,8 +472,8 @@ extension TableViewSteelSectionsSortByOptionsPopoverViewController: UIPickerView
             label.text = sortDataByPickerViewComponentZeroArray[row]
             
         } else if component == 1 {
-            
-            label.text = sortDataByPickerViewComponentOneArray[row]
+                            
+                label.text = sortDataByPickerViewComponentOneArray[row]
             
         }
         

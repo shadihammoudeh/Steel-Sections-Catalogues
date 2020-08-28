@@ -278,7 +278,7 @@ class SteelSectionsTableViewController: UIViewController {
                     
                     return $0.firstSectionSeriesNumberCrossSectionIsCutFrom < $1.firstSectionSeriesNumberCrossSectionIsCutFrom
                     
-                } else if $0.secondSectionSeriesNumberCrossSectionIsCutFrom != $1.secondSectionSeriesNumberCrossSectionIsCutFrom {
+                } else if $0.secondSectionSeriesNumberCrossSectionIsCutFrom != $1.secondSectionSeriesNumberCrossSectionIsCutFrom && $0.firstSectionSeriesNumberCrossSectionIsCutFrom == $1.firstSectionSeriesNumberCrossSectionIsCutFrom {
                     
                     return $0.secondSectionSeriesNumberCrossSectionIsCutFrom < $1.secondSectionSeriesNumberCrossSectionIsCutFrom
                     
@@ -298,16 +298,16 @@ class SteelSectionsTableViewController: UIViewController {
                     
                     return $0.firstSectionSeriesNumber < $1.firstSectionSeriesNumber
                     
-                } else if $0.sectionSerialNumber != $1.sectionSerialNumber {
+                } else if $0.secondSectionSeriesNumber != $1.secondSectionSeriesNumber && $0.firstSectionSeriesNumber == $1.firstSectionSeriesNumber {
                     
-                    return $0.sectionSerialNumber < $1.sectionSerialNumber
+                    return $0.secondSectionSeriesNumber < $1.secondSectionSeriesNumber
                     
                 } else {
                     
                     return $0.lastSectionSeriesNumber < $1.lastSectionSeriesNumber
                     
                 }
-                
+
             }
             
         }
