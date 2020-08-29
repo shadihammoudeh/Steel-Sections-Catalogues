@@ -44,7 +44,9 @@ class TableViewSteelSectionsSortByOptionsPopoverViewController: UIViewController
     
     // The below array represents the sorting options:
     
-    let sortDataByPickerViewComponentOneArray = ["Section Designation","Depth, h","Width, b","Area of Section, A"]
+    let sortDataByPickerViewComponentOneArrayForAllSectionsExceptTeeSections = ["Section Designation","Depth, h","Width, b","Area of Section, A"]
+    
+    let sortDataByPickerViewComponentOneArrayForTeeSections = ["Section Designation Profile is Cut from","Depth, h","Width, b","Area of Section, A"]
     
     // MARK: - viewDidLoad():
     
@@ -133,29 +135,57 @@ class TableViewSteelSectionsSortByOptionsPopoverViewController: UIViewController
     @objc func toolBarButtonPressed(sender: UIBarButtonItem) {
         
         switch (sortDataByPickerView.selectedRow(inComponent: 0), sortDataByPickerView.selectedRow(inComponent: 1)) {
-            
-        // MARK: - PickerView switch case for Sorting data inside Array by Section Designation in Ascending Order:
-            
+                        
         case (0, 0):
             
-            receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.sort {
+            // MARK: - PickerView switch case for Sorting data inside Array by Section Designation in Ascending Order for all sections except Tee sections:
+            
+            if userLastSelectedCollectionViewCellNumber != 6 && userLastSelectedCollectionViewCellNumber != 7 {
                 
-                if $0.firstSectionSeriesNumber != $1.firstSectionSeriesNumber {
+                receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.sort {
                     
-                    return $0.firstSectionSeriesNumber < $1.firstSectionSeriesNumber
-                    
-                } else if $0.secondSectionSeriesNumber != $1.secondSectionSeriesNumber && $0.firstSectionSeriesNumber == $1.firstSectionSeriesNumber {
-                    
-                    return $0.secondSectionSeriesNumber < $1.secondSectionSeriesNumber
-                    
-                } else {
-                    
-                    return $0.lastSectionSeriesNumber < $1.lastSectionSeriesNumber
+                    if $0.firstSectionSeriesNumber != $1.firstSectionSeriesNumber {
+                        
+                        return $0.firstSectionSeriesNumber < $1.firstSectionSeriesNumber
+                        
+                    } else if $0.secondSectionSeriesNumber != $1.secondSectionSeriesNumber && $0.firstSectionSeriesNumber == $1.firstSectionSeriesNumber {
+                        
+                        return $0.secondSectionSeriesNumber < $1.secondSectionSeriesNumber
+                        
+                    } else {
+                        
+                        return $0.lastSectionSeriesNumber < $1.lastSectionSeriesNumber
+                        
+                    }
                     
                 }
                 
             }
-                                            
+            
+            // MARK: - PickerView switch case for Sorting data inside Array by Section Designation in Ascending Order for Tee sections:
+
+            else {
+                
+                receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.sort {
+                    
+                    if $0.firstSectionSeriesNumberCrossSectionIsCutFrom != $1.firstSectionSeriesNumberCrossSectionIsCutFrom {
+                        
+                        return $0.firstSectionSeriesNumberCrossSectionIsCutFrom < $1.firstSectionSeriesNumberCrossSectionIsCutFrom
+                        
+                    } else if $0.secondSectionSeriesNumberCrossSectionIsCutFrom != $1.secondSectionSeriesNumberCrossSectionIsCutFrom && $0.firstSectionSeriesNumberCrossSectionIsCutFrom == $1.firstSectionSeriesNumberCrossSectionIsCutFrom {
+                        
+                        return $0.secondSectionSeriesNumberCrossSectionIsCutFrom < $1.secondSectionSeriesNumberCrossSectionIsCutFrom
+                        
+                    } else {
+                        
+                        return $0.thirdSectionSeriesNumberCrossSectionIsCutFrom < $1.thirdSectionSeriesNumberCrossSectionIsCutFrom
+                        
+                    }
+                    
+                }
+                
+            }
+            
             delegate?.dataToBePassedUsingProtocol(userLastSelectedCollectionViewCellNumber: self.userLastSelectedCollectionViewCellNumber, configuredArrayContainingSteelSectionsData: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController, configuredArrayContainingSteelSectionsSerialNumbersOnly: receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionSerialNumber }).removingDuplicates(), configuredSortByVariable: "Sorted by: Section designation in ascending order", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
             
             dismiss(animated: true, completion: {})
@@ -262,23 +292,51 @@ class TableViewSteelSectionsSortByOptionsPopoverViewController: UIViewController
             
             dismiss(animated: true, completion: {})
             
-        // MARK: - PickerView switch case for Sorting data inside Array by Section Designation in Descending Order:
-            
         case(1, 0):
             
-            receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.sort {
+            // MARK: - PickerView switch case for Sorting data inside Array by Section Designation in Descending Order for all sections except Tee:
+            
+            if userLastSelectedCollectionViewCellNumber != 6 && userLastSelectedCollectionViewCellNumber != 7 {
                 
-                if $0.firstSectionSeriesNumber != $1.firstSectionSeriesNumber {
+                receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.sort {
                     
-                    return $0.firstSectionSeriesNumber > $1.firstSectionSeriesNumber
+                    if $0.firstSectionSeriesNumber != $1.firstSectionSeriesNumber {
+                        
+                        return $0.firstSectionSeriesNumber > $1.firstSectionSeriesNumber
+                        
+                    } else if $0.secondSectionSeriesNumber != $1.secondSectionSeriesNumber && $0.firstSectionSeriesNumber == $1.firstSectionSeriesNumber {
+                        
+                        return $0.secondSectionSeriesNumber > $1.secondSectionSeriesNumber
+                        
+                    } else {
+                        
+                        return $0.lastSectionSeriesNumber > $1.lastSectionSeriesNumber
+                        
+                    }
                     
-                } else if $0.secondSectionSeriesNumber != $1.secondSectionSeriesNumber && $0.firstSectionSeriesNumber == $1.firstSectionSeriesNumber {
+                }
+                
+            }
+            
+            // MARK: - PickerView switch case for Sorting data inside Array by Section Designation in Descending Order for Tee sections:
+                
+            else {
+                
+                receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.sort {
                     
-                    return $0.secondSectionSeriesNumber > $1.secondSectionSeriesNumber
-                    
-                } else {
-                    
-                    return $0.lastSectionSeriesNumber > $1.lastSectionSeriesNumber
+                    if $0.firstSectionSeriesNumberCrossSectionIsCutFrom != $1.firstSectionSeriesNumberCrossSectionIsCutFrom {
+                        
+                        return $0.firstSectionSeriesNumberCrossSectionIsCutFrom > $1.firstSectionSeriesNumberCrossSectionIsCutFrom
+                        
+                    } else if $0.secondSectionSeriesNumberCrossSectionIsCutFrom != $1.secondSectionSeriesNumberCrossSectionIsCutFrom && $0.firstSectionSeriesNumberCrossSectionIsCutFrom == $1.firstSectionSeriesNumberCrossSectionIsCutFrom {
+                        
+                        return $0.secondSectionSeriesNumberCrossSectionIsCutFrom > $1.secondSectionSeriesNumberCrossSectionIsCutFrom
+                        
+                    } else {
+                        
+                        return $0.thirdSectionSeriesNumberCrossSectionIsCutFrom > $1.thirdSectionSeriesNumberCrossSectionIsCutFrom
+                        
+                    }
                     
                 }
                 
@@ -421,9 +479,17 @@ extension TableViewSteelSectionsSortByOptionsPopoverViewController: UIPickerView
             return sortDataByPickerViewComponentZeroArray.count
             
         } else {
-                            
-                return sortDataByPickerViewComponentOneArray.count
             
+            if userLastSelectedCollectionViewCellNumber != 6 && userLastSelectedCollectionViewCellNumber != 7 {
+                
+                return sortDataByPickerViewComponentOneArrayForAllSectionsExceptTeeSections.count
+                
+            } else {
+                
+                return sortDataByPickerViewComponentOneArrayForTeeSections.count
+                
+            }
+                            
         }
         
     }
@@ -436,7 +502,15 @@ extension TableViewSteelSectionsSortByOptionsPopoverViewController: UIPickerView
             
         } else {
             
-                return sortDataByPickerViewComponentOneArray[row]
+            if userLastSelectedCollectionViewCellNumber != 6 && userLastSelectedCollectionViewCellNumber != 7 {
+                
+                return sortDataByPickerViewComponentOneArrayForAllSectionsExceptTeeSections[row]
+                
+            } else {
+                
+                return sortDataByPickerViewComponentOneArrayForTeeSections[row]
+                
+            }
             
         }
         
@@ -466,19 +540,49 @@ extension TableViewSteelSectionsSortByOptionsPopoverViewController: UIPickerView
         
         label.textAlignment = .center
         
+        label.numberOfLines = 0
+        
+        label.lineBreakMode = .byWordWrapping
+        
+        label.sizeToFit()
+        
         label.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 18)
         
         if component == 0 {
+            
             label.text = sortDataByPickerViewComponentZeroArray[row]
             
         } else if component == 1 {
+            
+            if userLastSelectedCollectionViewCellNumber != 6 && userLastSelectedCollectionViewCellNumber != 7 {
+                
+                label.text = sortDataByPickerViewComponentOneArrayForAllSectionsExceptTeeSections[row]
+
+            } else {
+                
+                label.text = sortDataByPickerViewComponentOneArrayForTeeSections[row]
+
+            }
                             
-                label.text = sortDataByPickerViewComponentOneArray[row]
             
         }
         
         return label
         
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
+        
+        if userLastSelectedCollectionViewCellNumber != 6 && userLastSelectedCollectionViewCellNumber != 7 {
+            
+            return 25
+            
+        } else {
+            
+            return 50
+            
+        }
+    
     }
     
 }

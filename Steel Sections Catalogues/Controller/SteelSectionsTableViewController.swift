@@ -667,7 +667,7 @@ extension SteelSectionsTableViewController: UINavigationBarDelegate {
         
         // The below code is needed in order to set the size of the pop-over view controller:
         
-        tableViewSteelSectionsSortByOptionsViewController.preferredContentSize = CGSize(width: 320, height: 150)
+        tableViewSteelSectionsSortByOptionsViewController.preferredContentSize = CGSize(width: 320, height: 160)
         
         // The sourceView in the below code line represents the view containing the anchor rectangle for the popover:
         
