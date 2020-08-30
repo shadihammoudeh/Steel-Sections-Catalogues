@@ -362,7 +362,7 @@ class SteelSectionsTableViewController: UIViewController {
             
         }
             
-            // Below code gets executed for all other selections:
+            // Below code gets executed for all UB, UC, UBP and PFC sections:
             
         else {
             
@@ -729,7 +729,7 @@ extension SteelSectionsTableViewController: UITableViewDataSource {
             
             return steelSectionsDataArrayContainingOnlyInfoAboutSectionsSerialNumberSortedInAscendingOrDescendingOrder.count
             
-        } else if sortBy == "None" && filtersApplied == false && isSearching == false {
+        } else if sortBy == "None" && (isSearching == false && filtersApplied == false) {
             
             return steelSectionsDataArrayContainingOnlyInfoAboutSectionsSerialNumberSortedInAscendingOrder.count
             
@@ -1059,7 +1059,7 @@ extension SteelSectionsTableViewController: UITableViewDataSource {
             
         }
             
-            // The below catches the cases where the user sorted data by any criteria other than "None", Section Designation in Ascending or Descending order or filters or searches are applied:
+            // The below catches the cases where the user sorted data by any criteria other than "None", Section Designation in Ascending or Descending order or filters or searches are applied, in all of these cases there will only be one section inside of the tableView:
             
         else {
             
@@ -1085,7 +1085,7 @@ extension SteelSectionsTableViewController: UITableViewDataSource {
                 
                 arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView = steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsDataFilterOptionsViewController
                 
-                if arrayContainingDataRelatedOnlyToSectionsSerialNumbers.count == 0 {
+                if arrayContainingSteelSectionsDataToBeDisplayedInsideTheTableView.count == 0 {
                     
                     tableViewErrorMessageCell.messageLabel.text = "No results matched applied filters, try again."
                     
@@ -1894,9 +1894,11 @@ extension SteelSectionsTableViewController: UISearchBarDelegate {
         
         tableViewSteelSectionsDataFilterOptionsViewController.filtersApplied = self.filtersApplied
         
-        tableViewSteelSectionsDataFilterOptionsViewController.delegate = self
-        
         tableViewSteelSectionsDataFilterOptionsViewController.receivedSteelSectionsDataArrayFromSteelSectionsTableViewController = extractedSteelSectionsDataArrayFromThePassedCsvFileUsingTheParser
+
+        tableViewSteelSectionsDataFilterOptionsViewController.userLastSelectedCollectionViewCellNumber = self.userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController
+        
+        tableViewSteelSectionsDataFilterOptionsViewController.delegate = self
         
         self.present(tableViewSteelSectionsDataFilterOptionsViewController, animated: true, completion: nil)
         
@@ -1908,14 +1910,22 @@ extension SteelSectionsTableViewController: UISearchBarDelegate {
 
 extension SteelSectionsTableViewController: PassingDataBackwardsBetweenViewControllersProtocol {
     
-    func dataToBePassedUsingProtocol(userLastSelectedCollectionViewCellNumber: Int, configuredArrayContainingSteelSectionsData: [SteelSectionParameters], configuredArrayContainingSteelSectionsSerialNumbersOnly: [String], configuredSortByVariable: String, configuredFiltersAppliedVariable: Bool, configuredIsSearchingVariable: Bool, exchangedUserSelectedTableCellSectionNumber: Int, exchangedUserSelectedTableCellRowNumber: Int) {
+    func dataToBePassedUsingProtocol(viewControllerDataIsSentFrom: String, userLastSelectedCollectionViewCellNumber: Int, configuredArrayContainingSteelSectionsData: [SteelSectionParameters], configuredArrayContainingSteelSectionsSerialNumbersOnly: [String], configuredSortByVariable: String, configuredFiltersAppliedVariable: Bool, configuredIsSearchingVariable: Bool, exchangedUserSelectedTableCellSectionNumber: Int, exchangedUserSelectedTableCellRowNumber: Int) {
         
         self.userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController = userLastSelectedCollectionViewCellNumber
         
-        self.steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsSortByOptionsPopoverViewController = configuredArrayContainingSteelSectionsData
+        if viewControllerDataIsSentFrom == "TableViewSteelSectionsDataFilterOptions" {
+            
+            self.steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsDataFilterOptionsViewController = configuredArrayContainingSteelSectionsData
+            
+            } else {
+            
+            self.steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsSortByOptionsPopoverViewController = configuredArrayContainingSteelSectionsData
+            
+            self.steelSectionsDataArrayContainingOnlyInfoAboutSectionsSerialNumberSortedInAscendingOrDescendingOrder = configuredArrayContainingSteelSectionsSerialNumbersOnly
+            
+        }
         
-        self.steelSectionsDataArrayContainingOnlyInfoAboutSectionsSerialNumberSortedInAscendingOrDescendingOrder = configuredArrayContainingSteelSectionsSerialNumbersOnly
-                
         self.sortBy = configuredSortByVariable
         
         self.filtersApplied = configuredFiltersAppliedVariable
