@@ -28,9 +28,13 @@ class OpenRolledSteelSectionsCollectionViewController: UIViewController, UIColle
     
     let cellImageArray = ["3D Universal Beam","3D Universal Column","3D Universal Bearing Pile","3D Parallel Flange Channels","3D Equal Leg Angle","3D Unequal Leg Angle","3D Tees (T) Split from UB", "3D Tees (T) Split from UC"]
     
+    let movingToNewVCTransition = CATransition()
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        
+        setupMoveToNewVCTransition()
                 
     }
     
@@ -43,6 +47,18 @@ class OpenRolledSteelSectionsCollectionViewController: UIViewController, UIColle
         let blueBookOpenRolledSectionsCollectionView = CustomCollectionView(startingHoriztonalCoordinateOfCollectionView: 0, startingVerticalCoordinateOfCollectionView: blueBookControllerStatusBarHeight + blueBookControllerNavigationBarHeight, widthOfCollectionView: view.frame.size.width, heightOfCollectionView: blueBookOpenRolledSectionsCollectionViewHeight, collectionViewLayoutTopEdgeInset: 20, collectionViewLayoutLeftEdgeInset: 20, collectionViewLayoutBottomEdgeInset: 20, collectionViewLayoutRightEdgeInset: 20, collectionViewLayoutCellsMinimumVerticalSpacings: 20, collectionViewLayoutCellsMinimumHorizontalSpacings: 20, numberOfCellsPerRow: 2, numberOfCellsPerColumn: 4, hostViewDataSource: self, hostViewDelegate: self)
         
         view.addSubview(blueBookOpenRolledSectionsCollectionView)
+        
+    }
+    
+    func setupMoveToNewVCTransition() {
+        
+        movingToNewVCTransition.duration = 0.55
+        
+        movingToNewVCTransition.type = CATransitionType.moveIn
+        
+        movingToNewVCTransition.subtype = CATransitionSubtype.fromRight
+        
+        movingToNewVCTransition.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
         
     }
         
@@ -76,24 +92,28 @@ class OpenRolledSteelSectionsCollectionViewController: UIViewController, UIColle
         
         let cell = collectionView.cellForItem(at: indexPath)
 
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, animations: ({
+        UIView.animate(withDuration: 0.25, delay: 0, usingSpringWithDamping: 0.50, initialSpringVelocity: 1, animations: ({
                         
             cell?.frame.origin = CGPoint(x: (cell?.frame.origin.x)! + 3, y: (cell?.frame.origin.y)! + 3)
                         
             cell?.layer.shadowOpacity = 0
             
-            }), completion: nil)
-        
-        let main = UIStoryboard(name: "Main", bundle: nil)
-        
-        let viewControllerToGoTo = main.instantiateViewController(identifier: "SteelSectionsTableViewController") as! SteelSectionsTableViewController
-        
-        viewControllerToGoTo.receivedNavigatioBarTitleFromPreviousViewController = cellTitleArray[indexPath.row]
-        
-        viewControllerToGoTo.userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController = indexPath.row
-        
-        self.present(viewControllerToGoTo, animated: true, completion: nil)
-        
+        }), completion: { _ in
+            
+            let main = UIStoryboard(name: "Main", bundle: nil)
+            
+            let viewControllerToGoTo = main.instantiateViewController(identifier: "SteelSectionsTableViewController") as! SteelSectionsTableViewController
+            
+            viewControllerToGoTo.receivedNavigatioBarTitleFromPreviousViewController = self.cellTitleArray[indexPath.row]
+            
+            viewControllerToGoTo.userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController = indexPath.row
+            
+            self.view.window!.layer.add(self.movingToNewVCTransition, forKey: kCATransition)
+            
+            self.present(viewControllerToGoTo, animated: false, completion: nil)
+            
+        })
+    
     }
     
 }

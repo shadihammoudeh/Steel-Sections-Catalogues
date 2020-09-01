@@ -14,7 +14,7 @@ class SteelSectionsTableViewController: UIViewController {
     
     // The below variable is needed whenever the user select Equal Angle Sections tableViewController to be displayed, in order to figure out whether the searchBarDropListOptionsViewController is currently displayed or not, since if it is displayed then it should not be dismissed unless the user select from the available options inside the searchBarDropListOptionsViewController. If it is not displayed, and let's say the user displayed the sortByPopoverViewController instead, and the user tapped anywhere on the screen outside the popOver area, then the popOverViewController should dismiss:
     
-    var searcgBarDropListOptionsPopoverViewControllerIsCurrentlyPresentedOnScreen: Bool = false
+    var searchBarDropListOptionsPopoverViewControllerIsCurrentlyPresentedOnScreen: Bool = false
     
     // MARK: - Data received from previous View Controller (i.e. OpenRolledSteelSectionsCollectionViewController):
     
@@ -72,6 +72,10 @@ class SteelSectionsTableViewController: UIViewController {
     
     var steelSectionsDataArrayContainingOnlyInfoAboutSectionsSerialNumberSortedInAscendingOrDescendingOrder: [String] = []
     
+    let movingInTransitionInsideSameVC = CATransition()
+    
+    let movingBackTransitionToPreviousVC = CATransition()
+    
     // MARK: - Search Bar, Navigation Bar and Table View instances definitions:
     
     var searchBar = UISearchBar()
@@ -113,6 +117,12 @@ class SteelSectionsTableViewController: UIViewController {
         setupSearchBar()
         
         setupTableView()
+        
+        // The below line of code will call the method which is responsible to animate the moveIn transition whenever the user display the filteringViewController:
+        
+        setupMoveInTransition()
+        
+        setupMoveBackTransitionToPreviousVC()
         
         // MARK: - Gestures & Adding subViews:
         
@@ -210,6 +220,34 @@ class SteelSectionsTableViewController: UIViewController {
         
     }
     
+    // The below method defines the needed parameters for the moveInTransition, which will be used inside of this viewController whenever the filterByViewController is to be displayed:
+    
+    func setupMoveInTransition() {
+        
+        movingInTransitionInsideSameVC.duration = 0.65
+        
+        movingInTransitionInsideSameVC.type = CATransitionType.moveIn
+        
+        movingInTransitionInsideSameVC.subtype = CATransitionSubtype.fromBottom
+        
+        movingInTransitionInsideSameVC.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
+        
+    }
+    
+    // The below method defines the needed transition whenever the user hit the back button inside the Navigation Bar in order to go back to the previous viewController:
+    
+    func setupMoveBackTransitionToPreviousVC() {
+        
+        movingBackTransitionToPreviousVC.duration = 0.55
+        
+        movingBackTransitionToPreviousVC.type = CATransitionType.reveal
+        
+        movingBackTransitionToPreviousVC.subtype = CATransitionSubtype.fromLeft
+        
+        movingBackTransitionToPreviousVC.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
+        
+    }
+    
     // MARK: - dismissKeyboard Method used by tapGesture:
     
     @objc func dismissKeyboard() {
@@ -250,7 +288,7 @@ class SteelSectionsTableViewController: UIViewController {
             
             self.dismissKeyboard()
             
-            self.searcgBarDropListOptionsPopoverViewControllerIsCurrentlyPresentedOnScreen = true
+            self.searchBarDropListOptionsPopoverViewControllerIsCurrentlyPresentedOnScreen = true
             
         })
         
@@ -307,7 +345,7 @@ class SteelSectionsTableViewController: UIViewController {
                     return $0.lastSectionSeriesNumber < $1.lastSectionSeriesNumber
                     
                 }
-
+                
             }
             
         }
@@ -649,7 +687,9 @@ extension SteelSectionsTableViewController: UINavigationBarDelegate {
         
         let previousViewControllerToGoTo = main.instantiateViewController(withIdentifier: "OpenAndClosedSteelSectionsTabViewController")
         
-        self.present(previousViewControllerToGoTo, animated: true, completion: nil)
+        view.window!.layer.add(movingBackTransitionToPreviousVC, forKey: kCATransition)
+        
+        self.present(previousViewControllerToGoTo, animated: false, completion: nil)
         
     }
     
@@ -1665,9 +1705,9 @@ extension SteelSectionsTableViewController: UISearchBarDelegate {
                 }
                 
             }
-            
+                
                 // MARK: - Search Criteria and Auto-Fill for Un-equal Leg Angles Sections:
-            
+                
             else if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 5 {
                 
                 if searchText.count == 3 {
@@ -1713,7 +1753,7 @@ extension SteelSectionsTableViewController: UISearchBarDelegate {
                     searchBar.text = String(newText)
                     
                 } else if searchText.count == 9 {
-                     
+                    
                     newText.deleteCharacters(in: NSRange(location: 6, length: 3))
                     
                     searchBar.text = String(newText)
@@ -1733,9 +1773,9 @@ extension SteelSectionsTableViewController: UISearchBarDelegate {
                 }
                 
             }
-            
+                
                 // MARK: - Search Criteria and Auto-Fill for Tees (T) split from UB Sections:
-
+                
             else if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 6 {
                 
                 if searchText.count == 3 {
@@ -1767,7 +1807,7 @@ extension SteelSectionsTableViewController: UISearchBarDelegate {
             }
                 
                 // MARK: - Search Criteria and Auto-Fill for Tees (T) split from UC Sections:
-
+                
             else if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 7 {
                 
                 if searchText.count == 3 {
@@ -1895,12 +1935,14 @@ extension SteelSectionsTableViewController: UISearchBarDelegate {
         tableViewSteelSectionsDataFilterOptionsViewController.filtersApplied = self.filtersApplied
         
         tableViewSteelSectionsDataFilterOptionsViewController.receivedSteelSectionsDataArrayFromSteelSectionsTableViewController = extractedSteelSectionsDataArrayFromThePassedCsvFileUsingTheParser
-
+        
         tableViewSteelSectionsDataFilterOptionsViewController.userLastSelectedCollectionViewCellNumber = self.userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController
         
         tableViewSteelSectionsDataFilterOptionsViewController.delegate = self
         
-        self.present(tableViewSteelSectionsDataFilterOptionsViewController, animated: true, completion: nil)
+        view.window!.layer.add(movingInTransitionInsideSameVC, forKey: kCATransition)
+        
+        self.present(tableViewSteelSectionsDataFilterOptionsViewController, animated: false, completion: nil)
         
     }
     
@@ -1910,19 +1952,36 @@ extension SteelSectionsTableViewController: UISearchBarDelegate {
 
 extension SteelSectionsTableViewController: PassingDataBackwardsBetweenViewControllersProtocol {
     
-    func dataToBePassedUsingProtocol(viewControllerDataIsSentFrom: String, userLastSelectedCollectionViewCellNumber: Int, configuredArrayContainingSteelSectionsData: [SteelSectionParameters], configuredArrayContainingSteelSectionsSerialNumbersOnly: [String], configuredSortByVariable: String, configuredFiltersAppliedVariable: Bool, configuredIsSearchingVariable: Bool, exchangedUserSelectedTableCellSectionNumber: Int, exchangedUserSelectedTableCellRowNumber: Int) {
+    func dataToBePassedUsingProtocol(viewControllerDataIsSentFrom: String, filteringSlidersCleared: Bool, userLastSelectedCollectionViewCellNumber: Int, configuredArrayContainingSteelSectionsData: [SteelSectionParameters], configuredArrayContainingSteelSectionsSerialNumbersOnly: [String], configuredSortByVariable: String, configuredFiltersAppliedVariable: Bool, configuredIsSearchingVariable: Bool, exchangedUserSelectedTableCellSectionNumber: Int, exchangedUserSelectedTableCellRowNumber: Int) {
         
         self.userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController = userLastSelectedCollectionViewCellNumber
         
         if viewControllerDataIsSentFrom == "TableViewSteelSectionsDataFilterOptions" {
             
-            self.steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsDataFilterOptionsViewController = configuredArrayContainingSteelSectionsData
-            
+            if filteringSlidersCleared == true {
+                
+                self.sortBy = configuredSortByVariable
+                
+                self.filtersApplied = configuredFiltersAppliedVariable
+                
+                self.isSearching = configuredIsSearchingVariable
+                
+                self.extractedSteelSectionsDataArrayFromThePassedCsvFileUsingTheParser = configuredArrayContainingSteelSectionsData
+                
             } else {
+                
+                self.steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsDataFilterOptionsViewController = configuredArrayContainingSteelSectionsData
+                
+            }
+            
+            
+        } else {
             
             self.steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsSortByOptionsPopoverViewController = configuredArrayContainingSteelSectionsData
             
             self.steelSectionsDataArrayContainingOnlyInfoAboutSectionsSerialNumberSortedInAscendingOrDescendingOrder = configuredArrayContainingSteelSectionsSerialNumbersOnly
+            
+            self.searchBar.text = ""
             
         }
         
@@ -1941,7 +2000,7 @@ extension SteelSectionsTableViewController: PassingDataBackwardsBetweenViewContr
         // The below code is needed in order to scroll back to a specific section and row inside a tableView once it has been reloaded, in this case we are scrolling back to the very top of the table (i.e. section: 0, row: 0):
         
         self.steelSectionsTableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
-                
+        
     }
     
 }
@@ -1960,7 +2019,7 @@ extension SteelSectionsTableViewController: PassingDataBackwardsFromSearchBarOpt
         
         self.view.alpha = 1
         
-        self.searcgBarDropListOptionsPopoverViewControllerIsCurrentlyPresentedOnScreen = false
+        self.searchBarDropListOptionsPopoverViewControllerIsCurrentlyPresentedOnScreen = false
         
     }
     
@@ -2002,29 +2061,29 @@ extension SteelSectionsTableViewController: UIPopoverPresentationControllerDeleg
         
         if userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController == 4 {
             
-            if searcgBarDropListOptionsPopoverViewControllerIsCurrentlyPresentedOnScreen == true {
+            if searchBarDropListOptionsPopoverViewControllerIsCurrentlyPresentedOnScreen == true {
                 
-                    // Note that in order to be able to display the alert relevant to equal angle sections tableViewController, the first step is to dismiss the already poped up searchBarPopoverVC, which appeared to the user as soon as he typed two characters inside the searchBar textField, in order to know whether for example the user intention is to search for a 10 x ... series or 100 x ... series. Once the searchBarPopoverVC has been dismissed, then the AlertVC can be displayed whenever the user tap amywhere on the screen outside of the UIAlert dialogue box.
+                // Note that in order to be able to display the alert relevant to equal angle sections tableViewController, the first step is to dismiss the already poped up searchBarPopoverVC, which appeared to the user as soon as he typed two characters inside the searchBar textField, in order to know whether for example the user intention is to search for a 10 x ... series or 100 x ... series. Once the searchBarPopoverVC has been dismissed, then the AlertVC can be displayed whenever the user tap amywhere on the screen outside of the UIAlert dialogue box.
+                
+                self.searchBarDropListOptionsPopoverViewController.dismiss(animated: true, completion: {
                     
-                    self.searchBarDropListOptionsPopoverViewController.dismiss(animated: true, completion: {
-                        
-                        let alert = UIAlertController(title: "Alert", message: "Please select from available options to proceed!", preferredStyle: UIAlertController.Style.alert)
-                        
-                        // The below title represents the title of the button that will be displayed inside the UIAlert, which the user needs to click on in order to dismiss the alert. The below handler contains the previously defined UIAlertAction, which is required in order to display again the searchBar Popover VC when the user click on the "Ok" button displayed inside the UIAlert. Basically the alert will be dismissed and the searchBarPopoverVC will be displayed again:
-                        
-                        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: self.searchBarPopoverVCHandlerMethod(action:)))
-                        
-                        // The below line of code is needed in order to display the UIAlert:
-                        
-                        self.present(alert, animated: true, completion: nil)
-                        
-                    })
+                    let alert = UIAlertController(title: "Alert", message: "Please select from available options to proceed!", preferredStyle: UIAlertController.Style.alert)
                     
-                    // The below will prevent the popover VC from disappearing whenever the user tap anywhere on the screen outside the popover VC itself:
-
+                    // The below title represents the title of the button that will be displayed inside the UIAlert, which the user needs to click on in order to dismiss the alert. The below handler contains the previously defined UIAlertAction, which is required in order to display again the searchBar Popover VC when the user click on the "Ok" button displayed inside the UIAlert. Basically the alert will be dismissed and the searchBarPopoverVC will be displayed again:
                     
-                    return false
-
+                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: self.searchBarPopoverVCHandlerMethod(action:)))
+                    
+                    // The below line of code is needed in order to display the UIAlert:
+                    
+                    self.present(alert, animated: true, completion: nil)
+                    
+                })
+                
+                // The below will prevent the popover VC from disappearing whenever the user tap anywhere on the screen outside the popover VC itself:
+                
+                
+                return false
+                
             } else {
                 
                 return true
@@ -2032,11 +2091,11 @@ extension SteelSectionsTableViewController: UIPopoverPresentationControllerDeleg
             }
             
         } else {
-                
-                return true
-                
-            }
-    
+            
+            return true
+            
+        }
+        
     }
     
 }

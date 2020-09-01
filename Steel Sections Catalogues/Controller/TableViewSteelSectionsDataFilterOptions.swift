@@ -15,7 +15,7 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
     // MARK: - Assigning protocol delegate:
     
     weak var delegate: PassingDataBackwardsBetweenViewControllersProtocol?
-
+    
     // MARK: - Instance scope variables and constants declarations:
     
     // The below variables (i.e., sortBy, isSearching and filtersApplied) will be passed from BlueBookUniversalBeamsVC, and when this ViewController gets dismissed, any made changes to these variables will be sent back to BlueBookUniversalBeamsVC using the Protocol:
@@ -32,6 +32,8 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
     
     let navigationBarTitleForOpenRolledSteelSections: [String] = ["UB Data Filters", "UC Data Filters", "UBP Data Filters", "PFC Data Filters", "Equal Leg Angles Data Filters", "Unequal Leg Angles Data Filters", "T split from UB Data Filters", "T split from UC Data Filters"]
     
+    let movingOutTransition = CATransition()
+    
     let rangeSliderTitleTopPaddingFromNavigationBarBottom: CGFloat = 20
     
     let rangeSliderTitleLeftAndRightPadding: CGFloat = 20
@@ -41,7 +43,7 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
     let rangeSliderTrackLeftAndRightPadding: CGFloat = 15
     
     let verticalSpacingBetweenBottomOfRangeSliderTrackAndTopOfRangeSliderTitleLabel: CGFloat = 10
-                    
+    
     var extractedDepthOfSection: [Double]?
     
     var extractedWidthOfSection: [Double]?
@@ -160,6 +162,8 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
         
         super.viewDidLoad()
         
+        setupMoveOutTransition()
+        
         // In order to prevent the movement of a UISlider's trackers to get confused with a swipeGesture (i.e. avoid the swipeGesture to get triggered when a user moves one of the slider's trackers in the right direction, which also correspond to the direction of the swipeGesture). We need to add a panGesture to the UISlider, whereby the panGesture does nothing at all. Then we need to set the cancelsTouchesInView property to be equal to false. As this will prevent the delivery of gestures to the view. Note that a UIGestureRecognizer is to be used with a single view:
         
         let panGestureRecogniseForDepthOfSectionUISlider = UIPanGestureRecognizer(target: nil, action:nil)
@@ -185,7 +189,7 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
         // MARK: - Adding right swipe gesture:
         
         let rightGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(navigationBarLeftButtonPressed(sender:)))
-                
+        
         rightGestureRecognizer.direction = .right
         
         // MARK: - Extracting appropriate Arrays data for Range Sliders:
@@ -245,7 +249,7 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
         customSectionAreaSlider!.addGestureRecognizer(panGestureRecogniseForAreaOfSectionUISlider)
         
         view.addSubview(scrollView)
-                
+        
         scrollView.addSubview(depthOfSectionRangeSliderTitle)
         
         scrollView.addSubview(widthOfSectionRangeSliderTitle)
@@ -271,25 +275,37 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
         scrollView.addSubview(applyFiltersButton)
         
     }
-        
+    
     // MARK: - viewWillLayoutSubviews():
     
     override func viewWillLayoutSubviews() {
-                
+        
         let clearFiltersButtonCoordinatesInRelationToItsScrollView = applyFiltersButton.convert(applyFiltersButton.bounds.origin, to: scrollView)
         
         scrollView.contentSize = CGSize(width: self.view.frame.width, height: clearFiltersButtonCoordinatesInRelationToItsScrollView.y + applyFiltersButton.intrinsicContentSize.height + rangeSliderTitleTopPaddingFromNavigationBarBottom)
         
         // MARK: - Calling the setupConstraints function:
-    
+        
         setupConstraints()
-            
-        }
+        
+    }
     
     override func viewDidAppear(_ animated: Bool) {
-                
+        
         self.scrollView.flashScrollIndicators()
-
+        
+    }
+    
+    func setupMoveOutTransition() {
+        
+        movingOutTransition.duration = 0.65
+        
+        movingOutTransition.type = CATransitionType.reveal
+        
+        movingOutTransition.subtype = CATransitionSubtype.fromTop
+        
+        movingOutTransition.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
+        
     }
     
     // MARK: - Button pressed method:
@@ -348,50 +364,50 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
                 
                 filteredArrayToBeSentBack = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController
                 
-                delegate?.dataToBePassedUsingProtocol(viewControllerDataIsSentFrom: "TableViewSteelSectionsDataFilterOptions", userLastSelectedCollectionViewCellNumber: self.userLastSelectedCollectionViewCellNumber, configuredArrayContainingSteelSectionsData: filteredArrayToBeSentBack, configuredArrayContainingSteelSectionsSerialNumbersOnly: [""], configuredSortByVariable: "None", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
-            
-            }
-            
+                delegate?.dataToBePassedUsingProtocol(viewControllerDataIsSentFrom: "TableViewSteelSectionsDataFilterOptions", filteringSlidersCleared: true, userLastSelectedCollectionViewCellNumber: self.userLastSelectedCollectionViewCellNumber, configuredArrayContainingSteelSectionsData: filteredArrayToBeSentBack, configuredArrayContainingSteelSectionsSerialNumbersOnly: [""], configuredSortByVariable: "None", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
+                
+            } else {
+                
                 // The below will get executed whenever the user filtered results only as per their total depth:
-            
-            else if (customDepthOfSectionRangeSlider?.selectedMinValue != CGFloat(minimumDepthOfSection!) || customDepthOfSectionRangeSlider?.selectedMaxValue != CGFloat(maximumDepthOfSection!)) && (customWidthOfSectionRangeSlider?.selectedMinValue == CGFloat(minimumWidthOfSection!) && customWidthOfSectionRangeSlider?.selectedMaxValue == CGFloat(maximumWidthOfSection!) && customSectionWebThicknessSlider?.selectedMinValue == CGFloat(minimumSectionWebThickness!) && customSectionWebThicknessSlider?.selectedMaxValue == CGFloat(maximumSectionWebThickness!) && customSectionFlangeThicknessSlider?.selectedMinValue == CGFloat(minimumSectionFlangeThickness!) && customSectionFlangeThicknessSlider?.selectedMaxValue == CGFloat(maximumSectionFlangeThickness!) && customSectionAreaSlider?.selectedMinValue == CGFloat(minimumAreaOfSection!) && customSectionAreaSlider?.selectedMaxValue == CGFloat(maximumAreaOfSection!)) {
-
-                filteredArrayToBeSentBack = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.filter({ return (($0.sectionTotalDepth >= Double(customDepthOfSectionRangeSlider!.selectedMinValue)) && ($0.sectionTotalDepth <= Double(customDepthOfSectionRangeSlider!.selectedMaxValue))) })
                 
-                // The below code will sort out the results to be displayed according to their totalDepth in ascending order:
-                
-                filteredArrayToBeSentBack.sort {
+                if (customDepthOfSectionRangeSlider?.selectedMinValue != CGFloat(minimumDepthOfSection!) || customDepthOfSectionRangeSlider?.selectedMaxValue != CGFloat(maximumDepthOfSection!)) && (customWidthOfSectionRangeSlider?.selectedMinValue == CGFloat(minimumWidthOfSection!) && customWidthOfSectionRangeSlider?.selectedMaxValue == CGFloat(maximumWidthOfSection!) && customSectionWebThicknessSlider?.selectedMinValue == CGFloat(minimumSectionWebThickness!) && customSectionWebThicknessSlider?.selectedMaxValue == CGFloat(maximumSectionWebThickness!) && customSectionFlangeThicknessSlider?.selectedMinValue == CGFloat(minimumSectionFlangeThickness!) && customSectionFlangeThicknessSlider?.selectedMaxValue == CGFloat(maximumSectionFlangeThickness!) && customSectionAreaSlider?.selectedMinValue == CGFloat(minimumAreaOfSection!) && customSectionAreaSlider?.selectedMaxValue == CGFloat(maximumAreaOfSection!)) {
                     
-                    if $0.sectionTotalDepth != $1.sectionTotalDepth {
+                    filteredArrayToBeSentBack = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.filter({ return (($0.sectionTotalDepth >= Double(customDepthOfSectionRangeSlider!.selectedMinValue)) && ($0.sectionTotalDepth <= Double(customDepthOfSectionRangeSlider!.selectedMaxValue))) })
+                    
+                    // The below code will sort out the results to be displayed according to their totalDepth in ascending order:
+                    
+                    filteredArrayToBeSentBack.sort {
                         
-                        return $0.sectionTotalDepth < $1.sectionTotalDepth
-                        
-                    } else {
-                        
-                        if $0.firstSectionSeriesNumber != $1.firstSectionSeriesNumber {
+                        if $0.sectionTotalDepth != $1.sectionTotalDepth {
                             
-                            return $0.firstSectionSeriesNumber < $1.firstSectionSeriesNumber
-                            
-                        } else if $0.secondSectionSeriesNumber != $1.secondSectionSeriesNumber && $0.firstSectionSeriesNumber == $1.firstSectionSeriesNumber {
-                            
-                            return $0.secondSectionSeriesNumber < $1.secondSectionSeriesNumber
+                            return $0.sectionTotalDepth < $1.sectionTotalDepth
                             
                         } else {
                             
-                            return $0.lastSectionSeriesNumber < $1.lastSectionSeriesNumber
+                            if $0.firstSectionSeriesNumber != $1.firstSectionSeriesNumber {
+                                
+                                return $0.firstSectionSeriesNumber < $1.firstSectionSeriesNumber
+                                
+                            } else if $0.secondSectionSeriesNumber != $1.secondSectionSeriesNumber && $0.firstSectionSeriesNumber == $1.firstSectionSeriesNumber {
+                                
+                                return $0.secondSectionSeriesNumber < $1.secondSectionSeriesNumber
+                                
+                            } else {
+                                
+                                return $0.lastSectionSeriesNumber < $1.lastSectionSeriesNumber
+                                
+                            }
                             
                         }
                         
                     }
                     
                 }
-
-            }
-                
+                    
                     // The below will get executed whenever the user filtered results only as per their width:
-                
+                    
                 else if (customWidthOfSectionRangeSlider?.selectedMinValue != CGFloat(minimumWidthOfSection!) || customWidthOfSectionRangeSlider?.selectedMaxValue != CGFloat(maximumWidthOfSection!)) && (customDepthOfSectionRangeSlider?.selectedMinValue == CGFloat(minimumDepthOfSection!) && customDepthOfSectionRangeSlider?.selectedMaxValue == CGFloat(maximumDepthOfSection!) && customSectionWebThicknessSlider?.selectedMinValue == CGFloat(minimumSectionWebThickness!) && customSectionWebThicknessSlider?.selectedMaxValue == CGFloat(maximumSectionWebThickness!) && customSectionFlangeThicknessSlider?.selectedMinValue == CGFloat(minimumSectionFlangeThickness!) && customSectionFlangeThicknessSlider?.selectedMaxValue == CGFloat(maximumSectionFlangeThickness!) && customSectionAreaSlider?.selectedMinValue == CGFloat(minimumAreaOfSection!) && customSectionAreaSlider?.selectedMaxValue == CGFloat(maximumAreaOfSection!)) {
-
+                    
                     filteredArrayToBeSentBack = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.filter({ return (($0.sectionWidth >= Double(customWidthOfSectionRangeSlider!.selectedMinValue)) && ($0.sectionWidth <= Double(customWidthOfSectionRangeSlider!.selectedMaxValue))) })
                     
                     // The below code will sort out the results to be displayed according to their totalDepth in ascending order:
@@ -421,13 +437,13 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
                         }
                         
                     }
-
+                    
                 }
-                
+                    
                     // The below will get executed whenever the user filtered results only as per their web thicknesses:
-                
+                    
                 else if (customSectionWebThicknessSlider?.selectedMinValue != CGFloat(minimumSectionWebThickness!) || customSectionWebThicknessSlider?.selectedMaxValue != CGFloat(maximumSectionWebThickness!)) && (customDepthOfSectionRangeSlider?.selectedMinValue == CGFloat(minimumDepthOfSection!) && customDepthOfSectionRangeSlider?.selectedMaxValue == CGFloat(maximumDepthOfSection!) && customWidthOfSectionRangeSlider?.selectedMinValue == CGFloat(minimumWidthOfSection!) && customWidthOfSectionRangeSlider?.selectedMaxValue == CGFloat(maximumWidthOfSection!) && customSectionFlangeThicknessSlider?.selectedMinValue == CGFloat(minimumSectionFlangeThickness!) && customSectionFlangeThicknessSlider?.selectedMaxValue == CGFloat(maximumSectionFlangeThickness!) && customSectionAreaSlider?.selectedMinValue == CGFloat(minimumAreaOfSection!) && customSectionAreaSlider?.selectedMaxValue == CGFloat(maximumAreaOfSection!)) {
-
+                    
                     filteredArrayToBeSentBack = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.filter({ return (($0.sectionWebThickness >= Double(customSectionWebThicknessSlider!.selectedMinValue)) && ($0.sectionWebThickness <= Double(customSectionWebThicknessSlider!.selectedMaxValue))) })
                     
                     // The below code will sort out the results to be displayed according to their totalDepth in ascending order:
@@ -457,13 +473,13 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
                         }
                         
                     }
-
+                    
                 }
-            
+                    
                     // The below will get executed whenever the user filtered results only as per their flange thicknesses:
-                
+                    
                 else if (customSectionFlangeThicknessSlider?.selectedMinValue != CGFloat(minimumSectionFlangeThickness!) || customSectionFlangeThicknessSlider?.selectedMaxValue != CGFloat(maximumSectionFlangeThickness!)) && (customDepthOfSectionRangeSlider?.selectedMinValue == CGFloat(minimumDepthOfSection!) && customDepthOfSectionRangeSlider?.selectedMaxValue == CGFloat(maximumDepthOfSection!) && customWidthOfSectionRangeSlider?.selectedMinValue == CGFloat(minimumWidthOfSection!) && customWidthOfSectionRangeSlider?.selectedMaxValue == CGFloat(maximumWidthOfSection!) && customSectionWebThicknessSlider?.selectedMinValue == CGFloat(minimumSectionWebThickness!) && customSectionWebThicknessSlider?.selectedMaxValue == CGFloat(maximumSectionWebThickness!) && customSectionAreaSlider?.selectedMinValue == CGFloat(minimumAreaOfSection!) && customSectionAreaSlider?.selectedMaxValue == CGFloat(maximumAreaOfSection!)) {
-
+                    
                     filteredArrayToBeSentBack = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.filter({ return (($0.sectionFlangeThickness >= Double(customSectionFlangeThicknessSlider!.selectedMinValue)) && ($0.sectionFlangeThickness <= Double(customSectionFlangeThicknessSlider!.selectedMaxValue))) })
                     
                     // The below code will sort out the results to be displayed according to their totalDepth in ascending order:
@@ -493,13 +509,13 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
                         }
                         
                     }
-
+                    
                 }
-                
+                    
                     // The below will get executed whenever the user filtered results only as per their sectional area:
-                
+                    
                 else if (customSectionAreaSlider?.selectedMinValue != CGFloat(minimumAreaOfSection!) || customSectionAreaSlider?.selectedMaxValue != CGFloat(maximumAreaOfSection!)) && (customDepthOfSectionRangeSlider?.selectedMinValue == CGFloat(minimumDepthOfSection!) && customDepthOfSectionRangeSlider?.selectedMaxValue == CGFloat(maximumDepthOfSection!) && customWidthOfSectionRangeSlider?.selectedMinValue == CGFloat(minimumWidthOfSection!) && customWidthOfSectionRangeSlider?.selectedMaxValue == CGFloat(maximumWidthOfSection!) && customSectionWebThicknessSlider?.selectedMinValue == CGFloat(minimumSectionWebThickness!) && customSectionWebThicknessSlider?.selectedMaxValue == CGFloat(maximumSectionWebThickness!) && customSectionFlangeThicknessSlider?.selectedMinValue == CGFloat(minimumSectionFlangeThickness!) && customSectionFlangeThicknessSlider?.selectedMaxValue == CGFloat(maximumSectionFlangeThickness!)) {
-
+                    
                     filteredArrayToBeSentBack = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.filter({ return (($0.sectionArea >= Double(customSectionAreaSlider!.selectedMinValue)) && ($0.sectionArea <= Double(customSectionAreaSlider!.selectedMaxValue))) })
                     
                     // The below code will sort out the results to be displayed according to their totalDepth in ascending order:
@@ -529,25 +545,28 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
                         }
                         
                     }
-
+                    
+                }
+                    
+                    // The below will get executed whenever the user selected multiple filtering criteria togther and hit the Apply button:
+                    
+                else {
+                    
+                    filteredArrayToBeSentBack = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.filter( { return (($0.sectionTotalDepth >= Double(customDepthOfSectionRangeSlider!.selectedMinValue)) && ($0.sectionTotalDepth <= Double(customDepthOfSectionRangeSlider!.selectedMaxValue)) && ($0.sectionWidth >= Double(customWidthOfSectionRangeSlider!.selectedMinValue)) && ($0.sectionWidth <= Double(customWidthOfSectionRangeSlider!.selectedMaxValue)) && ($0.sectionWebThickness >= Double(customSectionWebThicknessSlider!.selectedMinValue)) && ($0.sectionWebThickness <= Double(customSectionWebThicknessSlider!.selectedMaxValue)) && ($0.sectionFlangeThickness >= Double(customSectionFlangeThicknessSlider!.selectedMinValue)) && ($0.sectionFlangeThickness <= Double(customSectionFlangeThicknessSlider!.selectedMaxValue)) && ($0.sectionArea >= Double(customSectionAreaSlider!.selectedMinValue)) && ($0.sectionArea <= Double(customSectionAreaSlider!.selectedMaxValue))) } )
+                    
                 }
                 
-            // The below will get executed whenever the user selected multiple filtering criteria togther and hit the Apply button:
-                
-            else {
-                
-                filteredArrayToBeSentBack = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.filter( { return (($0.sectionTotalDepth >= Double(customDepthOfSectionRangeSlider!.selectedMinValue)) && ($0.sectionTotalDepth <= Double(customDepthOfSectionRangeSlider!.selectedMaxValue)) && ($0.sectionWidth >= Double(customWidthOfSectionRangeSlider!.selectedMinValue)) && ($0.sectionWidth <= Double(customWidthOfSectionRangeSlider!.selectedMaxValue)) && ($0.sectionWebThickness >= Double(customSectionWebThicknessSlider!.selectedMinValue)) && ($0.sectionWebThickness <= Double(customSectionWebThicknessSlider!.selectedMaxValue)) && ($0.sectionFlangeThickness >= Double(customSectionFlangeThicknessSlider!.selectedMinValue)) && ($0.sectionFlangeThickness <= Double(customSectionFlangeThicknessSlider!.selectedMaxValue)) && ($0.sectionArea >= Double(customSectionAreaSlider!.selectedMinValue)) && ($0.sectionArea <= Double(customSectionAreaSlider!.selectedMaxValue))) } )
+                delegate?.dataToBePassedUsingProtocol(viewControllerDataIsSentFrom: "TableViewSteelSectionsDataFilterOptions", filteringSlidersCleared: false, userLastSelectedCollectionViewCellNumber: self.userLastSelectedCollectionViewCellNumber, configuredArrayContainingSteelSectionsData: filteredArrayToBeSentBack, configuredArrayContainingSteelSectionsSerialNumbersOnly: [""], configuredSortByVariable: "None", configuredFiltersAppliedVariable: true, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
                 
             }
             
-            delegate?.dataToBePassedUsingProtocol(viewControllerDataIsSentFrom: "TableViewSteelSectionsDataFilterOptions", userLastSelectedCollectionViewCellNumber: self.userLastSelectedCollectionViewCellNumber, configuredArrayContainingSteelSectionsData: filteredArrayToBeSentBack, configuredArrayContainingSteelSectionsSerialNumbersOnly: [""], configuredSortByVariable: "None", configuredFiltersAppliedVariable: true, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
-
+            view.window!.layer.add(movingOutTransition, forKey: kCATransition)
             
-            dismiss(animated: true, completion: {})
-                
-            }
+            dismiss(animated: false, completion: {})
             
         }
+        
+    }
     
     // MARK: - Defining the setupConstraints function:
     
@@ -558,9 +577,9 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
             navigationBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             
             navigationBar.rightAnchor.constraint(equalTo: view.rightAnchor),
-
+            
             navigationBar.leftAnchor.constraint(equalTo: view.leftAnchor),
-                        
+            
             scrollView.topAnchor.constraint(equalTo: navigationBar.bottomAnchor),
             
             scrollView.rightAnchor.constraint(equalTo: view.rightAnchor),
@@ -586,7 +605,7 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
             widthOfSectionRangeSliderTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTitleLeftAndRightPadding),
             
             widthOfSectionRangeSliderTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTitleLeftAndRightPadding),
-                        
+            
             customWidthOfSectionRangeSlider!.topAnchor.constraint(equalTo: widthOfSectionRangeSliderTitle.bottomAnchor, constant: rangeSliderTrackTopPaddingFromBottomOfRangeSlideTitle),
             
             customWidthOfSectionRangeSlider!.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTrackLeftAndRightPadding),
@@ -598,19 +617,19 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
             sectionWebThicknessSliderTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTitleLeftAndRightPadding),
             
             sectionWebThicknessSliderTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTitleLeftAndRightPadding),
-                        
+            
             customSectionWebThicknessSlider!.topAnchor.constraint(equalTo: sectionWebThicknessSliderTitle.bottomAnchor, constant: rangeSliderTrackTopPaddingFromBottomOfRangeSlideTitle),
             
             customSectionWebThicknessSlider!.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTrackLeftAndRightPadding),
             
             customSectionWebThicknessSlider!.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTrackLeftAndRightPadding),
-                        
+            
             sectionFlangeThicknessSliderTitle.topAnchor.constraint(equalTo: customSectionWebThicknessSlider!.bottomAnchor, constant: verticalSpacingBetweenBottomOfRangeSliderTrackAndTopOfRangeSliderTitleLabel),
             
             sectionFlangeThicknessSliderTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTitleLeftAndRightPadding),
             
             sectionFlangeThicknessSliderTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTitleLeftAndRightPadding),
-                        
+            
             customSectionFlangeThicknessSlider!.topAnchor.constraint(equalTo: sectionFlangeThicknessSliderTitle.bottomAnchor, constant: rangeSliderTrackTopPaddingFromBottomOfRangeSlideTitle),
             
             customSectionFlangeThicknessSlider!.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTrackLeftAndRightPadding),
@@ -620,21 +639,21 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
             sectionAreaSliderTitle.topAnchor.constraint(equalTo: customSectionFlangeThicknessSlider!.bottomAnchor, constant: verticalSpacingBetweenBottomOfRangeSliderTrackAndTopOfRangeSliderTitleLabel),
             
             sectionAreaSliderTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTitleLeftAndRightPadding),
-
+            
             sectionAreaSliderTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTitleLeftAndRightPadding),
-                        
+            
             customSectionAreaSlider!.topAnchor.constraint(equalTo: sectionAreaSliderTitle.bottomAnchor, constant: rangeSliderTrackTopPaddingFromBottomOfRangeSlideTitle),
             
             customSectionAreaSlider!.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * (rangeSliderTrackLeftAndRightPadding)),
             
             customSectionAreaSlider!.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTrackLeftAndRightPadding),
-                        
+            
             resetFiltersButton.topAnchor.constraint(equalTo: customSectionAreaSlider!.bottomAnchor, constant: rangeSliderTitleTopPaddingFromNavigationBarBottom),
-
+            
             resetFiltersButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: -1 * (self.view.frame.width/4)),
-
+            
             applyFiltersButton.topAnchor.constraint(equalTo: customSectionAreaSlider!.bottomAnchor, constant: rangeSliderTitleTopPaddingFromNavigationBarBottom),
-
+            
             applyFiltersButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: self.view.frame.width/4)
             
         ])
@@ -650,11 +669,9 @@ extension TableViewSteelSectionsDataFilterOptions: UINavigationBarDelegate {
     
     @objc func navigationBarLeftButtonPressed(sender : UIButton) {
         
-        let main = UIStoryboard(name: "Main", bundle: nil)
+        view.window!.layer.add(movingOutTransition, forKey: kCATransition)
         
-        let previousViewControllerToGoTo = main.instantiateViewController(withIdentifier: "SteelSectionsTableViewController")
-        
-        self.present(previousViewControllerToGoTo, animated: true, completion: nil)
+        dismiss(animated: false, completion: {})
         
     }
     
@@ -669,15 +686,15 @@ extension TableViewSteelSectionsDataFilterOptions: UINavigationBarDelegate {
 extension TableViewSteelSectionsDataFilterOptions: RangeSeekSliderDelegate {
     
     func rangeSeekSlider(_ slider: RangeSeekSlider, didChange minValue: CGFloat, maxValue: CGFloat) {
-                
+        
     }
     
     func didStartTouches(in slider: RangeSeekSlider) {
-                
+        
     }
     
     func didEndTouches(in slider: RangeSeekSlider) {
-                
+        
     }
     
     func rangeSeekSlider(_ slider: RangeSeekSlider, stringForMinValue minValue: CGFloat) -> String? {

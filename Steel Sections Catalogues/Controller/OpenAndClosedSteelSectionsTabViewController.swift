@@ -8,8 +8,6 @@
 
 import UIKit
 
-import ChameleonFramework
-
 class OpenAndClosedSteelSectionsTabViewController: UITabBarController, UINavigationBarDelegate {
     
     // The below lines of code create an instance for the Open and Closed Steel Sections ViewControllers to be displayed in the TabBar View Controller, i.e this one:
