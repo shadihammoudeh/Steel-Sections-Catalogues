@@ -48,9 +48,17 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
     
     var extractedWidthOfSection: [Double]?
     
+    // The below will be used for Open Steel Section, Equal Angle Leg sections:
+    
+    var extractedSectionLegLength: [Double]?
+    
     var extractedSectionWebThickness: [Double]?
     
     var extractedSectionFlangeThickness: [Double]?
+    
+    // The below will be used for Open Steel Section, Equal Angle Leg and Unequal Angle Leg sections:
+    
+    var extractedSectionLegThickness: [Double]?
     
     var extractedSectionArea: [Double]?
     
@@ -58,9 +66,17 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
     
     var customWidthOfSectionRangeSlider: RangeSeekSlider?
     
+    // The below will be used for Open Steel Section, Equal Angle Leg sections:
+    
+    var customSectionLegLengthRangeSlider: RangeSeekSlider?
+    
     var customSectionWebThicknessSlider: RangeSeekSlider?
     
     var customSectionFlangeThicknessSlider: RangeSeekSlider?
+    
+    // The below will be used for Open Steel Section, Equal Angle Leg and Unequal Angle Leg sections:
+    
+    var customSectionLegThicknessSlider: RangeSeekSlider?
     
     var customSectionAreaSlider: RangeSeekSlider?
     
@@ -68,9 +84,17 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
     
     var minimumWidthOfSection: Double?
     
+    // The below will be used for Open Steel Section, Equal Angle Leg sections:
+    
+    var minimumSectionLegLength: Double?
+    
     var minimumSectionWebThickness: Double?
     
     var minimumSectionFlangeThickness: Double?
+    
+    // The below will be used for Open Steel Section, Equal Angle Leg and Unequal Angle Leg sections:
+    
+    var minimumSectionLegThickness: Double?
     
     var minimumAreaOfSection: Double?
     
@@ -78,9 +102,17 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
     
     var maximumWidthOfSection: Double?
     
+    // The below will be used for Open Steel Section, Equal Angle Leg sections:
+    
+    var maximumSectionLegLength: Double?
+    
     var maximumSectionWebThickness: Double?
     
     var maximumSectionFlangeThickness: Double?
+    
+    // The below will be used for Open Steel Section, Equal Angle Leg and Unequal Angle Leg sections:
+    
+    var maximumSectionLegThickness: Double?
     
     var maximumAreaOfSection: Double?
     
@@ -148,9 +180,17 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
     
     let widthOfSectionRangeSliderTitle = CustomRangeSliderUILabel(rangeSliderTitle: "Range Slider for Width of Section, b [mm]:", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 35, abbreviationLettersLength: 1, containsSubScriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 0, containsSuperScriptletters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 0)
     
+    // The below will be used for Open Steel Section, Equal Angle Leg sections:
+    
+    let sectionLegLengthRangeSliderTitle = CustomRangeSliderUILabel(rangeSliderTitle: "Range Slider for Section Leg Length, h [mm]:", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 37, abbreviationLettersLength: 1, containsSubScriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 0, containsSuperScriptletters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 0)
+    
     let sectionWebThicknessSliderTitle = CustomRangeSliderUILabel(rangeSliderTitle: "Range Slider for Section Web Thickness, tw [mm]:", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 40, abbreviationLettersLength: 2, containsSubScriptLetters: true, subScriptLettersStartingLocation: 41, subScriptLettersLength: 1, containsSuperScriptletters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 0)
     
     let sectionFlangeThicknessSliderTitle = CustomRangeSliderUILabel(rangeSliderTitle: "Range Slider for Section Flange Thickness, tf [mm]:", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 43, abbreviationLettersLength: 2, containsSubScriptLetters: true, subScriptLettersStartingLocation: 44, subScriptLettersLength: 1, containsSuperScriptletters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 0)
+    
+    // The below will be used for Open Steel Section, Equal Angle Leg sections:
+    
+    let sectionLegThicknessSliderTitle = CustomRangeSliderUILabel(rangeSliderTitle: "Range Slider for Section Leg Thickness, t [mm]:", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 40, abbreviationLettersLength: 1, containsSubScriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 0, containsSuperScriptletters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 0)
     
     let sectionAreaSliderTitle = CustomRangeSliderUILabel(rangeSliderTitle: "Range Slider for Area of Section, A [cm2]:", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 34, abbreviationLettersLength: 1, containsSubScriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 0, containsSuperScriptletters: true, superScriptLettersStartingLocation: 39, superScriptLettersLength: 1)
     
@@ -165,22 +205,31 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
         setupMoveOutTransition()
         
         // In order to prevent the movement of a UISlider's trackers to get confused with a swipeGesture (i.e. avoid the swipeGesture to get triggered when a user moves one of the slider's trackers in the right direction, which also correspond to the direction of the swipeGesture). We need to add a panGesture to the UISlider, whereby the panGesture does nothing at all. Then we need to set the cancelsTouchesInView property to be equal to false. As this will prevent the delivery of gestures to the view. Note that a UIGestureRecognizer is to be used with a single view:
-        
-        let panGestureRecogniseForDepthOfSectionUISlider = UIPanGestureRecognizer(target: nil, action:nil)
-        
-        panGestureRecogniseForDepthOfSectionUISlider.cancelsTouchesInView = false
-        
-        let panGestureRecogniseForWidthOfSectionUISlider = UIPanGestureRecognizer(target: nil, action:nil)
-        
-        panGestureRecogniseForWidthOfSectionUISlider.cancelsTouchesInView = false
-        
-        let panGestureRecogniseForWebThicknessUISlider = UIPanGestureRecognizer(target: nil, action:nil)
-        
-        panGestureRecogniseForWebThicknessUISlider.cancelsTouchesInView = false
-        
-        let panGestureRecogniseForFlangeThicknessUISlider = UIPanGestureRecognizer(target: nil, action:nil)
-        
-        panGestureRecogniseForFlangeThicknessUISlider.cancelsTouchesInView = false
+            
+            let panGestureRecogniseForDepthOfSectionUISlider = UIPanGestureRecognizer(target: nil, action:nil)
+            
+            panGestureRecogniseForDepthOfSectionUISlider.cancelsTouchesInView = false
+            
+            let panGestureRecogniseForWidthOfSectionUISlider = UIPanGestureRecognizer(target: nil, action:nil)
+            
+            
+            panGestureRecogniseForWidthOfSectionUISlider.cancelsTouchesInView = false
+            
+            let panGestureRecogniseForWebThicknessUISlider = UIPanGestureRecognizer(target: nil, action:nil)
+            
+            panGestureRecogniseForWebThicknessUISlider.cancelsTouchesInView = false
+            
+            let panGestureRecogniseForFlangeThicknessUISlider = UIPanGestureRecognizer(target: nil, action:nil)
+            
+            panGestureRecogniseForFlangeThicknessUISlider.cancelsTouchesInView = false
+
+            let panGestureRecgoniserForSectionLegLengthUISlider = UIPanGestureRecognizer(target: nil, action: nil)
+            
+            panGestureRecgoniserForSectionLegLengthUISlider.cancelsTouchesInView = false
+            
+            let panGestureRecogniserForSectionLegThicknessUISlider = UIPanGestureRecognizer(target: nil, action: nil)
+            
+            panGestureRecogniserForSectionLegThicknessUISlider.cancelsTouchesInView = false
         
         let panGestureRecogniseForAreaOfSectionUISlider = UIPanGestureRecognizer(target: nil, action:nil)
         
@@ -193,28 +242,50 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
         rightGestureRecognizer.direction = .right
         
         // MARK: - Extracting appropriate Arrays data for Range Sliders:
-        
-        extractedDepthOfSection = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionTotalDepth })
-        
-        extractedWidthOfSection = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionWidth })
-        
-        extractedSectionWebThickness = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionWebThickness })
-        
-        extractedSectionFlangeThickness = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionFlangeThickness })
-        
+                    
+            extractedDepthOfSection = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionTotalDepth })
+            
+            extractedWidthOfSection = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionWidth })
+            
+            extractedSectionWebThickness = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionWebThickness })
+            
+            extractedSectionFlangeThickness = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionFlangeThickness })
+            
+            extractedSectionLegLength = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionLegLength })
+            
+            extractedSectionLegThickness = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionLegThickness })
+            
         extractedSectionArea = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionArea })
         
         // MARK: - Declaring range sliders:
         
-        if let extractedDepthOfSection = extractedDepthOfSection, let extractedWidthOfSection = extractedWidthOfSection, let extractedSectionWebThickness = extractedSectionWebThickness, let extractedSectionFlangeThickness = extractedSectionFlangeThickness, let extractedSectionArea = extractedSectionArea {
+        if userLastSelectedCollectionViewCellNumber != 4 && userLastSelectedCollectionViewCellNumber != 5 {
             
-            customDepthOfSectionRangeSlider = CustomRangeSeekSlider(sectionPropertyDataArrayForRangeSlide: extractedDepthOfSection, minimumDistanceBetweenSliders: 80)
+            if let extractedDepthOfSection = extractedDepthOfSection, let extractedWidthOfSection = extractedWidthOfSection, let extractedSectionWebThickness = extractedSectionWebThickness, let extractedSectionFlangeThickness = extractedSectionFlangeThickness {
+                
+                customDepthOfSectionRangeSlider = CustomRangeSeekSlider(sectionPropertyDataArrayForRangeSlide: extractedDepthOfSection, minimumDistanceBetweenSliders: 80)
+                
+                customWidthOfSectionRangeSlider = CustomRangeSeekSlider(sectionPropertyDataArrayForRangeSlide: extractedWidthOfSection, minimumDistanceBetweenSliders: 30)
+                
+                customSectionWebThicknessSlider = CustomRangeSeekSlider(sectionPropertyDataArrayForRangeSlide: extractedSectionWebThickness, minimumDistanceBetweenSliders: 3)
+                
+                customSectionFlangeThicknessSlider = CustomRangeSeekSlider(sectionPropertyDataArrayForRangeSlide: extractedSectionFlangeThickness, minimumDistanceBetweenSliders: 5)
+                
+            }
             
-            customWidthOfSectionRangeSlider = CustomRangeSeekSlider(sectionPropertyDataArrayForRangeSlide: extractedWidthOfSection, minimumDistanceBetweenSliders: 30)
+        } else {
             
-            customSectionWebThicknessSlider = CustomRangeSeekSlider(sectionPropertyDataArrayForRangeSlide: extractedSectionWebThickness, minimumDistanceBetweenSliders: 3)
+            if let extractedSectionLegLength = extractedSectionLegLength, let extractedSectionLegThickness = extractedSectionLegThickness {
+                
+                customSectionLegLengthRangeSlider = CustomRangeSeekSlider(sectionPropertyDataArrayForRangeSlide: extractedSectionLegLength, minimumDistanceBetweenSliders: 55)
+                
+                customSectionLegThicknessSlider = CustomRangeSeekSlider(sectionPropertyDataArrayForRangeSlide: extractedSectionLegThickness, minimumDistanceBetweenSliders: 20)
+                
+            }
             
-            customSectionFlangeThicknessSlider = CustomRangeSeekSlider(sectionPropertyDataArrayForRangeSlide: extractedSectionFlangeThickness, minimumDistanceBetweenSliders: 5)
+        }
+        
+        if let extractedSectionArea = extractedSectionArea {
             
             customSectionAreaSlider = CustomRangeSeekSlider(sectionPropertyDataArrayForRangeSlide: extractedSectionArea, minimumDistanceBetweenSliders: 55)
             
@@ -222,13 +293,23 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
         
         // MARK: - Setting Range Sliders delegates:
         
-        customDepthOfSectionRangeSlider!.delegate = self
-        
-        customWidthOfSectionRangeSlider!.delegate = self
-        
-        customSectionWebThicknessSlider!.delegate = self
-        
-        customSectionFlangeThicknessSlider!.delegate = self
+        if userLastSelectedCollectionViewCellNumber != 4 && userLastSelectedCollectionViewCellNumber != 5 {
+            
+            customDepthOfSectionRangeSlider!.delegate = self
+            
+            customWidthOfSectionRangeSlider!.delegate = self
+            
+            customSectionWebThicknessSlider!.delegate = self
+            
+            customSectionFlangeThicknessSlider!.delegate = self
+            
+        } else {
+            
+            customSectionLegLengthRangeSlider!.delegate = self
+            
+            customSectionLegThicknessSlider!.delegate = self
+            
+        }
         
         customSectionAreaSlider!.delegate = self
         
@@ -238,35 +319,59 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
         
         view.addGestureRecognizer(rightGestureRecognizer)
         
-        customDepthOfSectionRangeSlider!.addGestureRecognizer(panGestureRecogniseForDepthOfSectionUISlider)
-        
-        customWidthOfSectionRangeSlider!.addGestureRecognizer(panGestureRecogniseForWidthOfSectionUISlider)
-        
-        customSectionWebThicknessSlider!.addGestureRecognizer(panGestureRecogniseForWebThicknessUISlider)
-        
-        customSectionFlangeThicknessSlider!.addGestureRecognizer(panGestureRecogniseForFlangeThicknessUISlider)
+        if userLastSelectedCollectionViewCellNumber != 4 && userLastSelectedCollectionViewCellNumber != 5 {
+            
+            customDepthOfSectionRangeSlider!.addGestureRecognizer(panGestureRecogniseForDepthOfSectionUISlider)
+            
+            customWidthOfSectionRangeSlider!.addGestureRecognizer(panGestureRecogniseForWidthOfSectionUISlider)
+            
+            customSectionWebThicknessSlider!.addGestureRecognizer(panGestureRecogniseForWebThicknessUISlider)
+            
+            customSectionFlangeThicknessSlider!.addGestureRecognizer(panGestureRecogniseForFlangeThicknessUISlider)
+            
+        } else {
+            
+            customSectionLegLengthRangeSlider!.addGestureRecognizer(panGestureRecgoniserForSectionLegLengthUISlider)
+            
+            customSectionLegThicknessSlider!.addGestureRecognizer(panGestureRecogniserForSectionLegThicknessUISlider)
+            
+        }
         
         customSectionAreaSlider!.addGestureRecognizer(panGestureRecogniseForAreaOfSectionUISlider)
         
         view.addSubview(scrollView)
         
-        scrollView.addSubview(depthOfSectionRangeSliderTitle)
-        
-        scrollView.addSubview(widthOfSectionRangeSliderTitle)
-        
-        scrollView.addSubview(sectionWebThicknessSliderTitle)
-        
-        scrollView.addSubview(sectionFlangeThicknessSliderTitle)
+        if userLastSelectedCollectionViewCellNumber != 4 && userLastSelectedCollectionViewCellNumber != 5 {
+            
+            scrollView.addSubview(depthOfSectionRangeSliderTitle)
+            
+            scrollView.addSubview(widthOfSectionRangeSliderTitle)
+            
+            scrollView.addSubview(sectionWebThicknessSliderTitle)
+            
+            scrollView.addSubview(sectionFlangeThicknessSliderTitle)
+            
+            scrollView.addSubview(customDepthOfSectionRangeSlider!)
+            
+            scrollView.addSubview(customWidthOfSectionRangeSlider!)
+            
+            scrollView.addSubview(customSectionWebThicknessSlider!)
+            
+            scrollView.addSubview(customSectionFlangeThicknessSlider!)
+            
+        } else {
+            
+            scrollView.addSubview(sectionLegLengthRangeSliderTitle)
+            
+            scrollView.addSubview(sectionLegThicknessSliderTitle)
+            
+            scrollView.addSubview(customSectionLegLengthRangeSlider!)
+
+            scrollView.addSubview(customSectionLegThicknessSlider!)
+            
+        }
         
         scrollView.addSubview(sectionAreaSliderTitle)
-        
-        scrollView.addSubview(customDepthOfSectionRangeSlider!)
-        
-        scrollView.addSubview(customWidthOfSectionRangeSlider!)
-        
-        scrollView.addSubview(customSectionWebThicknessSlider!)
-        
-        scrollView.addSubview(customSectionFlangeThicknessSlider!)
         
         scrollView.addSubview(customSectionAreaSlider!)
         
@@ -286,8 +391,16 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
         
         // MARK: - Calling the setupConstraints function:
         
-        setupConstraints()
-        
+        if userLastSelectedCollectionViewCellNumber != 4 && userLastSelectedCollectionViewCellNumber != 5 {
+            
+            setupConstraintsForAllOpenSteelSectionsExceptEqualAndUnequalLegSections()
+            
+        } else {
+            
+            setupConstraintsForOpenSteelSectionsEqualLegAngles()
+            
+        }
+                
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -570,7 +683,7 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
     
     // MARK: - Defining the setupConstraints function:
     
-    func setupConstraints() {
+    func setupConstraintsForAllOpenSteelSectionsExceptEqualAndUnequalLegSections() {
         
         NSLayoutConstraint.activate([
             
@@ -587,6 +700,7 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
             scrollView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            
             
             depthOfSectionRangeSliderTitle.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: rangeSliderTitleTopPaddingFromNavigationBarBottom),
             
@@ -656,6 +770,72 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
             
             applyFiltersButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: self.view.frame.width/4)
             
+        ])
+                
+    }
+    
+    func setupConstraintsForOpenSteelSectionsEqualLegAngles() {
+        
+        NSLayoutConstraint.activate([
+        
+        navigationBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+        
+        navigationBar.rightAnchor.constraint(equalTo: view.rightAnchor),
+        
+        navigationBar.leftAnchor.constraint(equalTo: view.leftAnchor),
+        
+        scrollView.topAnchor.constraint(equalTo: navigationBar.bottomAnchor),
+        
+        scrollView.rightAnchor.constraint(equalTo: view.rightAnchor),
+        
+        scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        
+        scrollView.leftAnchor.constraint(equalTo: view.leftAnchor),
+        
+        sectionLegLengthRangeSliderTitle.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: rangeSliderTitleTopPaddingFromNavigationBarBottom),
+        
+        sectionLegLengthRangeSliderTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTitleLeftAndRightPadding),
+        
+        sectionLegLengthRangeSliderTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTitleLeftAndRightPadding),
+        
+        customSectionLegLengthRangeSlider!.topAnchor.constraint(equalTo: sectionLegLengthRangeSliderTitle.bottomAnchor, constant: rangeSliderTrackTopPaddingFromBottomOfRangeSlideTitle),
+        
+        customSectionLegLengthRangeSlider!.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTrackLeftAndRightPadding),
+        
+        customSectionLegLengthRangeSlider!.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTrackLeftAndRightPadding),
+        
+        sectionLegThicknessSliderTitle.topAnchor.constraint(equalTo: customSectionLegLengthRangeSlider!.bottomAnchor, constant: verticalSpacingBetweenBottomOfRangeSliderTrackAndTopOfRangeSliderTitleLabel),
+        
+        sectionLegThicknessSliderTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTitleLeftAndRightPadding),
+        
+        sectionLegThicknessSliderTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTitleLeftAndRightPadding),
+        
+        customSectionLegThicknessSlider!.topAnchor.constraint(equalTo: sectionLegThicknessSliderTitle.bottomAnchor, constant: rangeSliderTrackTopPaddingFromBottomOfRangeSlideTitle),
+                   
+        customSectionLegThicknessSlider!.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTrackLeftAndRightPadding),
+                   
+        customSectionLegThicknessSlider!.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTrackLeftAndRightPadding),
+        
+        sectionAreaSliderTitle.topAnchor.constraint(equalTo: customSectionLegThicknessSlider!.bottomAnchor, constant: verticalSpacingBetweenBottomOfRangeSliderTrackAndTopOfRangeSliderTitleLabel),
+        
+        sectionAreaSliderTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTitleLeftAndRightPadding),
+        
+        sectionAreaSliderTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTitleLeftAndRightPadding),
+        
+        customSectionAreaSlider!.topAnchor.constraint(equalTo: sectionAreaSliderTitle.bottomAnchor, constant: rangeSliderTrackTopPaddingFromBottomOfRangeSlideTitle),
+        
+        customSectionAreaSlider!.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * (rangeSliderTrackLeftAndRightPadding)),
+        
+        customSectionAreaSlider!.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTrackLeftAndRightPadding),
+        
+        resetFiltersButton.topAnchor.constraint(equalTo: customSectionAreaSlider!.bottomAnchor, constant: rangeSliderTitleTopPaddingFromNavigationBarBottom),
+        
+        resetFiltersButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: -1 * (self.view.frame.width/4)),
+        
+        applyFiltersButton.topAnchor.constraint(equalTo: customSectionAreaSlider!.bottomAnchor, constant: rangeSliderTitleTopPaddingFromNavigationBarBottom),
+        
+        applyFiltersButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: self.view.frame.width/4)
+        
         ])
         
     }
