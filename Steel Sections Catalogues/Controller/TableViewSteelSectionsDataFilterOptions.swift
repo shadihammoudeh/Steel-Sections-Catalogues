@@ -170,7 +170,7 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
         
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         
-        scrollView.backgroundColor = UIColor(named: "Filter Results VC - Scroll View Backgtround Colour")
+        scrollView.backgroundColor = UIColor(named: "Filter Results VC - Scroll View Background Colour")
         
         return scrollView
         
@@ -206,36 +206,35 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
         
         // In order to prevent the movement of a UISlider's trackers to get confused with a swipeGesture (i.e. avoid the swipeGesture to get triggered when a user moves one of the slider's trackers in the right direction, which also correspond to the direction of the swipeGesture). We need to add a panGesture to the UISlider, whereby the panGesture does nothing at all. Then we need to set the cancelsTouchesInView property to be equal to false. As this will prevent the delivery of gestures to the view. Note that a UIGestureRecognizer is to be used with a single view:
             
-            let panGestureRecogniseForDepthOfSectionUISlider = UIPanGestureRecognizer(target: nil, action:nil)
+        let panGestureRecogniseForDepthOfSectionUISlider = UIPanGestureRecognizer(target: nil, action:nil)
             
-            panGestureRecogniseForDepthOfSectionUISlider.cancelsTouchesInView = false
+        panGestureRecogniseForDepthOfSectionUISlider.cancelsTouchesInView = false
             
-            let panGestureRecogniseForWidthOfSectionUISlider = UIPanGestureRecognizer(target: nil, action:nil)
+        let panGestureRecogniseForWidthOfSectionUISlider = UIPanGestureRecognizer(target: nil, action:nil)
             
+        panGestureRecogniseForWidthOfSectionUISlider.cancelsTouchesInView = false
+        
+        let panGestureRecgoniserForSectionLegLengthUISlider = UIPanGestureRecognizer(target: nil, action: nil)
+        
+        panGestureRecgoniserForSectionLegLengthUISlider.cancelsTouchesInView = false
             
-            panGestureRecogniseForWidthOfSectionUISlider.cancelsTouchesInView = false
+        let panGestureRecogniseForWebThicknessUISlider = UIPanGestureRecognizer(target: nil, action:nil)
             
-            let panGestureRecogniseForWebThicknessUISlider = UIPanGestureRecognizer(target: nil, action:nil)
+        panGestureRecogniseForWebThicknessUISlider.cancelsTouchesInView = false
             
-            panGestureRecogniseForWebThicknessUISlider.cancelsTouchesInView = false
+        let panGestureRecogniseForFlangeThicknessUISlider = UIPanGestureRecognizer(target: nil, action:nil)
             
-            let panGestureRecogniseForFlangeThicknessUISlider = UIPanGestureRecognizer(target: nil, action:nil)
+        panGestureRecogniseForFlangeThicknessUISlider.cancelsTouchesInView = false
             
-            panGestureRecogniseForFlangeThicknessUISlider.cancelsTouchesInView = false
-
-            let panGestureRecgoniserForSectionLegLengthUISlider = UIPanGestureRecognizer(target: nil, action: nil)
+        let panGestureRecogniserForSectionLegThicknessUISlider = UIPanGestureRecognizer(target: nil, action: nil)
             
-            panGestureRecgoniserForSectionLegLengthUISlider.cancelsTouchesInView = false
-            
-            let panGestureRecogniserForSectionLegThicknessUISlider = UIPanGestureRecognizer(target: nil, action: nil)
-            
-            panGestureRecogniserForSectionLegThicknessUISlider.cancelsTouchesInView = false
+        panGestureRecogniserForSectionLegThicknessUISlider.cancelsTouchesInView = false
         
         let panGestureRecogniseForAreaOfSectionUISlider = UIPanGestureRecognizer(target: nil, action:nil)
         
         panGestureRecogniseForAreaOfSectionUISlider.cancelsTouchesInView = false
         
-        // MARK: - Adding right swipe gesture:
+        // MARK: - Adding right swipe gesture to allow the user to go back to the previous VC when a right swipe gesture is detected:
         
         let rightGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(navigationBarLeftButtonPressed(sender:)))
         
@@ -243,73 +242,54 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
         
         // MARK: - Extracting appropriate Arrays data for Range Sliders:
                     
-            extractedDepthOfSection = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionTotalDepth })
+        extractedDepthOfSection = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionTotalDepth })
             
-            extractedWidthOfSection = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionWidth })
+        extractedWidthOfSection = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionWidth })
+        
+        extractedSectionLegLength = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionLegLength })
             
-            extractedSectionWebThickness = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionWebThickness })
+        extractedSectionWebThickness = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionWebThickness })
             
-            extractedSectionFlangeThickness = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionFlangeThickness })
+        extractedSectionFlangeThickness = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionFlangeThickness })
             
-            extractedSectionLegLength = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionLegLength })
-            
-            extractedSectionLegThickness = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionLegThickness })
+        extractedSectionLegThickness = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionLegThickness })
             
         extractedSectionArea = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionArea })
         
         // MARK: - Declaring range sliders:
         
-        if userLastSelectedCollectionViewCellNumber != 4 && userLastSelectedCollectionViewCellNumber != 5 {
-            
-            if let extractedDepthOfSection = extractedDepthOfSection, let extractedWidthOfSection = extractedWidthOfSection, let extractedSectionWebThickness = extractedSectionWebThickness, let extractedSectionFlangeThickness = extractedSectionFlangeThickness {
+        if let extractedDepthOfSection = extractedDepthOfSection, let extractedWidthOfSection = extractedWidthOfSection, let extractedSectionLegLength = extractedSectionLegLength, let extractedSectionWebThickness = extractedSectionWebThickness, let extractedSectionFlangeThickness = extractedSectionFlangeThickness, let extractedSectionLegThickness = extractedSectionLegThickness, let extractedSectionArea = extractedSectionArea {
                 
                 customDepthOfSectionRangeSlider = CustomRangeSeekSlider(sectionPropertyDataArrayForRangeSlide: extractedDepthOfSection, minimumDistanceBetweenSliders: 80)
                 
                 customWidthOfSectionRangeSlider = CustomRangeSeekSlider(sectionPropertyDataArrayForRangeSlide: extractedWidthOfSection, minimumDistanceBetweenSliders: 30)
+            
+            
+                customSectionLegLengthRangeSlider = CustomRangeSeekSlider(sectionPropertyDataArrayForRangeSlide: extractedSectionLegLength, minimumDistanceBetweenSliders: 55)
                 
                 customSectionWebThicknessSlider = CustomRangeSeekSlider(sectionPropertyDataArrayForRangeSlide: extractedSectionWebThickness, minimumDistanceBetweenSliders: 3)
                 
                 customSectionFlangeThicknessSlider = CustomRangeSeekSlider(sectionPropertyDataArrayForRangeSlide: extractedSectionFlangeThickness, minimumDistanceBetweenSliders: 5)
-                
-            }
             
-        } else {
-            
-            if let extractedSectionLegLength = extractedSectionLegLength, let extractedSectionLegThickness = extractedSectionLegThickness {
-                
-                customSectionLegLengthRangeSlider = CustomRangeSeekSlider(sectionPropertyDataArrayForRangeSlide: extractedSectionLegLength, minimumDistanceBetweenSliders: 55)
-                
                 customSectionLegThicknessSlider = CustomRangeSeekSlider(sectionPropertyDataArrayForRangeSlide: extractedSectionLegThickness, minimumDistanceBetweenSliders: 20)
-                
+            
+                customSectionAreaSlider = CustomRangeSeekSlider(sectionPropertyDataArrayForRangeSlide: extractedSectionArea, minimumDistanceBetweenSliders: 55)
+
             }
-            
-        }
-        
-        if let extractedSectionArea = extractedSectionArea {
-            
-            customSectionAreaSlider = CustomRangeSeekSlider(sectionPropertyDataArrayForRangeSlide: extractedSectionArea, minimumDistanceBetweenSliders: 55)
-            
-        }
         
         // MARK: - Setting Range Sliders delegates:
+            
+        customDepthOfSectionRangeSlider!.delegate = self
+            
+        customWidthOfSectionRangeSlider!.delegate = self
         
-        if userLastSelectedCollectionViewCellNumber != 4 && userLastSelectedCollectionViewCellNumber != 5 {
+        customSectionLegLengthRangeSlider!.delegate = self
             
-            customDepthOfSectionRangeSlider!.delegate = self
+        customSectionWebThicknessSlider!.delegate = self
             
-            customWidthOfSectionRangeSlider!.delegate = self
-            
-            customSectionWebThicknessSlider!.delegate = self
-            
-            customSectionFlangeThicknessSlider!.delegate = self
-            
-        } else {
-            
-            customSectionLegLengthRangeSlider!.delegate = self
-            
-            customSectionLegThicknessSlider!.delegate = self
-            
-        }
+        customSectionFlangeThicknessSlider!.delegate = self
+        
+        customSectionLegThicknessSlider!.delegate = self
         
         customSectionAreaSlider!.delegate = self
         
@@ -319,57 +299,81 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
         
         view.addGestureRecognizer(rightGestureRecognizer)
         
+        view.addSubview(scrollView)
+        
+        // The below will be executed for all Open Rolled Steel Sections expect Equal and Unequal Leg Sections:
+        
         if userLastSelectedCollectionViewCellNumber != 4 && userLastSelectedCollectionViewCellNumber != 5 {
             
             customDepthOfSectionRangeSlider!.addGestureRecognizer(panGestureRecogniseForDepthOfSectionUISlider)
             
+            scrollView.addSubview(depthOfSectionRangeSliderTitle)
+            
+            scrollView.addSubview(customDepthOfSectionRangeSlider!)
+            
             customWidthOfSectionRangeSlider!.addGestureRecognizer(panGestureRecogniseForWidthOfSectionUISlider)
+            
+            scrollView.addSubview(widthOfSectionRangeSliderTitle)
+            
+            scrollView.addSubview(customWidthOfSectionRangeSlider!)
             
             customSectionWebThicknessSlider!.addGestureRecognizer(panGestureRecogniseForWebThicknessUISlider)
             
+            scrollView.addSubview(sectionWebThicknessSliderTitle)
+            
+            scrollView.addSubview(customSectionWebThicknessSlider!)
+            
             customSectionFlangeThicknessSlider!.addGestureRecognizer(panGestureRecogniseForFlangeThicknessUISlider)
             
-        } else {
+            scrollView.addSubview(sectionFlangeThicknessSliderTitle)
+            
+            scrollView.addSubview(customSectionFlangeThicknessSlider!)
+            
+        }
+        
+        // The below IF STATEMENT will be executed for Equal Angle Leg Sections:
+        
+        else if userLastSelectedCollectionViewCellNumber == 4 {
             
             customSectionLegLengthRangeSlider!.addGestureRecognizer(panGestureRecgoniserForSectionLegLengthUISlider)
             
+            scrollView.addSubview(sectionLegLengthRangeSliderTitle)
+            
+            scrollView.addSubview(customSectionLegLengthRangeSlider!)
+            
             customSectionLegThicknessSlider!.addGestureRecognizer(panGestureRecogniserForSectionLegThicknessUISlider)
+            
+            scrollView.addSubview(sectionLegThicknessSliderTitle)
+            
+            scrollView.addSubview(customSectionLegThicknessSlider!)
+            
+        }
+        
+        // The below will be executed for Unequal Leg Sections:
+        
+        else {
+            
+            customDepthOfSectionRangeSlider!.addGestureRecognizer(panGestureRecogniseForDepthOfSectionUISlider)
+            
+            scrollView.addSubview(depthOfSectionRangeSliderTitle)
+            
+            scrollView.addSubview(customDepthOfSectionRangeSlider!)
+            
+            customWidthOfSectionRangeSlider!.addGestureRecognizer(panGestureRecogniseForWidthOfSectionUISlider)
+            
+            scrollView.addSubview(widthOfSectionRangeSliderTitle)
+            
+            scrollView.addSubview(customWidthOfSectionRangeSlider!)
+            
+            customSectionLegThicknessSlider!.addGestureRecognizer(panGestureRecogniserForSectionLegThicknessUISlider)
+            
+            scrollView.addSubview(sectionLegThicknessSliderTitle)
+            
+            scrollView.addSubview(customSectionLegThicknessSlider!)
             
         }
         
         customSectionAreaSlider!.addGestureRecognizer(panGestureRecogniseForAreaOfSectionUISlider)
-        
-        view.addSubview(scrollView)
-        
-        if userLastSelectedCollectionViewCellNumber != 4 && userLastSelectedCollectionViewCellNumber != 5 {
-            
-            scrollView.addSubview(depthOfSectionRangeSliderTitle)
-            
-            scrollView.addSubview(widthOfSectionRangeSliderTitle)
-            
-            scrollView.addSubview(sectionWebThicknessSliderTitle)
-            
-            scrollView.addSubview(sectionFlangeThicknessSliderTitle)
-            
-            scrollView.addSubview(customDepthOfSectionRangeSlider!)
-            
-            scrollView.addSubview(customWidthOfSectionRangeSlider!)
-            
-            scrollView.addSubview(customSectionWebThicknessSlider!)
-            
-            scrollView.addSubview(customSectionFlangeThicknessSlider!)
-            
-        } else {
-            
-            scrollView.addSubview(sectionLegLengthRangeSliderTitle)
-            
-            scrollView.addSubview(sectionLegThicknessSliderTitle)
-            
-            scrollView.addSubview(customSectionLegLengthRangeSlider!)
-
-            scrollView.addSubview(customSectionLegThicknessSlider!)
-            
-        }
         
         scrollView.addSubview(sectionAreaSliderTitle)
         
@@ -391,13 +395,19 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
         
         // MARK: - Calling the setupConstraints function:
         
+        setupNavigationBarAndScrollViewAndClearAndApplyButtonsConstraints()
+        
         if userLastSelectedCollectionViewCellNumber != 4 && userLastSelectedCollectionViewCellNumber != 5 {
             
             setupConstraintsForAllOpenSteelSectionsExceptEqualAndUnequalLegSections()
             
-        } else {
+        } else if userLastSelectedCollectionViewCellNumber == 4 {
             
             setupConstraintsForOpenSteelSectionsEqualLegAngles()
+            
+        } else {
+            
+            setupConstraintsForOpenSteelSectionsUnequalLegAngles()
             
         }
                 
@@ -429,39 +439,49 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
         
         if sender.tag == 1 {
             
-            if let minimumDepthOfSection = minimumDepthOfSection, let maximumDepthOfSection = maximumDepthOfSection, let minimumWidthOfSection = minimumWidthOfSection, let maximumWidthOfSection = maximumWidthOfSection, let minimumSectionWebThickness = minimumSectionWebThickness, let maximumSectionWebThickness = maximumSectionWebThickness, let minimumSectionFlangeThickness = minimumSectionFlangeThickness, let maximumSectionFlangeThickness = maximumSectionFlangeThickness, let minimumSectionArea = minimumAreaOfSection, let maximumSectionArea = maximumAreaOfSection {
+            if userLastSelectedCollectionViewCellNumber != 4 && userLastSelectedCollectionViewCellNumber != 5 {
                 
-                customDepthOfSectionRangeSlider?.selectedMinValue = CGFloat(minimumDepthOfSection)
+                if let minimumDepthOfSection = minimumDepthOfSection, let maximumDepthOfSection = maximumDepthOfSection, let minimumWidthOfSection = minimumWidthOfSection, let maximumWidthOfSection = maximumWidthOfSection, let minimumSectionWebThickness = minimumSectionWebThickness, let maximumSectionWebThickness = maximumSectionWebThickness, let minimumSectionFlangeThickness = minimumSectionFlangeThickness, let maximumSectionFlangeThickness = maximumSectionFlangeThickness, let minimumSectionArea = minimumAreaOfSection, let maximumSectionArea = maximumAreaOfSection {
+                    
+                    customDepthOfSectionRangeSlider?.selectedMinValue = CGFloat(minimumDepthOfSection)
+                    
+                    customDepthOfSectionRangeSlider?.selectedMaxValue = CGFloat(maximumDepthOfSection)
+                    
+                    customDepthOfSectionRangeSlider?.layoutSubviews()
+                    
+                    customWidthOfSectionRangeSlider?.selectedMinValue = CGFloat(minimumWidthOfSection)
+                    
+                    customWidthOfSectionRangeSlider?.selectedMaxValue = CGFloat(maximumWidthOfSection)
+                    
+                    customWidthOfSectionRangeSlider?.layoutSubviews()
+                    
+                    customSectionWebThicknessSlider?.selectedMinValue = CGFloat(minimumSectionWebThickness)
+                    
+                    customSectionWebThicknessSlider?.selectedMaxValue = CGFloat(maximumSectionWebThickness)
+                    
+                    customSectionWebThicknessSlider?.layoutSubviews()
+                    
+                    customSectionFlangeThicknessSlider?.selectedMinValue = CGFloat(minimumSectionFlangeThickness)
+                    
+                    customSectionFlangeThicknessSlider?.selectedMaxValue = CGFloat(maximumSectionFlangeThickness)
+                    
+                    customSectionFlangeThicknessSlider?.layoutSubviews()
+                    
+                    customSectionAreaSlider?.selectedMinValue = CGFloat(minimumSectionArea)
+                    
+                    customSectionAreaSlider?.selectedMaxValue = CGFloat(maximumSectionArea)
+                    
+                    customSectionAreaSlider?.layoutSubviews()
+                    
+                }
                 
-                customDepthOfSectionRangeSlider?.selectedMaxValue = CGFloat(maximumDepthOfSection)
+            } else {
                 
-                customDepthOfSectionRangeSlider?.layoutSubviews()
                 
-                customWidthOfSectionRangeSlider?.selectedMinValue = CGFloat(minimumWidthOfSection)
-                
-                customWidthOfSectionRangeSlider?.selectedMaxValue = CGFloat(maximumWidthOfSection)
-                
-                customWidthOfSectionRangeSlider?.layoutSubviews()
-                
-                customSectionWebThicknessSlider?.selectedMinValue = CGFloat(minimumSectionWebThickness)
-                
-                customSectionWebThicknessSlider?.selectedMaxValue = CGFloat(maximumSectionWebThickness)
-                
-                customSectionWebThicknessSlider?.layoutSubviews()
-                
-                customSectionFlangeThicknessSlider?.selectedMinValue = CGFloat(minimumSectionFlangeThickness)
-                
-                customSectionFlangeThicknessSlider?.selectedMaxValue = CGFloat(maximumSectionFlangeThickness)
-                
-                customSectionFlangeThicknessSlider?.layoutSubviews()
-                
-                customSectionAreaSlider?.selectedMinValue = CGFloat(minimumSectionArea)
-                
-                customSectionAreaSlider?.selectedMaxValue = CGFloat(maximumSectionArea)
-                
-                customSectionAreaSlider?.layoutSubviews()
                 
             }
+            
+            
             
         }
             
@@ -683,10 +703,10 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
     
     // MARK: - Defining the setupConstraints function:
     
-    func setupConstraintsForAllOpenSteelSectionsExceptEqualAndUnequalLegSections() {
+    func setupNavigationBarAndScrollViewAndClearAndApplyButtonsConstraints() {
         
         NSLayoutConstraint.activate([
-            
+        
             navigationBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             
             navigationBar.rightAnchor.constraint(equalTo: view.rightAnchor),
@@ -701,60 +721,41 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
             
             scrollView.leftAnchor.constraint(equalTo: view.leftAnchor),
             
+            resetFiltersButton.topAnchor.constraint(equalTo: customSectionAreaSlider!.bottomAnchor, constant: rangeSliderTitleTopPaddingFromNavigationBarBottom),
+
+            resetFiltersButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: -1 * (self.view.frame.width/4)),
+
+            applyFiltersButton.topAnchor.constraint(equalTo: customSectionAreaSlider!.bottomAnchor, constant: rangeSliderTitleTopPaddingFromNavigationBarBottom),
+
+            applyFiltersButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: self.view.frame.width/4)
+        
+        ])
+        
+    }
+    
+    func setupConstraintsForAllOpenSteelSectionsExceptEqualAndUnequalLegSections() {
+        
+        depthOfSectionRangeSliderTitle.pin(fixedToSuperViewTopAnchor: true, fixedToSuperViewRightAnchor: true, fixedToSuperViewBottomAnchor: false, fixedToSuperViewLeftAnchor: true, superViewTopAnchor: scrollView.topAnchor, superViewRightAnchor: self.view.rightAnchor, superViewBottomAnchor: self.view.bottomAnchor, superViewLeftAnchor: self.view.leftAnchor, topAnchorConstant: rangeSliderTitleTopPaddingFromNavigationBarBottom, rightAnchorConstant: -1 * rangeSliderTitleLeftAndRightPadding, bottomAnchorConstant: 1, leftAnchorConstant: rangeSliderTitleLeftAndRightPadding)
+        
+        customDepthOfSectionRangeSlider!.pin(fixedToSuperViewTopAnchor: true, fixedToSuperViewRightAnchor: true, fixedToSuperViewBottomAnchor: false, fixedToSuperViewLeftAnchor: true, superViewTopAnchor: depthOfSectionRangeSliderTitle.bottomAnchor, superViewRightAnchor: self.view.rightAnchor, superViewBottomAnchor: self.view.bottomAnchor, superViewLeftAnchor: self.view.leftAnchor, topAnchorConstant: rangeSliderTrackTopPaddingFromBottomOfRangeSlideTitle, rightAnchorConstant: -1 * rangeSliderTrackLeftAndRightPadding, bottomAnchorConstant: 1, leftAnchorConstant: rangeSliderTrackLeftAndRightPadding)
+        
+        widthOfSectionRangeSliderTitle.pin(fixedToSuperViewTopAnchor: true, fixedToSuperViewRightAnchor: true, fixedToSuperViewBottomAnchor: false, fixedToSuperViewLeftAnchor: true, superViewTopAnchor: customDepthOfSectionRangeSlider!.bottomAnchor, superViewRightAnchor: self.view.rightAnchor, superViewBottomAnchor: self.view.bottomAnchor, superViewLeftAnchor: self.view.leftAnchor, topAnchorConstant: verticalSpacingBetweenBottomOfRangeSliderTrackAndTopOfRangeSliderTitleLabel, rightAnchorConstant: -1 * rangeSliderTitleLeftAndRightPadding, bottomAnchorConstant: 1, leftAnchorConstant: rangeSliderTitleLeftAndRightPadding)
+        
+        customWidthOfSectionRangeSlider!.pin(fixedToSuperViewTopAnchor: true, fixedToSuperViewRightAnchor: true, fixedToSuperViewBottomAnchor: false, fixedToSuperViewLeftAnchor: true, superViewTopAnchor: widthOfSectionRangeSliderTitle.bottomAnchor, superViewRightAnchor: self.view.rightAnchor, superViewBottomAnchor: self.view.bottomAnchor, superViewLeftAnchor: self.view.leftAnchor, topAnchorConstant: rangeSliderTrackTopPaddingFromBottomOfRangeSlideTitle, rightAnchorConstant: -1 * rangeSliderTrackLeftAndRightPadding, bottomAnchorConstant: 1, leftAnchorConstant: rangeSliderTrackLeftAndRightPadding)
+        
+        sectionWebThicknessSliderTitle.pin(fixedToSuperViewTopAnchor: true, fixedToSuperViewRightAnchor: true, fixedToSuperViewBottomAnchor: false, fixedToSuperViewLeftAnchor: true, superViewTopAnchor: customWidthOfSectionRangeSlider!.bottomAnchor, superViewRightAnchor: self.view.rightAnchor, superViewBottomAnchor: self.view.bottomAnchor, superViewLeftAnchor: self.view.leftAnchor, topAnchorConstant: verticalSpacingBetweenBottomOfRangeSliderTrackAndTopOfRangeSliderTitleLabel, rightAnchorConstant: -1 * rangeSliderTitleLeftAndRightPadding, bottomAnchorConstant: 1, leftAnchorConstant: rangeSliderTitleLeftAndRightPadding)
+        
+        customSectionWebThicknessSlider!.pin(fixedToSuperViewTopAnchor: true, fixedToSuperViewRightAnchor: true, fixedToSuperViewBottomAnchor: false, fixedToSuperViewLeftAnchor: true, superViewTopAnchor: sectionWebThicknessSliderTitle.bottomAnchor, superViewRightAnchor: self.view.rightAnchor, superViewBottomAnchor: self.view.bottomAnchor, superViewLeftAnchor: self.view.leftAnchor, topAnchorConstant: rangeSliderTrackTopPaddingFromBottomOfRangeSlideTitle, rightAnchorConstant: -1 * rangeSliderTrackLeftAndRightPadding, bottomAnchorConstant: 1, leftAnchorConstant: rangeSliderTrackLeftAndRightPadding)
+        
+        sectionFlangeThicknessSliderTitle.pin(fixedToSuperViewTopAnchor: true, fixedToSuperViewRightAnchor: true, fixedToSuperViewBottomAnchor: false, fixedToSuperViewLeftAnchor: true, superViewTopAnchor: customSectionWebThicknessSlider!.bottomAnchor, superViewRightAnchor: self.view.rightAnchor, superViewBottomAnchor: self.view.bottomAnchor, superViewLeftAnchor: self.view.leftAnchor, topAnchorConstant: verticalSpacingBetweenBottomOfRangeSliderTrackAndTopOfRangeSliderTitleLabel, rightAnchorConstant: -1 * rangeSliderTitleLeftAndRightPadding, bottomAnchorConstant: 1, leftAnchorConstant: rangeSliderTitleLeftAndRightPadding)
+        
+        customSectionFlangeThicknessSlider!.pin(fixedToSuperViewTopAnchor: true, fixedToSuperViewRightAnchor: true, fixedToSuperViewBottomAnchor: false, fixedToSuperViewLeftAnchor: true, superViewTopAnchor: sectionFlangeThicknessSliderTitle.bottomAnchor, superViewRightAnchor: self.view.rightAnchor, superViewBottomAnchor: self.view.bottomAnchor, superViewLeftAnchor: self.view.leftAnchor, topAnchorConstant: rangeSliderTrackTopPaddingFromBottomOfRangeSlideTitle, rightAnchorConstant: -1 * rangeSliderTrackLeftAndRightPadding, bottomAnchorConstant: 1, leftAnchorConstant: rangeSliderTrackLeftAndRightPadding)
+        
+        sectionAreaSliderTitle.pin(fixedToSuperViewTopAnchor: true, fixedToSuperViewRightAnchor: true, fixedToSuperViewBottomAnchor: false, fixedToSuperViewLeftAnchor: true, superViewTopAnchor: customSectionFlangeThicknessSlider!.bottomAnchor, superViewRightAnchor: self.view.rightAnchor, superViewBottomAnchor: self.view.bottomAnchor, superViewLeftAnchor: self.view.leftAnchor, topAnchorConstant: verticalSpacingBetweenBottomOfRangeSliderTrackAndTopOfRangeSliderTitleLabel, rightAnchorConstant: -1 * rangeSliderTitleLeftAndRightPadding, bottomAnchorConstant: 1, leftAnchorConstant: rangeSliderTitleLeftAndRightPadding)
+        
+        
+        NSLayoutConstraint.activate([
             
-            depthOfSectionRangeSliderTitle.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: rangeSliderTitleTopPaddingFromNavigationBarBottom),
-            
-            depthOfSectionRangeSliderTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTitleLeftAndRightPadding),
-            
-            depthOfSectionRangeSliderTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTitleLeftAndRightPadding),
-            
-            customDepthOfSectionRangeSlider!.topAnchor.constraint(equalTo: depthOfSectionRangeSliderTitle.bottomAnchor, constant: rangeSliderTrackTopPaddingFromBottomOfRangeSlideTitle),
-            
-            customDepthOfSectionRangeSlider!.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTrackLeftAndRightPadding),
-            
-            customDepthOfSectionRangeSlider!.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTrackLeftAndRightPadding),
-            
-            widthOfSectionRangeSliderTitle.topAnchor.constraint(equalTo: customDepthOfSectionRangeSlider!.bottomAnchor, constant: verticalSpacingBetweenBottomOfRangeSliderTrackAndTopOfRangeSliderTitleLabel),
-            
-            widthOfSectionRangeSliderTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTitleLeftAndRightPadding),
-            
-            widthOfSectionRangeSliderTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTitleLeftAndRightPadding),
-            
-            customWidthOfSectionRangeSlider!.topAnchor.constraint(equalTo: widthOfSectionRangeSliderTitle.bottomAnchor, constant: rangeSliderTrackTopPaddingFromBottomOfRangeSlideTitle),
-            
-            customWidthOfSectionRangeSlider!.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTrackLeftAndRightPadding),
-            
-            customWidthOfSectionRangeSlider!.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTrackLeftAndRightPadding),
-            
-            sectionWebThicknessSliderTitle.topAnchor.constraint(equalTo: customWidthOfSectionRangeSlider!.bottomAnchor, constant: verticalSpacingBetweenBottomOfRangeSliderTrackAndTopOfRangeSliderTitleLabel),
-            
-            sectionWebThicknessSliderTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTitleLeftAndRightPadding),
-            
-            sectionWebThicknessSliderTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTitleLeftAndRightPadding),
-            
-            customSectionWebThicknessSlider!.topAnchor.constraint(equalTo: sectionWebThicknessSliderTitle.bottomAnchor, constant: rangeSliderTrackTopPaddingFromBottomOfRangeSlideTitle),
-            
-            customSectionWebThicknessSlider!.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTrackLeftAndRightPadding),
-            
-            customSectionWebThicknessSlider!.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTrackLeftAndRightPadding),
-            
-            sectionFlangeThicknessSliderTitle.topAnchor.constraint(equalTo: customSectionWebThicknessSlider!.bottomAnchor, constant: verticalSpacingBetweenBottomOfRangeSliderTrackAndTopOfRangeSliderTitleLabel),
-            
-            sectionFlangeThicknessSliderTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTitleLeftAndRightPadding),
-            
-            sectionFlangeThicknessSliderTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTitleLeftAndRightPadding),
-            
-            customSectionFlangeThicknessSlider!.topAnchor.constraint(equalTo: sectionFlangeThicknessSliderTitle.bottomAnchor, constant: rangeSliderTrackTopPaddingFromBottomOfRangeSlideTitle),
-            
-            customSectionFlangeThicknessSlider!.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTrackLeftAndRightPadding),
-            
-            customSectionFlangeThicknessSlider!.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTrackLeftAndRightPadding),
-            
-            sectionAreaSliderTitle.topAnchor.constraint(equalTo: customSectionFlangeThicknessSlider!.bottomAnchor, constant: verticalSpacingBetweenBottomOfRangeSliderTrackAndTopOfRangeSliderTitleLabel),
-            
-            sectionAreaSliderTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTitleLeftAndRightPadding),
-            
-            sectionAreaSliderTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTitleLeftAndRightPadding),
             
             customSectionAreaSlider!.topAnchor.constraint(equalTo: sectionAreaSliderTitle.bottomAnchor, constant: rangeSliderTrackTopPaddingFromBottomOfRangeSlideTitle),
             
@@ -778,66 +779,72 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
         
         NSLayoutConstraint.activate([
         
-        navigationBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-        
-        navigationBar.rightAnchor.constraint(equalTo: view.rightAnchor),
-        
-        navigationBar.leftAnchor.constraint(equalTo: view.leftAnchor),
-        
-        scrollView.topAnchor.constraint(equalTo: navigationBar.bottomAnchor),
-        
-        scrollView.rightAnchor.constraint(equalTo: view.rightAnchor),
-        
-        scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-        
-        scrollView.leftAnchor.constraint(equalTo: view.leftAnchor),
-        
-        sectionLegLengthRangeSliderTitle.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: rangeSliderTitleTopPaddingFromNavigationBarBottom),
-        
-        sectionLegLengthRangeSliderTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTitleLeftAndRightPadding),
-        
-        sectionLegLengthRangeSliderTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTitleLeftAndRightPadding),
-        
-        customSectionLegLengthRangeSlider!.topAnchor.constraint(equalTo: sectionLegLengthRangeSliderTitle.bottomAnchor, constant: rangeSliderTrackTopPaddingFromBottomOfRangeSlideTitle),
-        
-        customSectionLegLengthRangeSlider!.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTrackLeftAndRightPadding),
-        
-        customSectionLegLengthRangeSlider!.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTrackLeftAndRightPadding),
-        
-        sectionLegThicknessSliderTitle.topAnchor.constraint(equalTo: customSectionLegLengthRangeSlider!.bottomAnchor, constant: verticalSpacingBetweenBottomOfRangeSliderTrackAndTopOfRangeSliderTitleLabel),
-        
-        sectionLegThicknessSliderTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTitleLeftAndRightPadding),
-        
-        sectionLegThicknessSliderTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTitleLeftAndRightPadding),
-        
-        customSectionLegThicknessSlider!.topAnchor.constraint(equalTo: sectionLegThicknessSliderTitle.bottomAnchor, constant: rangeSliderTrackTopPaddingFromBottomOfRangeSlideTitle),
-                   
-        customSectionLegThicknessSlider!.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTrackLeftAndRightPadding),
-                   
-        customSectionLegThicknessSlider!.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTrackLeftAndRightPadding),
-        
-        sectionAreaSliderTitle.topAnchor.constraint(equalTo: customSectionLegThicknessSlider!.bottomAnchor, constant: verticalSpacingBetweenBottomOfRangeSliderTrackAndTopOfRangeSliderTitleLabel),
-        
-        sectionAreaSliderTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTitleLeftAndRightPadding),
-        
-        sectionAreaSliderTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTitleLeftAndRightPadding),
-        
-        customSectionAreaSlider!.topAnchor.constraint(equalTo: sectionAreaSliderTitle.bottomAnchor, constant: rangeSliderTrackTopPaddingFromBottomOfRangeSlideTitle),
-        
-        customSectionAreaSlider!.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * (rangeSliderTrackLeftAndRightPadding)),
-        
-        customSectionAreaSlider!.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTrackLeftAndRightPadding),
-        
-        resetFiltersButton.topAnchor.constraint(equalTo: customSectionAreaSlider!.bottomAnchor, constant: rangeSliderTitleTopPaddingFromNavigationBarBottom),
-        
-        resetFiltersButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: -1 * (self.view.frame.width/4)),
-        
-        applyFiltersButton.topAnchor.constraint(equalTo: customSectionAreaSlider!.bottomAnchor, constant: rangeSliderTitleTopPaddingFromNavigationBarBottom),
-        
-        applyFiltersButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: self.view.frame.width/4)
+            sectionLegLengthRangeSliderTitle.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: rangeSliderTitleTopPaddingFromNavigationBarBottom),
+            
+            sectionLegLengthRangeSliderTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTitleLeftAndRightPadding),
+            
+            sectionLegLengthRangeSliderTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTitleLeftAndRightPadding),
+            
+            customSectionLegLengthRangeSlider!.topAnchor.constraint(equalTo: sectionLegLengthRangeSliderTitle.bottomAnchor, constant: rangeSliderTrackTopPaddingFromBottomOfRangeSlideTitle),
+            
+            customSectionLegLengthRangeSlider!.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTrackLeftAndRightPadding),
+            
+            customSectionLegLengthRangeSlider!.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTrackLeftAndRightPadding),
+            
+            sectionLegThicknessSliderTitle.topAnchor.constraint(equalTo: customSectionLegLengthRangeSlider!.bottomAnchor, constant: verticalSpacingBetweenBottomOfRangeSliderTrackAndTopOfRangeSliderTitleLabel),
+            
+            sectionLegThicknessSliderTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTitleLeftAndRightPadding),
+            
+            sectionLegThicknessSliderTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTitleLeftAndRightPadding),
+            
+            customSectionLegThicknessSlider!.topAnchor.constraint(equalTo: sectionLegThicknessSliderTitle.bottomAnchor, constant: rangeSliderTrackTopPaddingFromBottomOfRangeSlideTitle),
+                       
+            customSectionLegThicknessSlider!.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTrackLeftAndRightPadding),
+                       
+            customSectionLegThicknessSlider!.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTrackLeftAndRightPadding),
+            
+            sectionAreaSliderTitle.topAnchor.constraint(equalTo: customSectionLegThicknessSlider!.bottomAnchor, constant: verticalSpacingBetweenBottomOfRangeSliderTrackAndTopOfRangeSliderTitleLabel),
+            
+            sectionAreaSliderTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * rangeSliderTitleLeftAndRightPadding),
+            
+            sectionAreaSliderTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTitleLeftAndRightPadding),
+            
+            customSectionAreaSlider!.topAnchor.constraint(equalTo: sectionAreaSliderTitle.bottomAnchor, constant: rangeSliderTrackTopPaddingFromBottomOfRangeSlideTitle),
+            
+            customSectionAreaSlider!.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1 * (rangeSliderTrackLeftAndRightPadding)),
+            
+            customSectionAreaSlider!.leftAnchor.constraint(equalTo: view.leftAnchor, constant: rangeSliderTrackLeftAndRightPadding),
+            
+            resetFiltersButton.topAnchor.constraint(equalTo: customSectionAreaSlider!.bottomAnchor, constant: rangeSliderTitleTopPaddingFromNavigationBarBottom),
+            
+            resetFiltersButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: -1 * (self.view.frame.width/4)),
+            
+            applyFiltersButton.topAnchor.constraint(equalTo: customSectionAreaSlider!.bottomAnchor, constant: rangeSliderTitleTopPaddingFromNavigationBarBottom),
+            
+            applyFiltersButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: self.view.frame.width/4)
         
         ])
         
+    }
+    
+    func setupConstraintsForOpenSteelSectionsUnequalLegAngles() {
+        
+        depthOfSectionRangeSliderTitle.pin(fixedToSuperViewTopAnchor: true, fixedToSuperViewRightAnchor: true, fixedToSuperViewBottomAnchor: false, fixedToSuperViewLeftAnchor: true, superViewTopAnchor: scrollView.topAnchor, superViewRightAnchor: self.view.rightAnchor, superViewBottomAnchor: self.view.bottomAnchor, superViewLeftAnchor: self.view.leftAnchor, topAnchorConstant: rangeSliderTitleTopPaddingFromNavigationBarBottom, rightAnchorConstant: -1 * rangeSliderTrackLeftAndRightPadding, bottomAnchorConstant: 1, leftAnchorConstant: rangeSliderTitleLeftAndRightPadding)
+        
+        customDepthOfSectionRangeSlider!.pin(fixedToSuperViewTopAnchor: true, fixedToSuperViewRightAnchor: true, fixedToSuperViewBottomAnchor: false, fixedToSuperViewLeftAnchor: true, superViewTopAnchor: depthOfSectionRangeSliderTitle.bottomAnchor, superViewRightAnchor: self.view.rightAnchor, superViewBottomAnchor: self.view.bottomAnchor, superViewLeftAnchor: self.view.leftAnchor, topAnchorConstant: rangeSliderTrackTopPaddingFromBottomOfRangeSlideTitle, rightAnchorConstant: -1 * rangeSliderTrackLeftAndRightPadding, bottomAnchorConstant: 1, leftAnchorConstant: rangeSliderTrackLeftAndRightPadding)
+        
+        widthOfSectionRangeSliderTitle.pin(fixedToSuperViewTopAnchor: true, fixedToSuperViewRightAnchor: true, fixedToSuperViewBottomAnchor: false, fixedToSuperViewLeftAnchor: true, superViewTopAnchor: customDepthOfSectionRangeSlider!.bottomAnchor, superViewRightAnchor: self.view.rightAnchor, superViewBottomAnchor: self.view.bottomAnchor, superViewLeftAnchor: self.view.leftAnchor, topAnchorConstant: verticalSpacingBetweenBottomOfRangeSliderTrackAndTopOfRangeSliderTitleLabel, rightAnchorConstant: -1 * rangeSliderTitleLeftAndRightPadding, bottomAnchorConstant: 1, leftAnchorConstant: rangeSliderTitleLeftAndRightPadding)
+        
+        customWidthOfSectionRangeSlider!.pin(fixedToSuperViewTopAnchor: true, fixedToSuperViewRightAnchor: true, fixedToSuperViewBottomAnchor: false, fixedToSuperViewLeftAnchor: true, superViewTopAnchor: widthOfSectionRangeSliderTitle.bottomAnchor, superViewRightAnchor: self.view.rightAnchor, superViewBottomAnchor: self.view.bottomAnchor, superViewLeftAnchor: self.view.leftAnchor, topAnchorConstant: rangeSliderTrackTopPaddingFromBottomOfRangeSlideTitle, rightAnchorConstant: -1 * rangeSliderTrackLeftAndRightPadding, bottomAnchorConstant: 1, leftAnchorConstant: rangeSliderTrackLeftAndRightPadding)
+        
+        sectionLegThicknessSliderTitle.pin(fixedToSuperViewTopAnchor: true, fixedToSuperViewRightAnchor: true, fixedToSuperViewBottomAnchor: false, fixedToSuperViewLeftAnchor: true, superViewTopAnchor: customWidthOfSectionRangeSlider!.bottomAnchor, superViewRightAnchor: self.view.rightAnchor, superViewBottomAnchor: self.view.bottomAnchor, superViewLeftAnchor: self.view.leftAnchor, topAnchorConstant: verticalSpacingBetweenBottomOfRangeSliderTrackAndTopOfRangeSliderTitleLabel, rightAnchorConstant: -1 * rangeSliderTitleLeftAndRightPadding, bottomAnchorConstant: 1, leftAnchorConstant: rangeSliderTitleLeftAndRightPadding)
+        
+        customSectionLegThicknessSlider!.pin(fixedToSuperViewTopAnchor: true, fixedToSuperViewRightAnchor: true, fixedToSuperViewBottomAnchor: false, fixedToSuperViewLeftAnchor: true, superViewTopAnchor: sectionLegThicknessSliderTitle.bottomAnchor, superViewRightAnchor: self.view.rightAnchor, superViewBottomAnchor: self.view.bottomAnchor, superViewLeftAnchor: self.view.leftAnchor, topAnchorConstant: rangeSliderTrackTopPaddingFromBottomOfRangeSlideTitle, rightAnchorConstant: -1 * rangeSliderTrackLeftAndRightPadding, bottomAnchorConstant: 1, leftAnchorConstant: rangeSliderTrackLeftAndRightPadding)
+        
+        sectionAreaSliderTitle.pin(fixedToSuperViewTopAnchor: true, fixedToSuperViewRightAnchor: true, fixedToSuperViewBottomAnchor: false, fixedToSuperViewLeftAnchor: true, superViewTopAnchor: customSectionLegThicknessSlider!.bottomAnchor, superViewRightAnchor: self.view.rightAnchor, superViewBottomAnchor: self.view.bottomAnchor, superViewLeftAnchor: self.view.leftAnchor, topAnchorConstant: verticalSpacingBetweenBottomOfRangeSliderTrackAndTopOfRangeSliderTitleLabel, rightAnchorConstant: -1 * rangeSliderTitleLeftAndRightPadding, bottomAnchorConstant: 1, leftAnchorConstant: rangeSliderTitleLeftAndRightPadding)
+        
+        customSectionAreaSlider!.pin(fixedToSuperViewTopAnchor: true, fixedToSuperViewRightAnchor: true, fixedToSuperViewBottomAnchor: false, fixedToSuperViewLeftAnchor: true, superViewTopAnchor: sectionAreaSliderTitle.bottomAnchor, superViewRightAnchor: self.view.rightAnchor, superViewBottomAnchor: self.view.bottomAnchor, superViewLeftAnchor: self.view.leftAnchor, topAnchorConstant: rangeSliderTrackTopPaddingFromBottomOfRangeSlideTitle, rightAnchorConstant: -1 * rangeSliderTrackLeftAndRightPadding, bottomAnchorConstant: 1, leftAnchorConstant: rangeSliderTrackLeftAndRightPadding)
+
     }
     
 }

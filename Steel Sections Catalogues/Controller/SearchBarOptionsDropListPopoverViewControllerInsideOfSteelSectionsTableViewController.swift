@@ -86,8 +86,8 @@ class SearchBarOptionsDropListPopoverViewControllerInsideOfSteelSectionsTableVie
     
     func setUpConstraints() {
         
-        dropListOptionsTableViewInsidePopoverView.pin(to: self.view, topAnchorConstant: 13, rightAnchorConstant: 0, bottomAnchorConstant: 0, leftAnchorConstant: 0)
-        
+        dropListOptionsTableViewInsidePopoverView.pin(fixedToSuperViewTopAnchor: true, fixedToSuperViewRightAnchor: true, fixedToSuperViewBottomAnchor: true, fixedToSuperViewLeftAnchor: true, superViewTopAnchor: self.view.topAnchor, superViewRightAnchor: self.view.rightAnchor, superViewBottomAnchor: self.view.bottomAnchor, superViewLeftAnchor: self.view.leftAnchor, topAnchorConstant: 13, rightAnchorConstant: 0, bottomAnchorConstant: 0, leftAnchorConstant: 0)
+                
     }
     
     func setDataArrayToBeDisplayedInTableView() {

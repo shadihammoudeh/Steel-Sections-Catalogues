@@ -12,22 +12,34 @@ import UIKit
 
 extension UIView {
     
-    func pin(to superView: UIView, topAnchorConstant: CGFloat, rightAnchorConstant: CGFloat, bottomAnchorConstant: CGFloat, leftAnchorConstant: CGFloat) {
+    func pin(fixedToSuperViewTopAnchor: Bool, fixedToSuperViewRightAnchor: Bool, fixedToSuperViewBottomAnchor: Bool, fixedToSuperViewLeftAnchor: Bool, superViewTopAnchor: NSLayoutYAxisAnchor, superViewRightAnchor: NSLayoutXAxisAnchor, superViewBottomAnchor: NSLayoutYAxisAnchor, superViewLeftAnchor: NSLayoutXAxisAnchor, topAnchorConstant: CGFloat, rightAnchorConstant: CGFloat, bottomAnchorConstant: CGFloat, leftAnchorConstant: CGFloat) {
         
         translatesAutoresizingMaskIntoConstraints = false
         
-        NSLayoutConstraint.activate([
-        
-            topAnchor.constraint(equalTo: superView.topAnchor, constant: topAnchorConstant),
+        if fixedToSuperViewTopAnchor == true {
             
-            rightAnchor.constraint(equalTo: superView.rightAnchor, constant: rightAnchorConstant),
+            topAnchor.constraint(equalTo: superViewTopAnchor, constant: topAnchorConstant).isActive = true
             
-            bottomAnchor.constraint(equalTo: superView.bottomAnchor, constant: bottomAnchorConstant),
+        }
+        
+        if fixedToSuperViewRightAnchor == true {
             
-            leftAnchor.constraint(equalTo: superView.leftAnchor, constant: leftAnchorConstant)
+            rightAnchor.constraint(equalTo: superViewRightAnchor, constant: rightAnchorConstant).isActive = true
+            
+        }
         
-        ])
+        if fixedToSuperViewBottomAnchor == true {
+            
+            bottomAnchor.constraint(equalTo: superViewBottomAnchor, constant: bottomAnchorConstant).isActive = true
+            
+        }
         
+        if fixedToSuperViewLeftAnchor == true {
+            
+            leftAnchor.constraint(equalTo: superViewLeftAnchor, constant: leftAnchorConstant).isActive = true
+            
+        }
+            
     }
     
 }
