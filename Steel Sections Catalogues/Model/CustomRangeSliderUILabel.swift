@@ -102,9 +102,7 @@ class CustomRangeSliderUILabel: UILabel {
     }
     
     func setupLabel(rangeSliderTitle: String, containsAbbreviationLetters: Bool, abbreviationLettersStartingLocation: Int, abbreviationLettersLength: Int, containsSubScriptLetters: Bool, subScriptLettersStartingLocation: Int, subScriptLettersLength: Int, containsSuperScriptLetters: Bool, superScriptLettersStartingLocation: Int, superScriptLettersLength: Int) {
-                
-        translatesAutoresizingMaskIntoConstraints = false
-        
+                        
         textAlignment = .left
         
         numberOfLines = 0
