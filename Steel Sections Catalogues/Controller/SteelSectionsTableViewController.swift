@@ -1960,20 +1960,13 @@ extension SteelSectionsTableViewController: PassingDataBackwardsBetweenViewContr
             
             if filteringSlidersCleared == true {
                 
-                self.sortBy = configuredSortByVariable
-                
-                self.filtersApplied = configuredFiltersAppliedVariable
-                
-                self.isSearching = configuredIsSearchingVariable
-                
                 self.extractedSteelSectionsDataArrayFromThePassedCsvFileUsingTheParser = configuredArrayContainingSteelSectionsData
                 
             } else {
-                
+                                
                 self.steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsDataFilterOptionsViewController = configuredArrayContainingSteelSectionsData
                 
             }
-            
             
         } else {
             
