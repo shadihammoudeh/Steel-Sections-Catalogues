@@ -8,8 +8,6 @@
 
 import UIKit
 
-import ChameleonFramework
-
 class CustomRangeSliderUILabel: UILabel {
     
     override init(frame: CGRect) {
@@ -42,7 +40,7 @@ class CustomRangeSliderUILabel: UILabel {
             
             .font: UIFont(name: "AppleSDGothicNeo-SemiBold", size: 18)!,
                 
-            .foregroundColor: UIColor(named: "Filter Results Range Slide Title Text Colour")!,
+            .foregroundColor: UIColor(named: "Filter Results VC - Range Slider Title Text Colour")!,
             
         ]
         
@@ -50,7 +48,7 @@ class CustomRangeSliderUILabel: UILabel {
             
             .font: UIFont(name: "AppleSDGothicNeo-Bold", size: 19)!,
             
-            .foregroundColor: UIColor(named: "Filter Results Range Slider Abbreviation Letters Text Colour")!,
+            .foregroundColor: UIColor(named: "Filter Results VC - Range Slider Title Abbreviation Letter Colour")!,
             
         ]
         

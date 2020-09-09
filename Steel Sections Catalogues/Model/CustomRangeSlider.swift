@@ -10,8 +10,6 @@ import UIKit
 
 import RangeSeekSlider
 
-import ChameleonFramework
-
 class CustomRangeSeekSlider: RangeSeekSlider {
     
     convenience init(sectionPropertyDataArrayForRangeSlide: [Double], minimumDistanceBetweenSliders: CGFloat) {
@@ -23,9 +21,7 @@ class CustomRangeSeekSlider: RangeSeekSlider {
     }
     
     func setupRangeSlider(sectionPropertyDataArrayForRangeSlide: [Double], minimumDistanceBetweenSliders: CGFloat) {
-        
-        translatesAutoresizingMaskIntoConstraints = false
-        
+                
         let sectionPropertyMappedArray: [Double] = sectionPropertyDataArrayForRangeSlide
         
         if let minimumRangeSliderValue = sectionPropertyMappedArray.min() {
@@ -50,13 +46,13 @@ class CustomRangeSeekSlider: RangeSeekSlider {
         
         minDistance = minimumDistanceBetweenSliders
         
-        handleColor = UIColor(named: "Range Slider Handle Colour inside Filter View Controller")
+        handleColor = UIColor(named: "Filter Results VC - Range Slider Track Handles Colour")
         
-        minLabelColor = UIColor(named: "Range Slider Minimum & Maximum Value Label Text Colour inside Filter View Controller")
+        minLabelColor = UIColor(named: "Filter Results VC - Range Slider Min & Max Value Titles Text Colours")
         
-        maxLabelColor = UIColor(named: "Range Slider Minimum & Maximum Value Label Text Colour inside Filter View Controller")
+        maxLabelColor = UIColor(named: "Filter Results VC - Range Slider Min & Max Value Titles Text Colours")
         
-        colorBetweenHandles = UIColor(named: "Range Slider Track Colour in between Handles")
+        colorBetweenHandles = UIColor(named: "Filter Results VC - Range Slider Track Colour in between Handles")
         
         lineHeight = 5
         
@@ -66,16 +62,16 @@ class CustomRangeSeekSlider: RangeSeekSlider {
 
         // The below line of code sets the colour of the range slider track not in between the two handles:
         
-        tintColor = UIColor(named: "Range Slider Track Colour not between Handles")
+        tintColor = UIColor(named: "Filter Results VC - Range Slider Track Colour Outside the Area Enclosed by the Handles")
         
         // The color of the entire slider when the handle is set to the minimum value and the maximum value:
 
         
-        initialColor = UIColor(named: "Range Slider Colour when Values Set to Max and Min")
+        initialColor = UIColor(named: "Filter Results VC - Range Slider Track and Handles Colours when Handles are on Max & Min Values")
         
         handleBorderWidth = 1.5
         
-        handleBorderColor = UIColor(named: "Range Slider Handle Border Colour inside Filter View Controller")
+        handleBorderColor = UIColor(named: "Filter Results VC - Range Slider Handles Borders Colours")
         
         numberFormatter.numberStyle = .decimal
         

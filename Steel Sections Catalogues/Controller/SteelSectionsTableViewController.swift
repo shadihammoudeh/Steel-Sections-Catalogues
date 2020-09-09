@@ -96,6 +96,8 @@ class SteelSectionsTableViewController: UIViewController {
     
     lazy var searchBarDropListOptionsPopoverViewController = main.instantiateViewController(identifier: "SearchBarOptionsDropListPopoverViewControllerInsideOfSteelSectionsTableViewController") as! SearchBarOptionsDropListPopoverViewControllerInsideOfSteelSectionsTableViewController
     
+    lazy var selectedSteelSectionSummaryPageViewControllerInstance = main.instantiateViewController(withIdentifier: "SelectedSteelSectionSummaryPage") as! SelectedSteelSectionSummaryPage
+    
     // MARK: - viewDidLoad():
     
     override func viewDidLoad() {
@@ -258,7 +260,7 @@ class SteelSectionsTableViewController: UIViewController {
         
     }
     
-    // MARK: - Method to display Search Bar popover VC whenever the user type two characters inside the searchBar field of an equal and unequal angle sections. In order to know for example whether when the user type 10 whether he would like the first section serial number to be 10 or 100:
+    // MARK: - Method to display Search Bar popover VC whenever the user type two characters inside the searchBar field of an equal angle sections. In order to know for example whether when the user type 10 whether he would like the first section serial number to be 20 or 200:
     
     func displaySearchBarPopoverVC() {
         
@@ -1257,8 +1259,6 @@ extension SteelSectionsTableViewController: UITableViewDelegate {
         
         // In order to de-initialize/de-allocate the viewController (i.e. SelectedSteelSectionSummaryPage) that gets displayed depending on which tableView cell disclosure icon the user tapped, once it gets dismissed. So that a new one gets initialised when the user taps on a different tableView cell disclosure icon, and therefore, its navigationBar title as well as relevant information about the selected section get displayed. The below is needed in order to avoid having a Strong Reference to the viewController that will be displayed once the user hit on a particular tableView Cell Disclosure Icon. This is achieved by making the reference to the viewController that will be displayed once the user hit on a particular tableView cell inside this method (i.e. a Local Variable) as opposed to outside this methid (Global Variable):
         
-        let selectedSteelSectionSummaryPageViewControllerInstance = main.instantiateViewController(withIdentifier: "SelectedSteelSectionSummaryPage") as! SelectedSteelSectionSummaryPage
-        
         selectedSteelSectionSummaryPageViewControllerInstance.delegate = self
         
         selectedSteelSectionSummaryPageViewControllerInstance.userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController = self.userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController
@@ -1968,13 +1968,21 @@ extension SteelSectionsTableViewController: PassingDataBackwardsBetweenViewContr
                 
             }
             
-        } else {
+        } else if viewControllerDataIsSentFrom == "TableViewSteelSectionsSortByOptionsPopoverViewController" {
             
             self.steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsSortByOptionsPopoverViewController = configuredArrayContainingSteelSectionsData
             
             self.steelSectionsDataArrayContainingOnlyInfoAboutSectionsSerialNumberSortedInAscendingOrDescendingOrder = configuredArrayContainingSteelSectionsSerialNumbersOnly
             
             self.searchBar.text = ""
+            
+        } else {
+            
+            
+            
+            self.userLastSelectedTableCellSectionNumberBeforeTheSelectedSteelSectionSummaryPageViewControllerWasDisplayed = exchangedUserSelectedTableCellSectionNumber
+            
+            self.userLastSelectedTableCellRowNumberBeforeTheSelectedSteelSectionSummaryPageViewControllerWasDisplayed = exchangedUserSelectedTableCellRowNumber
             
         }
         

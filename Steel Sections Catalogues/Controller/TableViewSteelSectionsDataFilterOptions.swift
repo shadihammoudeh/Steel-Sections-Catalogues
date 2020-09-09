@@ -12,7 +12,7 @@ import RangeSeekSlider
 
 class TableViewSteelSectionsDataFilterOptions: UIViewController {
     
-    // MARK: - Assigning protocol delegate:
+    // MARK: - Assigning protocol delegate in order to be able to pass data back to the previous VC once this VC has been dismissed:
     
     weak var delegate: PassingDataBackwardsBetweenViewControllersProtocol?
     
@@ -29,6 +29,8 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
     var isSearching: Bool = false
     
     var filtersApplied: Bool = false
+    
+    // This array of dictionary arrays will be passed from the previous VC once this VC has been displayed, and appropriate filtering and sorting will be applied to it in this VC depending on the user filtering criteria, then the modified version of this array will be pass back to the previous VC using the protocol in order to display the data inside the tableVC:
     
     var receivedSteelSectionsDataArrayFromSteelSectionsTableViewController = [SteelSectionParameters]()
     
@@ -52,7 +54,7 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
     
     var extractedWidthOfSection: [Double]?
     
-    // The below will be used for Open Steel Section, Equal Angle Leg sections:
+    // The below will be used for Open Rolled Steel Section, Equal Angle Leg sections:
     
     var extractedSectionLegLength: [Double]?
     
@@ -60,7 +62,7 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
     
     var extractedSectionFlangeThickness: [Double]?
     
-    // The below will be used for Open Steel Section, Equal Angle Leg and Unequal Angle Leg sections:
+    // The below will be used for Open Rolled Steel Section, Equal Angle Leg and Unequal Angle Leg sections:
     
     var extractedSectionLegThickness: [Double]?
     
@@ -70,7 +72,7 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
     
     var customWidthOfSectionRangeSlider: RangeSeekSlider?
     
-    // The below will be used for Open Steel Section, Equal Angle Leg sections:
+    // The below will be used for Open Rolled Steel Section, Equal Angle Leg sections:
     
     var customSectionLegLengthRangeSlider: RangeSeekSlider?
     
@@ -78,7 +80,7 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
     
     var customSectionFlangeThicknessSlider: RangeSeekSlider?
     
-    // The below will be used for Open Steel Section, Equal Angle Leg and Unequal Angle Leg sections:
+    // The below will be used for Open Rolled Steel Section, Equal Angle Leg and Unequal Angle Leg sections:
     
     var customSectionLegThicknessSlider: RangeSeekSlider?
     
@@ -88,7 +90,7 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
     
     var minimumWidthOfSection: Double?
     
-    // The below will be used for Open Steel Section, Equal Angle Leg sections:
+    // The below will be used for Open Rolled Steel Section, Equal Angle Leg sections:
     
     var minimumSectionLegLength: Double?
     
@@ -96,7 +98,7 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
     
     var minimumSectionFlangeThickness: Double?
     
-    // The below will be used for Open Steel Section, Equal Angle Leg and Unequal Angle Leg sections:
+    // The below will be used for Open Rolled Steel Section, Equal Angle Leg and Unequal Angle Leg sections:
     
     var minimumSectionLegThickness: Double?
     
@@ -106,7 +108,7 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
     
     var maximumWidthOfSection: Double?
     
-    // The below will be used for Open Steel Section, Equal Angle Leg sections:
+    // The below will be used for Open Rolled Steel Section, Equal Angle Leg sections:
     
     var maximumSectionLegLength: Double?
     
@@ -114,7 +116,7 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
     
     var maximumSectionFlangeThickness: Double?
     
-    // The below will be used for Open Steel Section, Equal Angle Leg and Unequal Angle Leg sections:
+    // The below will be used for Open Rolled Steel Section, Equal Angle Leg and Unequal Angle Leg sections:
     
     var maximumSectionLegThickness: Double?
     
@@ -127,21 +129,21 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
         button.setTitle("Clear Filters", for: .normal)
         
         button.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 20)
-
+        
         button.setTitleColor(UIColor(named: "Filter Results VC - Clear & Apply Buttons Text Colour - Normal"), for: .normal)
-
+        
         button.setTitleColor(UIColor(named: "Filter Results VC - Clear & Apply Buttons Text Colour - Highlighted State"), for: .highlighted)
-                                
+        
         button.showsTouchWhenHighlighted = true
-            
+        
         button.tag = 1
-
+        
         button.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchUpInside)
-
+        
         button.translatesAutoresizingMaskIntoConstraints = false
-
+        
         return button
-
+        
     }()
     
     var applyFiltersButton: UIButton = {
@@ -155,9 +157,9 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
         button.setTitleColor(UIColor(named: "Filter Results VC - Clear & Apply Buttons Text Colour - Normal"), for: .normal)
         
         button.setTitleColor(UIColor(named: "Filter Results VC - Clear & Apply Buttons Text Colour - Highlighted State"), for: .highlighted)
-                
+        
         button.showsTouchWhenHighlighted = true
-
+        
         button.tag = 2
         
         button.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchUpInside)
@@ -171,7 +173,7 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
     lazy var scrollView: UIScrollView = {
         
         let scrollView = UIScrollView()
-                
+        
         scrollView.backgroundColor = UIColor(named: "Filter Results VC - Scroll View Background Colour")
         
         return scrollView
@@ -182,7 +184,7 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
     
     let widthOfSectionRangeSliderTitle = CustomRangeSliderUILabel(rangeSliderTitle: "Range Slider for Width of Section, b [mm]:", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 35, abbreviationLettersLength: 1, containsSubScriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 0, containsSuperScriptletters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 0)
     
-    // The below will be used for Open Steel Section, Equal Angle Leg sections:
+    // The below will be used for Open Rolled Steel Section, Equal Angle Leg sections:
     
     let sectionLegLengthRangeSliderTitle = CustomRangeSliderUILabel(rangeSliderTitle: "Range Slider for Section Leg Length, h [mm]:", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 37, abbreviationLettersLength: 1, containsSubScriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 0, containsSuperScriptletters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 0)
     
@@ -190,7 +192,7 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
     
     let sectionFlangeThicknessSliderTitle = CustomRangeSliderUILabel(rangeSliderTitle: "Range Slider for Section Flange Thickness, tf [mm]:", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 43, abbreviationLettersLength: 2, containsSubScriptLetters: true, subScriptLettersStartingLocation: 44, subScriptLettersLength: 1, containsSuperScriptletters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 0)
     
-    // The below will be used for Open Steel Section, Equal and Unequal Angle Leg sections:
+    // The below will be used for Open Rolled Steel Section, Equal and Unequal Angle Leg sections:
     
     let sectionLegThicknessSliderTitle = CustomRangeSliderUILabel(rangeSliderTitle: "Range Slider for Section Leg Thickness, t [mm]:", containsAbbreviationLetters: true, abbreviationLettersStartingLocation: 40, abbreviationLettersLength: 1, containsSubScriptLetters: false, subScriptLettersStartingLocation: 0, subScriptLettersLength: 0, containsSuperScriptletters: false, superScriptLettersStartingLocation: 0, superScriptLettersLength: 0)
     
@@ -203,37 +205,37 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
-                                
+        
         setupMoveOutTransition()
-                        
+        
         // In order to prevent the movement of a UISlider's trackers to get confused with a swipeGesture (i.e. avoid the swipeGesture to get triggered when a user moves one of the slider's trackers in the right direction, which also correspond to the direction of the swipeGesture). We need to add a panGesture to the UISlider, whereby the panGesture does nothing at all. Then we need to set the cancelsTouchesInView property to be equal to false. As this will prevent the delivery of gestures to the view. Note that a UIGestureRecognizer is to be used with a single view:
-            
+        
         let panGestureRecogniseForDepthOfSectionUISlider = UIPanGestureRecognizer(target: nil, action:nil)
-
+        
         panGestureRecogniseForDepthOfSectionUISlider.cancelsTouchesInView = false
-
+        
         let panGestureRecogniseForWidthOfSectionUISlider = UIPanGestureRecognizer(target: nil, action:nil)
-
+        
         panGestureRecogniseForWidthOfSectionUISlider.cancelsTouchesInView = false
-
+        
         let panGestureRecgoniserForSectionLegLengthUISlider = UIPanGestureRecognizer(target: nil, action: nil)
-
+        
         panGestureRecgoniserForSectionLegLengthUISlider.cancelsTouchesInView = false
-
+        
         let panGestureRecogniseForWebThicknessUISlider = UIPanGestureRecognizer(target: nil, action:nil)
-
+        
         panGestureRecogniseForWebThicknessUISlider.cancelsTouchesInView = false
-
+        
         let panGestureRecogniseForFlangeThicknessUISlider = UIPanGestureRecognizer(target: nil, action:nil)
-
+        
         panGestureRecogniseForFlangeThicknessUISlider.cancelsTouchesInView = false
-
+        
         let panGestureRecogniserForSectionLegThicknessUISlider = UIPanGestureRecognizer(target: nil, action: nil)
-
+        
         panGestureRecogniserForSectionLegThicknessUISlider.cancelsTouchesInView = false
-
+        
         let panGestureRecogniseForAreaOfSectionUISlider = UIPanGestureRecognizer(target: nil, action:nil)
-
+        
         panGestureRecogniseForAreaOfSectionUISlider.cancelsTouchesInView = false
         
         // MARK: - Adding right swipe gesture to allow the user to go back to the previous VC when a right swipe gesture is detected:
@@ -243,51 +245,55 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
         rightGestureRecognizer.direction = .right
         
         // MARK: - Extracting appropriate Arrays data for Range Sliders:
-                    
+        
         extractedDepthOfSection = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionTotalDepth })
-            
+        
         extractedWidthOfSection = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionWidth })
         
         extractedSectionLegLength = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionLegLength })
-                    
+        
         extractedSectionWebThickness = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionWebThickness })
-            
+        
         extractedSectionFlangeThickness = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionFlangeThickness })
-            
+        
         extractedSectionLegThickness = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionLegThickness })
-                    
+        
         extractedSectionArea = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.map({ return $0.sectionArea })
         
         // MARK: - Declaring range sliders:
         
         if let extractedDepthOfSection = extractedDepthOfSection, let extractedWidthOfSection = extractedWidthOfSection, let extractedSectionLegLength = extractedSectionLegLength, let extractedSectionWebThickness = extractedSectionWebThickness, let extractedSectionFlangeThickness = extractedSectionFlangeThickness, let extractedSectionLegThickness = extractedSectionLegThickness, let extractedSectionArea = extractedSectionArea {
-                
+            
             customDepthOfSectionRangeSlider = CustomRangeSeekSlider(sectionPropertyDataArrayForRangeSlide: extractedDepthOfSection, minimumDistanceBetweenSliders: eurocodeOpenRolledSteelSectionRangeSliderHandlesMinimumSpacing[userLastSelectedCollectionViewCellNumber]["h"]!)
-
+            
             customWidthOfSectionRangeSlider = CustomRangeSeekSlider(sectionPropertyDataArrayForRangeSlide: extractedWidthOfSection, minimumDistanceBetweenSliders: eurocodeOpenRolledSteelSectionRangeSliderHandlesMinimumSpacing[userLastSelectedCollectionViewCellNumber]["b"]!)
             
+            // The below Range Slider will be displayed when the user selects Open Rolled Equal Angle Sections:
+            
             customSectionLegLengthRangeSlider = CustomRangeSeekSlider(sectionPropertyDataArrayForRangeSlide: extractedSectionLegLength, minimumDistanceBetweenSliders: eurocodeOpenRolledSteelSectionRangeSliderHandlesMinimumSpacing[userLastSelectedCollectionViewCellNumber]["l"]!)
-
+            
             customSectionWebThicknessSlider = CustomRangeSeekSlider(sectionPropertyDataArrayForRangeSlide: extractedSectionWebThickness, minimumDistanceBetweenSliders: eurocodeOpenRolledSteelSectionRangeSliderHandlesMinimumSpacing[userLastSelectedCollectionViewCellNumber]["tw"]!)
-
+            
             customSectionFlangeThicknessSlider = CustomRangeSeekSlider(sectionPropertyDataArrayForRangeSlide: extractedSectionFlangeThickness, minimumDistanceBetweenSliders: eurocodeOpenRolledSteelSectionRangeSliderHandlesMinimumSpacing[userLastSelectedCollectionViewCellNumber]["tf"]!)
-
+            
+            // The below Range Slider will be displayed when the user selects Open Rolled Equal and Unequal Angle Leg Sections:
+            
             customSectionLegThicknessSlider = CustomRangeSeekSlider(sectionPropertyDataArrayForRangeSlide: extractedSectionLegThickness, minimumDistanceBetweenSliders: eurocodeOpenRolledSteelSectionRangeSliderHandlesMinimumSpacing[userLastSelectedCollectionViewCellNumber]["t"]!)
-
+            
             customSectionAreaSlider = CustomRangeSeekSlider(sectionPropertyDataArrayForRangeSlide: extractedSectionArea, minimumDistanceBetweenSliders: eurocodeOpenRolledSteelSectionRangeSliderHandlesMinimumSpacing[userLastSelectedCollectionViewCellNumber]["A"]!)
-
-            }
+            
+        }
         
         // MARK: - Setting Range Sliders delegates:
-            
+        
         customDepthOfSectionRangeSlider!.delegate = self
-            
+        
         customWidthOfSectionRangeSlider!.delegate = self
         
         customSectionLegLengthRangeSlider!.delegate = self
-            
+        
         customSectionWebThicknessSlider!.delegate = self
-            
+        
         customSectionFlangeThicknessSlider!.delegate = self
         
         customSectionLegThicknessSlider!.delegate = self
@@ -331,9 +337,9 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
             scrollView.addSubview(customSectionFlangeThicknessSlider!)
             
         }
-        
-        // The below IF STATEMENT will be executed for Equal Angle Leg Sections:
-        
+            
+            // The below IF STATEMENT will be executed for Open Rolled Steel Equal Angle Leg Sections:
+            
         else if userLastSelectedCollectionViewCellNumber == 4 {
             
             customSectionLegLengthRangeSlider!.addGestureRecognizer(panGestureRecgoniserForSectionLegLengthUISlider)
@@ -349,9 +355,9 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
             scrollView.addSubview(customSectionLegThicknessSlider!)
             
         }
-        
-        // The below will be executed for Unequal Leg Sections:
-        
+            
+            // The below will be executed for Open Rolled Steel Unequal Leg Sections:
+            
         else {
             
             customDepthOfSectionRangeSlider!.addGestureRecognizer(panGestureRecogniseForDepthOfSectionUISlider)
@@ -439,7 +445,7 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
         // MARK: - Clear Filters button pressed:
         
         if sender.tag == 1 {
-                                                
+            
             // The below IF STATEMENT will be executed for all Open Rolled Steel Sections except Equal and Unequal Angle Leg Sections:
             
             if userLastSelectedCollectionViewCellNumber != 4 && userLastSelectedCollectionViewCellNumber != 5 {
@@ -479,13 +485,13 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
                 }
                 
             }
-            
-            // The below line of code will be executed for Open Rolled Equal Angle Steel Sections:
-            
+                
+                // The below line of code will be executed for Open Rolled Equal Angle Steel Sections:
+                
             else if userLastSelectedCollectionViewCellNumber == 4 {
-                                                
+                
                 if let minimumSectionLegLength = minimumSectionLegLength, let maximumSectionLegLength = maximumSectionLegLength, let minimumSectionLegThickness = minimumSectionLegThickness, let maximumSectionLegThickness = maximumSectionLegThickness, let minimumSectionArea = minimumAreaOfSection, let maximumSectionArea = maximumAreaOfSection {
-                                        
+                    
                     customSectionLegLengthRangeSlider?.selectedMinValue = CGFloat(minimumSectionLegLength)
                     
                     customSectionLegLengthRangeSlider?.selectedMaxValue = CGFloat(maximumSectionLegLength)
@@ -509,11 +515,11 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
             } else {
                 
                 if let minimumDepthOfSection = minimumDepthOfSection, let maximumDepthOfSection = maximumDepthOfSection, let minimumWidthOfSection = minimumWidthOfSection, let maximumWidthOfSection = maximumWidthOfSection, let minimumSectionLegThickness = minimumSectionLegThickness, let maximumSectionLegThickness = maximumSectionLegThickness , let minimumSectionArea = minimumAreaOfSection, let maximumSectionArea = maximumAreaOfSection {
-                                                       
+                    
                     customDepthOfSectionRangeSlider?.selectedMinValue = CGFloat(minimumDepthOfSection)
-
+                    
                     customDepthOfSectionRangeSlider?.selectedMaxValue = CGFloat(maximumDepthOfSection)
-
+                    
                     customDepthOfSectionRangeSlider?.layoutSubviews()
                     
                     customWidthOfSectionRangeSlider!.selectedMinValue = CGFloat(minimumWidthOfSection)
@@ -521,19 +527,19 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
                     customWidthOfSectionRangeSlider!.selectedMaxValue = CGFloat(maximumWidthOfSection)
                     
                     customWidthOfSectionRangeSlider?.layoutSubviews()
-
+                    
                     customSectionLegThicknessSlider?.selectedMinValue = CGFloat(minimumSectionLegThickness)
-
+                    
                     customSectionLegThicknessSlider?.selectedMaxValue = CGFloat(maximumSectionLegThickness)
-
+                    
                     customSectionLegThicknessSlider?.layoutSubviews()
-
+                    
                     customSectionAreaSlider?.selectedMinValue = CGFloat(minimumSectionArea)
-
+                    
                     customSectionAreaSlider?.selectedMaxValue = CGFloat(maximumSectionArea)
-
+                    
                     customSectionAreaSlider?.layoutSubviews()
-
+                    
                 }
                 
             }
@@ -546,20 +552,21 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
             
             var filteredArrayToBeSentBack = [SteelSectionParameters]()
             
-            // The below will get executed whenever the user clear all filters and hit the Apply button:
+            // The below IF STATEMENT will be triggered whenever the user has selected any Open Rolled Steel section apart from Equal and Unequal Leg Angle Sections:
             
-            if (customDepthOfSectionRangeSlider?.selectedMinValue == CGFloat(minimumDepthOfSection!) && customDepthOfSectionRangeSlider?.selectedMaxValue == CGFloat(maximumDepthOfSection!) && customWidthOfSectionRangeSlider?.selectedMinValue == CGFloat(minimumWidthOfSection!) && customWidthOfSectionRangeSlider?.selectedMaxValue == CGFloat(maximumWidthOfSection!) && customSectionWebThicknessSlider?.selectedMinValue == CGFloat(minimumSectionWebThickness!) && customSectionWebThicknessSlider?.selectedMaxValue == CGFloat(maximumSectionWebThickness!) && customSectionFlangeThicknessSlider?.selectedMinValue == CGFloat(minimumSectionFlangeThickness!) && customSectionFlangeThicknessSlider?.selectedMaxValue == CGFloat(maximumSectionFlangeThickness!) && customSectionAreaSlider?.selectedMinValue == CGFloat(minimumAreaOfSection!) && customSectionAreaSlider?.selectedMaxValue == CGFloat(maximumAreaOfSection!)) || (customSectionLegLengthRangeSlider?.selectedMinValue == CGFloat(minimumSectionLegLength!) && customSectionLegLengthRangeSlider?.selectedMaxValue == CGFloat(maximumSectionLegLength!) && customSectionLegThicknessSlider?.selectedMinValue == CGFloat(minimumSectionLegThickness!) && customSectionLegThicknessSlider?.selectedMaxValue == CGFloat(maximumSectionLegThickness!) && customSectionAreaSlider?.selectedMinValue == CGFloat(minimumAreaOfSection!) && customSectionAreaSlider?.selectedMaxValue == CGFloat(maximumAreaOfSection!)) {
+            if userLastSelectedCollectionViewCellNumber != 4 && userLastSelectedCollectionViewCellNumber != 5 {
                 
-                filteredArrayToBeSentBack = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController
+                // The below IF STATEMEMT represents the case where the user has first tapped on the CLEAR FILTERS button and then hit the APPLY BUTTON, basically in this case the user will be redirected to the tableViewVC with no filters applied and data will be sorted in Section Designation in Ascending order:
                 
-                delegate?.dataToBePassedUsingProtocol(viewControllerDataIsSentFrom: "TableViewSteelSectionsDataFilterOptions", filteringSlidersCleared: true, userLastSelectedCollectionViewCellNumber: self.userLastSelectedCollectionViewCellNumber, configuredArrayContainingSteelSectionsData: filteredArrayToBeSentBack, configuredArrayContainingSteelSectionsSerialNumbersOnly: [""], configuredSortByVariable: "None", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
-                
-            } else {
-                
-                if userLastSelectedCollectionViewCellNumber != 4 && userLastSelectedCollectionViewCellNumber != 5 {
+                if (customDepthOfSectionRangeSlider?.selectedMinValue == CGFloat(minimumDepthOfSection!) && customDepthOfSectionRangeSlider?.selectedMaxValue == CGFloat(maximumDepthOfSection!) && customWidthOfSectionRangeSlider?.selectedMinValue == CGFloat(minimumWidthOfSection!) && customWidthOfSectionRangeSlider?.selectedMaxValue == CGFloat(maximumWidthOfSection!) && customSectionWebThicknessSlider?.selectedMinValue == CGFloat(minimumSectionWebThickness!) && customSectionWebThicknessSlider?.selectedMaxValue == CGFloat(maximumSectionWebThickness!) && customSectionFlangeThicknessSlider?.selectedMinValue == CGFloat(minimumSectionFlangeThickness!) && customSectionFlangeThicknessSlider?.selectedMaxValue == CGFloat(maximumSectionFlangeThickness!) && customSectionAreaSlider?.selectedMinValue == CGFloat(minimumAreaOfSection!) && customSectionAreaSlider?.selectedMaxValue == CGFloat(maximumAreaOfSection!)) {
                     
+                    filteredArrayToBeSentBack = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController
                     
-                    // The below will get executed whenever the user filtered results only as per their total depth:
+                    delegate?.dataToBePassedUsingProtocol(viewControllerDataIsSentFrom: "TableViewSteelSectionsDataFilterOptions", filteringSlidersCleared: true, userLastSelectedCollectionViewCellNumber: self.userLastSelectedCollectionViewCellNumber, configuredArrayContainingSteelSectionsData: filteredArrayToBeSentBack, configuredArrayContainingSteelSectionsSerialNumbersOnly: [""], configuredSortByVariable: "None", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
+                    
+                } else {
+                    
+                    // The below IF STATEMENT represents the case where the user only applied filters to the total depth of the section, in this case filtered data will be sorted by Section Depth in Ascending order:
                     
                     if (customDepthOfSectionRangeSlider?.selectedMinValue != CGFloat(minimumDepthOfSection!) || customDepthOfSectionRangeSlider?.selectedMaxValue != CGFloat(maximumDepthOfSection!)) && (customWidthOfSectionRangeSlider?.selectedMinValue == CGFloat(minimumWidthOfSection!) && customWidthOfSectionRangeSlider?.selectedMaxValue == CGFloat(maximumWidthOfSection!) && customSectionWebThicknessSlider?.selectedMinValue == CGFloat(minimumSectionWebThickness!) && customSectionWebThicknessSlider?.selectedMaxValue == CGFloat(maximumSectionWebThickness!) && customSectionFlangeThicknessSlider?.selectedMinValue == CGFloat(minimumSectionFlangeThickness!) && customSectionFlangeThicknessSlider?.selectedMaxValue == CGFloat(maximumSectionFlangeThickness!) && customSectionAreaSlider?.selectedMinValue == CGFloat(minimumAreaOfSection!) && customSectionAreaSlider?.selectedMaxValue == CGFloat(maximumAreaOfSection!)) {
                         
@@ -595,7 +602,7 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
                         
                     }
                         
-                        // The below will get executed whenever the user filtered results only as per their width:
+                        // The below IF STATEMENT represents the case where the user has filtered results only by their Width, in this instance filtered data will be sorted by Width of Section in Ascending Order:
                         
                     else if (customWidthOfSectionRangeSlider?.selectedMinValue != CGFloat(minimumWidthOfSection!) || customWidthOfSectionRangeSlider?.selectedMaxValue != CGFloat(maximumWidthOfSection!)) && (customDepthOfSectionRangeSlider?.selectedMinValue == CGFloat(minimumDepthOfSection!) && customDepthOfSectionRangeSlider?.selectedMaxValue == CGFloat(maximumDepthOfSection!) && customSectionWebThicknessSlider?.selectedMinValue == CGFloat(minimumSectionWebThickness!) && customSectionWebThicknessSlider?.selectedMaxValue == CGFloat(maximumSectionWebThickness!) && customSectionFlangeThicknessSlider?.selectedMinValue == CGFloat(minimumSectionFlangeThickness!) && customSectionFlangeThicknessSlider?.selectedMaxValue == CGFloat(maximumSectionFlangeThickness!) && customSectionAreaSlider?.selectedMinValue == CGFloat(minimumAreaOfSection!) && customSectionAreaSlider?.selectedMaxValue == CGFloat(maximumAreaOfSection!)) {
                         
@@ -631,7 +638,7 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
                         
                     }
                         
-                        // The below will get executed whenever the user filtered results only as per their web thicknesses:
+                        // The below case will be triggered when the user filter results only by Section Web Thickness, filtered data will be sorted by Section WEb Thickness in Ascending order:
                         
                     else if (customSectionWebThicknessSlider?.selectedMinValue != CGFloat(minimumSectionWebThickness!) || customSectionWebThicknessSlider?.selectedMaxValue != CGFloat(maximumSectionWebThickness!)) && (customDepthOfSectionRangeSlider?.selectedMinValue == CGFloat(minimumDepthOfSection!) && customDepthOfSectionRangeSlider?.selectedMaxValue == CGFloat(maximumDepthOfSection!) && customWidthOfSectionRangeSlider?.selectedMinValue == CGFloat(minimumWidthOfSection!) && customWidthOfSectionRangeSlider?.selectedMaxValue == CGFloat(maximumWidthOfSection!) && customSectionFlangeThicknessSlider?.selectedMinValue == CGFloat(minimumSectionFlangeThickness!) && customSectionFlangeThicknessSlider?.selectedMaxValue == CGFloat(maximumSectionFlangeThickness!) && customSectionAreaSlider?.selectedMinValue == CGFloat(minimumAreaOfSection!) && customSectionAreaSlider?.selectedMaxValue == CGFloat(maximumAreaOfSection!)) {
                         
@@ -667,7 +674,7 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
                         
                     }
                         
-                        // The below will get executed whenever the user filtered results only as per their flange thicknesses:
+                        // The below IF STATEMENT will be triggered whenever the user filter data only by Section Flange Thickness, filtered data will be sorted in Section Flange Thickness in Ascending order:
                         
                     else if (customSectionFlangeThicknessSlider?.selectedMinValue != CGFloat(minimumSectionFlangeThickness!) || customSectionFlangeThicknessSlider?.selectedMaxValue != CGFloat(maximumSectionFlangeThickness!)) && (customDepthOfSectionRangeSlider?.selectedMinValue == CGFloat(minimumDepthOfSection!) && customDepthOfSectionRangeSlider?.selectedMaxValue == CGFloat(maximumDepthOfSection!) && customWidthOfSectionRangeSlider?.selectedMinValue == CGFloat(minimumWidthOfSection!) && customWidthOfSectionRangeSlider?.selectedMaxValue == CGFloat(maximumWidthOfSection!) && customSectionWebThicknessSlider?.selectedMinValue == CGFloat(minimumSectionWebThickness!) && customSectionWebThicknessSlider?.selectedMaxValue == CGFloat(maximumSectionWebThickness!) && customSectionAreaSlider?.selectedMinValue == CGFloat(minimumAreaOfSection!) && customSectionAreaSlider?.selectedMaxValue == CGFloat(maximumAreaOfSection!)) {
                         
@@ -703,7 +710,7 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
                         
                     }
                         
-                        // The below will get executed whenever the user filtered results only as per their sectional area:
+                        // The below IF STATEMENT will be triggered when the user has filtered results only by Section Area, filtered data will be sorted by Section Area in Ascending order:
                         
                     else if (customSectionAreaSlider?.selectedMinValue != CGFloat(minimumAreaOfSection!) || customSectionAreaSlider?.selectedMaxValue != CGFloat(maximumAreaOfSection!)) && (customDepthOfSectionRangeSlider?.selectedMinValue == CGFloat(minimumDepthOfSection!) && customDepthOfSectionRangeSlider?.selectedMaxValue == CGFloat(maximumDepthOfSection!) && customWidthOfSectionRangeSlider?.selectedMinValue == CGFloat(minimumWidthOfSection!) && customWidthOfSectionRangeSlider?.selectedMaxValue == CGFloat(maximumWidthOfSection!) && customSectionWebThicknessSlider?.selectedMinValue == CGFloat(minimumSectionWebThickness!) && customSectionWebThicknessSlider?.selectedMaxValue == CGFloat(maximumSectionWebThickness!) && customSectionFlangeThicknessSlider?.selectedMinValue == CGFloat(minimumSectionFlangeThickness!) && customSectionFlangeThicknessSlider?.selectedMaxValue == CGFloat(maximumSectionFlangeThickness!)) {
                         
@@ -747,12 +754,303 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
                         
                     }
                     
-                } else {
-                    
+                    delegate?.dataToBePassedUsingProtocol(viewControllerDataIsSentFrom: "TableViewSteelSectionsDataFilterOptions", filteringSlidersCleared: false, userLastSelectedCollectionViewCellNumber: self.userLastSelectedCollectionViewCellNumber, configuredArrayContainingSteelSectionsData: filteredArrayToBeSentBack, configuredArrayContainingSteelSectionsSerialNumbersOnly: [""], configuredSortByVariable: "None", configuredFiltersAppliedVariable: true, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
                     
                 }
                 
-                delegate?.dataToBePassedUsingProtocol(viewControllerDataIsSentFrom: "TableViewSteelSectionsDataFilterOptions", filteringSlidersCleared: false, userLastSelectedCollectionViewCellNumber: self.userLastSelectedCollectionViewCellNumber, configuredArrayContainingSteelSectionsData: filteredArrayToBeSentBack, configuredArrayContainingSteelSectionsSerialNumbersOnly: [""], configuredSortByVariable: "None", configuredFiltersAppliedVariable: true, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
+            }
+                
+                // The below IF STATEMENT will be triggered for Open Rolled Steel Equal Angle Sections:
+                
+            else if userLastSelectedCollectionViewCellNumber == 4 {
+                
+                // The below IF STATEMEMT represents the case where the user has first tapped on the CLEAR FILTERS button and then hit the APPLY BUTTON, basically in this case the user will be redirected to the tableViewVC with no filters applied and data will be sorted in Section Designation in Ascending order:
+                
+                if (customSectionLegLengthRangeSlider?.selectedMinValue == CGFloat(minimumSectionLegLength!) && customSectionLegLengthRangeSlider?.selectedMaxValue == CGFloat(maximumSectionLegLength!) && customSectionLegThicknessSlider?.selectedMinValue == CGFloat(minimumSectionLegThickness!) && customSectionLegThicknessSlider?.selectedMaxValue == CGFloat(maximumSectionLegThickness!) && customSectionAreaSlider?.selectedMinValue == CGFloat(minimumAreaOfSection!) && customSectionAreaSlider?.selectedMaxValue == CGFloat(maximumAreaOfSection!)) {
+                    
+                    filteredArrayToBeSentBack = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController
+                    
+                    delegate?.dataToBePassedUsingProtocol(viewControllerDataIsSentFrom: "TableViewSteelSectionsDataFilterOptions", filteringSlidersCleared: true, userLastSelectedCollectionViewCellNumber: self.userLastSelectedCollectionViewCellNumber, configuredArrayContainingSteelSectionsData: filteredArrayToBeSentBack, configuredArrayContainingSteelSectionsSerialNumbersOnly: [""], configuredSortByVariable: "None", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
+                    
+                } else {
+                    
+                    // The below IF STATEMENT represents the case where the user only applied filters to the section leg length only, in this case filtered data will be sorted by Section Leg Length in Ascending order:
+                    
+                    if (customSectionLegLengthRangeSlider?.selectedMinValue != CGFloat(minimumSectionLegLength!) || customSectionLegLengthRangeSlider?.selectedMaxValue != CGFloat(maximumSectionLegLength!)) && (customSectionLegThicknessSlider?.selectedMinValue == CGFloat(minimumSectionLegThickness!) && customSectionLegThicknessSlider?.selectedMaxValue == CGFloat(maximumSectionLegThickness!) && customSectionAreaSlider?.selectedMinValue == CGFloat(minimumAreaOfSection!) && customSectionAreaSlider?.selectedMaxValue == CGFloat(maximumAreaOfSection!)) {
+                        
+                        filteredArrayToBeSentBack = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.filter({ return (($0.sectionLegLength >= Double(customSectionLegLengthRangeSlider!.selectedMinValue)) && ($0.sectionLegLength <= Double(customSectionLegLengthRangeSlider!.selectedMaxValue))) })
+                        
+                        filteredArrayToBeSentBack.sort {
+                            
+                            if $0.sectionLegLength != $1.sectionLegLength {
+                                
+                                return $0.sectionLegLength < $1.sectionLegLength
+                                
+                            } else {
+                                
+                                if $0.firstSectionSeriesNumber != $1.firstSectionSeriesNumber {
+                                    
+                                    return $0.firstSectionSeriesNumber < $1.firstSectionSeriesNumber
+                                    
+                                } else if $0.secondSectionSeriesNumber != $1.secondSectionSeriesNumber && $0.firstSectionSeriesNumber == $1.firstSectionSeriesNumber {
+                                    
+                                    return $0.secondSectionSeriesNumber < $1.secondSectionSeriesNumber
+                                    
+                                } else {
+                                    
+                                    return $0.lastSectionSeriesNumber < $1.lastSectionSeriesNumber
+                                    
+                                }
+                                
+                            }
+                            
+                        }
+                        
+                    }
+                        
+                        // The below IF STATEMENT represents the case where the user has filtered results only by their Section Leg Thickness, in this instance filtered data will be sorted by Section Leg Thickness in Ascending Order:
+                        
+                    else if (customSectionLegThicknessSlider?.selectedMinValue != CGFloat(minimumSectionLegThickness!) || customSectionLegThicknessSlider?.selectedMaxValue != CGFloat(maximumSectionLegThickness!)) && (customSectionLegLengthRangeSlider?.selectedMinValue == CGFloat(minimumSectionLegLength!) && customSectionLegLengthRangeSlider?.selectedMaxValue == CGFloat(maximumSectionLegLength!) && customSectionAreaSlider?.selectedMinValue == CGFloat(minimumAreaOfSection!) && customSectionAreaSlider?.selectedMaxValue == CGFloat(maximumAreaOfSection!)) {
+                        
+                        filteredArrayToBeSentBack = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.filter({ return (($0.sectionLegThickness >= Double(customSectionLegThicknessSlider!.selectedMinValue)) && ($0.sectionLegThickness <= Double(customSectionLegThicknessSlider!.selectedMaxValue))) })
+                        
+                        filteredArrayToBeSentBack.sort {
+                            
+                            if $0.sectionLegThickness != $1.sectionLegThickness {
+                                
+                                return $0.sectionLegThickness < $1.sectionLegThickness
+                                
+                            } else {
+                                
+                                if $0.firstSectionSeriesNumber != $1.firstSectionSeriesNumber {
+                                    
+                                    return $0.firstSectionSeriesNumber < $1.firstSectionSeriesNumber
+                                    
+                                } else if $0.secondSectionSeriesNumber != $1.secondSectionSeriesNumber && $0.firstSectionSeriesNumber == $1.firstSectionSeriesNumber {
+                                    
+                                    return $0.secondSectionSeriesNumber < $1.secondSectionSeriesNumber
+                                    
+                                } else {
+                                    
+                                    return $0.lastSectionSeriesNumber < $1.lastSectionSeriesNumber
+                                    
+                                }
+                                
+                            }
+                            
+                        }
+                        
+                    }
+                        
+                    // The below IF STATEMENT will be triggered when the user has filtered results only by Section Area, filtered data will be sorted by Section Area in Ascending order:
+                        
+                    else if (customSectionAreaSlider?.selectedMinValue != CGFloat(minimumAreaOfSection!) || customSectionAreaSlider?.selectedMaxValue != CGFloat(maximumAreaOfSection!)) && (customSectionLegLengthRangeSlider?.selectedMinValue == CGFloat(minimumSectionLegLength!) && customSectionLegLengthRangeSlider?.selectedMaxValue == CGFloat(maximumSectionLegLength!) && customSectionLegThicknessSlider?.selectedMinValue == CGFloat(minimumSectionLegThickness!) && customSectionLegThicknessSlider?.selectedMaxValue == CGFloat(maximumSectionLegThickness!)) {
+                        
+                        filteredArrayToBeSentBack = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.filter({ return (($0.sectionArea >= Double(customSectionAreaSlider!.selectedMinValue)) && ($0.sectionArea <= Double(customSectionAreaSlider!.selectedMaxValue))) })
+                        
+                        filteredArrayToBeSentBack.sort {
+                            
+                            if $0.sectionArea != $1.sectionArea {
+                                
+                                return $0.sectionArea < $1.sectionArea
+                                
+                            } else {
+                                
+                                if $0.firstSectionSeriesNumber != $1.firstSectionSeriesNumber {
+                                    
+                                    return $0.firstSectionSeriesNumber < $1.firstSectionSeriesNumber
+                                    
+                                } else if $0.secondSectionSeriesNumber != $1.secondSectionSeriesNumber && $0.firstSectionSeriesNumber == $1.firstSectionSeriesNumber {
+                                    
+                                    return $0.secondSectionSeriesNumber < $1.secondSectionSeriesNumber
+                                    
+                                } else {
+                                    
+                                    return $0.lastSectionSeriesNumber < $1.lastSectionSeriesNumber
+                                    
+                                }
+                                
+                            }
+                            
+                        }
+                        
+                    }
+                        
+                    // The below will get executed whenever the user selected multiple filtering criteria togther and hit the Apply button:
+                        
+                    else {
+                        
+                        filteredArrayToBeSentBack = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.filter( { return (($0.sectionLegLength >= Double(customSectionLegLengthRangeSlider!.selectedMinValue)) && ($0.sectionLegLength <= Double(customSectionLegLengthRangeSlider!.selectedMaxValue)) && ($0.sectionLegThickness >= Double(customSectionLegThicknessSlider!.selectedMinValue)) && ($0.sectionLegThickness <= Double(customSectionLegThicknessSlider!.selectedMaxValue)) && ($0.sectionArea >= Double(customSectionAreaSlider!.selectedMinValue)) && ($0.sectionArea <= Double(customSectionAreaSlider!.selectedMaxValue))) } )
+                        
+                    }
+                    
+                    delegate?.dataToBePassedUsingProtocol(viewControllerDataIsSentFrom: "TableViewSteelSectionsDataFilterOptions", filteringSlidersCleared: false, userLastSelectedCollectionViewCellNumber: self.userLastSelectedCollectionViewCellNumber, configuredArrayContainingSteelSectionsData: filteredArrayToBeSentBack, configuredArrayContainingSteelSectionsSerialNumbersOnly: [""], configuredSortByVariable: "None", configuredFiltersAppliedVariable: true, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
+                    
+                }
+                
+            }
+            
+            // The below will be trigged for Open Rolled Unequal Steel Sections:
+            
+            else {
+                
+                // The below IF STATEMEMT represents the case where the user has first tapped on the CLEAR FILTERS button and then hit the APPLY BUTTON, basically in this case the user will be redirected to the tableViewVC with no filters applied and data will be sorted in Section Designation in Ascending order:
+                
+                if (customDepthOfSectionRangeSlider?.selectedMinValue == CGFloat(minimumDepthOfSection!) && customDepthOfSectionRangeSlider?.selectedMaxValue == CGFloat(maximumDepthOfSection!) && customWidthOfSectionRangeSlider?.selectedMinValue == CGFloat(minimumWidthOfSection!) && customWidthOfSectionRangeSlider?.selectedMaxValue == CGFloat(maximumWidthOfSection!) && customSectionLegThicknessSlider?.selectedMinValue == CGFloat(minimumSectionLegThickness!) && customSectionLegThicknessSlider?.selectedMaxValue == CGFloat(maximumSectionLegThickness!) && customSectionAreaSlider?.selectedMinValue == CGFloat(minimumAreaOfSection!) && customSectionAreaSlider?.selectedMaxValue == CGFloat(maximumAreaOfSection!)) {
+                    
+                    filteredArrayToBeSentBack = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController
+                    
+                    delegate?.dataToBePassedUsingProtocol(viewControllerDataIsSentFrom: "TableViewSteelSectionsDataFilterOptions", filteringSlidersCleared: true, userLastSelectedCollectionViewCellNumber: self.userLastSelectedCollectionViewCellNumber, configuredArrayContainingSteelSectionsData: filteredArrayToBeSentBack, configuredArrayContainingSteelSectionsSerialNumbersOnly: [""], configuredSortByVariable: "None", configuredFiltersAppliedVariable: false, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
+                    
+                } else {
+                    
+                    // The below IF STATEMENT represents the case where the user only applied filters to the Depth of Section only, in this case filtered data will be sorted by Depth of Section in Ascending order:
+                    
+                    if (customDepthOfSectionRangeSlider?.selectedMinValue != CGFloat(minimumDepthOfSection!) || customDepthOfSectionRangeSlider?.selectedMaxValue != CGFloat(maximumDepthOfSection!)) && (customWidthOfSectionRangeSlider?.selectedMinValue == CGFloat(minimumWidthOfSection!) && customWidthOfSectionRangeSlider?.selectedMaxValue == CGFloat(maximumWidthOfSection!) && customSectionLegThicknessSlider?.selectedMinValue == CGFloat(minimumSectionLegThickness!) && customSectionLegThicknessSlider?.selectedMaxValue == CGFloat(maximumSectionLegThickness!) && customSectionAreaSlider?.selectedMinValue == CGFloat(minimumAreaOfSection!) && customSectionAreaSlider?.selectedMaxValue == CGFloat(maximumAreaOfSection!)) {
+                        
+                        filteredArrayToBeSentBack = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.filter({ return (($0.sectionTotalDepth >= Double(customDepthOfSectionRangeSlider!.selectedMinValue)) && ($0.sectionTotalDepth <= Double(customDepthOfSectionRangeSlider!.selectedMaxValue))) })
+                        
+                        filteredArrayToBeSentBack.sort {
+                            
+                            if $0.sectionTotalDepth != $1.sectionTotalDepth {
+                                
+                                return $0.sectionTotalDepth < $1.sectionTotalDepth
+                                
+                            } else {
+                                
+                                if $0.firstSectionSeriesNumber != $1.firstSectionSeriesNumber {
+                                    
+                                    return $0.firstSectionSeriesNumber < $1.firstSectionSeriesNumber
+                                    
+                                } else if $0.secondSectionSeriesNumber != $1.secondSectionSeriesNumber && $0.firstSectionSeriesNumber == $1.firstSectionSeriesNumber {
+                                    
+                                    return $0.secondSectionSeriesNumber < $1.secondSectionSeriesNumber
+                                    
+                                } else {
+                                    
+                                    return $0.lastSectionSeriesNumber < $1.lastSectionSeriesNumber
+                                    
+                                }
+                                
+                            }
+                            
+                        }
+                        
+                    }
+                        
+                    // The below IF STATEMENT represents the case where the user has filtered results only by their Width of Section, in this instance filtered data will be sorted by Width of Section in Ascending Order:
+                        
+                    else if (customWidthOfSectionRangeSlider?.selectedMinValue != CGFloat(minimumWidthOfSection!) || customWidthOfSectionRangeSlider?.selectedMaxValue != CGFloat(maximumWidthOfSection!)) && (customDepthOfSectionRangeSlider?.selectedMinValue == CGFloat(minimumDepthOfSection!) && customDepthOfSectionRangeSlider?.selectedMaxValue == CGFloat(maximumDepthOfSection!) && customSectionLegThicknessSlider?.selectedMinValue == CGFloat(minimumSectionLegLength!) && customSectionLegLengthRangeSlider?.selectedMaxValue == CGFloat(maximumSectionLegThickness!) && customSectionAreaSlider?.selectedMinValue == CGFloat(minimumAreaOfSection!) && customSectionAreaSlider?.selectedMaxValue == CGFloat(maximumAreaOfSection!)) {
+                        
+                        filteredArrayToBeSentBack = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.filter({ return (($0.sectionWidth >= Double(customWidthOfSectionRangeSlider!.selectedMinValue)) && ($0.sectionWidth <= Double(customWidthOfSectionRangeSlider!.selectedMaxValue))) })
+                        
+                        filteredArrayToBeSentBack.sort {
+                            
+                            if $0.sectionWidth != $1.sectionWidth {
+                                
+                                return $0.sectionWidth < $1.sectionWidth
+                                
+                            } else {
+                                
+                                if $0.firstSectionSeriesNumber != $1.firstSectionSeriesNumber {
+                                    
+                                    return $0.firstSectionSeriesNumber < $1.firstSectionSeriesNumber
+                                    
+                                } else if $0.secondSectionSeriesNumber != $1.secondSectionSeriesNumber && $0.firstSectionSeriesNumber == $1.firstSectionSeriesNumber {
+                                    
+                                    return $0.secondSectionSeriesNumber < $1.secondSectionSeriesNumber
+                                    
+                                } else {
+                                    
+                                    return $0.lastSectionSeriesNumber < $1.lastSectionSeriesNumber
+                                    
+                                }
+                                
+                            }
+                            
+                        }
+                        
+                    }
+                        
+                    // The below IF STATEMENT will be triggered when the user has filtered results only by Section Leg Thickness, filtered data will be sorted by Section Leg Thickness in Ascending order:
+                        
+                    else if (customSectionLegThicknessSlider?.selectedMinValue != CGFloat(minimumSectionLegThickness!) || customSectionLegThicknessSlider?.selectedMaxValue != CGFloat(maximumSectionLegThickness!)) && (customDepthOfSectionRangeSlider?.selectedMinValue == CGFloat(minimumDepthOfSection!) && customDepthOfSectionRangeSlider?.selectedMaxValue == CGFloat(maximumDepthOfSection!) && customWidthOfSectionRangeSlider?.selectedMinValue == CGFloat(minimumWidthOfSection!) && customWidthOfSectionRangeSlider?.selectedMaxValue == CGFloat(maximumWidthOfSection!) && customSectionAreaSlider?.selectedMinValue == CGFloat(minimumAreaOfSection!) && customSectionAreaSlider?.selectedMaxValue == CGFloat(maximumAreaOfSection!)) {
+                            
+                            filteredArrayToBeSentBack = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.filter({ return (($0.sectionLegThickness >= Double(customSectionLegThicknessSlider!.selectedMinValue)) && ($0.sectionLegThickness <= Double(customSectionLegThicknessSlider!.selectedMaxValue))) })
+                            
+                            filteredArrayToBeSentBack.sort {
+                                
+                                if $0.sectionLegThickness != $1.sectionLegThickness {
+                                    
+                                    return $0.sectionLegThickness < $1.sectionLegThickness
+                                    
+                                } else {
+                                    
+                                    if $0.firstSectionSeriesNumber != $1.firstSectionSeriesNumber {
+                                        
+                                        return $0.firstSectionSeriesNumber < $1.firstSectionSeriesNumber
+                                        
+                                    } else if $0.secondSectionSeriesNumber != $1.secondSectionSeriesNumber && $0.firstSectionSeriesNumber == $1.firstSectionSeriesNumber {
+                                        
+                                        return $0.secondSectionSeriesNumber < $1.secondSectionSeriesNumber
+                                        
+                                    } else {
+                                        
+                                        return $0.lastSectionSeriesNumber < $1.lastSectionSeriesNumber
+                                        
+                                    }
+                                    
+                                }
+                                
+                            }
+                            
+                        }
+                        
+                    // The below IF STATEMENT will be triggered when the user has filtered results only by Area of Section, filtered data will be sorted by Area of Section in Ascending order:
+
+                    else if (customSectionAreaSlider?.selectedMinValue != CGFloat(minimumAreaOfSection!) || customSectionAreaSlider?.selectedMaxValue != CGFloat(maximumAreaOfSection!)) && (customDepthOfSectionRangeSlider?.selectedMinValue == CGFloat(minimumDepthOfSection!) && customDepthOfSectionRangeSlider?.selectedMaxValue == CGFloat(maximumDepthOfSection!) && customWidthOfSectionRangeSlider?.selectedMinValue == CGFloat(minimumWidthOfSection!) && customWidthOfSectionRangeSlider?.selectedMaxValue == CGFloat(maximumWidthOfSection!) && customSectionLegThicknessSlider?.selectedMinValue == CGFloat(minimumSectionLegThickness!) && customSectionLegThicknessSlider?.selectedMaxValue == CGFloat(maximumSectionLegThickness!)) {
+                            
+                            filteredArrayToBeSentBack = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.filter({ return (($0.sectionArea >= Double(customSectionAreaSlider!.selectedMinValue)) && ($0.sectionArea <= Double(customSectionAreaSlider!.selectedMaxValue))) })
+                            
+                            filteredArrayToBeSentBack.sort {
+                                
+                                if $0.sectionArea != $1.sectionArea {
+                                    
+                                    return $0.sectionArea < $1.sectionArea
+                                    
+                                } else {
+                                    
+                                    if $0.firstSectionSeriesNumber != $1.firstSectionSeriesNumber {
+                                        
+                                        return $0.firstSectionSeriesNumber < $1.firstSectionSeriesNumber
+                                        
+                                    } else if $0.secondSectionSeriesNumber != $1.secondSectionSeriesNumber && $0.firstSectionSeriesNumber == $1.firstSectionSeriesNumber {
+                                        
+                                        return $0.secondSectionSeriesNumber < $1.secondSectionSeriesNumber
+                                        
+                                    } else {
+                                        
+                                        return $0.lastSectionSeriesNumber < $1.lastSectionSeriesNumber
+                                        
+                                    }
+                                    
+                                }
+                                
+                            }
+                            
+                        }
+                        
+                        // The below will get executed whenever the user selected multiple filtering criteria togther and hit the Apply button:
+                        
+                    else {
+                        
+                        filteredArrayToBeSentBack = receivedSteelSectionsDataArrayFromSteelSectionsTableViewController.filter( { return (($0.sectionTotalDepth >= Double(customDepthOfSectionRangeSlider!.selectedMinValue)) && ($0.sectionTotalDepth <= Double(customDepthOfSectionRangeSlider!.selectedMaxValue)) && ($0.sectionWidth >= Double(customWidthOfSectionRangeSlider!.selectedMinValue)) && ($0.sectionWidth <= Double(customWidthOfSectionRangeSlider!.selectedMaxValue)) && ($0.sectionLegThickness >= Double(customSectionLegThicknessSlider!.selectedMinValue)) && ($0.sectionLegThickness <= Double(customSectionLegThicknessSlider!.selectedMaxValue)) && ($0.sectionArea >= Double(customSectionAreaSlider!.selectedMinValue)) && ($0.sectionArea <= Double(customSectionAreaSlider!.selectedMaxValue))) } )
+                        
+                    }
+                    
+                    delegate?.dataToBePassedUsingProtocol(viewControllerDataIsSentFrom: "TableViewSteelSectionsDataFilterOptions", filteringSlidersCleared: false, userLastSelectedCollectionViewCellNumber: self.userLastSelectedCollectionViewCellNumber, configuredArrayContainingSteelSectionsData: filteredArrayToBeSentBack, configuredArrayContainingSteelSectionsSerialNumbersOnly: [""], configuredSortByVariable: "None", configuredFiltersAppliedVariable: true, configuredIsSearchingVariable: false, exchangedUserSelectedTableCellSectionNumber: 0, exchangedUserSelectedTableCellRowNumber: 0)
+                    
+                }
                 
             }
             
@@ -769,7 +1067,7 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
     func setupNavigationBarAndScrollViewAndClearAndApplyButtonsConstraints() {
         
         NSLayoutConstraint.activate([
-        
+            
             navigationBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             
             navigationBar.rightAnchor.constraint(equalTo: view.rightAnchor),
@@ -777,13 +1075,13 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
             navigationBar.leftAnchor.constraint(equalTo: view.leftAnchor),
             
             resetFiltersButton.topAnchor.constraint(equalTo: customSectionAreaSlider!.bottomAnchor, constant: rangeSliderTitleTopPaddingFromNavigationBarBottom),
-
+            
             resetFiltersButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: -1 * (self.view.frame.width/4)),
-
+            
             applyFiltersButton.topAnchor.constraint(equalTo: customSectionAreaSlider!.bottomAnchor, constant: rangeSliderTitleTopPaddingFromNavigationBarBottom),
-
+            
             applyFiltersButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: self.view.frame.width/4)
-        
+            
         ])
         
         scrollView.pin(fixedToSuperViewTopAnchor: true, fixedToSuperViewRightAnchor: true, fixedToSuperViewBottomAnchor: true, fixedToSuperViewLeftAnchor: true, superViewTopAnchor: navigationBar.bottomAnchor, superViewRightAnchor: self.view.rightAnchor, superViewBottomAnchor: self.view.bottomAnchor, superViewLeftAnchor: self.view.leftAnchor, topAnchorConstant: 0, rightAnchorConstant: 0, bottomAnchorConstant: 0, leftAnchorConstant: 0)
@@ -811,7 +1109,7 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
         sectionAreaSliderTitle.pin(fixedToSuperViewTopAnchor: true, fixedToSuperViewRightAnchor: true, fixedToSuperViewBottomAnchor: false, fixedToSuperViewLeftAnchor: true, superViewTopAnchor: customSectionFlangeThicknessSlider!.bottomAnchor, superViewRightAnchor: self.view.rightAnchor, superViewBottomAnchor: self.view.bottomAnchor, superViewLeftAnchor: self.view.leftAnchor, topAnchorConstant: verticalSpacingBetweenBottomOfRangeSliderTrackAndTopOfRangeSliderTitleLabel, rightAnchorConstant: -1 * rangeSliderTitleLeftAndRightPadding, bottomAnchorConstant: 1, leftAnchorConstant: rangeSliderTitleLeftAndRightPadding)
         
         customSectionAreaSlider!.pin(fixedToSuperViewTopAnchor: true, fixedToSuperViewRightAnchor: true, fixedToSuperViewBottomAnchor: false, fixedToSuperViewLeftAnchor: true, superViewTopAnchor: sectionAreaSliderTitle.bottomAnchor, superViewRightAnchor: self.view.rightAnchor, superViewBottomAnchor: self.view.bottomAnchor, superViewLeftAnchor: self.view.leftAnchor, topAnchorConstant: rangeSliderTrackTopPaddingFromBottomOfRangeSlideTitle, rightAnchorConstant: -1 * rangeSliderTrackLeftAndRightPadding, bottomAnchorConstant: 1, leftAnchorConstant: rangeSliderTrackLeftAndRightPadding)
-                
+        
     }
     
     func setupConstraintsForOpenSteelSectionsEqualLegAngles() {
@@ -847,11 +1145,10 @@ class TableViewSteelSectionsDataFilterOptions: UIViewController {
         sectionAreaSliderTitle.pin(fixedToSuperViewTopAnchor: true, fixedToSuperViewRightAnchor: true, fixedToSuperViewBottomAnchor: false, fixedToSuperViewLeftAnchor: true, superViewTopAnchor: customSectionLegThicknessSlider!.bottomAnchor, superViewRightAnchor: self.view.rightAnchor, superViewBottomAnchor: self.view.bottomAnchor, superViewLeftAnchor: self.view.leftAnchor, topAnchorConstant: verticalSpacingBetweenBottomOfRangeSliderTrackAndTopOfRangeSliderTitleLabel, rightAnchorConstant: -1 * rangeSliderTitleLeftAndRightPadding, bottomAnchorConstant: 1, leftAnchorConstant: rangeSliderTitleLeftAndRightPadding)
         
         customSectionAreaSlider!.pin(fixedToSuperViewTopAnchor: true, fixedToSuperViewRightAnchor: true, fixedToSuperViewBottomAnchor: false, fixedToSuperViewLeftAnchor: true, superViewTopAnchor: sectionAreaSliderTitle.bottomAnchor, superViewRightAnchor: self.view.rightAnchor, superViewBottomAnchor: self.view.bottomAnchor, superViewLeftAnchor: self.view.leftAnchor, topAnchorConstant: rangeSliderTrackTopPaddingFromBottomOfRangeSlideTitle, rightAnchorConstant: -1 * rangeSliderTrackLeftAndRightPadding, bottomAnchorConstant: 1, leftAnchorConstant: rangeSliderTrackLeftAndRightPadding)
-
+        
     }
     
 }
-
 
 // MARK: - Extensions:
 

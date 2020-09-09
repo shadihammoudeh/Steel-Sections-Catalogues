@@ -9,12 +9,16 @@
 import UIKit
 
 class SelectedSteelSectionSummaryPage: UIViewController {
-    
+        
     // MARK: - Assigning protocol delegate:
-    
+        
     // Here we are setting a delegate inside this View Controller in order to be able to access all the methods inside the Protocol. Notice that the delegate is defined as a "weak" one, as in most cases you do not want a child object maintaining a string reference to a parent object:
     
     weak var delegate: PassingDataBackwardsBetweenViewControllersProtocol?
+    
+    // The below property is defined in order to animate how this VC will go back to the previous VC once a rightSwipeGesture has been recognised or the user pressed on the back navigation bar button item located inside the navigation bar:
+    
+    let movingBackTransitionToPreviousVC = CATransition()
     
     // The below variables will get their values from the previous viewController (i.e. SteelSectionsTableViewController):
     
@@ -1456,6 +1460,8 @@ class SelectedSteelSectionSummaryPage: UIViewController {
         
         super.viewDidLoad()
         
+        setupMoveBackTransitionToPreviousVC()
+        
         // The below gesture is needed in order to enable the user to navigate to the previous viewController once a right swipe gesture gets detected:
                 
         let rightGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(navigationBarLeftButtonPressed(sender:)))
@@ -1678,6 +1684,18 @@ class SelectedSteelSectionSummaryPage: UIViewController {
     }
     
     //
+    
+    func setupMoveBackTransitionToPreviousVC() {
+        
+        movingBackTransitionToPreviousVC.duration = 0.55
+        
+        movingBackTransitionToPreviousVC.type = CATransitionType.reveal
+        
+        movingBackTransitionToPreviousVC.subtype = CATransitionSubtype.fromLeft
+        
+        movingBackTransitionToPreviousVC.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
+        
+    }
     
     func drawSelectedIsteelSectionProfilePathAndItsAnnotations() {
 
@@ -2652,9 +2670,11 @@ extension SelectedSteelSectionSummaryPage: UINavigationBarDelegate {
 
     @objc func navigationBarLeftButtonPressed(sender : UIButton) {
 
-        delegate?.dataToBePassedUsingProtocol(viewControllerDataIsSentFrom: "", filteringSlidersCleared: false, userLastSelectedCollectionViewCellNumber: self.userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController, configuredArrayContainingSteelSectionsData: receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData, configuredArrayContainingSteelSectionsSerialNumbersOnly: receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly, configuredSortByVariable: self.sortBy, configuredFiltersAppliedVariable: self.filtersApplied, configuredIsSearchingVariable: self.isSearching, exchangedUserSelectedTableCellSectionNumber: receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController, exchangedUserSelectedTableCellRowNumber: receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController)
+        delegate?.dataToBePassedUsingProtocol(viewControllerDataIsSentFrom: "SelectedSteelSectionSummaryPage", filteringSlidersCleared: false, userLastSelectedCollectionViewCellNumber: self.userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController, configuredArrayContainingSteelSectionsData: receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData, configuredArrayContainingSteelSectionsSerialNumbersOnly: receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly, configuredSortByVariable: self.sortBy, configuredFiltersAppliedVariable: self.filtersApplied, configuredIsSearchingVariable: self.isSearching, exchangedUserSelectedTableCellSectionNumber: receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController, exchangedUserSelectedTableCellRowNumber: receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController)
         
         // In order not to instantiate a new instance of the first view controller once the user navigates back to the previous view controller, we should use present.viewController. Instead the second view controller should be dismissed. This is needed so that the user will be guided back to the previous view controller, specifically to the last location he was on inside the tableView (in terms of row and section):
+        
+        view.window!.layer.add(movingBackTransitionToPreviousVC, forKey: kCATransition)
 
         dismiss(animated: true) {}
 
