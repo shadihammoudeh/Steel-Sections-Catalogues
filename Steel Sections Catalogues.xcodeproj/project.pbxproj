@@ -14,6 +14,7 @@
 		CF0CB86522E8F43B00257A91 /* CustomCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0CB86422E8F43B00257A91 /* CustomCollectionView.swift */; };
 		CF0CB86722E8F4A700257A91 /* CustomCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0CB86622E8F4A700257A91 /* CustomCollectionViewCell.swift */; };
 		CF2A3DC3235CD1A200552C92 /* SelectedSteelSectionSummaryPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF2A3DC2235CD1A200552C92 /* SelectedSteelSectionSummaryPage.swift */; };
+		CF3428B2250BBEE6004D1F9C /* SelectedSteelSectionSummaryVCCustomUILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF3428B1250BBEE6004D1F9C /* SelectedSteelSectionSummaryVCCustomUILabel.swift */; };
 		CF4A6CB1232525D40040F1ED /* CustomRangeSliderUILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4A6CB0232525D40040F1ED /* CustomRangeSliderUILabel.swift */; };
 		CF4C734722E3BEB700923B4C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4C734622E3BEB700923B4C /* AppDelegate.swift */; };
 		CF4C734922E3BEB700923B4C /* CustomUIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4C734822E3BEB700923B4C /* CustomUIButton.swift */; };
@@ -72,6 +73,7 @@
 		CF0CB86422E8F43B00257A91 /* CustomCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionView.swift; sourceTree = "<group>"; };
 		CF0CB86622E8F4A700257A91 /* CustomCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewCell.swift; sourceTree = "<group>"; };
 		CF2A3DC2235CD1A200552C92 /* SelectedSteelSectionSummaryPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SelectedSteelSectionSummaryPage.swift; path = "Steel Sections Catalogues/View/SelectedSteelSectionSummaryPage.swift"; sourceTree = SOURCE_ROOT; };
+		CF3428B1250BBEE6004D1F9C /* SelectedSteelSectionSummaryVCCustomUILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedSteelSectionSummaryVCCustomUILabel.swift; sourceTree = SOURCE_ROOT; };
 		CF4A6CB0232525D40040F1ED /* CustomRangeSliderUILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomRangeSliderUILabel.swift; sourceTree = "<group>"; };
 		CF4C734322E3BEB700923B4C /* Steel Sections Catalogues.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Steel Sections Catalogues.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF4C734622E3BEB700923B4C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -188,6 +190,7 @@
 		CF4C735B22E3BF3500923B4C /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				CF3428B1250BBEE6004D1F9C /* SelectedSteelSectionSummaryVCCustomUILabel.swift */,
 				CF4C734822E3BEB700923B4C /* CustomUIButton.swift */,
 				CF4A6CB0232525D40040F1ED /* CustomRangeSliderUILabel.swift */,
 				CF71D78B22E47FF3000FDDE9 /* CustomUINavigationBar.swift */,
@@ -416,6 +419,7 @@
 				CFDBB59424E9D09700222175 /* UIViewExtensionToAppyConstraintsToAnyUIView.swift in Sources */,
 				CF4C734922E3BEB700923B4C /* CustomUIButton.swift in Sources */,
 				CF71D78C22E47FF3000FDDE9 /* CustomUINavigationBar.swift in Sources */,
+				CF3428B2250BBEE6004D1F9C /* SelectedSteelSectionSummaryVCCustomUILabel.swift in Sources */,
 				CF69330824EEADE300FE6C74 /* PassingDataBackwardsFromSearchBarOptionsDropListPopoverVCToSteelSectionsTableVC.swift in Sources */,
 				CFAF8AA324E47EEF00BBFFA3 /* CustomTableViewCellForTeeSteelSections.swift in Sources */,
 				CF4C734722E3BEB700923B4C /* AppDelegate.swift in Sources */,

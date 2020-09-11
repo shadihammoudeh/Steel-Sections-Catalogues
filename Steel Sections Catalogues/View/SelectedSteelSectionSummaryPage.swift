@@ -20,7 +20,7 @@ class SelectedSteelSectionSummaryPage: UIViewController {
     
     let movingBackTransitionToPreviousVC = CATransition()
     
-    // The below variables will get their values from the previous viewController (i.e. SteelSectionsTableViewController):
+    // The below variables will get their values from the previous viewController (i.e. SteelSectionsTableViewController) once the user tapped on one of the disclosure icons next to the displayed table view rows:
     
     var sortBy: String = "None"
 
@@ -30,6 +30,12 @@ class SelectedSteelSectionSummaryPage: UIViewController {
     
     var userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController: Int = 0
     
+    // The below will be passed later on to the previous viewController later on using the Protocol in order to re-divert the user to the exact position insisde the tableView he was on before getting diverted to this viewController:
+    
+    var receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController: Int = 0
+    
+    var receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController: Int = 0
+    
     // The below arrays and variables which gets passed from the previous viewController (i.e. SteelSectionsTableViewController) to this viewController contains all steel sections data used in the previois viewController to populate its tableView. These will be passed back to the previous viewController using the Protocol later on, in order to display the extact data the user was one as well as the exact location in terms of tableView Section and Row, before being diverted to this viewController:
     
     var receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData = [SteelSectionParameters]()
@@ -38,44 +44,44 @@ class SelectedSteelSectionSummaryPage: UIViewController {
     
     var receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly: [String] = []
     
-    // The below wil be passed later on to the previous viewController later on using the Protocol in order to re-divert the user to the exact position insisde the tableView he was one before getting diverted to this viewController:
-    
-    var receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController: Int = 0
-    
-    var receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController: Int = 0
-    
-    // MARK: - Selected Steel Section properties passed from previous viewController (i.e. SteelSectionsTableViewController), the below start at 0 and later on get their values from the previous View Controller:
-    
-    // The below data are related to open steel sections with an I-section profile geometry:
+    // Variables to be displayed for all steel sections, these will get their values later on inside this VC:
     
     var userSelectedSteelSectionFullSectionDesignationReceivedFromPreviousViewController: String = ""
     
+    // Variables to be displayed for Open Rolled UB Steel Sections:
+       
+    var userSelectedSteelSectionMassPerMetreReceivedFromPreviousViewController: Double = 0
+
     var userSelectedSteelSectionDepthReceivedFromPreviousViewController: CGFloat = 0
     
     var userSelectedSteelSectionWidthReceivedFromPreviousViewController: CGFloat = 0
-    
-    var userSelectedSteelSectionWebThicknessReceivedFromPreviousViewController: CGFloat = 0
-    
-    var userSelectedSteelSectionFlangeThicknessReceivedFromPreviousViewController: CGFloat = 0
-    
-    var userSelectedSteelSectionRootRadiusReceivedFromPreviousViewController: CGFloat = 0
-    
-    var userSelectedSteelSectionDepthBetweenFilletsReceivedFromPreviousViewController: Double = 0
-    
-    var userSelectedSteelSectionAreaReceivedFromPreviousViewController: Double = 0
 
-    var userSelectedSteelSectionMassPerMetreReceivedFromPreviousViewController: Double = 0
+    var userSelectedSteelSectionWebThicknessReceivedFromPreviousViewController: CGFloat = 0
+
+    var userSelectedSteelSectionFlangeThicknessReceivedFromPreviousViewController: CGFloat = 0
+
+    var userSelectedSteelSectionRootRadiusReceivedFromPreviousViewController: CGFloat = 0
+
+    var userSelectedSteelSectionDepthBetweenFilletsReceivedFromPreviousViewController: Double = 0
+
+    var userSelectedSteelSectionRatioForWebLocalBucklingReceivedFromPreviousViewController: Double = 0
+
+    var userSelectedSteelSectionRatioForFlangeLocalBucklingReceivedFromPreviousViewController: Double = 0
     
     var userSelectedSteelSectionEndClearanceDetailingDimensionReceivedFromPreviousViewController: Int = 0
-    
+
     var userSelectedSteelSectionNotchNdetailingDimensionReceivedFromPreviousViewController: Int = 0
 
     var userSelectedSteelSectionNotchnDetailingDimensionReceivedFromPreviousViewController: Int = 0
 
+    var userSelectedSteelSectionSurfaceAreaPerMetreReceivedFromPreviousViewController: Double = 0
+
+    var userSelectedSteelSectionSurfaceAreaPerTonneReceivedFromPreviousViewController: Double = 0
+    
     var userSelectedSteelSectionSecondMomentOfAreaAboutMajorAxisReceivedFromPreviousViewController: Double = 0
 
     var userSelectedSteelSectionSecondMomentOfAreaAboutMinorAxisReceivedFromPreviousViewController: Double = 0
-
+    
     var userSelectedSteelSectionRadiusOfGyrationAboutMajorAxisReceivedFromPreviousViewController: Double = 0
 
     var userSelectedSteelSectionRadiusOfGyrationAboutMinorAxisReceivedFromPreviousViewController: Double = 0
@@ -83,11 +89,11 @@ class SelectedSteelSectionSummaryPage: UIViewController {
     var userSelectedSteelSectionElasticModulusAboutMajorAxisReceivedFromPreviousViewController: Double = 0
     
     var userSelectedSteelSectionElasticModulusAboutMinorAxisReceivedFromPreviousViewController: Double = 0
-
+    
     var userSelectedSteelSectionPlasticModulusAboutMajorAxisReceivedFromPreviousViewController: Double = 0
     
     var userSelectedSteelSectionPlasticModulusAboutMinorAxisReceivedFromPreviousViewController: Double = 0
-
+    
     var userSelectedSteelSectionBucklingParameterReceivedFromPreviousViewController: Double = 0
 
     var userSelectedSteelSectionTorsionalIndexReceivedFromPreviousViewController: Double = 0
@@ -96,13 +102,7 @@ class SelectedSteelSectionSummaryPage: UIViewController {
 
     var userSelectedSteelSectionTorsionalConstantReceivedFromPreviousViewController: Double = 0
 
-    var userSelectedSteelSectionSurfaceAreaPerMetreReceivedFromPreviousViewController: Double = 0
-
-    var userSelectedSteelSectionSurfaceAreaPerTonneReceivedFromPreviousViewController: Double = 0
-
-    var userSelectedSteelSectionRatioForWebLocalBucklingReceivedFromPreviousViewController: Double = 0
-
-    var userSelectedSteelSectionRatioForFlangeLocalBucklingReceivedFromPreviousViewController: Double = 0
+    var userSelectedSteelSectionAreaReceivedFromPreviousViewController: Double = 0
 
     // MARK: - navigationBar instance declaration:
     
@@ -166,7 +166,7 @@ class SelectedSteelSectionSummaryPage: UIViewController {
         
         let view = UIView()
         
-        view.backgroundColor = UIColor(named: "Background Colour for Section Profile Drawing Area")
+        view.backgroundColor = UIColor(named: "SelectedSteelSectionSummaryPageVC - Background Colour for Section Profile Drawing Area")
         
         view.translatesAutoresizingMaskIntoConstraints = false
         
@@ -176,203 +176,203 @@ class SelectedSteelSectionSummaryPage: UIViewController {
     
     // MARK: - Declaration of UILabels to be displayed inside the steel section drawing area. These labels will be used to display information such as section's dimensions as well as major and minor axes labels):
     
-    lazy var selectedSectionDimensionDepthLabel: UILabel = {
-
-        var label = UILabel()
-
-        label.translatesAutoresizingMaskIntoConstraints = false
-
-        label.numberOfLines = 0
-
-        label.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2)
-
-        let labelString: String = "h = \(self.userSelectedSteelSectionDepthReceivedFromPreviousViewController) mm"
-
-        let labelAttributedString: NSMutableAttributedString = NSMutableAttributedString(string: labelString)
-        
-        labelAttributedString.addAttributes(steelSectionProfileDimensionAnnotationLabelsStringsAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: labelString.count))
-        
-        labelAttributedString.addAttributes(steelSectionProfileDimensionLabelsAbbreviationLettersAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: 1))
-
-        label.attributedText = labelAttributedString
-
-        return label
-
-    }()
-
-    lazy var selectedSectionDimensionWidthLabel: UILabel = {
-
-        var label = UILabel()
-
-        label.translatesAutoresizingMaskIntoConstraints = false
-
-        label.numberOfLines = 0
-
-        let labelString: String = "b = \(self.userSelectedSteelSectionWidthReceivedFromPreviousViewController) mm"
-
-        let labelAttributedString: NSMutableAttributedString = NSMutableAttributedString(string: labelString)
-        
-        labelAttributedString.addAttributes(steelSectionProfileDimensionAnnotationLabelsStringsAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: labelString.count))
-        
-        labelAttributedString.addAttributes(steelSectionProfileDimensionLabelsAbbreviationLettersAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: 1))
-
-        label.attributedText = labelAttributedString
-
-        return label
-
-    }()
-
-    lazy var selectedSectionDimensionThicknessOfWebLabel: UILabel = {
-
-        var label = UILabel()
-
-        label.translatesAutoresizingMaskIntoConstraints = false
-
-        label.numberOfLines = 0
-
-        let labelString: String = "tw = \(self.userSelectedSteelSectionWebThicknessReceivedFromPreviousViewController) mm"
-
-        let labelAttributedString: NSMutableAttributedString = NSMutableAttributedString(string: labelString)
-        
-        labelAttributedString.addAttributes(steelSectionProfileDimensionAnnotationLabelsStringsAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: labelString.count))
-        
-        labelAttributedString.addAttributes(steelSectionProfileDimensionLabelsAbbreviationLettersAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: 2))
-
-        labelAttributedString.addAttributes(steelSectionProfileDimensionLabelsSubAbbreviationLettersAttributesInsideTheProfileDrawingArea, range: NSRange(location: 1, length: 1))
-
-        label.attributedText = labelAttributedString
-
-        return label
-
-    }()
-
-    lazy var selectedSectionDimensionThicknessOfFlangeLabel: UILabel = {
-
-        var label = UILabel()
-
-        label.translatesAutoresizingMaskIntoConstraints = false
-
-        label.numberOfLines = 0
-
-        let labelString: String = "tf = \(self.userSelectedSteelSectionFlangeThicknessReceivedFromPreviousViewController) mm"
-
-        let labelAttributedString: NSMutableAttributedString = NSMutableAttributedString(string: labelString)
-        
-        labelAttributedString.addAttributes(steelSectionProfileDimensionAnnotationLabelsStringsAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: labelString.count))
-        
-        labelAttributedString.addAttributes(steelSectionProfileDimensionLabelsAbbreviationLettersAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: 2))
-
-        labelAttributedString.addAttributes(steelSectionProfileDimensionLabelsSubAbbreviationLettersAttributesInsideTheProfileDrawingArea, range: NSRange(location: 1, length: 1))
-
-        label.attributedText = labelAttributedString
-
-        return label
-
-    }()
-    
-    lazy var selectedSectionDimensionRootRadiusLabel: UILabel = {
-
-        var label = UILabel()
-
-        label.translatesAutoresizingMaskIntoConstraints = false
-
-        label.numberOfLines = 0
-
-        label.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
-
-        let labelString: String = "r = \(self.userSelectedSteelSectionRootRadiusReceivedFromPreviousViewController) mm"
-
-        let labelAttributedString: NSMutableAttributedString = NSMutableAttributedString(string: labelString)
-        
-        labelAttributedString.addAttributes(steelSectionProfileDimensionAnnotationLabelsStringsAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: labelString.count))
-        
-        labelAttributedString.addAttributes(steelSectionProfileDimensionLabelsAbbreviationLettersAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: 1))
-
-        label.attributedText = labelAttributedString
-
-        return label
-
-    }()
-
-    lazy var steelSectionMinorAxisBottomAnnotationLabel: UILabel = {
-
-        var label = UILabel()
-
-        label.translatesAutoresizingMaskIntoConstraints = false
-
-        label.numberOfLines = 0
-
-        let labelString: String = "z"
-
-        let labelAttributedString: NSMutableAttributedString = NSMutableAttributedString(string: labelString)
-        
-    labelAttributedString.addAttributes(steelSectionProfileMajorAndMinorAxisLabelFontAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: 1))
-
-        label.attributedText = labelAttributedString
-
-        return label
-
-    }()
-
-    lazy var steelSectionMinorAxisTopAnnotationLabel: UILabel = {
-
-        var label = UILabel()
-
-        label.translatesAutoresizingMaskIntoConstraints = false
-
-        label.numberOfLines = 0
-
-        let labelString: String = "z"
-
-        let labelAttributedString: NSMutableAttributedString = NSMutableAttributedString(string: labelString)
-        
-        labelAttributedString.addAttributes(steelSectionProfileMajorAndMinorAxisLabelFontAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: 1))
-
-        label.attributedText = labelAttributedString
-
-        return label
-
-    }()
-
-    lazy var steelSectionMajorAxisLeftAnnotationLabel: UILabel = {
-
-        var label = UILabel()
-
-        label.translatesAutoresizingMaskIntoConstraints = false
-
-        label.numberOfLines = 0
-
-        let labelString: String = "y"
-
-        let labelAttributedString: NSMutableAttributedString = NSMutableAttributedString(string: labelString)
-        
-        labelAttributedString.addAttributes(steelSectionProfileMajorAndMinorAxisLabelFontAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: 1))
-
-        label.attributedText = labelAttributedString
-
-        return label
-
-    }()
-
-    lazy var steelSectionMajorAxisRightAnnotationLabel: UILabel = {
-
-        var label = UILabel()
-
-        label.translatesAutoresizingMaskIntoConstraints = false
-
-        label.numberOfLines = 0
-
-        let labelString: String = "y"
-
-        let labelAttributedString: NSMutableAttributedString = NSMutableAttributedString(string: labelString)
-        
-        labelAttributedString.addAttributes(steelSectionProfileMajorAndMinorAxisLabelFontAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: 1))
-
-        label.attributedText = labelAttributedString
-
-        return label
-
-    }()
+//    lazy var selectedSectionDimensionDepthLabel: UILabel = {
+//
+//        var label = UILabel()
+//
+//        label.translatesAutoresizingMaskIntoConstraints = false
+//
+//        label.numberOfLines = 0
+//
+//        label.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2)
+//
+//        let labelString: String = "h = \(self.userSelectedSteelSectionDepthReceivedFromPreviousViewController) mm"
+//
+//        let labelAttributedString: NSMutableAttributedString = NSMutableAttributedString(string: labelString)
+//
+//        labelAttributedString.addAttributes(steelSectionProfileDimensionAnnotationLabelsStringsAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: labelString.count))
+//
+//        labelAttributedString.addAttributes(steelSectionProfileDimensionLabelsAbbreviationLettersAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: 1))
+//
+//        label.attributedText = labelAttributedString
+//
+//        return label
+//
+//    }()
+//
+//    lazy var selectedSectionDimensionWidthLabel: UILabel = {
+//
+//        var label = UILabel()
+//
+//        label.translatesAutoresizingMaskIntoConstraints = false
+//
+//        label.numberOfLines = 0
+//
+//        let labelString: String = "b = \(self.userSelectedSteelSectionWidthReceivedFromPreviousViewController) mm"
+//
+//        let labelAttributedString: NSMutableAttributedString = NSMutableAttributedString(string: labelString)
+//
+//        labelAttributedString.addAttributes(steelSectionProfileDimensionAnnotationLabelsStringsAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: labelString.count))
+//
+//        labelAttributedString.addAttributes(steelSectionProfileDimensionLabelsAbbreviationLettersAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: 1))
+//
+//        label.attributedText = labelAttributedString
+//
+//        return label
+//
+//    }()
+//
+//    lazy var selectedSectionDimensionThicknessOfWebLabel: UILabel = {
+//
+//        var label = UILabel()
+//
+//        label.translatesAutoresizingMaskIntoConstraints = false
+//
+//        label.numberOfLines = 0
+//
+//        let labelString: String = "tw = \(self.userSelectedSteelSectionWebThicknessReceivedFromPreviousViewController) mm"
+//
+//        let labelAttributedString: NSMutableAttributedString = NSMutableAttributedString(string: labelString)
+//
+//        labelAttributedString.addAttributes(steelSectionProfileDimensionAnnotationLabelsStringsAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: labelString.count))
+//
+//        labelAttributedString.addAttributes(steelSectionProfileDimensionLabelsAbbreviationLettersAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: 2))
+//
+//        labelAttributedString.addAttributes(steelSectionProfileDimensionLabelsSubAbbreviationLettersAttributesInsideTheProfileDrawingArea, range: NSRange(location: 1, length: 1))
+//
+//        label.attributedText = labelAttributedString
+//
+//        return label
+//
+//    }()
+//
+//    lazy var selectedSectionDimensionThicknessOfFlangeLabel: UILabel = {
+//
+//        var label = UILabel()
+//
+//        label.translatesAutoresizingMaskIntoConstraints = false
+//
+//        label.numberOfLines = 0
+//
+//        let labelString: String = "tf = \(self.userSelectedSteelSectionFlangeThicknessReceivedFromPreviousViewController) mm"
+//
+//        let labelAttributedString: NSMutableAttributedString = NSMutableAttributedString(string: labelString)
+//
+//        labelAttributedString.addAttributes(steelSectionProfileDimensionAnnotationLabelsStringsAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: labelString.count))
+//
+//        labelAttributedString.addAttributes(steelSectionProfileDimensionLabelsAbbreviationLettersAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: 2))
+//
+//        labelAttributedString.addAttributes(steelSectionProfileDimensionLabelsSubAbbreviationLettersAttributesInsideTheProfileDrawingArea, range: NSRange(location: 1, length: 1))
+//
+//        label.attributedText = labelAttributedString
+//
+//        return label
+//
+//    }()
+//
+//    lazy var selectedSectionDimensionRootRadiusLabel: UILabel = {
+//
+//        var label = UILabel()
+//
+//        label.translatesAutoresizingMaskIntoConstraints = false
+//
+//        label.numberOfLines = 0
+//
+//        label.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
+//
+//        let labelString: String = "r = \(self.userSelectedSteelSectionRootRadiusReceivedFromPreviousViewController) mm"
+//
+//        let labelAttributedString: NSMutableAttributedString = NSMutableAttributedString(string: labelString)
+//
+//        labelAttributedString.addAttributes(steelSectionProfileDimensionAnnotationLabelsStringsAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: labelString.count))
+//
+//        labelAttributedString.addAttributes(steelSectionProfileDimensionLabelsAbbreviationLettersAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: 1))
+//
+//        label.attributedText = labelAttributedString
+//
+//        return label
+//
+//    }()
+//
+//    lazy var steelSectionMinorAxisBottomAnnotationLabel: UILabel = {
+//
+//        var label = UILabel()
+//
+//        label.translatesAutoresizingMaskIntoConstraints = false
+//
+//        label.numberOfLines = 0
+//
+//        let labelString: String = "z"
+//
+//        let labelAttributedString: NSMutableAttributedString = NSMutableAttributedString(string: labelString)
+//
+//    labelAttributedString.addAttributes(steelSectionProfileMajorAndMinorAxisLabelFontAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: 1))
+//
+//        label.attributedText = labelAttributedString
+//
+//        return label
+//
+//    }()
+//
+//    lazy var steelSectionMinorAxisTopAnnotationLabel: UILabel = {
+//
+//        var label = UILabel()
+//
+//        label.translatesAutoresizingMaskIntoConstraints = false
+//
+//        label.numberOfLines = 0
+//
+//        let labelString: String = "z"
+//
+//        let labelAttributedString: NSMutableAttributedString = NSMutableAttributedString(string: labelString)
+//
+//        labelAttributedString.addAttributes(steelSectionProfileMajorAndMinorAxisLabelFontAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: 1))
+//
+//        label.attributedText = labelAttributedString
+//
+//        return label
+//
+//    }()
+//
+//    lazy var steelSectionMajorAxisLeftAnnotationLabel: UILabel = {
+//
+//        var label = UILabel()
+//
+//        label.translatesAutoresizingMaskIntoConstraints = false
+//
+//        label.numberOfLines = 0
+//
+//        let labelString: String = "y"
+//
+//        let labelAttributedString: NSMutableAttributedString = NSMutableAttributedString(string: labelString)
+//
+//        labelAttributedString.addAttributes(steelSectionProfileMajorAndMinorAxisLabelFontAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: 1))
+//
+//        label.attributedText = labelAttributedString
+//
+//        return label
+//
+//    }()
+//
+//    lazy var steelSectionMajorAxisRightAnnotationLabel: UILabel = {
+//
+//        var label = UILabel()
+//
+//        label.translatesAutoresizingMaskIntoConstraints = false
+//
+//        label.numberOfLines = 0
+//
+//        let labelString: String = "y"
+//
+//        let labelAttributedString: NSMutableAttributedString = NSMutableAttributedString(string: labelString)
+//
+//        labelAttributedString.addAttributes(steelSectionProfileMajorAndMinorAxisLabelFontAttributesInsideTheProfileDrawingArea, range: NSRange(location: 0, length: 1))
+//
+//        label.attributedText = labelAttributedString
+//
+//        return label
+//
+//    }()
 
     // MARK: - CoreAnimation layers used to draw paths inside the Section Profile Drawing Area:
     
@@ -396,15 +396,15 @@ class SelectedSteelSectionSummaryPage: UIViewController {
         
     // MARK: - BezierPaths stroke colours and line widths inside the Section Profile Drawing Area:
     
-    let steelSectionProfilePathStrokeColour: String = "Section Profile Stroke Colour"
+    let steelSectionProfilePathStrokeColour: String = "SelectedSteelSectionSummaryPageVC - Drawing Area Section Profile Stroke Colour"
     
     let steelSectionShapeLayerPathLineWidth: CGFloat = 1.50
     
-    let steelSectionProfileDimensionalAnnotationLinesPathsStrokeColour: String = "Section Profile Dimensional Annotation Lines Paths Stroke Colour"
+    let steelSectionProfileDimensionalAnnotationLinesPathsStrokeColour: String = "SelectedSteelSectionSummaryPageVC - Drawing Area Section Profile Dimensional Annotation Lines Paths Stroke Colour"
     
     let steelSectionProfileDimensionalAnnotationLinesPathsLineWidths: CGFloat = 1.0
     
-    let steelSectionMinorAndMajorAxisLinesStrokePathColour: String = "Text Font Colour for Table Title and Table Columns Titles Inside the Section Dimensional & Structural Properties Scroll View"
+    let steelSectionMinorAndMajorAxisLinesStrokePathColour: String = "SelectedSteelSectionSummaryPageVC - Drawing Area and Scroll Area Major And Minor Axes Colours"
     
     let steelSectionMinorAndMajorAxisLinesStrokePathLineWidth: CGFloat = 0.80
         
@@ -462,7 +462,7 @@ class SelectedSteelSectionSummaryPage: UIViewController {
             
     // MARK: - Font colour, type, size and strings attributes used for labels inside the Section Dimensions and Structural Properties Scroll View:
     
-    let mainTitlesTextFontColourInsideSectionDimensionalAndStructuralPropertiesScrollView = UIColor(named: "Text Font Colour for Main Titles Inside the Section Dimensional & Structural Properties Scroll View")
+    let mainTitlesTextFontColourInsideSectionDimensionalAndStructuralPropertiesScrollView = UIColor(named: "SelectedSteelSectionSummaryPageVC - Scroll Area Main Titles Labels Text Font Colours")
     
     let mainTitlesTextFontTypeAndSizeInsideSectionDimensionalAndStructuralPropertiesScrollView = UIFont(name: "AppleSDGothicNeo-Bold", size: 18)
     
@@ -478,7 +478,7 @@ class SelectedSteelSectionSummaryPage: UIViewController {
     
     // The below are needed to define the whole general text attributes for the UILabels underneath the main title inside the UIScrollView:
     
-    let subLabelsInsideSectionDimensionalAndStructuralPropertiesScrollViewTextFontColour = UIColor(named: "Text Font Colour for Sub Labels Inside the Section Dimensional & Structural Properties Scroll View")
+    let subLabelsInsideSectionDimensionalAndStructuralPropertiesScrollViewTextFontColour = UIColor(named: "SelectedSteelSectionSummaryPageVC - Scroll Area Sub Titles Labels Text Font Colours")
     
     let subLabelsInsideSectionDimensionalAndStructuralPropertiesScrollViewTextFontTypeAndSize = UIFont(name: "AppleSDGothicNeo-Light", size: 14)
     
@@ -492,7 +492,7 @@ class SelectedSteelSectionSummaryPage: UIViewController {
     
     // The below are needed to define the text attributes for the abbreviation letters (i.e. the ones in bold and of different colour) used inside of the sub-labels underneath the main title inside the UIScrollView:
     
-    let subLabelsInsideSectionDimensionalAndStructuralPropertiesScrollViewAbbreviationLettersFontColour = UIColor(named: "Text Font Colour for Sub Labels Abbreviation Letters Inside the Section Dimensional & Structural Properties Scroll View")
+    let subLabelsInsideSectionDimensionalAndStructuralPropertiesScrollViewAbbreviationLettersFontColour = UIColor(named: "SelectedSteelSectionSummaryPageVS - Scroll Area Sub Titles Labels Abbreviation Letters Text Font Colours")
     
     let subLabelsAbbrivationLettersInsideSectionDimensionalAndStructuralPropertiesScrollViewFontTypeAndSize = UIFont(name: "AppleSDGothicNeo-SemiBold", size: 15)
     
@@ -526,7 +526,7 @@ class SelectedSteelSectionSummaryPage: UIViewController {
     
     // The below are needed to define the text attributes for the table titles to be used to illustrate selected steel section major and minor values to be used inside the UIScrollView:
     
-    let tableTitleAndTableColumnsTitlesFontColourUnderneathSectionStructuralPropertiesMainTitleInsideSectionDimensionsAndStructuralPropertiesScrollView = UIColor(named: "Text Font Colour for Table Title and Table Columns Titles Inside the Section Dimensional & Structural Properties Scroll View")
+    let tableTitleAndTableColumnsTitlesFontColourUnderneathSectionStructuralPropertiesMainTitleInsideSectionDimensionsAndStructuralPropertiesScrollView = UIColor(named: "SelectedSteelSectionSummaryPageVC - Drawing Area and Scroll Area Major And Minor Axes Colours")
     
     let tableTitleAndTableColumnsTitlesFontTypeAndSizeUnderneathSectionStructuralPropertiesMainTitleInsideSectionDimensionsAndStructuralPropertiesScrollView = UIFont(name: "AppleSDGothicNeo-Medium", size: 16)
     
@@ -554,7 +554,7 @@ class SelectedSteelSectionSummaryPage: UIViewController {
     
     // MARK: - BezierPaths stroke colours and line widths inside the Section Dimensional & Structural Properties Scroll View:
        
-       let verticalAndHorizontalSeparationLinesColourInsideSectionDimensionalAndPropertiesScrollView: String = "Vertical and Horizontal Separation Lines inside the Section Dimensional & Structural Properties Scroll View"
+       let verticalAndHorizontalSeparationLinesColourInsideSectionDimensionalAndPropertiesScrollView: String = "SelectedSteelSectionSummaryPageVC - Scroll Area Vertical and Horizontal Separation Lines For Major and Minor Axes Properties Table"
        
        let verticalAndHorizontalSeparationLinesWidthsInsideSectionDimensionalAndPropertiesScrollView: CGFloat = 1
         
@@ -600,7 +600,7 @@ class SelectedSteelSectionSummaryPage: UIViewController {
         
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         
-        scrollView.backgroundColor = UIColor(named: "Background Colour for Section Dimensional & Structural Properties Scroll View")
+        scrollView.backgroundColor = UIColor(named: "SelectedSteelSectionSummaryPageVC - Drawing and Scroll Area Background Colour")
         
         return scrollView
         
