@@ -12,7 +12,7 @@ import UIKit
 
 extension UIView {
     
-    func pin(fixedToSuperViewTopAnchor: Bool, fixedToSuperViewRightAnchor: Bool, fixedToSuperViewBottomAnchor: Bool, fixedToSuperViewLeftAnchor: Bool, superViewTopAnchor: NSLayoutYAxisAnchor, superViewRightAnchor: NSLayoutXAxisAnchor, superViewBottomAnchor: NSLayoutYAxisAnchor, superViewLeftAnchor: NSLayoutXAxisAnchor, topAnchorConstant: CGFloat, rightAnchorConstant: CGFloat, bottomAnchorConstant: CGFloat, leftAnchorConstant: CGFloat) {
+    func pin(fixedToSuperViewTopAnchor: Bool, fixedToSuperViewRightAnchor: Bool, fixedToSuperViewBottomAnchor: Bool, fixedToSuperViewLeftAnchor: Bool, superViewTopAnchor: NSLayoutYAxisAnchor, superViewRightAnchor: NSLayoutXAxisAnchor, superViewBottomAnchor: NSLayoutYAxisAnchor, superViewLeftAnchor: NSLayoutXAxisAnchor, topAnchorConstant: CGFloat, rightAnchorConstant: CGFloat, bottomAnchorConstant: CGFloat, leftAnchorConstant: CGFloat, heightAnchorAssigned: Bool, heightAnchorConstant: CGFloat) {
         
         translatesAutoresizingMaskIntoConstraints = false
         
@@ -37,6 +37,12 @@ extension UIView {
         if fixedToSuperViewLeftAnchor == true {
             
             leftAnchor.constraint(equalTo: superViewLeftAnchor, constant: leftAnchorConstant).isActive = true
+            
+        }
+        
+        if heightAnchorAssigned == true {
+            
+            heightAnchor.constraint(equalToConstant: heightAnchorConstant).isActive = true
             
         }
             
