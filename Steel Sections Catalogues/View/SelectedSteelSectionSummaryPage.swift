@@ -30,7 +30,7 @@ class SelectedSteelSectionSummaryPage: UIViewController {
     
     // The below variable value will be passed from OpenRolledSteelSectionsCollectionVC which will be passed to SteelSectionsTableVC then passed onto this VC:
     
-    var userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController: Int = 0
+    var userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController: Int = 6
     
     // The below will be passed later on to the previous viewController later on using the Protocol in order to re-divert the user to the exact position inside the tableView he was on before getting diverted to this viewController:
     
@@ -378,29 +378,35 @@ class SelectedSteelSectionSummaryPage: UIViewController {
 
     // MARK: - CoreAnimation layers used to draw paths inside the Section Profile Drawing Area:
     
-    let steelSectionShapeLayer = CAShapeLayer()
+    let steelCrossSectionWithAnIorTProfileShapeLayer = CAShapeLayer()
     
-    let depthOfSectionAnnotationShapeLayer = CAShapeLayer()
+    let drawnSteelCrossSectionUIBezierPathStrokeColourString = "SelectedSteelSectionSummaryPageVC - Drawing Area Section Profile Stroke Colour"
     
-    let widthOfSectionAnnotationShapeLayer = CAShapeLayer()
+    let drawnSteelCrossSectionUIBezierPathLineWidthWeight: CGFloat = 1.5
     
-    let sectionWebThicknessAnnotationShapeLayer = CAShapeLayer()
+//    let steelSectionShapeLayer = CAShapeLayer()
     
-    let sectionFlangeThicknessAnnotationShapeLayer = CAShapeLayer()
-    
-    let sectionRootRadiusAnnotationShapeLayer = CAShapeLayer()
-    
-    let dimensioningAnnotationDashedLinesShapeLayer = CAShapeLayer()
-    
-    let steelSectionMinorAndMajorAxisLinesShapeLayer = CAShapeLayer()
-    
-    let rootRadiusDimensioningAnnotationLineShapeLayer = CAShapeLayer()
+//    let depthOfSectionAnnotationShapeLayer = CAShapeLayer()
+//
+//    let widthOfSectionAnnotationShapeLayer = CAShapeLayer()
+//
+//    let sectionWebThicknessAnnotationShapeLayer = CAShapeLayer()
+//
+//    let sectionFlangeThicknessAnnotationShapeLayer = CAShapeLayer()
+//
+//    let sectionRootRadiusAnnotationShapeLayer = CAShapeLayer()
+//
+//    let dimensioningAnnotationDashedLinesShapeLayer = CAShapeLayer()
+//
+//    let steelSectionMinorAndMajorAxisLinesShapeLayer = CAShapeLayer()
+//
+//    let rootRadiusDimensioningAnnotationLineShapeLayer = CAShapeLayer()
         
     // MARK: - BezierPaths stroke colours and line widths inside the Section Profile Drawing Area:
     
-    let steelSectionProfilePathStrokeColour: String = "SelectedSteelSectionSummaryPageVC - Drawing Area Section Profile Stroke Colour"
+//    let steelSectionProfilePathStrokeColour: String = "SelectedSteelSectionSummaryPageVC - Drawing Area Section Profile Stroke Colour"
     
-    let steelSectionShapeLayerPathLineWidth: CGFloat = 1.50
+//    let steelSectionShapeLayerPathLineWidth: CGFloat = 1.50
     
     let steelSectionProfileDimensionalAnnotationLinesPathsStrokeColour: String = "SelectedSteelSectionSummaryPageVC - Drawing Area Section Profile Dimensional Annotation Lines Paths Stroke Colour"
     
@@ -1450,7 +1456,7 @@ class SelectedSteelSectionSummaryPage: UIViewController {
         rightGestureRecognizer.direction = .right
 
         view.addGestureRecognizer(rightGestureRecognizer)
-
+        
         // MARK: - Adding SubViews to the main View Controller:
 
         view.addSubview(navigationBar)
@@ -1458,26 +1464,28 @@ class SelectedSteelSectionSummaryPage: UIViewController {
         view.addSubview(steelSectionDrawingView)
 
         view.addSubview(sectionDimensionsAndPropertiesScrollView)
+        
+        view.layer.addSublayer(steelCrossSectionWithAnIorTProfileShapeLayer)
 
         // MARK: - Adding SubViews to universalBeamDrawingView:
 
-        steelSectionDrawingView.layer.addSublayer(steelSectionShapeLayer)
-
-        steelSectionDrawingView.layer.addSublayer(depthOfSectionAnnotationShapeLayer)
-
-        steelSectionDrawingView.layer.addSublayer(widthOfSectionAnnotationShapeLayer)
-        
-        steelSectionDrawingView.layer.addSublayer(dimensioningAnnotationDashedLinesShapeLayer)
-        
-        steelSectionDrawingView.layer.addSublayer(sectionWebThicknessAnnotationShapeLayer)
-        
-        steelSectionDrawingView.layer.addSublayer(sectionFlangeThicknessAnnotationShapeLayer)
-        
-        steelSectionDrawingView.layer.addSublayer(sectionRootRadiusAnnotationShapeLayer)
-        
-        steelSectionDrawingView.layer.addSublayer(steelSectionMinorAndMajorAxisLinesShapeLayer)
-        
-        steelSectionDrawingView.layer.addSublayer(rootRadiusDimensioningAnnotationLineShapeLayer)
+//        steelSectionDrawingView.layer.addSublayer(steelSectionShapeLayer)
+//
+//        steelSectionDrawingView.layer.addSublayer(depthOfSectionAnnotationShapeLayer)
+//
+//        steelSectionDrawingView.layer.addSublayer(widthOfSectionAnnotationShapeLayer)
+//
+//        steelSectionDrawingView.layer.addSublayer(dimensioningAnnotationDashedLinesShapeLayer)
+//
+//        steelSectionDrawingView.layer.addSublayer(sectionWebThicknessAnnotationShapeLayer)
+//
+//        steelSectionDrawingView.layer.addSublayer(sectionFlangeThicknessAnnotationShapeLayer)
+//
+//        steelSectionDrawingView.layer.addSublayer(sectionRootRadiusAnnotationShapeLayer)
+//
+//        steelSectionDrawingView.layer.addSublayer(steelSectionMinorAndMajorAxisLinesShapeLayer)
+//
+//        steelSectionDrawingView.layer.addSublayer(rootRadiusDimensioningAnnotationLineShapeLayer)
         
         steelSectionDrawingView.addSubview(drawingAreaDepthOfSectionLabel)
 //
@@ -1645,6 +1653,26 @@ class SelectedSteelSectionSummaryPage: UIViewController {
         // MARK: - Assigning needed constraints:
         
         setupConstraints()
+        
+        drawAnIorTSectionSteelProfile(drawingAreaMargins: 10, widthOfSteelSection: 133.20, totalHeightOfSteelSection: 101.50, centreOfGravityInYDirectionFromTopOfSectionForTProfiles: 21.0, flangeThicknessOfSteelSection: 7.8, webThicknessOfSteelSection: 5.7, rootRadiusOfSteelSection: 7.6, drawingAreaUIView: steelSectionDrawingView)
+
+        print("Drawing area width is equal to \(steelSectionDrawingView.layer.frame.width)")
+        
+        print("Drawing area height is equal to \(steelSectionDrawingView.layer.frame.height)")
+        
+        let sectionWidth: Double = 314
+        
+        let sectionHeight: Double = 1056
+        
+        print("Width scale is equal to \(steelSectionDrawingView.layer.frame.width / CGFloat(sectionWidth))")
+        
+        print("Height scale is equal to \(steelSectionDrawingView.layer.frame.height / CGFloat(sectionHeight))")
+        
+        print(steelSectionDrawingView.layer.frame.origin)
+        
+        print("Drawing area origin relative to iPhoneScreenIs x: \(steelSectionDrawingView.layer.frame.origin.x + 414) y: \(steelSectionDrawingView.layer.frame.origin.y + 414)")
+        
+        
 
 //        setupSubViewsConstraints()
 
@@ -1682,9 +1710,17 @@ class SelectedSteelSectionSummaryPage: UIViewController {
     
     func drawAnIorTSectionSteelProfile(drawingAreaMargins: CGFloat, widthOfSteelSection: Double, totalHeightOfSteelSection: Double, centreOfGravityInYDirectionFromTopOfSectionForTProfiles: Double, flangeThicknessOfSteelSection: Double, webThicknessOfSteelSection: Double, rootRadiusOfSteelSection: Double, drawingAreaUIView: UIView) {
         
-    // Declaring drawing margins:
+    // Below are the multiple UIBezierPaths that will be used to draw different quarters of an I-profile section, these will all be added together in order to draw the final combined shape inside of the previously defined core animation shape layer, that is steelCrossSectionWithAnIorTProfileShapeLayer:
         
-        let allDrawingMargins: CGFloat = drawingAreaMargins
+        let combinedIAndTSteelCrossSectionUIBezierPaths = UIBezierPath()
+        
+        let topRightQuarterBezierPathForAnISteelCrossSectionOrRightHandSideHalfBezierPathForTSteelCrossSection = UIBezierPath()
+        
+        let iSteelCrossSectionTopLeftQuarterBezierPath = UIBezierPath()
+        
+        let tSteelCrossSectionReflectedLeftHandSideUIBezierPath = UIBezierPath()
+        
+        let iSteelCrossSectionBottomRightAndLeftQuartersBezierPaths = UIBezierPath()
         
     // Defining drawing scale:
         
@@ -1692,9 +1728,9 @@ class SelectedSteelSectionSummaryPage: UIViewController {
                 
     // Drawing area centre point coordinates:
         
-        let drawingAreaCentrePointCoordinates: (x: CGFloat, y: CGFloat) = (x: (drawingAreaUIView.layer.frame.width)/2, y: (drawingAreaUIView.layer.frame.height)/2)
+        let drawingAreaCentrePointCoordinatesRelativeToTheIPhoneScreen: (x: CGFloat, y: CGFloat) = (x: steelSectionDrawingView.layer.frame.origin.x + ((drawingAreaUIView.layer.frame.width)/2), y: steelSectionDrawingView.layer.frame.origin.y + ((drawingAreaUIView.layer.frame.height)/2))
         
-    // Step-01 Draw the right top quarter of the steel profile:
+    // Step-01 Tracing the needed UIBezierPath for the top right hand-side quarter of an I steel cross-section, and the entire right hand-side in the case of a T steel cross-section:
         
         // Point-01 coordinates, which is located at the mid length of the top horziontal line:
         
@@ -1704,7 +1740,7 @@ class SelectedSteelSectionSummaryPage: UIViewController {
         
         if userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 0 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 1 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 2 {
             
-            pointOneCoordinates = (x: drawingAreaCentrePointCoordinates.x, y: drawingAreaCentrePointCoordinates.y - ((CGFloat(totalHeightOfSteelSection) / 2) * drawingScale))
+            pointOneCoordinates = (x: drawingAreaCentrePointCoordinatesRelativeToTheIPhoneScreen.x, y: drawingAreaCentrePointCoordinatesRelativeToTheIPhoneScreen.y - ((CGFloat(totalHeightOfSteelSection) / 2) * drawingScale))
             
         }
             
@@ -1712,13 +1748,13 @@ class SelectedSteelSectionSummaryPage: UIViewController {
         
         else if userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 6 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 7 {
             
-            pointOneCoordinates = (x: drawingAreaCentrePointCoordinates.x, y: drawingAreaCentrePointCoordinates.y - (CGFloat(centreOfGravityInYDirectionFromTopOfSectionForTProfiles) * drawingScale))
+            pointOneCoordinates = (x: drawingAreaCentrePointCoordinatesRelativeToTheIPhoneScreen.x, y: drawingAreaCentrePointCoordinatesRelativeToTheIPhoneScreen.y - (CGFloat(centreOfGravityInYDirectionFromTopOfSectionForTProfiles) * drawingScale))
             
         }
         
         // Point-02 coordinates, which is located at the far right top corner of the section:
         
-        let pointTwoCoordinates: (x: CGFloat, y: CGFloat) = (x: drawingAreaCentrePointCoordinates.x + ((CGFloat(widthOfSteelSection) / 2) * drawingScale), y: pointOneCoordinates.y)
+        let pointTwoCoordinates: (x: CGFloat, y: CGFloat) = (x: pointOneCoordinates.x + ((CGFloat(widthOfSteelSection) / 2) * drawingScale), y: pointOneCoordinates.y)
         
         // Point-03 coordinates, which is located at the far right bottom corner of the section:
         
@@ -1728,17 +1764,121 @@ class SelectedSteelSectionSummaryPage: UIViewController {
         
         let pointFourCoordinates: (x: CGFloat, y: CGFloat) = (x: pointThreeCoordinates.x - (CGFloat(((widthOfSteelSection / 2) - (webThicknessOfSteelSection / 2) - rootRadiusOfSteelSection)) * drawingScale), y: pointThreeCoordinates.y)
         
-        // Point-05 coordinates, which is located at the right inner-side corner of the section at the end of the root radius curve:
+        // Point-05 coordinates, which is represents the centre of the arc used to represents the root radius curve:
         
-        let pointFiveCoordinates: (x: CGFloat, y: CGFloat) = (x: pointFourCoordinates.x - (CGFloat(rootRadiusOfSteelSection) * drawingScale), y: pointFourCoordinates.y + (CGFloat(rootRadiusOfSteelSection) * drawingScale))
+        let pointFiveCoordinates: (x: CGFloat, y: CGFloat) = (x: pointFourCoordinates.x, y: pointFourCoordinates.y + (CGFloat(rootRadiusOfSteelSection) * drawingScale))
         
         // Point-06 coordinates, which is located at the right side centre of gravity of the section in the Y-direction:
         
+        var pointSixCoordinates: (x: CGFloat, y: CGFloat) = (x: 0, y: 0)
+        
+        // If an I section is to be drawn then the below code will needs to be executed:
+        
+        if userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 0 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 1 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 2 {
+            
+            pointSixCoordinates = (x: pointFiveCoordinates.x - (CGFloat(rootRadiusOfSteelSection) * drawingScale), y: pointOneCoordinates.y + ((CGFloat(totalHeightOfSteelSection) / 2) * drawingScale))
+            
+        }
+        
+        // The below code will be executed if a T-section is to be drawn whether cut from a UB or UC profile:
+        
+        else if userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 6 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 7 {
+            
+            pointSixCoordinates = (x: pointFiveCoordinates.x - (CGFloat(rootRadiusOfSteelSection) * drawingScale), y: pointOneCoordinates.y + (CGFloat(centreOfGravityInYDirectionFromTopOfSectionForTProfiles) * drawingScale))
+            
+        }
+        
+        // Point-07 coordinates which is related only to a T steel cross-section and it is located at the bottom right hand-side corner of the cross-section:
+        
+        let pointSevenCoordinates: (x: CGFloat, y: CGFloat) = (x: pointSixCoordinates.x, y: pointSixCoordinates.y + (CGFloat(totalHeightOfSteelSection - centreOfGravityInYDirectionFromTopOfSectionForTProfiles) * drawingScale))
+        
+        // Point-08 coordinates which is related only to a T steel cross-section and it is located at the bottom mid of the cross-section (i.e. at the bottom centre of the web thickness of a T steel cross-section):
+        
+        let pointEightCoordinates: (x: CGFloat, y: CGFloat) = (x: pointSevenCoordinates.x - CGFloat(webThicknessOfSteelSection / 2) * drawingScale, y: pointSevenCoordinates.y)
+        
+    // Step-02 Defining the UIBezierPath for the right top  quarter of an I profile steel cross-section, and the entire right hand-side half for a T profile cross-section. Basically in this step we are conencting the points defined earlier on using lines and curves, we are tracing the path for the top right quarter in the case of an I section, and the entire right hand-side half in the case of a T cross-section of the steel section needed to be drawn:
+                
+        topRightQuarterBezierPathForAnISteelCrossSectionOrRightHandSideHalfBezierPathForTSteelCrossSection.move(to: CGPoint(x: pointOneCoordinates.x, y: pointOneCoordinates.y))
+        
+        topRightQuarterBezierPathForAnISteelCrossSectionOrRightHandSideHalfBezierPathForTSteelCrossSection.addLine(to: CGPoint(x: pointTwoCoordinates.x, y: pointTwoCoordinates.y))
+        
+        topRightQuarterBezierPathForAnISteelCrossSectionOrRightHandSideHalfBezierPathForTSteelCrossSection.addLine(to: CGPoint(x: pointThreeCoordinates.x, y: pointThreeCoordinates.y))
+        
+        topRightQuarterBezierPathForAnISteelCrossSectionOrRightHandSideHalfBezierPathForTSteelCrossSection.addLine(to: CGPoint(x: pointFourCoordinates.x, y: pointFourCoordinates.y))
+        
+        topRightQuarterBezierPathForAnISteelCrossSectionOrRightHandSideHalfBezierPathForTSteelCrossSection.addArc(withCenter: CGPoint(x: pointFiveCoordinates.x, y: pointFiveCoordinates.y), radius: -1 * (CGFloat(rootRadiusOfSteelSection) * drawingScale), startAngle: (CGFloat.pi) / 2, endAngle: 0, clockwise: false)
+        
+        topRightQuarterBezierPathForAnISteelCrossSectionOrRightHandSideHalfBezierPathForTSteelCrossSection.addLine(to: CGPoint(x: pointSixCoordinates.x, y: pointSixCoordinates.y))
+        
+        // In the below code the traced top right quarter UIBezierPath for an I cross-section is added/appended to the overall UIBezierPath which will represent the entire cross-section when get drawn on the screen. If however, a T steel cross-section is to be drawn then the top right quarter so far traced UIBezierPath will be completed to trace the entire right hand portion of the T profile and then later on gets reflected about a vertical reflection axis in order to obtain the full T cross-section:
+        
+        // The below IF STATEMENT will be triggered for an I steel cross-section profile (i.e., UB, UC and UBP):
+
+        if userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 0 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 1 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 2 {
+            
+            combinedIAndTSteelCrossSectionUIBezierPaths.append(topRightQuarterBezierPathForAnISteelCrossSectionOrRightHandSideHalfBezierPathForTSteelCrossSection)
+
+        }
+        
+        // The below IF STATEMENT will be triggered for a T steel cross-section profile (i.e., Tees split from UB or UC cross-sections), whereby we first continue tracing the UIBezierPath needed to trace the full right hand-side half of a T steel cross-section, and lastly we add/append it to the overall UIBezierPath (i.e., combinedIAndTSteelCrossSectionUIBezierPaths) which will be used to draw the steel cross-section on the screen:
+        
+        else if userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 6 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 7 {
+            
+            topRightQuarterBezierPathForAnISteelCrossSectionOrRightHandSideHalfBezierPathForTSteelCrossSection.addLine(to: CGPoint(x: pointSevenCoordinates.x, y: pointSevenCoordinates.y))
+            
+            topRightQuarterBezierPathForAnISteelCrossSectionOrRightHandSideHalfBezierPathForTSteelCrossSection.addLine(to: CGPoint(x: pointEightCoordinates.x, y: pointEightCoordinates.y))
+            
+            combinedIAndTSteelCrossSectionUIBezierPaths.append(topRightQuarterBezierPathForAnISteelCrossSectionOrRightHandSideHalfBezierPathForTSteelCrossSection)
+            
+        }
+        
+    // Step-03 Mirror the drawn top right quarter in Step-02 above along the Y-axis to obtain the left hand-side top quarter for an I steel cross-section. In the case of a T cross-section we need to reflect/mirror and translate the entire so far traced right hand-side half portion of the T cross-section in order to obtain the full T steel cross-section to be drawn on screen:
+        
+        // The below constant will basically cause all previously defined points coordinates to be multiplied by -1 relative to their x-coordinate point and +1 relative to their y-coordinate. Basically, the below will cause the entire so far traced I or T steel cross-section UIBezierPath to be mirrored about a vertical axis located at the origin of this view controller (i.e., x = 0 and y = 0, which is a point at the top left corner of the iPhone screen):
+        
+        let scaleMultiplierForIAndTSteelCrossSectionToMirrorTheSoFarTracedUIBezierPathAboutAVerticalLineLocatedAtTheOriginOfTheIPhoneScreen = CGAffineTransform(scaleX: -1, y: 1)
+        
+        // The above step as mentioned will mirror the entire so far traced UIBezierPath about a vertical line located at the origin of this view controller. Afterwards, we need to move the newly reflected UIBezierPath, which represents the top left quarter for I steel cross-section and the entire left hand-side portion for a T cross-section a horizontal distance equivalent to two multiplied by pointOne X-coordinate defined previously (i.e., the point located at the mid of the section width):
+        
+        let horizontalTranslationForReflectedSteelCrossSectionAboutVerticalMirrorLine = CGAffineTransform(translationX: (pointOneCoordinates.x) * 2, y: 0)
+        
+        let combinedScaleMultiplierAndTransformationRequiredToObtainTheTopLeftQuarterUIBezierPathForISteelCrossSectionAndTheEntireLeftHandSidePortionForTSteelCrossSection = scaleMultiplierForIAndTSteelCrossSectionToMirrorTheSoFarTracedUIBezierPathAboutAVerticalLineLocatedAtTheOriginOfTheIPhoneScreen.concatenating(horizontalTranslationForReflectedSteelCrossSectionAboutVerticalMirrorLine)
+        
+        // The below IF STATEMENT will be triggered for an I steel cross-section profile (i.e., UB, UC and UBP):
+        
+        if userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 0 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 1 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 2 {
+            
+            iSteelCrossSectionTopLeftQuarterBezierPath.append(topRightQuarterBezierPathForAnISteelCrossSectionOrRightHandSideHalfBezierPathForTSteelCrossSection)
+            
+            iSteelCrossSectionTopLeftQuarterBezierPath.apply(combinedScaleMultiplierAndTransformationRequiredToObtainTheTopLeftQuarterUIBezierPathForISteelCrossSectionAndTheEntireLeftHandSidePortionForTSteelCrossSection)
+            
+            combinedIAndTSteelCrossSectionUIBezierPaths.append(iSteelCrossSectionTopLeftQuarterBezierPath)
+            
+        } else if userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 6 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 7 {
+            
+            tSteelCrossSectionReflectedLeftHandSideUIBezierPath.append(topRightQuarterBezierPathForAnISteelCrossSectionOrRightHandSideHalfBezierPathForTSteelCrossSection)
+            
+            tSteelCrossSectionReflectedLeftHandSideUIBezierPath.apply(combinedScaleMultiplierAndTransformationRequiredToObtainTheTopLeftQuarterUIBezierPathForISteelCrossSectionAndTheEntireLeftHandSidePortionForTSteelCrossSection)
+            
+            combinedIAndTSteelCrossSectionUIBezierPaths.append(tSteelCrossSectionReflectedLeftHandSideUIBezierPath)
+            
+        }
+    
+    // Step-05 Assigning the required properties for the UIBezierPath defined in Step-02 above in order for it to be drawn on screen and be visible:
         
         
-    // Step-02 Mirror the drawn top right quarter in Step-01 above along the Y-axis to obtain a T-Section:
+        steelCrossSectionWithAnIorTProfileShapeLayer.path = combinedIAndTSteelCrossSectionUIBezierPaths.cgPath
         
-    // Step-03 If we are drawing an I Section then the next step is to mirror what have been drawn in Step-02 along the X-axis in order to obtain an I-Section:
+        steelCrossSectionWithAnIorTProfileShapeLayer.strokeColor = UIColor(named: drawnSteelCrossSectionUIBezierPathStrokeColourString)?.cgColor
+        
+        steelCrossSectionWithAnIorTProfileShapeLayer.fillColor = UIColor.clear.cgColor
+        
+        steelCrossSectionWithAnIorTProfileShapeLayer.lineWidth = drawnSteelCrossSectionUIBezierPathLineWidthWeight
+                
+        
+        
+        
+    // Step-05 If we are drawing an I Section then the next step is to mirror what have been drawn in Step-02 along the X-axis in order to obtain an I-Section:
         
         
     }
