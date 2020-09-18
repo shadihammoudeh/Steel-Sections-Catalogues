@@ -30,7 +30,7 @@ class SelectedSteelSectionSummaryPage: UIViewController {
     
     // The below variable value will be passed from OpenRolledSteelSectionsCollectionVC which will be passed to SteelSectionsTableVC then passed onto this VC:
     
-    var userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController: Int = 6
+    var userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController: Int = 0
     
     // The below will be passed later on to the previous viewController later on using the Protocol in order to re-divert the user to the exact position inside the tableView he was on before getting diverted to this viewController:
     
@@ -400,28 +400,20 @@ class SelectedSteelSectionSummaryPage: UIViewController {
     
     let steelCrossSectionMajorAndMinorAxesAnnotationLinesUIBezierPathLineWeight: CGFloat = 0.80
     
-//    let steelSectionShapeLayer = CAShapeLayer()
+        // The below is the core animation shape layer required to display the dimensioning annotation lines on screens, annotating dimensions such as flange and web thickness, depth of section as well as it width and its root radius:
     
-//    let depthOfSectionAnnotationShapeLayer = CAShapeLayer()
-//
-//    let widthOfSectionAnnotationShapeLayer = CAShapeLayer()
-//
-//    let sectionWebThicknessAnnotationShapeLayer = CAShapeLayer()
-//
-//    let sectionFlangeThicknessAnnotationShapeLayer = CAShapeLayer()
-//
-//    let sectionRootRadiusAnnotationShapeLayer = CAShapeLayer()
-//
-//    let dimensioningAnnotationDashedLinesShapeLayer = CAShapeLayer()
-////
-//    let rootRadiusDimensioningAnnotationLineShapeLayer = CAShapeLayer()
-        
+    let steelCrossSectionDimensioningAnnotationLinesAndDimensioningDashedLinesShapeLayer = CAShapeLayer()
+    
+    let steelCrossSectionDimensioningAnnotationLinesUIBezierPathColourString: String = "SelectedSteelSectionSummaryPageVC - Drawing Area Section Profile Dimensional Annotation Lines Paths Stroke Colour"
+    
+    let steelCrossSectionDimensioningAnnotationLinesUIBezierPathLineWeight: CGFloat = 1.0
+
+
+ 
     // MARK: - BezierPaths stroke colours and line widths inside the Section Profile Drawing Area:
     
         
-    let steelSectionProfileDimensionalAnnotationLinesPathsStrokeColour: String = "SelectedSteelSectionSummaryPageVC - Drawing Area Section Profile Dimensional Annotation Lines Paths Stroke Colour"
     
-    let steelSectionProfileDimensionalAnnotationLinesPathsLineWidths: CGFloat = 1.0
                 
     // MARK: - depthOfSection Vertical Annotation Line X & Mid Y Coordinates, the below gets their values later on from the draw steel section profile function:
     
@@ -1477,6 +1469,8 @@ class SelectedSteelSectionSummaryPage: UIViewController {
         view.layer.addSublayer(steelCrossSectionMajorAxisAnnotationHorizontalLineShapeLayer)
         
         view.layer.addSublayer(steelCrossSectionMinorAxisAnnotationVerticalLineShapeLayer)
+        
+        view.layer.addSublayer(steelCrossSectionDimensioningAnnotationLinesAndDimensioningDashedLinesShapeLayer)
 
         // MARK: - Adding SubViews to universalBeamDrawingView:
 
@@ -1666,8 +1660,7 @@ class SelectedSteelSectionSummaryPage: UIViewController {
         
         setupConstraints()
         
-        drawAnIorTSectionSteelProfile(drawingAreaMargins: 10, widthOfSteelSection: 133.2, totalHeightOfSteelSection: 101.50, centreOfGravityInYDirectionFromTopOfSectionForTProfiles: 21.0, flangeThicknessOfSteelSection: 7.80, webThicknessOfSteelSection: 5.70, rootRadiusOfSteelSection: 7.60, drawingAreaUIView: steelSectionDrawingView)
-        
+        drawAnIorTSectionSteelProfile(drawingAreaMargins: 10, widthOfSteelSection: 314, totalHeightOfSteelSection: 1056, depthOfISectionBetweenFillets: 868.1, centreOfGravityInYDirectionFromTopOfSectionForTProfiles: 0, flangeThicknessOfSteelSection: 64, webThicknessOfSteelSection: 36, rootRadiusOfSteelSection: 30, drawingAreaUIView: steelSectionDrawingView)
 
 //        setupSubViewsConstraints()
 
@@ -1703,7 +1696,7 @@ class SelectedSteelSectionSummaryPage: UIViewController {
         
     }
     
-    func drawAnIorTSectionSteelProfile(drawingAreaMargins: CGFloat, widthOfSteelSection: Double, totalHeightOfSteelSection: Double, centreOfGravityInYDirectionFromTopOfSectionForTProfiles: Double, flangeThicknessOfSteelSection: Double, webThicknessOfSteelSection: Double, rootRadiusOfSteelSection: Double, drawingAreaUIView: UIView) {
+    func drawAnIorTSectionSteelProfile(drawingAreaMargins: CGFloat, widthOfSteelSection: Double, totalHeightOfSteelSection: Double, depthOfISectionBetweenFillets: Double, centreOfGravityInYDirectionFromTopOfSectionForTProfiles: Double, flangeThicknessOfSteelSection: Double, webThicknessOfSteelSection: Double, rootRadiusOfSteelSection: Double, drawingAreaUIView: UIView) {
         
     // Below are the multiple UIBezierPaths that will be used to draw different quarters of an I-profile section, these will all be added together in order to draw the final combined shape inside of the previously defined core animation shape layer, that is steelCrossSectionWithAnIorTProfileShapeLayer:
         
@@ -1738,7 +1731,6 @@ class SelectedSteelSectionSummaryPage: UIViewController {
         // Point-01 coordinates, which is located at the mid length of the top horziontal line:
     
         let pointOneCoordinates = (x: drawingAreaCentrePointCoordinatesRelativeToTheIPhoneScreen.x, y: drawingAreaCentrePointCoordinatesRelativeToTheIPhoneScreen.y - ((CGFloat(totalHeightOfSteelSection) / 2) * drawingScale))
-            
             
         // Point-02 coordinates, which is located at the far right top corner of the section:
         
@@ -1875,6 +1867,12 @@ class SelectedSteelSectionSummaryPage: UIViewController {
         let majorAxisAnnotationHorizontalLineUIBezierPath = UIBezierPath()
         
         let minorAxisAnnotationVerticalLineUIBezierPath = UIBezierPath()
+        
+        let steelCrossSectionRightHandSideWebThicknessDimensioningAnnotationLinesUIBezierPath = UIBezierPath()
+        
+        let steelCrossSectionReflectedLeftHandSideWebThicknessDimensioningAnnotationLinesUIBezierPath = UIBezierPath()
+        
+        let steelCrossSectionDimensioningLinesUIBezierPath = UIBezierPath()
 
         // Step-01 Defining the top (start) and bottom (end) points coordinates needed to trace the UIBezierPath for the minor and major axes annotation lines:
         
@@ -1910,6 +1908,42 @@ class SelectedSteelSectionSummaryPage: UIViewController {
 
         }
         
+            // Web thickness dimensioning annotation lines points coordinates:
+        
+                // The below point is located at the right hand-side of either I or T steel cross-section:
+        
+        var rightHandSideWebThicknessHorizontalDimensioningLineStartingPointCoordinates: (x: CGFloat, y: CGFloat) = (x: 0, y: 0)
+        
+        var rightHandSideWebThicknessHorizontalDimensioningLineEndPointCoordinate: (x: CGFloat, y: CGFloat) = (x: 0, y: 0)
+        
+                // The below point defines the coordinates for the top inclined arrow head dimensioning line that starts at the rightHandSideWebThicknessHorizontalDimensioningLineStartingPointCorrdinates (i.e. at the point where the web thickness dimensioning line on the right hand side begins) and ends at the below point coordinates definition:
+        
+        var rightHandSideWebThicknessInclinedTopArrowHeadDimensioningLineEndPoint: (x: CGFloat, y: CGFloat) = (x: 0, y: 0)
+        
+                // The below point defines the coordinates for the bottom inclined arrow head dimensioning line that starts at the rightHandSideWebThicknessHorizontalDimensioningLineStartingPointCorrdinates (i.e. at the point where the web thickness dimensioning line on the right hand side begins) and ends at the below point coordinates definition:
+
+        var rightHandSideWebThicknessInclinedBottomArrowHeadDimensioningLineEndPoint: (x: CGFloat, y: CGFloat) = (x: 0, y: 0)
+        
+                // The below IF STATEMENT will be triggered for I steel cross-sections such as UB, UC and UBP. The starting point for web thickness horizontal dimensioning annotation line is located at the right hand-side bottom portion of the I section. Specifically at mid-height between reflected pointFive coordinates and pointSix coordinates:
+        
+        if userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 0 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 1 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 2 {
+            
+            rightHandSideWebThicknessHorizontalDimensioningLineStartingPointCoordinates = (x: pointSixCoordinates.x + (drawnSteelCrossSectionUIBezierPathLineWidthWeight / 2), y: pointSixCoordinates.y + (CGFloat(depthOfISectionBetweenFillets / 4) * drawingScale))
+            
+            rightHandSideWebThicknessHorizontalDimensioningLineEndPointCoordinate = (x: pointOneCoordinates.x + (CGFloat(widthOfSteelSection / 4) * drawingScale), y: rightHandSideWebThicknessHorizontalDimensioningLineStartingPointCoordinates.y)
+            
+            rightHandSideWebThicknessInclinedTopArrowHeadDimensioningLineEndPoint = (x: rightHandSideWebThicknessHorizontalDimensioningLineStartingPointCoordinates.x + (CGFloat(widthOfSteelSection / 16) * drawingScale), y: rightHandSideWebThicknessHorizontalDimensioningLineStartingPointCoordinates.y - (tan(CGFloat.pi / 6) * (CGFloat((widthOfSteelSection / 16)) * drawingScale)))
+            
+            rightHandSideWebThicknessInclinedBottomArrowHeadDimensioningLineEndPoint = (x: rightHandSideWebThicknessInclinedTopArrowHeadDimensioningLineEndPoint.x, y: rightHandSideWebThicknessHorizontalDimensioningLineStartingPointCoordinates.y + (tan(CGFloat.pi / 6) * (CGFloat((widthOfSteelSection / 16)) * drawingScale)))
+            
+        }
+        
+        else if userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 6 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 7 {
+            
+            
+            
+        }
+        
         // Step-02 The below code trace the UIBezierPath needed to connect the needed major and minor axes annotation lines between the above defined points coordinates related:
         
             // Minor axis UIBezierPath:
@@ -1923,6 +1957,35 @@ class SelectedSteelSectionSummaryPage: UIViewController {
         majorAxisAnnotationHorizontalLineUIBezierPath.move(to: CGPoint(x: rightStartingPointCoordinatesForMajorAxisAnnotationHorizontalLine.x, y: rightStartingPointCoordinatesForMajorAxisAnnotationHorizontalLine.y))
         
         majorAxisAnnotationHorizontalLineUIBezierPath.addLine(to: CGPoint(x: leftEndingPointCoordinatesForMajorAxisAnnotationHorizontalLine.x, y: leftEndingPointCoordinatesForMajorAxisAnnotationHorizontalLine.y))
+        
+            // Web thickness right hand-side UIBezierPath:
+
+        steelCrossSectionRightHandSideWebThicknessDimensioningAnnotationLinesUIBezierPath.move(to: CGPoint(x: rightHandSideWebThicknessHorizontalDimensioningLineStartingPointCoordinates.x, y: rightHandSideWebThicknessHorizontalDimensioningLineStartingPointCoordinates.y))
+        
+        steelCrossSectionRightHandSideWebThicknessDimensioningAnnotationLinesUIBezierPath.addLine(to: CGPoint(x: rightHandSideWebThicknessHorizontalDimensioningLineEndPointCoordinate.x, y: rightHandSideWebThicknessHorizontalDimensioningLineEndPointCoordinate.y))
+        
+                // The below defines the needed UIBezierPath to trace the path for the upper arrow head inclined dimensioning line:
+        
+        steelCrossSectionRightHandSideWebThicknessDimensioningAnnotationLinesUIBezierPath.move(to: CGPoint(x: rightHandSideWebThicknessHorizontalDimensioningLineStartingPointCoordinates.x, y: rightHandSideWebThicknessHorizontalDimensioningLineStartingPointCoordinates.y))
+        
+        steelCrossSectionRightHandSideWebThicknessDimensioningAnnotationLinesUIBezierPath.addLine(to: CGPoint(x: rightHandSideWebThicknessInclinedTopArrowHeadDimensioningLineEndPoint.x, y: rightHandSideWebThicknessInclinedTopArrowHeadDimensioningLineEndPoint.y))
+        
+                // The below defines the needed UIBezierPath to trace the path for the lower arrow head inclined dimensioning line:
+
+        steelCrossSectionRightHandSideWebThicknessDimensioningAnnotationLinesUIBezierPath.move(to: CGPoint(x: rightHandSideWebThicknessHorizontalDimensioningLineStartingPointCoordinates.x, y: rightHandSideWebThicknessHorizontalDimensioningLineStartingPointCoordinates.y))
+        
+        steelCrossSectionRightHandSideWebThicknessDimensioningAnnotationLinesUIBezierPath.addLine(to: CGPoint(x: rightHandSideWebThicknessInclinedBottomArrowHeadDimensioningLineEndPoint.x, y: rightHandSideWebThicknessInclinedBottomArrowHeadDimensioningLineEndPoint.y))
+        
+                // The below code adds the so far traced right hand side web thickness dimensioning lines to the overall UIBezierPath (i.e. steelCrossSectionDimensioningLinesUIBezierPath) that will eventually contains all needed dimensioning lines UIBezierPaths to draw them all on screen. Next step is to reflect the so far traced UIBezierPath to the left hand-side:
+        
+        steelCrossSectionDimensioningLinesUIBezierPath.append(steelCrossSectionRightHandSideWebThicknessDimensioningAnnotationLinesUIBezierPath)
+        
+                // The next step is to reflect the so far traced UIBezierPath (i.e. steelCrossSectionRightHandSideWebThicknessDimensioningAnnotationLinesUIBezierPath) onto the left hand-side of the cross-section through its vertical centreline mirror line:
+        
+        steelCrossSectionReflectedLeftHandSideWebThicknessDimensioningAnnotationLinesUIBezierPath.append(steelCrossSectionDimensioningLinesUIBezierPath)
+        
+        
+        
 
         // Step-03 Assigning the required properties for the UIBezierPaths that will be used to draw the Major and Minor axes annotation lines on the screen:
         
@@ -1945,7 +2008,14 @@ class SelectedSteelSectionSummaryPage: UIViewController {
                 // The below line of code is needed in order to display the displayed minor axis vertical annotation line as a dashed line appearance. the firsdt number inside the Array represeents the dash length and the second number represents the gap length in between the dashes:
         
         steelCrossSectionMajorAxisAnnotationHorizontalLineShapeLayer.lineDashPattern = [NSNumber(value: Float(((CGFloat(minorAxisAnnotationLineVerticalExtensionLengthsInMmBeyondDrawnSteelCrossSectionProfileTotalHeight * 2) * drawingScale) + ((CGFloat(totalHeightOfSteelSection) * drawingScale))) / 15)), NSNumber(value: Float(((CGFloat(minorAxisAnnotationLineVerticalExtensionLengthsInMmBeyondDrawnSteelCrossSectionProfileTotalHeight * 2) * drawingScale) + ((CGFloat(totalHeightOfSteelSection) * drawingScale))) / 30))]
+        
+            // Steel cross-section dimensioning annotation lines UIBezierPath properties:
 
+        steelCrossSectionDimensioningAnnotationLinesAndDimensioningDashedLinesShapeLayer.path = steelCrossSectionDimensioningLinesUIBezierPath.cgPath
+        
+        steelCrossSectionDimensioningAnnotationLinesAndDimensioningDashedLinesShapeLayer.strokeColor = UIColor(named: steelCrossSectionDimensioningAnnotationLinesUIBezierPathColourString)?.cgColor
+        
+        steelCrossSectionDimensioningAnnotationLinesAndDimensioningDashedLinesShapeLayer.lineWidth = steelCrossSectionDimensioningAnnotationLinesUIBezierPathLineWeight
         
 //        steelCrossSectionMajorAxisAnnotationHorizontalLineShapeLayer.lineDashPattern = [NSNumber(value: Float(((CGFloat(majorAxisAnnotationLineHorizontalExtensionLengthsInMmBeyondDrawnSteelCrossSectionProfileWidth * 2) * drawingScale) + ((CGFloat(widthOfSteelSection) * drawingScale))) / 8)), NSNumber(value: Float(((CGFloat(majorAxisAnnotationLineHorizontalExtensionLengthsInMmBeyondDrawnSteelCrossSectionProfileWidth * 2) * drawingScale) + ((CGFloat(widthOfSteelSection) * drawingScale))) / 16))]
         
