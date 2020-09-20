@@ -1,0 +1,6 @@
+framework module Pods_Steel_Sections_Catalogues {
+  umbrella header "Pods-Steel Sections Catalogues-umbrella.h"
+
+  export *
+  module * { export * }
+}
