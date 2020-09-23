@@ -406,7 +406,7 @@ class SelectedSteelSectionSummaryPage: UIViewController {
     
             // The below are the core animation layers required to draw the vertical and horizontal dashed lines that are required as part of the dimensioning annotation lines needed to draw the width as well as the total height of the drawn steel cross section dimensions. The reason they are in separate layers is due to the fact that these lines need to have dashed properties assigned to them:
     
-    let verticalDashedLinesShapeLayerThatArePartOfTheDimensioningAnnotationLinesRequiredForTheWidthOfTheSteelCrossSectionDimension = CAShapeLayer()
+    let verticalAndHorizontalDashedLinesShapeLayerThatArePartOfTheDimensioningAnnotationLinesRequiredForTheWidthAndOverallHeightOfTheSteelCrossSectionDimension = CAShapeLayer()
     
     let steelCrossSectionDimensioningAnnotationLinesUIBezierPathColourString: String = "SelectedSteelSectionSummaryPageVC - Drawing Area Section Profile Dimensional Annotation Lines Paths Stroke Colour"
     
@@ -1469,7 +1469,7 @@ class SelectedSteelSectionSummaryPage: UIViewController {
         
         view.layer.addSublayer(steelCrossSectionDimensioningAnnotationLinesAndDimensioningDashedLinesShapeLayer)
         
-        view.layer.addSublayer(verticalDashedLinesShapeLayerThatArePartOfTheDimensioningAnnotationLinesRequiredForTheWidthOfTheSteelCrossSectionDimension)
+        view.layer.addSublayer(verticalAndHorizontalDashedLinesShapeLayerThatArePartOfTheDimensioningAnnotationLinesRequiredForTheWidthAndOverallHeightOfTheSteelCrossSectionDimension)
 
         // MARK: - Adding SubViews to universalBeamDrawingView:
 
@@ -1811,13 +1811,13 @@ class SelectedSteelSectionSummaryPage: UIViewController {
         
         // The below constant will basically cause all previously defined points coordinates to be multiplied by -1 relative to their x-coordinate point and +1 relative to their y-coordinate. Basically, the below will cause the entire so far traced I or T steel cross-section UIBezierPath to be mirrored about a vertical axis located at the origin of this view controller (i.e., x = 0 and y = 0, which is a point at the top left corner of the iPhone screen):
         
-        let scaleMultiplierForIAndTSteelCrossSectionToMirrorTheSoFarTracedUIBezierPathAboutAVerticalLineLocatedAtTheOriginOfTheIPhoneScreen = CGAffineTransform(scaleX: -1, y: 1)
+//        let scaleMultiplierForIAndTSteelCrossSectionToMirrorTheSoFarTracedUIBezierPathAboutAVerticalLineLocatedAtTheOriginOfTheIPhoneScreen = CGAffineTransform(scaleX: -1, y: 1)
         
         // The above step as mentioned will mirror the entire so far traced UIBezierPath about a vertical line located at the origin of this view controller. Afterwards, we need to move the newly reflected UIBezierPath, which represents the top left quarter for I steel cross-section and the entire left hand-side portion for a T cross-section a horizontal distance equivalent to two multiplied by pointOne X-coordinate defined previously (i.e., the point located at the mid of the section width):
         
-        let horizontalTranslationForReflectedSteelCrossSectionAboutVerticalMirrorLine = CGAffineTransform(translationX: (pointOneCoordinates.x) * 2, y: 0)
+//        let horizontalTranslationForReflectedSteelCrossSectionAboutVerticalMirrorLine = CGAffineTransform(translationX: (pointOneCoordinates.x) * 2, y: 0)
         
-        let combinedScaleMultiplierAndTransformationRequiredToObtainTheTopLeftQuarterUIBezierPathForISteelCrossSectionAndTheEntireLeftHandSidePortionForTSteelCrossSection = scaleMultiplierForIAndTSteelCrossSectionToMirrorTheSoFarTracedUIBezierPathAboutAVerticalLineLocatedAtTheOriginOfTheIPhoneScreen.concatenating(horizontalTranslationForReflectedSteelCrossSectionAboutVerticalMirrorLine)
+//        let combinedScaleMultiplierAndTransformationRequiredToObtainTheTopLeftQuarterUIBezierPathForISteelCrossSectionAndTheEntireLeftHandSidePortionForTSteelCrossSection = scaleMultiplierForIAndTSteelCrossSectionToMirrorTheSoFarTracedUIBezierPathAboutAVerticalLineLocatedAtTheOriginOfTheIPhoneScreen.concatenating(horizontalTranslationForReflectedSteelCrossSectionAboutVerticalMirrorLine)
         
         // The below IF STATEMENT will be triggered for an I steel cross-section profile (i.e., UB, UC and UBP):
         
@@ -1825,9 +1825,9 @@ class SelectedSteelSectionSummaryPage: UIViewController {
             
             iSteelCrossSectionTopLeftQuarterBezierPath.append(topRightQuarterBezierPathForAnISteelCrossSectionOrRightHandSideHalfBezierPathForTSteelCrossSection)
             
-            iSteelCrossSectionTopLeftQuarterBezierPath.apply(combinedScaleMultiplierAndTransformationRequiredToObtainTheTopLeftQuarterUIBezierPathForISteelCrossSectionAndTheEntireLeftHandSidePortionForTSteelCrossSection)
+//            iSteelCrossSectionTopLeftQuarterBezierPath.apply(combinedScaleMultiplierAndTransformationRequiredToObtainTheTopLeftQuarterUIBezierPathForISteelCrossSectionAndTheEntireLeftHandSidePortionForTSteelCrossSection)
             
-            combinedIAndTSteelCrossSectionUIBezierPaths.append(iSteelCrossSectionTopLeftQuarterBezierPath)
+            combinedIAndTSteelCrossSectionUIBezierPaths.append(performRequiredReflectionAndTranslationForTheUIBezierPath(UIBezierPathToBeReflected: iSteelCrossSectionTopLeftQuarterBezierPath, xCoordinateScaleMutiplier: -1, yCoordinateScaleMultiplier: 1, translationInTheXDirection: (pointOneCoordinates.x) * 2, translationInTheYDirection: 0))
             
         }
         
@@ -1837,9 +1837,9 @@ class SelectedSteelSectionSummaryPage: UIViewController {
             
             tSteelCrossSectionReflectedLeftHandSideUIBezierPath.append(topRightQuarterBezierPathForAnISteelCrossSectionOrRightHandSideHalfBezierPathForTSteelCrossSection)
             
-            tSteelCrossSectionReflectedLeftHandSideUIBezierPath.apply(combinedScaleMultiplierAndTransformationRequiredToObtainTheTopLeftQuarterUIBezierPathForISteelCrossSectionAndTheEntireLeftHandSidePortionForTSteelCrossSection)
+//            tSteelCrossSectionReflectedLeftHandSideUIBezierPath.apply(combinedScaleMultiplierAndTransformationRequiredToObtainTheTopLeftQuarterUIBezierPathForISteelCrossSectionAndTheEntireLeftHandSidePortionForTSteelCrossSection)
             
-            combinedIAndTSteelCrossSectionUIBezierPaths.append(tSteelCrossSectionReflectedLeftHandSideUIBezierPath)
+            combinedIAndTSteelCrossSectionUIBezierPaths.append(performRequiredReflectionAndTranslationForTheUIBezierPath(UIBezierPathToBeReflected: tSteelCrossSectionReflectedLeftHandSideUIBezierPath, xCoordinateScaleMutiplier: -1, yCoordinateScaleMultiplier: 1, translationInTheXDirection: (pointOneCoordinates.x) * 2, translationInTheYDirection: 0))
             
         }
         
@@ -1893,12 +1893,20 @@ class SelectedSteelSectionSummaryPage: UIViewController {
         
         let reflectedLeftHandSideVerticalDashedLineUIBezierPathThatIsPartOfTheDimensioningAnnotationLinesRequiredForSteelCrossSectionWidthDimension = UIBezierPath()
         
-        let combinedVerticalDashedLinesUIBezierPathsThatArePartOfTheDimensioningAnnotationLinesRequiredForSteelCrossSectionWidthDimension = UIBezierPath()
+        let leftHandSideTopHorizontalDashedLineUIBezierPathThatIsPartOfTheDimensioningAnnotationLinesRequiredToAnnotateTheTotalHeightOfTheDrawnSteelCrossSection = UIBezierPath()
+        
+        let leftHandSideReflectedBottomHorizontalDashedLineUIBezierPathThatIsPartOfTheDimensioningAnnotationLinesRequiredToAnnotateTheTotalHeightOfTheDrawnSteelCrossSection = UIBezierPath()
+        
+        let combinedVerticalAndHorizontalDashedLinesUIBezierPathsThatArePartOfTheDimensioningAnnotationLinesRequiredForSteelCrossSectionWidthAndOverallHeightDimensions = UIBezierPath()
         
         let rightHandSideHalfOfTheWidthOfSteelCrossSectionDimensioningAnnotationLinesUIBezierPath = UIBezierPath()
         
         let reflectedLeftHandSideHalfOfTheWidthOfSteelCrossSectionDimensioningAnnotationLinesUIBezierPath = UIBezierPath()
         
+        let leftHandSideTopHalfVerticalLineAndItsArrowHeadsPortionUIBezierpathRelatedToTheDrawnSteelCrossSectionTotalHeightDimensionAnnotation = UIBezierPath()
+        
+        let leftHandSideReflectedBottomHalfVerticalLineAndItsArrowHeadsPortionUIBezierpathRelatedToTheDrawnSteelCrossSectionTotalHeightDimensionAnnotation = UIBezierPath()
+                
         let steelCrossSectionDimensioningLinesUIBezierPath = UIBezierPath()
 
         // Step-01 Defining the start and end points coordinates needed to trace the UIBezierPath for the minor and major axes annotation lines as well as required dimensioning annotation lines such as web thickness, flange thickness, overall depth of section and its width:
@@ -2013,6 +2021,20 @@ class SelectedSteelSectionSummaryPage: UIViewController {
         
         let rightHandSideHalfOfTheWidthOfSteelCrossSectionBottomArrowHeadEndPointCoordinates: (x: CGFloat, y: CGFloat) = (x: rightHandSideHalfOfTheWidthOfSteelCrossSectionTopArrowHeadEndPointCoordinates.x, y: rightHandSideWidthOfSteelCrossSectionDimensioningAnnotationHorizontalLineHalfStartingPointCoordinates.y + (CGFloat(widthOfSteelSection / 20) * drawingScale * tan(CGFloat.pi / 6)))
         
+            // Top side horizontal dashed line as well as vertical steel cross section dimensioning line and its arrow head that are needed as part of the overall steel cross section height dimension annotation lines:
+        
+        let leftHandSideTopHorizontalDashedLineStartingPointCoordinatesThatIsPartOfTheDimensioningAnnotationLinesForTheSteelCrossSectionTotalHeightDimensionAnnotationToRepresentItsTopHalfPortion: (x: CGFloat, y: CGFloat) = (x: pointOneCoordinates.x - (CGFloat(widthOfSteelSection / 2) * drawingScale) - (drawnSteelCrossSectionUIBezierPathLineWidthWeight / 2), y: pointOneCoordinates.y)
+        
+        let leftHandSideTopHorizontalDashedLineEndPointCoordinatesThatIsPartOfTheDimensioningAnnotationLinesForTheSteelCrossSectionTotalHeightDimensionAnnotationToRepresentItsTopHalfPortion: (x: CGFloat, y: CGFloat) = (x: leftHandSideTopHorizontalDashedLineStartingPointCoordinatesThatIsPartOfTheDimensioningAnnotationLinesForTheSteelCrossSectionTotalHeightDimensionAnnotationToRepresentItsTopHalfPortion.x - (CGFloat(horizontalDashedLineLengthRelatedToOverallDepthOfSectionAnnotationLines) * drawingScale), y: leftHandSideTopHorizontalDashedLineStartingPointCoordinatesThatIsPartOfTheDimensioningAnnotationLinesForTheSteelCrossSectionTotalHeightDimensionAnnotationToRepresentItsTopHalfPortion.y)
+        
+        let topLeftHandSideTopHalfPortionVerticalDimensioningAnnotationLineThatIsPartOfTheRequiredSteelCrossSectionOverallHeightDimensionAnnotationLinesStartingPointCoordinates: (x: CGFloat, y: CGFloat) = (x: leftHandSideTopHorizontalDashedLineStartingPointCoordinatesThatIsPartOfTheDimensioningAnnotationLinesForTheSteelCrossSectionTotalHeightDimensionAnnotationToRepresentItsTopHalfPortion.x - (CGFloat(horizontalDashedLineLengthRelatedToOverallDepthOfSectionAnnotationLines / 2) * drawingScale), y: leftHandSideTopHorizontalDashedLineStartingPointCoordinatesThatIsPartOfTheDimensioningAnnotationLinesForTheSteelCrossSectionTotalHeightDimensionAnnotationToRepresentItsTopHalfPortion.y)
+        
+        let topLeftHandSideTopHalfPortionVerticalDimensioningAnnotationLineThatIsPartOfTheRequiredSteelCrossSectionOverallHeightDimensionAnnotationLinesEndPointCoordinates: (x: CGFloat, y: CGFloat) = (x: topLeftHandSideTopHalfPortionVerticalDimensioningAnnotationLineThatIsPartOfTheRequiredSteelCrossSectionOverallHeightDimensionAnnotationLinesStartingPointCoordinates.x, y: leftHandSideTopHorizontalDashedLineStartingPointCoordinatesThatIsPartOfTheDimensioningAnnotationLinesForTheSteelCrossSectionTotalHeightDimensionAnnotationToRepresentItsTopHalfPortion.y + (CGFloat(totalHeightOfSteelSection / 2) * drawingScale))
+        
+        let topLeftHandSideTopHalfPortionLeftInclinedArrowHeadEndPointCoordinatesThatIsPartOfTheRequiredSteelCrossSectionOverallHeightDimensionAnnotationLines: (x: CGFloat, y: CGFloat) = (x: topLeftHandSideTopHalfPortionVerticalDimensioningAnnotationLineThatIsPartOfTheRequiredSteelCrossSectionOverallHeightDimensionAnnotationLinesStartingPointCoordinates.x - ((CGFloat(widthOfSteelSection / 20) * drawingScale) * tan(CGFloat.pi / 6)), y: topLeftHandSideTopHalfPortionVerticalDimensioningAnnotationLineThatIsPartOfTheRequiredSteelCrossSectionOverallHeightDimensionAnnotationLinesStartingPointCoordinates.y + (CGFloat(widthOfSteelSection / 20) * drawingScale))
+        
+        let topLeftHandSideTopHalfPortionRightInclinedArrowHeadEndPointCoordinatesThatIsPartOfTheRequiredSteelCrossSectionOverallHeightDimensionAnnotationLines: (x: CGFloat, y: CGFloat) = (x: topLeftHandSideTopHalfPortionVerticalDimensioningAnnotationLineThatIsPartOfTheRequiredSteelCrossSectionOverallHeightDimensionAnnotationLinesStartingPointCoordinates.x + ((CGFloat(widthOfSteelSection / 20) * drawingScale) * tan(CGFloat.pi / 6)), y: topLeftHandSideTopHalfPortionLeftInclinedArrowHeadEndPointCoordinatesThatIsPartOfTheRequiredSteelCrossSectionOverallHeightDimensionAnnotationLines.y)
+        
         // Step-02 The below code trace the UIBezierPath needed to connect the needed major and minor axes annotation lines as well as other required dimensioning annotation lines between the above defined points coordinates related:
         
             // Minor axis UIBezierPath:
@@ -2125,7 +2147,7 @@ class SelectedSteelSectionSummaryPage: UIViewController {
         
         rightHandSideVerticalDashedLineUIBezierPathThatIsPartOfTheDimensioningAnnotationLinesRequiredForSteelCrossSectionWidthDimension.addLine(to: CGPoint(x: rightHandSideVerticalDashedLineEndPointCoordinatesThatIsPartOfTheDimensioningAnnotationLinesRequiredForTheSteelCrossSectionWidthDimension.x, y: rightHandSideVerticalDashedLineEndPointCoordinatesThatIsPartOfTheDimensioningAnnotationLinesRequiredForTheSteelCrossSectionWidthDimension.y))
         
-        combinedVerticalDashedLinesUIBezierPathsThatArePartOfTheDimensioningAnnotationLinesRequiredForSteelCrossSectionWidthDimension.append(rightHandSideVerticalDashedLineUIBezierPathThatIsPartOfTheDimensioningAnnotationLinesRequiredForSteelCrossSectionWidthDimension)
+        combinedVerticalAndHorizontalDashedLinesUIBezierPathsThatArePartOfTheDimensioningAnnotationLinesRequiredForSteelCrossSectionWidthAndOverallHeightDimensions.append(rightHandSideVerticalDashedLineUIBezierPathThatIsPartOfTheDimensioningAnnotationLinesRequiredForSteelCrossSectionWidthDimension)
         
                 // Tracing the needed UIBezierPath related to right half side of the steel cross section width annotation dimension:
         
@@ -2157,7 +2179,7 @@ class SelectedSteelSectionSummaryPage: UIViewController {
         
         reflectedLeftHandSideVerticalDashedLineUIBezierPathThatIsPartOfTheDimensioningAnnotationLinesRequiredForSteelCrossSectionWidthDimension.apply(requiredCombinedScaleMultiplierAndHorizontalTranslationToReflectTheRightHandSideVerticalDashedLineAndHorizontalDimensioningAnnotationLinesRelatedToTheWidthDimensionOfTheDrawnSteelCrossSectionOntoTheLeftHandSid)
         
-        combinedVerticalDashedLinesUIBezierPathsThatArePartOfTheDimensioningAnnotationLinesRequiredForSteelCrossSectionWidthDimension.append(reflectedLeftHandSideVerticalDashedLineUIBezierPathThatIsPartOfTheDimensioningAnnotationLinesRequiredForSteelCrossSectionWidthDimension)
+        combinedVerticalAndHorizontalDashedLinesUIBezierPathsThatArePartOfTheDimensioningAnnotationLinesRequiredForSteelCrossSectionWidthAndOverallHeightDimensions.append(reflectedLeftHandSideVerticalDashedLineUIBezierPathThatIsPartOfTheDimensioningAnnotationLinesRequiredForSteelCrossSectionWidthDimension)
         
                     // Below we are reflecting the so far drawn right hand-side width of section dimensioning annotation lines onto the left hand-side:
         
@@ -2166,6 +2188,33 @@ class SelectedSteelSectionSummaryPage: UIViewController {
         reflectedLeftHandSideHalfOfTheWidthOfSteelCrossSectionDimensioningAnnotationLinesUIBezierPath.apply(requiredCombinedScaleMultiplierAndHorizontalTranslationToReflectTheRightHandSideVerticalDashedLineAndHorizontalDimensioningAnnotationLinesRelatedToTheWidthDimensionOfTheDrawnSteelCrossSectionOntoTheLeftHandSid)
         
         steelCrossSectionDimensioningLinesUIBezierPath.append(reflectedLeftHandSideHalfOfTheWidthOfSteelCrossSectionDimensioningAnnotationLinesUIBezierPath)
+        
+            // Tracing the UIBezierPaths needed to annotate the top side half portion of the overall depth of section dimensioning annotation of the drawn steel cross-section:
+        
+                // Horizontal Dashed Line UIBezierPath at the left hand-side corner of the steel cross section:
+
+        leftHandSideTopHorizontalDashedLineUIBezierPathThatIsPartOfTheDimensioningAnnotationLinesRequiredToAnnotateTheTotalHeightOfTheDrawnSteelCrossSection.move(to: CGPoint(x: leftHandSideTopHorizontalDashedLineStartingPointCoordinatesThatIsPartOfTheDimensioningAnnotationLinesForTheSteelCrossSectionTotalHeightDimensionAnnotationToRepresentItsTopHalfPortion.x, y: leftHandSideTopHorizontalDashedLineStartingPointCoordinatesThatIsPartOfTheDimensioningAnnotationLinesForTheSteelCrossSectionTotalHeightDimensionAnnotationToRepresentItsTopHalfPortion.y))
+        
+        leftHandSideTopHorizontalDashedLineUIBezierPathThatIsPartOfTheDimensioningAnnotationLinesRequiredToAnnotateTheTotalHeightOfTheDrawnSteelCrossSection.addLine(to: CGPoint(x: leftHandSideTopHorizontalDashedLineEndPointCoordinatesThatIsPartOfTheDimensioningAnnotationLinesForTheSteelCrossSectionTotalHeightDimensionAnnotationToRepresentItsTopHalfPortion.x, y: leftHandSideTopHorizontalDashedLineEndPointCoordinatesThatIsPartOfTheDimensioningAnnotationLinesForTheSteelCrossSectionTotalHeightDimensionAnnotationToRepresentItsTopHalfPortion.y))
+        
+        combinedVerticalAndHorizontalDashedLinesUIBezierPathsThatArePartOfTheDimensioningAnnotationLinesRequiredForSteelCrossSectionWidthAndOverallHeightDimensions.append(leftHandSideTopHorizontalDashedLineUIBezierPathThatIsPartOfTheDimensioningAnnotationLinesRequiredToAnnotateTheTotalHeightOfTheDrawnSteelCrossSection)
+        
+                // Tracing the needed UIBezierPath related to top half side of the steel cross section total height annotation dimension:
+
+        leftHandSideTopHalfVerticalLineAndItsArrowHeadsPortionUIBezierpathRelatedToTheDrawnSteelCrossSectionTotalHeightDimensionAnnotation.move(to: CGPoint(x: topLeftHandSideTopHalfPortionVerticalDimensioningAnnotationLineThatIsPartOfTheRequiredSteelCrossSectionOverallHeightDimensionAnnotationLinesStartingPointCoordinates.x, y: topLeftHandSideTopHalfPortionVerticalDimensioningAnnotationLineThatIsPartOfTheRequiredSteelCrossSectionOverallHeightDimensionAnnotationLinesStartingPointCoordinates.y))
+        
+        leftHandSideTopHalfVerticalLineAndItsArrowHeadsPortionUIBezierpathRelatedToTheDrawnSteelCrossSectionTotalHeightDimensionAnnotation.addLine(to: CGPoint(x: topLeftHandSideTopHalfPortionVerticalDimensioningAnnotationLineThatIsPartOfTheRequiredSteelCrossSectionOverallHeightDimensionAnnotationLinesEndPointCoordinates.x, y: topLeftHandSideTopHalfPortionVerticalDimensioningAnnotationLineThatIsPartOfTheRequiredSteelCrossSectionOverallHeightDimensionAnnotationLinesEndPointCoordinates.y))
+        
+        leftHandSideTopHalfVerticalLineAndItsArrowHeadsPortionUIBezierpathRelatedToTheDrawnSteelCrossSectionTotalHeightDimensionAnnotation.move(to: CGPoint(x: topLeftHandSideTopHalfPortionVerticalDimensioningAnnotationLineThatIsPartOfTheRequiredSteelCrossSectionOverallHeightDimensionAnnotationLinesStartingPointCoordinates.x, y: topLeftHandSideTopHalfPortionVerticalDimensioningAnnotationLineThatIsPartOfTheRequiredSteelCrossSectionOverallHeightDimensionAnnotationLinesStartingPointCoordinates.y))
+        
+        leftHandSideTopHalfVerticalLineAndItsArrowHeadsPortionUIBezierpathRelatedToTheDrawnSteelCrossSectionTotalHeightDimensionAnnotation.addLine(to: CGPoint(x: topLeftHandSideTopHalfPortionLeftInclinedArrowHeadEndPointCoordinatesThatIsPartOfTheRequiredSteelCrossSectionOverallHeightDimensionAnnotationLines.x, y: topLeftHandSideTopHalfPortionLeftInclinedArrowHeadEndPointCoordinatesThatIsPartOfTheRequiredSteelCrossSectionOverallHeightDimensionAnnotationLines.y))
+        
+        leftHandSideTopHalfVerticalLineAndItsArrowHeadsPortionUIBezierpathRelatedToTheDrawnSteelCrossSectionTotalHeightDimensionAnnotation.move(to: CGPoint(x: topLeftHandSideTopHalfPortionVerticalDimensioningAnnotationLineThatIsPartOfTheRequiredSteelCrossSectionOverallHeightDimensionAnnotationLinesStartingPointCoordinates.x, y: topLeftHandSideTopHalfPortionVerticalDimensioningAnnotationLineThatIsPartOfTheRequiredSteelCrossSectionOverallHeightDimensionAnnotationLinesStartingPointCoordinates.y))
+        
+        leftHandSideTopHalfVerticalLineAndItsArrowHeadsPortionUIBezierpathRelatedToTheDrawnSteelCrossSectionTotalHeightDimensionAnnotation.addLine(to: CGPoint(x: topLeftHandSideTopHalfPortionRightInclinedArrowHeadEndPointCoordinatesThatIsPartOfTheRequiredSteelCrossSectionOverallHeightDimensionAnnotationLines.x, y: topLeftHandSideTopHalfPortionRightInclinedArrowHeadEndPointCoordinatesThatIsPartOfTheRequiredSteelCrossSectionOverallHeightDimensionAnnotationLines.y))
+        
+        steelCrossSectionDimensioningLinesUIBezierPath.append(leftHandSideTopHalfVerticalLineAndItsArrowHeadsPortionUIBezierpathRelatedToTheDrawnSteelCrossSectionTotalHeightDimensionAnnotation)
+        
         
         // Step-03 Assigning the required properties for the UIBezierPaths that will be used to draw the Major and Minor axes annotation lines on the screen:
         
@@ -2205,12 +2254,26 @@ class SelectedSteelSectionSummaryPage: UIViewController {
         
             // Vertrical dashed lines which are part of the dimensioning annotation lines required for width of steel cross-section dimension UIBezierPath properties:
 
-        verticalDashedLinesShapeLayerThatArePartOfTheDimensioningAnnotationLinesRequiredForTheWidthOfTheSteelCrossSectionDimension.path = combinedVerticalDashedLinesUIBezierPathsThatArePartOfTheDimensioningAnnotationLinesRequiredForSteelCrossSectionWidthDimension.cgPath
+        verticalAndHorizontalDashedLinesShapeLayerThatArePartOfTheDimensioningAnnotationLinesRequiredForTheWidthAndOverallHeightOfTheSteelCrossSectionDimension.path = combinedVerticalAndHorizontalDashedLinesUIBezierPathsThatArePartOfTheDimensioningAnnotationLinesRequiredForSteelCrossSectionWidthAndOverallHeightDimensions.cgPath
         
-        verticalDashedLinesShapeLayerThatArePartOfTheDimensioningAnnotationLinesRequiredForTheWidthOfTheSteelCrossSectionDimension.strokeColor = UIColor(named: steelCrossSectionDimensioningAnnotationLinesUIBezierPathColourString)?.cgColor
+        verticalAndHorizontalDashedLinesShapeLayerThatArePartOfTheDimensioningAnnotationLinesRequiredForTheWidthAndOverallHeightOfTheSteelCrossSectionDimension.strokeColor = UIColor(named: steelCrossSectionDimensioningAnnotationLinesUIBezierPathColourString)?.cgColor
         
-        verticalDashedLinesShapeLayerThatArePartOfTheDimensioningAnnotationLinesRequiredForTheWidthOfTheSteelCrossSectionDimension.lineWidth = steelCrossSectionDimensioningAnnotationLinesUIBezierPathLineWeight
+        verticalAndHorizontalDashedLinesShapeLayerThatArePartOfTheDimensioningAnnotationLinesRequiredForTheWidthAndOverallHeightOfTheSteelCrossSectionDimension.lineWidth = steelCrossSectionDimensioningAnnotationLinesUIBezierPathLineWeight
                                                
+    }
+    
+    func performRequiredReflectionAndTranslationForTheUIBezierPath(UIBezierPathToBeReflected: UIBezierPath, xCoordinateScaleMutiplier: CGFloat, yCoordinateScaleMultiplier: CGFloat, translationInTheXDirection: CGFloat, translationInTheYDirection: CGFloat) -> UIBezierPath {
+        
+        let scaleMultiplier = CGAffineTransform(scaleX: xCoordinateScaleMutiplier, y: yCoordinateScaleMultiplier)
+        
+        let requiredTranslationForTheReflectedUIBezierPath = CGAffineTransform(translationX: translationInTheXDirection, y: translationInTheYDirection)
+        
+        let combinedRequiredScaleMultiplierAndTranslation = scaleMultiplier.concatenating(requiredTranslationForTheReflectedUIBezierPath)
+        
+        UIBezierPathToBeReflected.apply(combinedRequiredScaleMultiplierAndTranslation)
+        
+        return UIBezierPathToBeReflected
+        
     }
     
 //    func drawSelectedIsteelSectionProfilePathAndItsAnnotations() {
