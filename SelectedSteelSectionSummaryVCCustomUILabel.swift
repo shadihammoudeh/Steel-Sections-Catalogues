@@ -10,9 +10,9 @@ import UIKit
 
 class SelectedSteelSectionSummaryVCCustomUILabel: UILabel {
     
-    init(frame: CGRect, numberOfLineToBeDisplayed: Int, horizontalAlignmentOfTextToBeDisplayed: NSTextAlignment, rotationAngleTransformation: CGFloat, textToBeDisplayed: String, wholeTitleAttributesAssigned: Bool, attributesForTheWholeTitle: [NSAttributedString.Key : Any], startingLocationForWholeTitleAttributes: Int, abbreviationLettersAttributesAssigned: Bool, attributesForAbbreviationLetters: [NSAttributedString.Key : Any], startingLocationForAbbreviationLettersAttributes: Int, lengthOfAbbreviationLettersAttributes: Int, abbreviationSubscriptLettersFirstLocationAttributesAssigned: Bool, abbreviationSubscriptLettersFirstLocationAttributes: [NSAttributedString.Key : Any], startingLocationForAbbreviationSubscriptLettersFirstLocationAttributes: Int, lengthOfAbbreviationSubscriptLettersFirstLocationAttributes: Int, abbreviationSubscriptLettersSecondLocationAttributesAssigned: Bool, abbreviationSubscriptLettersSecondLocationAttributes: [NSAttributedString.Key : Any], startingLocationForAbbreviationSubscriptLettersSecondLocationAttributes: Int, lengthOfAbbreviationSubscriptLettersSecondLocationAttributes: Int, superscriptLettersAttributesAssigned: Bool, superscriptLettersAttributes: [NSAttributedString.Key : Any], startingLocationForSuperscriptLettersAttributes: Int, lengthOfSuperscriptLettersAttributes: Int) {
+    init(numberOfLineToBeDisplayed: Int, horizontalAlignmentOfTextToBeDisplayed: NSTextAlignment, rotationAngleTransformation: CGFloat, textToBeDisplayed: String, wholeTitleAttributesAssigned: Bool, attributesForTheWholeTitle: [NSAttributedString.Key : Any], startingLocationForWholeTitleAttributes: Int, abbreviationLettersAttributesAssigned: Bool, attributesForAbbreviationLetters: [NSAttributedString.Key : Any], startingLocationForAbbreviationLettersAttributes: Int, lengthOfAbbreviationLettersAttributes: Int, abbreviationSubscriptLettersFirstLocationAttributesAssigned: Bool, abbreviationSubscriptLettersFirstLocationAttributes: [NSAttributedString.Key : Any], startingLocationForAbbreviationSubscriptLettersFirstLocationAttributes: Int, lengthOfAbbreviationSubscriptLettersFirstLocationAttributes: Int, abbreviationSubscriptLettersSecondLocationAttributesAssigned: Bool, abbreviationSubscriptLettersSecondLocationAttributes: [NSAttributedString.Key : Any], startingLocationForAbbreviationSubscriptLettersSecondLocationAttributes: Int, lengthOfAbbreviationSubscriptLettersSecondLocationAttributes: Int, superscriptLettersAttributesAssigned: Bool, superscriptLettersAttributes: [NSAttributedString.Key : Any], startingLocationForSuperscriptLettersAttributes: Int, lengthOfSuperscriptLettersAttributes: Int) {
         
-        super.init(frame: frame)
+        super.init(frame: CGRect())
         
         setupUILabel(numberOfLineToBeDisplayed: numberOfLineToBeDisplayed, horizontalAlignmentOfTextToBeDisplayed: horizontalAlignmentOfTextToBeDisplayed, rotationAngleTransformation: rotationAngleTransformation, textToBeDisplayed: textToBeDisplayed, wholeTitleAttributesAssigned: wholeTitleAttributesAssigned, attributesForTheWholeTitle: attributesForTheWholeTitle, startingLocationForWholeTitleAttributes: startingLocationForWholeTitleAttributes, abbreviationLettersAttributesAssigned: abbreviationLettersAttributesAssigned, attributesForAbbreviationLetters: attributesForAbbreviationLetters, startingLocationForAbbreviationLettersAttributes: startingLocationForAbbreviationLettersAttributes, lengthOfAbbreviationLettersAttributes: lengthOfAbbreviationLettersAttributes, abbreviationSubscriptLettersFirstLocationAttributesAssigned: abbreviationSubscriptLettersFirstLocationAttributesAssigned, abbreviationSubscriptLettersFirstLocationAttributes: abbreviationSubscriptLettersFirstLocationAttributes, startingLocationForAbbreviationSubscriptLettersFirstLocationAttributes: startingLocationForAbbreviationSubscriptLettersFirstLocationAttributes, lengthOfAbbreviationSubscriptLettersFirstLocationAttributes: lengthOfAbbreviationSubscriptLettersFirstLocationAttributes, abbreviationSubscriptLettersSecondLocationAttributesAssigned: abbreviationSubscriptLettersSecondLocationAttributesAssigned, abbreviationSubscriptLettersSecondLocationAttributes: abbreviationSubscriptLettersSecondLocationAttributes, startingLocationForAbbreviationSubscriptLettersSecondLocationAttributes: startingLocationForAbbreviationSubscriptLettersSecondLocationAttributes, lengthOfAbbreviationSubscriptLettersSecondLocationAttributes: lengthOfAbbreviationSubscriptLettersSecondLocationAttributes, superscriptLettersAttributesAssigned: superscriptLettersAttributesAssigned, superscriptLettersAttributes: superscriptLettersAttributes, startingLocationForSuperscriptLettersAttributes: startingLocationForSuperscriptLettersAttributes, lengthOfSuperscriptLettersAttributes: lengthOfSuperscriptLettersAttributes)
         
@@ -31,7 +31,7 @@ class SelectedSteelSectionSummaryVCCustomUILabel: UILabel {
         textAlignment = horizontalAlignmentOfTextToBeDisplayed
         
         transform = CGAffineTransform(rotationAngle: rotationAngleTransformation)
-        
+                
         let labelAttributedString: NSMutableAttributedString = NSMutableAttributedString(string: textToBeDisplayed)
         
         if wholeTitleAttributesAssigned == true {
@@ -66,8 +66,12 @@ class SelectedSteelSectionSummaryVCCustomUILabel: UILabel {
         
         attributedText = labelAttributedString
         
-        sizeToFit()
+        layer.borderWidth = 1
         
+        layer.borderColor = UIColor.black.cgColor
+        
+        sizeToFit()
+                        
     }
     
 }

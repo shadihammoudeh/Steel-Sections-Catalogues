@@ -1277,6 +1277,50 @@ extension SteelSectionsTableViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
         
+        selectedSteelSectionSummaryPageViewControllerInstance.sortBy = self.sortBy
+        
+        selectedSteelSectionSummaryPageViewControllerInstance.isSearching = self.isSearching
+        
+        selectedSteelSectionSummaryPageViewControllerInstance.filtersApplied = self.filtersApplied
+        
+        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController = self.userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController
+        
+        selectedSteelSectionSummaryPageViewControllerInstance.receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController = indexPath.section
+        
+        if (sortBy == "None" && filtersApplied == false && isSearching == false) || sortBy == "Sorted by: Section designation in ascending order" ||  sortBy == "Sorted by: Section designation in descending order" {
+            
+            if (sortBy == "None" && filtersApplied == false && isSearching == false) {
+                
+                selectedSteelSectionSummaryPageViewControllerInstance.receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData = extractedSteelSectionsDataArrayFromThePassedCsvFileUsingTheParser
+                
+                selectedSteelSectionSummaryPageViewControllerInstance.receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly = steelSectionsDataArrayContainingOnlyInfoAboutSectionsSerialNumberSortedInAscendingOrder
+                
+            } else {
+                
+                selectedSteelSectionSummaryPageViewControllerInstance.receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData = steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsSortByOptionsPopoverViewController
+                
+                selectedSteelSectionSummaryPageViewControllerInstance.receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly = steelSectionsDataArrayContainingOnlyInfoAboutSectionsSerialNumberSortedInAscendingOrDescendingOrder
+                
+            }
+   
+        } else {
+            
+            if (sortBy == "Sorted by: Depth of section in ascending order" || sortBy == "Sorted by: Width of section in ascending order" || sortBy == "Sorted by: Area of section in ascending order" || sortBy == "Sorted by: Depth of section in descending order" || sortBy == "Sorted by: Width of section in descending order" || sortBy == "Sorted by: Area of section in descending order") {
+             
+                selectedSteelSectionSummaryPageViewControllerInstance.receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData = steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsSortByOptionsPopoverViewController
+                
+            } else if isSearching == true {
+                
+                selectedSteelSectionSummaryPageViewControllerInstance.receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData = steelSectionsDataArrayAsPerSearchedCriteria
+                
+            } else if filtersApplied == true {
+                
+                selectedSteelSectionSummaryPageViewControllerInstance.receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData = steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsDataFilterOptionsViewController
+                
+            }
+            
+        }
+        
         // The below variable will be used in order to fill the required fields inside Steel Sections Summary Page:
         
 //        var steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom = [SteelSectionParameters]()
@@ -1291,67 +1335,17 @@ extension SteelSectionsTableViewController: UITableViewDelegate {
         
         // Below we are sending the sortBy, isSearching and filtersApplied Variables from this viewController to the next one:
         
-        selectedSteelSectionSummaryPageViewControllerInstance.sortBy = self.sortBy
         
-        selectedSteelSectionSummaryPageViewControllerInstance.isSearching = self.isSearching
-        
-        selectedSteelSectionSummaryPageViewControllerInstance.filtersApplied = self.filtersApplied
         
         // These values are obtained once the user taps on a disclousre button next to one of the displayed tableView rows. Then these values will be passed back again once the SelectedSteelSectionSummaryPageVC has been dismissed in order to automatically scroll the tableView inside this VC back to the row that the user last tapped its disclosure button:
         
-        selectedSteelSectionSummaryPageViewControllerInstance.receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController = indexPath.section
         
-        selectedSteelSectionSummaryPageViewControllerInstance.receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController = indexPath.row
         
         // In order to figure out which Data Array to send to the next VC the below code need to be run first:
         
         // The below IF STATEMENT represents the default case as soon as this VC loads up for the first time:
         
-        if sortBy == "None" && isSearching == false && filtersApplied == false {
-            
-            selectedSteelSectionSummaryPageViewControllerInstance.receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData = extractedSteelSectionsDataArrayFromThePassedCsvFileUsingTheParser
-            
-//            steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom = extractedSteelSectionsDataArrayFromThePassedCsvFileUsingTheParser
-            
-            selectedSteelSectionSummaryPageViewControllerInstance.receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly = steelSectionsDataArrayContainingOnlyInfoAboutSectionsSerialNumberSortedInAscendingOrder
-            
-//            sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom = steelSectionsDataArrayContainingOnlyInfoAboutSectionsSerialNumberSortedInAscendingOrder
-            
-        }
-        
-        // The below IF STATEMENT represents the case when the user first sorted data to a specific criteria inside this VC then tapped on one of the displayed table's row's disclosure icons:
-        
-        else if (sortBy == "Sorted by: Section designation in ascending order" || sortBy == "Sorted by: Depth of section in ascending order" || sortBy == "Sorted by: Width of section in ascending order" || sortBy == "Sorted by: Area of section in ascending order" || sortBy == "Sorted by: Section designation in descending order" || sortBy == "Sorted by: Depth of section in descending order" || sortBy == "Sorted by: Width of section in descending order" || sortBy == "Sorted by: Area of section in descending order") && isSearching == false && filtersApplied == false {
-            
-            selectedSteelSectionSummaryPageViewControllerInstance.receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData = steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsSortByOptionsPopoverViewController
-            
-//            steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom = steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsSortByOptionsPopoverViewController
-            
-            selectedSteelSectionSummaryPageViewControllerInstance.receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly = steelSectionsDataArrayContainingOnlyInfoAboutSectionsSerialNumberSortedInAscendingOrDescendingOrder
-            
-//            sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom = steelSectionsDataArrayContainingOnlyInfoAboutSectionsSerialNumberSortedInAscendingOrDescendingOrder
-            
-        }
-        
-        // The below IF STATEMENT represents the case when the user first filtered the results inside this VC to a specific criteria and then tapped on the disclosure button displayed next to one of the displayed table's row inside this VC after filterings have been applied:
-        
-        else if sortBy == "None" && isSearching == false && filtersApplied == true {
-            
-            selectedSteelSectionSummaryPageViewControllerInstance.receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData = steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsDataFilterOptionsViewController
-            
-//            steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom = steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsDataFilterOptionsViewController
-            
-        }
-        
-        // The below IF STATEMENT represents the case when the user first searched for a specific Section Designation Steel profile and then tapped on the disclousre icon button displayed next to one of the visible table's rows:
-        
-        else if sortBy == "None" && isSearching == true && filtersApplied == false {
-            
-            selectedSteelSectionSummaryPageViewControllerInstance.receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData = steelSectionsDataArrayAsPerSearchedCriteria
-            
-//            steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom = steelSectionsDataArrayAsPerSearchedCriteria
-            
-        }
+  
         
         // The below switch statement is required in order to figure out what initials to add next to the Navigation Bar title to be displayed on the next VC that is StelectedSteelSectionSummaryPageVC (i.e. whether to add UB, UC, UBP, etc..):
         
