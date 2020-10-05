@@ -106,7 +106,7 @@ class SteelSectionsTableViewController: UIViewController {
     
     // Steel Section Summary Page VC Instance:
     
-    lazy var selectedSteelSectionSummaryPageViewControllerInstance = main.instantiateViewController(withIdentifier: "SelectedSteelSectionSummaryPage") as! SelectedSteelSectionSummaryPage
+//    lazy var selectedSteelSectionSummaryPageViewControllerInstance = main.instantiateViewController(withIdentifier: "SelectedSteelSectionSummaryPage") as! SelectedSteelSectionSummaryPage
     
     // MARK: - viewDidLoad():
     
@@ -957,7 +957,8 @@ extension SteelSectionsTableViewController: UITableViewDataSource {
         
     }
     
-    // MARK: - cellForRowAtIndexPath:
+    //
+    
     
     // The below function will be used in order to populate the required data for each tableView cell:
     
@@ -1277,29 +1278,33 @@ extension SteelSectionsTableViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
         
-        selectedSteelSectionSummaryPageViewControllerInstance.sortBy = self.sortBy
+        let viewControllerToGoTo = main.instantiateViewController(withIdentifier: "SelectedSteelSectionSummaryPage") as! SelectedSteelSectionSummaryPage
         
-        selectedSteelSectionSummaryPageViewControllerInstance.isSearching = self.isSearching
+        viewControllerToGoTo.sortBy = self.sortBy
         
-        selectedSteelSectionSummaryPageViewControllerInstance.filtersApplied = self.filtersApplied
+        viewControllerToGoTo.isSearching = self.isSearching
         
-        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController = self.userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController
+        viewControllerToGoTo.filtersApplied = self.filtersApplied
         
-        selectedSteelSectionSummaryPageViewControllerInstance.receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController = indexPath.section
+        viewControllerToGoTo.userSelectedCollectionViewCellFromOpenRolledSteelSectionsCollectionViewController = self.userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController
+        
+        viewControllerToGoTo.receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController = indexPath.section
+        
+        viewControllerToGoTo.receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController = indexPath.row
         
         if (sortBy == "None" && filtersApplied == false && isSearching == false) || sortBy == "Sorted by: Section designation in ascending order" ||  sortBy == "Sorted by: Section designation in descending order" {
             
             if (sortBy == "None" && filtersApplied == false && isSearching == false) {
                 
-                selectedSteelSectionSummaryPageViewControllerInstance.receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData = extractedSteelSectionsDataArrayFromThePassedCsvFileUsingTheParser
+                viewControllerToGoTo.receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData = extractedSteelSectionsDataArrayFromThePassedCsvFileUsingTheParser
                 
-                selectedSteelSectionSummaryPageViewControllerInstance.receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly = steelSectionsDataArrayContainingOnlyInfoAboutSectionsSerialNumberSortedInAscendingOrder
+                viewControllerToGoTo.receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly = steelSectionsDataArrayContainingOnlyInfoAboutSectionsSerialNumberSortedInAscendingOrder
                 
             } else {
                 
-                selectedSteelSectionSummaryPageViewControllerInstance.receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData = steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsSortByOptionsPopoverViewController
+                viewControllerToGoTo.receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData = steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsSortByOptionsPopoverViewController
                 
-                selectedSteelSectionSummaryPageViewControllerInstance.receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly = steelSectionsDataArrayContainingOnlyInfoAboutSectionsSerialNumberSortedInAscendingOrDescendingOrder
+                viewControllerToGoTo.receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly = steelSectionsDataArrayContainingOnlyInfoAboutSectionsSerialNumberSortedInAscendingOrDescendingOrder
                 
             }
    
@@ -1307,15 +1312,15 @@ extension SteelSectionsTableViewController: UITableViewDelegate {
             
             if (sortBy == "Sorted by: Depth of section in ascending order" || sortBy == "Sorted by: Width of section in ascending order" || sortBy == "Sorted by: Area of section in ascending order" || sortBy == "Sorted by: Depth of section in descending order" || sortBy == "Sorted by: Width of section in descending order" || sortBy == "Sorted by: Area of section in descending order") {
              
-                selectedSteelSectionSummaryPageViewControllerInstance.receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData = steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsSortByOptionsPopoverViewController
+                viewControllerToGoTo.receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData = steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsSortByOptionsPopoverViewController
                 
             } else if isSearching == true {
                 
-                selectedSteelSectionSummaryPageViewControllerInstance.receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData = steelSectionsDataArrayAsPerSearchedCriteria
+                viewControllerToGoTo.receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData = steelSectionsDataArrayAsPerSearchedCriteria
                 
             } else if filtersApplied == true {
                 
-                selectedSteelSectionSummaryPageViewControllerInstance.receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData = steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsDataFilterOptionsViewController
+                viewControllerToGoTo.receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData = steelSectionsDataArrayAsReceivedFromTableViewSteelSectionsDataFilterOptionsViewController
                 
             }
             
@@ -1323,19 +1328,9 @@ extension SteelSectionsTableViewController: UITableViewDelegate {
         
         // The below variable will be used in order to fill the required fields inside Steel Sections Summary Page:
         
-//        var steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom = [SteelSectionParameters]()
-//
-//        var sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom = [String]()
+        // In order to de-initialize/de-allocate the viewController (i.e. SelectedSteelSectionSummaryPage) that gets displayed depending on which tableView cell disclosure icon the user tapped, once it gets dismissed. So that a new one gets initialised when the user taps on a different tableView cell disclosure icon, and therefore, its navigationBar title as well as relevant information about the selected section get displayed. The below is needed in order to avoid having a Strong Reference to the viewController that will be displayed once the user hit on a particular tableView Cell Disclosure Icon. This is achieved by making the reference to the viewController that will be displayed once the user hit on a particular tableView cell inside this method (i.e. a Local Variable)as opposed to outside this method (Global Variab le):
         
-        // In order to de-initialize/de-allocate the viewController (i.e. SelectedSteelSectionSummaryPage) that gets displayed depending on which tableView cell disclosure icon the user tapped, once it gets dismissed. So that a new one gets initialised when the user taps on a different tableView cell disclosure icon, and therefore, its navigationBar title as well as relevant information about the selected section get displayed. The below is needed in order to avoid having a Strong Reference to the viewController that will be displayed once the user hit on a particular tableView Cell Disclosure Icon. This is achieved by making the reference to the viewController that will be displayed once the user hit on a particular tableView cell inside this method (i.e. a Local Variable) as opposed to outside this methid (Global Variable):
-        
-        selectedSteelSectionSummaryPageViewControllerInstance.delegate = self
-        
-//        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController = self.userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController
-        
-        // Below we are sending the sortBy, isSearching and filtersApplied Variables from this viewController to the next one:
-        
-        
+        viewControllerToGoTo.delegate = self
         
         // These values are obtained once the user taps on a disclousre button next to one of the displayed tableView rows. Then these values will be passed back again once the SelectedSteelSectionSummaryPageVC has been dismissed in order to automatically scroll the tableView inside this VC back to the row that the user last tapped its disclosure button:
         
@@ -1345,94 +1340,12 @@ extension SteelSectionsTableViewController: UITableViewDelegate {
         
         // The below IF STATEMENT represents the default case as soon as this VC loads up for the first time:
         
-  
         
         // The below switch statement is required in order to figure out what initials to add next to the Navigation Bar title to be displayed on the next VC that is StelectedSteelSectionSummaryPageVC (i.e. whether to add UB, UC, UBP, etc..):
         
-//        switch userLastSelectedCollectionViewCellBeforeNavigatingToThisViewController {
-//
-//        // The below case is when the user selected Universal Beams collectionView cell from the previous viewController:
-//
-//        case 0:
-//
-//            selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionFullSectionDesignationReceivedFromPreviousViewController = "UB \(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.fullSectionDesignation })[indexPath.row])"
-//
-//            // The below case is when the user selected Universal Columns collectionView cell from the previous viewController:
-//
-//
-//        case 1:
-//
-//            selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionFullSectionDesignationReceivedFromPreviousViewController = "UC \(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.fullSectionDesignation })[indexPath.row])"
-//
-//            // The below case is when the user selected Universal Bearing Piles collectionView cell from the previous viewController:
-//
-//
-//        case 2:
-//
-//            selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionFullSectionDesignationReceivedFromPreviousViewController = "UBP \(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.fullSectionDesignation })[indexPath.row])"
-//
-//        default:
-//
-//            selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionFullSectionDesignationReceivedFromPreviousViewController = "UB \(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.fullSectionDesignation })[indexPath.row])"
-        
-//        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionDepthReceivedFromPreviousViewController = CGFloat(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionTotalDepth })[indexPath.row])
-//
-//        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionWidthReceivedFromPreviousViewController = CGFloat(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionWidth })[indexPath.row])
-//
-//        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionWebThicknessReceivedFromPreviousViewController = CGFloat(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionWebThickness })[indexPath.row])
-//
-//        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionFlangeThicknessReceivedFromPreviousViewController = CGFloat(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionFlangeThickness })[indexPath.row])
-//
-//        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionRootRadiusReceivedFromPreviousViewController = CGFloat(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionRootRadiusOne })[indexPath.row])
-//
-//        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionDepthBetweenFilletsReceivedFromPreviousViewController = Double(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionDepthBetweenFillets })[indexPath.row])
-//
-//        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionAreaReceivedFromPreviousViewController = Double(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionArea })[indexPath.row])
-//
-//        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionMassPerMetreReceivedFromPreviousViewController = Double(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionMassPerMetre })[indexPath.row])
-//
-//        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionEndClearanceDetailingDimensionReceivedFromPreviousViewController = Int(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionEndClearanceDimensionForDetailing })[indexPath.row])
-//
-//        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionNotchNdetailingDimensionReceivedFromPreviousViewController = Int(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionNotchNdimensionForDetailing })[indexPath.row])
-//
-//        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionNotchnDetailingDimensionReceivedFromPreviousViewController = Int(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionNotchnDimensionForDetailing })[indexPath.row])
-//
-//        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionSecondMomentOfAreaAboutMajorAxisReceivedFromPreviousViewController = Double(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionMajorSecondMomentOfAreaAboutYYaxis })[indexPath.row])
-//
-//        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionSecondMomentOfAreaAboutMinorAxisReceivedFromPreviousViewController = Double(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionMinorSecondMomentOfAreaAboutZZaxis })[indexPath.row])
-//
-//        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionRadiusOfGyrationAboutMajorAxisReceivedFromPreviousViewController = Double(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionMajorRadiusOfGyrationAboutYYaxis })[indexPath.row])
-//
-//        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionRadiusOfGyrationAboutMinorAxisReceivedFromPreviousViewController = Double(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionMinorRadiusOfGyrationAboutZZaxis })[indexPath.row])
-//
-//        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionElasticModulusAboutMajorAxisReceivedFromPreviousViewController = Double(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionMajorElasticModulusAboutYYaxis })[indexPath.row])
-//
-//        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionElasticModulusAboutMinorAxisReceivedFromPreviousViewController = Double(steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionMinorElasticModulusAboutZZaxis })[indexPath.row])
-//
-//        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionPlasticModulusAboutMajorAxisReceivedFromPreviousViewController = steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionMajorPlasticModulusAboutYYaxis })[indexPath.row]
-//
-//        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionPlasticModulusAboutMinorAxisReceivedFromPreviousViewController = steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionMinorPlasticModulusAboutZZaxis })[indexPath.row]
-//
-//        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionBucklingParameterReceivedFromPreviousViewController = steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionBucklingParameterU })[indexPath.row]
-//
-//        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionTorsionalIndexReceivedFromPreviousViewController = steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionTorsionalIndexX })[indexPath.row]
-//
-//        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionWarpingConstantReceivedFromPreviousViewController = steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionWarpingConstantIwInDm6 })[indexPath.row]
-//
-//        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionTorsionalConstantReceivedFromPreviousViewController = steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionTorsionalConstantIt })[indexPath.row]
-//
-//        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionSurfaceAreaPerMetreReceivedFromPreviousViewController = steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionSurfaceAreaPerMetre })[indexPath.row]
-//
-//        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionSurfaceAreaPerTonneReceivedFromPreviousViewController = steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionSurfaceAreaPerTonne })[indexPath.row]
-//
-//        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionRatioForWebLocalBucklingReceivedFromPreviousViewController = steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionLocalWebBucklingRatio })[indexPath.row]
-//
-//        selectedSteelSectionSummaryPageViewControllerInstance.userSelectedSteelSectionRatioForFlangeLocalBucklingReceivedFromPreviousViewController = steelSectionsDataArrayToBeUsedToExtractRelevantSelectedSteelSectionFrom.filter({ $0.sectionSerialNumber == "\(sectionsSerialNumbersArrayToBeUsedToExtractRelevantSelectedSectionSerialNumberFrom[indexPath.section])" }).map({ $0.sectionLocalFlangeBucklingRatio })[indexPath.row]
-//
-        
         view.window!.layer.add(movingToNewVCTransition, forKey: kCATransition)
         
-        self.present(selectedSteelSectionSummaryPageViewControllerInstance, animated: true, completion: nil)
+        self.present(viewControllerToGoTo, animated: true, completion: nil)
         
     }
     

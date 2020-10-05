@@ -10,17 +10,19 @@ import UIKit
 
 class SelectedSteelSectionSummaryPage: UIViewController {
         
-    // MARK: - Assigning protocol delegate:
+// MARK: - Assigning protocol delegate:
         
-    // Here we are setting a delegate inside this View Controller in order to be able to access all the methods inside the Protocol. Notice that the delegate is defined as a "weak" one, as in most cases you do not want a child object maintaining a string reference to a parent object:
+    // Here we are setting a delegate inside this View Controller in order to be able to access all the methods inside the Protocol. Notice that the delegate is defined as a "weak" one, as in most cases you do not want a child object maintaining a strong reference to a parent object:
     
     weak var delegate: PassingDataBackwardsBetweenViewControllersProtocol?
+    
+// MARK: - Core Animation transition declartion to go back to previous VC:
     
     // The below property is defined in order to animate how this VC will go back to the previous VC once a rightSwipeGesture has been recognised or the user tapped on the back navigation bar button item located inside the navigation bar:
     
     let movingBackTransitionToPreviousVC = CATransition()
-    
-    // MARK: - Data passed from previous VC:
+
+// MARK: - Data passed from previous VC when the user tap on the disclosure icon next to any of the displayed tableView's rows:
     
     var sortBy: String = "None"
 
@@ -28,7 +30,7 @@ class SelectedSteelSectionSummaryPage: UIViewController {
 
     var filtersApplied: Bool = false
     
-    var userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController: Int = 0
+    var userSelectedCollectionViewCellFromOpenRolledSteelSectionsCollectionViewController: Int = 0
     
     var receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController: Int = 0
     
@@ -38,11 +40,7 @@ class SelectedSteelSectionSummaryPage: UIViewController {
     
     var receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly: [String] = []
     
-    // Variables to be displayed for all steel sections, these will get their values later on inside this VC:
-    
-    var userSelectedSteelSectionFullSectionDesignationReceivedFromPreviousViewController: String = ""
-    
-    // MARK: - Drawn steel cross-section annotation and dimensioning lines start and end coordinates:
+// MARK: - Drawn steel cross-section annotation and dimensioning lines start and end coordinates, which are needed in order to properly place required annotation and dimensioning UILabels inside the steel cross-section drawing area:
     
     var thicknessOfFlangeBottomVerticalDimensioningLineEndPointCoordinates: (x: CGFloat, y: CGFloat) = (x: 0, y: 0)
     
@@ -62,17 +60,17 @@ class SelectedSteelSectionSummaryPage: UIViewController {
     
     var minorAxisVerticalAnnotationLineBottomSidePointCoordinates: (x: CGFloat, y: CGFloat) = (x: 0, y: 0)
     
-    // MARK: - The below Variables define the custom UILables that will be displayed inside the steel cross-section drawing UIView in order to display the relevant drawn steel cross-section dimensions and annotations:
+// MARK: - The below Variables define the custom UILables that will be displayed inside the steel cross-section drawing UIView in order to display the relevant drawn steel cross-section dimensions and annotations:
     
-    lazy var steelSectionDrawingViewFlangeThicknessOfDrawnSteelCrossSectionDimensioningLabel = SelectedSteelSectionSummaryVCCustomUILabel(numberOfLineToBeDisplayed: 0, horizontalAlignmentOfTextToBeDisplayed: .center, rotationAngleTransformation: 0, textToBeDisplayed: "tf = 20mm", wholeTitleAttributesAssigned: true, attributesForTheWholeTitle: steelSectionProfileDimensionAnnotationLabelsStringsAttributesInsideTheProfileDrawingArea, startingLocationForWholeTitleAttributes: 0, abbreviationLettersAttributesAssigned: true, attributesForAbbreviationLetters: steelSectionProfileDimensionLabelsAbbreviationLettersAttributesInsideTheProfileDrawingArea, startingLocationForAbbreviationLettersAttributes: 0, lengthOfAbbreviationLettersAttributes: 2, abbreviationSubscriptLettersFirstLocationAttributesAssigned: true, abbreviationSubscriptLettersFirstLocationAttributes: steelSectionProfileDimensionLabelsSubAbbreviationLettersAttributesInsideTheProfileDrawingArea, startingLocationForAbbreviationSubscriptLettersFirstLocationAttributes: 1, lengthOfAbbreviationSubscriptLettersFirstLocationAttributes: 2, abbreviationSubscriptLettersSecondLocationAttributesAssigned: false, abbreviationSubscriptLettersSecondLocationAttributes: steelSectionProfileDimensionLabelsSubAbbreviationLettersAttributesInsideTheProfileDrawingArea, startingLocationForAbbreviationSubscriptLettersSecondLocationAttributes: 0, lengthOfAbbreviationSubscriptLettersSecondLocationAttributes: 1, superscriptLettersAttributesAssigned: false, superscriptLettersAttributes: subLabelsSuperscriptLettersInsideSectionDimensionalAndStructuralPropertiesScrollViewStringAttributes, startingLocationForSuperscriptLettersAttributes: 0, lengthOfSuperscriptLettersAttributes: 1)
+    lazy var steelSectionDrawingViewFlangeThicknessOfDrawnSteelCrossSectionDimensioningLabel = SelectedSteelSectionSummaryVCCustomUILabel(numberOfLineToBeDisplayed: 0, horizontalAlignmentOfTextToBeDisplayed: .center, rotationAngleTransformation: 0, textToBeDisplayed: selectedSteelCrossSectionFromPreviousVCRelevantDataArray()["Flange Thickness [tf] (mm)"]!, wholeTitleAttributesAssigned: true, attributesForTheWholeTitle: steelSectionProfileDimensionAnnotationLabelsStringsAttributesInsideTheProfileDrawingArea, startingLocationForWholeTitleAttributes: 0, abbreviationLettersAttributesAssigned: true, attributesForAbbreviationLetters: steelSectionProfileDimensionLabelsAbbreviationLettersAttributesInsideTheProfileDrawingArea, startingLocationForAbbreviationLettersAttributes: 0, lengthOfAbbreviationLettersAttributes: 2, abbreviationSubscriptLettersFirstLocationAttributesAssigned: true, abbreviationSubscriptLettersFirstLocationAttributes: steelSectionProfileDimensionLabelsSubAbbreviationLettersAttributesInsideTheProfileDrawingArea, startingLocationForAbbreviationSubscriptLettersFirstLocationAttributes: 1, lengthOfAbbreviationSubscriptLettersFirstLocationAttributes: 2, abbreviationSubscriptLettersSecondLocationAttributesAssigned: false, abbreviationSubscriptLettersSecondLocationAttributes: steelSectionProfileDimensionLabelsSubAbbreviationLettersAttributesInsideTheProfileDrawingArea, startingLocationForAbbreviationSubscriptLettersSecondLocationAttributes: 0, lengthOfAbbreviationSubscriptLettersSecondLocationAttributes: 1, superscriptLettersAttributesAssigned: false, superscriptLettersAttributes: subLabelsSuperscriptLettersInsideSectionDimensionalAndStructuralPropertiesScrollViewStringAttributes, startingLocationForSuperscriptLettersAttributes: 0, lengthOfSuperscriptLettersAttributes: 1)
     
-    lazy var steelSectionDrawingViewRootRadiusOfDrawnSteelCrossSectionDimensioningLabel = SelectedSteelSectionSummaryVCCustomUILabel(numberOfLineToBeDisplayed: 0, horizontalAlignmentOfTextToBeDisplayed: .center, rotationAngleTransformation: 0, textToBeDisplayed: "r = 12mm", wholeTitleAttributesAssigned: true, attributesForTheWholeTitle: steelSectionProfileDimensionAnnotationLabelsStringsAttributesInsideTheProfileDrawingArea, startingLocationForWholeTitleAttributes: 0, abbreviationLettersAttributesAssigned: true, attributesForAbbreviationLetters: steelSectionProfileDimensionLabelsAbbreviationLettersAttributesInsideTheProfileDrawingArea, startingLocationForAbbreviationLettersAttributes: 0, lengthOfAbbreviationLettersAttributes: 1, abbreviationSubscriptLettersFirstLocationAttributesAssigned: false, abbreviationSubscriptLettersFirstLocationAttributes: steelSectionProfileDimensionLabelsSubAbbreviationLettersAttributesInsideTheProfileDrawingArea, startingLocationForAbbreviationSubscriptLettersFirstLocationAttributes: 0, lengthOfAbbreviationSubscriptLettersFirstLocationAttributes: 1, abbreviationSubscriptLettersSecondLocationAttributesAssigned: false, abbreviationSubscriptLettersSecondLocationAttributes: steelSectionProfileDimensionLabelsSubAbbreviationLettersAttributesInsideTheProfileDrawingArea, startingLocationForAbbreviationSubscriptLettersSecondLocationAttributes: 0, lengthOfAbbreviationSubscriptLettersSecondLocationAttributes: 1, superscriptLettersAttributesAssigned: false, superscriptLettersAttributes: subLabelsSuperscriptLettersInsideSectionDimensionalAndStructuralPropertiesScrollViewStringAttributes, startingLocationForSuperscriptLettersAttributes: 0, lengthOfSuperscriptLettersAttributes: 1)
+    lazy var steelSectionDrawingViewRootRadiusOfDrawnSteelCrossSectionDimensioningLabel = SelectedSteelSectionSummaryVCCustomUILabel(numberOfLineToBeDisplayed: 0, horizontalAlignmentOfTextToBeDisplayed: .center, rotationAngleTransformation: 0, textToBeDisplayed: selectedSteelCrossSectionFromPreviousVCRelevantDataArray()["Root Radius [r1] (mm)"]!, wholeTitleAttributesAssigned: true, attributesForTheWholeTitle: steelSectionProfileDimensionAnnotationLabelsStringsAttributesInsideTheProfileDrawingArea, startingLocationForWholeTitleAttributes: 0, abbreviationLettersAttributesAssigned: true, attributesForAbbreviationLetters: steelSectionProfileDimensionLabelsAbbreviationLettersAttributesInsideTheProfileDrawingArea, startingLocationForAbbreviationLettersAttributes: 0, lengthOfAbbreviationLettersAttributes: 1, abbreviationSubscriptLettersFirstLocationAttributesAssigned: false, abbreviationSubscriptLettersFirstLocationAttributes: steelSectionProfileDimensionLabelsSubAbbreviationLettersAttributesInsideTheProfileDrawingArea, startingLocationForAbbreviationSubscriptLettersFirstLocationAttributes: 0, lengthOfAbbreviationSubscriptLettersFirstLocationAttributes: 1, abbreviationSubscriptLettersSecondLocationAttributesAssigned: false, abbreviationSubscriptLettersSecondLocationAttributes: steelSectionProfileDimensionLabelsSubAbbreviationLettersAttributesInsideTheProfileDrawingArea, startingLocationForAbbreviationSubscriptLettersSecondLocationAttributes: 0, lengthOfAbbreviationSubscriptLettersSecondLocationAttributes: 1, superscriptLettersAttributesAssigned: false, superscriptLettersAttributes: subLabelsSuperscriptLettersInsideSectionDimensionalAndStructuralPropertiesScrollViewStringAttributes, startingLocationForSuperscriptLettersAttributes: 0, lengthOfSuperscriptLettersAttributes: 1)
     
-    lazy var steelSectionDrawingViewWebThicknessOfDrawnSteelCrossSectionDimensioningLabel = SelectedSteelSectionSummaryVCCustomUILabel(numberOfLineToBeDisplayed: 0, horizontalAlignmentOfTextToBeDisplayed: .center, rotationAngleTransformation: 0, textToBeDisplayed: "tw = 12mm", wholeTitleAttributesAssigned: true, attributesForTheWholeTitle: steelSectionProfileDimensionAnnotationLabelsStringsAttributesInsideTheProfileDrawingArea, startingLocationForWholeTitleAttributes: 0, abbreviationLettersAttributesAssigned: true, attributesForAbbreviationLetters: steelSectionProfileDimensionLabelsAbbreviationLettersAttributesInsideTheProfileDrawingArea, startingLocationForAbbreviationLettersAttributes: 0, lengthOfAbbreviationLettersAttributes: 2, abbreviationSubscriptLettersFirstLocationAttributesAssigned: true, abbreviationSubscriptLettersFirstLocationAttributes: steelSectionProfileDimensionLabelsSubAbbreviationLettersAttributesInsideTheProfileDrawingArea, startingLocationForAbbreviationSubscriptLettersFirstLocationAttributes: 1, lengthOfAbbreviationSubscriptLettersFirstLocationAttributes: 2, abbreviationSubscriptLettersSecondLocationAttributesAssigned: false, abbreviationSubscriptLettersSecondLocationAttributes: steelSectionProfileDimensionLabelsSubAbbreviationLettersAttributesInsideTheProfileDrawingArea, startingLocationForAbbreviationSubscriptLettersSecondLocationAttributes: 0, lengthOfAbbreviationSubscriptLettersSecondLocationAttributes: 1, superscriptLettersAttributesAssigned: false, superscriptLettersAttributes: subLabelsSuperscriptLettersInsideSectionDimensionalAndStructuralPropertiesScrollViewStringAttributes, startingLocationForSuperscriptLettersAttributes: 0, lengthOfSuperscriptLettersAttributes: 1)
+    lazy var steelSectionDrawingViewWebThicknessOfDrawnSteelCrossSectionDimensioningLabel = SelectedSteelSectionSummaryVCCustomUILabel(numberOfLineToBeDisplayed: 0, horizontalAlignmentOfTextToBeDisplayed: .center, rotationAngleTransformation: 0, textToBeDisplayed: selectedSteelCrossSectionFromPreviousVCRelevantDataArray()["Web Thickness [tw] (mm)"]!, wholeTitleAttributesAssigned: true, attributesForTheWholeTitle: steelSectionProfileDimensionAnnotationLabelsStringsAttributesInsideTheProfileDrawingArea, startingLocationForWholeTitleAttributes: 0, abbreviationLettersAttributesAssigned: true, attributesForAbbreviationLetters: steelSectionProfileDimensionLabelsAbbreviationLettersAttributesInsideTheProfileDrawingArea, startingLocationForAbbreviationLettersAttributes: 0, lengthOfAbbreviationLettersAttributes: 2, abbreviationSubscriptLettersFirstLocationAttributesAssigned: true, abbreviationSubscriptLettersFirstLocationAttributes: steelSectionProfileDimensionLabelsSubAbbreviationLettersAttributesInsideTheProfileDrawingArea, startingLocationForAbbreviationSubscriptLettersFirstLocationAttributes: 1, lengthOfAbbreviationSubscriptLettersFirstLocationAttributes: 2, abbreviationSubscriptLettersSecondLocationAttributesAssigned: false, abbreviationSubscriptLettersSecondLocationAttributes: steelSectionProfileDimensionLabelsSubAbbreviationLettersAttributesInsideTheProfileDrawingArea, startingLocationForAbbreviationSubscriptLettersSecondLocationAttributes: 0, lengthOfAbbreviationSubscriptLettersSecondLocationAttributes: 1, superscriptLettersAttributesAssigned: false, superscriptLettersAttributes: subLabelsSuperscriptLettersInsideSectionDimensionalAndStructuralPropertiesScrollViewStringAttributes, startingLocationForSuperscriptLettersAttributes: 0, lengthOfSuperscriptLettersAttributes: 1)
     
-    lazy var steelSectionDrawingViewWidthOfDrawnSteelCrossSectionDimensioningLabel = SelectedSteelSectionSummaryVCCustomUILabel(numberOfLineToBeDisplayed: 0, horizontalAlignmentOfTextToBeDisplayed: .center, rotationAngleTransformation: 0, textToBeDisplayed: "b = 300mm", wholeTitleAttributesAssigned: true, attributesForTheWholeTitle: steelSectionProfileDimensionAnnotationLabelsStringsAttributesInsideTheProfileDrawingArea, startingLocationForWholeTitleAttributes: 0, abbreviationLettersAttributesAssigned: true, attributesForAbbreviationLetters: steelSectionProfileDimensionLabelsAbbreviationLettersAttributesInsideTheProfileDrawingArea, startingLocationForAbbreviationLettersAttributes: 0, lengthOfAbbreviationLettersAttributes: 1, abbreviationSubscriptLettersFirstLocationAttributesAssigned: false, abbreviationSubscriptLettersFirstLocationAttributes: steelSectionProfileDimensionLabelsSubAbbreviationLettersAttributesInsideTheProfileDrawingArea, startingLocationForAbbreviationSubscriptLettersFirstLocationAttributes: 0, lengthOfAbbreviationSubscriptLettersFirstLocationAttributes: 1, abbreviationSubscriptLettersSecondLocationAttributesAssigned: false, abbreviationSubscriptLettersSecondLocationAttributes: steelSectionProfileDimensionLabelsSubAbbreviationLettersAttributesInsideTheProfileDrawingArea, startingLocationForAbbreviationSubscriptLettersSecondLocationAttributes: 0, lengthOfAbbreviationSubscriptLettersSecondLocationAttributes: 1, superscriptLettersAttributesAssigned: false, superscriptLettersAttributes: subLabelsSuperscriptLettersInsideSectionDimensionalAndStructuralPropertiesScrollViewStringAttributes, startingLocationForSuperscriptLettersAttributes: 0, lengthOfSuperscriptLettersAttributes: 1)
+    lazy var steelSectionDrawingViewWidthOfDrawnSteelCrossSectionDimensioningLabel = SelectedSteelSectionSummaryVCCustomUILabel(numberOfLineToBeDisplayed: 0, horizontalAlignmentOfTextToBeDisplayed: .center, rotationAngleTransformation: 0, textToBeDisplayed: selectedSteelCrossSectionFromPreviousVCRelevantDataArray()["Width of Section [b] (mm)"]!, wholeTitleAttributesAssigned: true, attributesForTheWholeTitle: steelSectionProfileDimensionAnnotationLabelsStringsAttributesInsideTheProfileDrawingArea, startingLocationForWholeTitleAttributes: 0, abbreviationLettersAttributesAssigned: true, attributesForAbbreviationLetters: steelSectionProfileDimensionLabelsAbbreviationLettersAttributesInsideTheProfileDrawingArea, startingLocationForAbbreviationLettersAttributes: 0, lengthOfAbbreviationLettersAttributes: 1, abbreviationSubscriptLettersFirstLocationAttributesAssigned: false, abbreviationSubscriptLettersFirstLocationAttributes: steelSectionProfileDimensionLabelsSubAbbreviationLettersAttributesInsideTheProfileDrawingArea, startingLocationForAbbreviationSubscriptLettersFirstLocationAttributes: 0, lengthOfAbbreviationSubscriptLettersFirstLocationAttributes: 1, abbreviationSubscriptLettersSecondLocationAttributesAssigned: false, abbreviationSubscriptLettersSecondLocationAttributes: steelSectionProfileDimensionLabelsSubAbbreviationLettersAttributesInsideTheProfileDrawingArea, startingLocationForAbbreviationSubscriptLettersSecondLocationAttributes: 0, lengthOfAbbreviationSubscriptLettersSecondLocationAttributes: 1, superscriptLettersAttributesAssigned: false, superscriptLettersAttributes: subLabelsSuperscriptLettersInsideSectionDimensionalAndStructuralPropertiesScrollViewStringAttributes, startingLocationForSuperscriptLettersAttributes: 0, lengthOfSuperscriptLettersAttributes: 1)
     
-    lazy var steelSectionDrawingViewTotalDepthOfDrawnSteelCrossSectionDimensioningLabel = SelectedSteelSectionSummaryVCCustomUILabel(numberOfLineToBeDisplayed: 0, horizontalAlignmentOfTextToBeDisplayed: .center, rotationAngleTransformation: -1 * (CGFloat.pi / 2), textToBeDisplayed: "h = 500mm", wholeTitleAttributesAssigned: true, attributesForTheWholeTitle: steelSectionProfileDimensionAnnotationLabelsStringsAttributesInsideTheProfileDrawingArea, startingLocationForWholeTitleAttributes: 0, abbreviationLettersAttributesAssigned: true, attributesForAbbreviationLetters: steelSectionProfileDimensionLabelsAbbreviationLettersAttributesInsideTheProfileDrawingArea, startingLocationForAbbreviationLettersAttributes: 0, lengthOfAbbreviationLettersAttributes: 1, abbreviationSubscriptLettersFirstLocationAttributesAssigned: false, abbreviationSubscriptLettersFirstLocationAttributes: steelSectionProfileDimensionLabelsSubAbbreviationLettersAttributesInsideTheProfileDrawingArea, startingLocationForAbbreviationSubscriptLettersFirstLocationAttributes: 0, lengthOfAbbreviationSubscriptLettersFirstLocationAttributes: 1, abbreviationSubscriptLettersSecondLocationAttributesAssigned: false, abbreviationSubscriptLettersSecondLocationAttributes: steelSectionProfileDimensionLabelsSubAbbreviationLettersAttributesInsideTheProfileDrawingArea, startingLocationForAbbreviationSubscriptLettersSecondLocationAttributes: 0, lengthOfAbbreviationSubscriptLettersSecondLocationAttributes: 1, superscriptLettersAttributesAssigned: false, superscriptLettersAttributes: subLabelsSuperscriptLettersInsideSectionDimensionalAndStructuralPropertiesScrollViewStringAttributes, startingLocationForSuperscriptLettersAttributes: 0, lengthOfSuperscriptLettersAttributes: 1)
+    lazy var steelSectionDrawingViewTotalDepthOfDrawnSteelCrossSectionDimensioningLabel = SelectedSteelSectionSummaryVCCustomUILabel(numberOfLineToBeDisplayed: 0, horizontalAlignmentOfTextToBeDisplayed: .center, rotationAngleTransformation: -1 * (CGFloat.pi / 2), textToBeDisplayed: selectedSteelCrossSectionFromPreviousVCRelevantDataArray()["Depth of Section [h] (mm)"]!, wholeTitleAttributesAssigned: true, attributesForTheWholeTitle: steelSectionProfileDimensionAnnotationLabelsStringsAttributesInsideTheProfileDrawingArea, startingLocationForWholeTitleAttributes: 0, abbreviationLettersAttributesAssigned: true, attributesForAbbreviationLetters: steelSectionProfileDimensionLabelsAbbreviationLettersAttributesInsideTheProfileDrawingArea, startingLocationForAbbreviationLettersAttributes: 0, lengthOfAbbreviationLettersAttributes: 1, abbreviationSubscriptLettersFirstLocationAttributesAssigned: false, abbreviationSubscriptLettersFirstLocationAttributes: steelSectionProfileDimensionLabelsSubAbbreviationLettersAttributesInsideTheProfileDrawingArea, startingLocationForAbbreviationSubscriptLettersFirstLocationAttributes: 0, lengthOfAbbreviationSubscriptLettersFirstLocationAttributes: 1, abbreviationSubscriptLettersSecondLocationAttributesAssigned: false, abbreviationSubscriptLettersSecondLocationAttributes: steelSectionProfileDimensionLabelsSubAbbreviationLettersAttributesInsideTheProfileDrawingArea, startingLocationForAbbreviationSubscriptLettersSecondLocationAttributes: 0, lengthOfAbbreviationSubscriptLettersSecondLocationAttributes: 1, superscriptLettersAttributesAssigned: false, superscriptLettersAttributes: subLabelsSuperscriptLettersInsideSectionDimensionalAndStructuralPropertiesScrollViewStringAttributes, startingLocationForSuperscriptLettersAttributes: 0, lengthOfSuperscriptLettersAttributes: 1)
     
     lazy var steelSectionDrawingViewRightHandSideMajorAxisOfDrawnSteelCrossSectionDimensioningLabel = SelectedSteelSectionSummaryVCCustomUILabel(numberOfLineToBeDisplayed: 0, horizontalAlignmentOfTextToBeDisplayed: .center, rotationAngleTransformation: 0, textToBeDisplayed: "y", wholeTitleAttributesAssigned: true, attributesForTheWholeTitle: steelSectionProfileMajorAndMinorAxisLabelFontAttributesInsideTheProfileDrawingArea, startingLocationForWholeTitleAttributes: 0, abbreviationLettersAttributesAssigned: false, attributesForAbbreviationLetters: steelSectionProfileDimensionLabelsAbbreviationLettersAttributesInsideTheProfileDrawingArea, startingLocationForAbbreviationLettersAttributes: 0, lengthOfAbbreviationLettersAttributes: 1, abbreviationSubscriptLettersFirstLocationAttributesAssigned: false, abbreviationSubscriptLettersFirstLocationAttributes: steelSectionProfileDimensionLabelsSubAbbreviationLettersAttributesInsideTheProfileDrawingArea, startingLocationForAbbreviationSubscriptLettersFirstLocationAttributes: 0, lengthOfAbbreviationSubscriptLettersFirstLocationAttributes: 1, abbreviationSubscriptLettersSecondLocationAttributesAssigned: false, abbreviationSubscriptLettersSecondLocationAttributes: steelSectionProfileDimensionLabelsSubAbbreviationLettersAttributesInsideTheProfileDrawingArea, startingLocationForAbbreviationSubscriptLettersSecondLocationAttributes: 0, lengthOfAbbreviationSubscriptLettersSecondLocationAttributes: 1, superscriptLettersAttributesAssigned: false, superscriptLettersAttributes: subLabelsSuperscriptLettersInsideSectionDimensionalAndStructuralPropertiesScrollViewStringAttributes, startingLocationForSuperscriptLettersAttributes: 0, lengthOfSuperscriptLettersAttributes: 1)
     
@@ -82,11 +80,11 @@ class SelectedSteelSectionSummaryPage: UIViewController {
     
     lazy var steelSectionDrawingViewBottomSideMinorAxisOfDrawnSteelCrossSectionDimensioningLabel = SelectedSteelSectionSummaryVCCustomUILabel(numberOfLineToBeDisplayed: 0, horizontalAlignmentOfTextToBeDisplayed: .center, rotationAngleTransformation: 0, textToBeDisplayed: "z", wholeTitleAttributesAssigned: true, attributesForTheWholeTitle: steelSectionProfileMajorAndMinorAxisLabelFontAttributesInsideTheProfileDrawingArea, startingLocationForWholeTitleAttributes: 0, abbreviationLettersAttributesAssigned: false, attributesForAbbreviationLetters: steelSectionProfileDimensionLabelsAbbreviationLettersAttributesInsideTheProfileDrawingArea, startingLocationForAbbreviationLettersAttributes: 0, lengthOfAbbreviationLettersAttributes: 1, abbreviationSubscriptLettersFirstLocationAttributesAssigned: false, abbreviationSubscriptLettersFirstLocationAttributes: steelSectionProfileDimensionLabelsSubAbbreviationLettersAttributesInsideTheProfileDrawingArea, startingLocationForAbbreviationSubscriptLettersFirstLocationAttributes: 0, lengthOfAbbreviationSubscriptLettersFirstLocationAttributes: 1, abbreviationSubscriptLettersSecondLocationAttributesAssigned: false, abbreviationSubscriptLettersSecondLocationAttributes: steelSectionProfileDimensionLabelsSubAbbreviationLettersAttributesInsideTheProfileDrawingArea, startingLocationForAbbreviationSubscriptLettersSecondLocationAttributes: 0, lengthOfAbbreviationSubscriptLettersSecondLocationAttributes: 1, superscriptLettersAttributesAssigned: false, superscriptLettersAttributes: subLabelsSuperscriptLettersInsideSectionDimensionalAndStructuralPropertiesScrollViewStringAttributes, startingLocationForSuperscriptLettersAttributes: 0, lengthOfSuperscriptLettersAttributes: 1)
  
-    // MARK: - navigationBar instance declaration:
+// MARK: - INSTANCE DECLARATION - Navigation Bar instance declaration:
     
-    lazy var navigationBar = CustomUINavigationBar(navBarLeftButtonTarget: self, navBarLeftButtonSelector: #selector(navigationBarLeftButtonPressed(sender:)), labelTitleText: self.userSelectedSteelSectionFullSectionDesignationReceivedFromPreviousViewController, navBarDelegate: self)
+    lazy var navigationBar = CustomUINavigationBar(navBarLeftButtonTarget: self, navBarLeftButtonSelector: #selector(navigationBarLeftButtonPressed(sender:)), labelTitleText: selectedSteelCrossSectionFromPreviousVCRelevantDataArray()["Full Section Designation"]!, navBarDelegate: self)
     
-    // MARK: - Font colour, type, size and strings attributes used for labels inside the Section Profile Drawing Area:
+// MARK: - Font colour, type, size and strings attributes used for labels inside the Section Profile Drawing Area:
     
     // The below are needed to define the attributes of the text to be used to represent the whole string:
     
@@ -138,7 +136,7 @@ class SelectedSteelSectionSummaryPage: UIViewController {
         
     ]
     
-    // MARK: - Declaration of the selected steel section drawing area (this is where the steel section will ne drawn using CoreGraphics and CoreAnimation):
+// MARK: - Declaration of the selected steel section drawing area (this is where the steel section will ne drawn using CoreGraphics and CoreAnimation):
     
     lazy var steelSectionDrawingView: UIView = {
         
@@ -348,7 +346,7 @@ class SelectedSteelSectionSummaryPage: UIViewController {
 //
 //    }()
 
-    // MARK: - Core Animation Shape Layers, UIBezierPaths Stroke Colours as well as UIBezierPaths Line Weights needed to draw the various required steel cross-section profiles as well as their annotations and dimensioning lines on screen:
+// MARK: - Core Animation Shape Layers, UIBezierPaths Stroke Colours as well as UIBezierPaths Line Weights needed to draw the various required steel cross-section profiles as well as their annotations and dimensioning lines on screen:
     
         // The below are the needed properties for the CAShapaeLayer and UIBezierPath required to draw an I or T section on screen:
     
@@ -436,7 +434,7 @@ class SelectedSteelSectionSummaryPage: UIViewController {
 //
 //    var rootRadiusAnnotationLabelTopYcoordinate: CGFloat = 0
             
-    // MARK: - Font colour, type, size and strings attributes used for labels inside the Section Dimensions and Structural Properties Scroll View:
+// MARK: - Font colour, type, size and strings attributes used for labels inside the Section Dimensions and Structural Properties Scroll View:
     
     let mainTitlesTextFontColourInsideSectionDimensionalAndStructuralPropertiesScrollView = UIColor(named: "SelectedSteelSectionSummaryPageVC - Scroll Area Main Titles Labels Text Font Colours")
     
@@ -524,17 +522,17 @@ class SelectedSteelSectionSummaryPage: UIViewController {
         
     ]
     
-    // MARK: - CoreAnimation layers used to draw paths inside the Section Dimensions and Structural Properties Scroll View:
+// MARK: - CoreAnimation layers used to draw paths inside the Section Dimensions and Structural Properties Scroll View:
 
     let verticalAndHorizontalSeparationLinesNeededBetweenLabelsContainedInSectionDimensionsAndPropertiesScrollViewCoreAnimationShapeLayer = CAShapeLayer()
     
-    // MARK: - BezierPaths stroke colours and line widths inside the Section Dimensional & Structural Properties Scroll View:
+// MARK: - BezierPaths stroke colours and line widths inside the Section Dimensional & Structural Properties Scroll View:
        
        let verticalAndHorizontalSeparationLinesColourInsideSectionDimensionalAndPropertiesScrollView: String = "SelectedSteelSectionSummaryPageVC - Scroll Area Vertical and Horizontal Separation Lines For Major and Minor Axes Properties Table"
        
        let verticalAndHorizontalSeparationLinesWidthsInsideSectionDimensionalAndPropertiesScrollView: CGFloat = 1
         
-    // MARK: - Declaring section dimensions and properties inside UIScrollView margins and spacings:
+// MARK: - Declaring section dimensions and properties inside UIScrollView margins and spacings:
     
     // There are two main titles inside the scrollView, which are (1) Section Dimensional Properties (2) Section Structural Properties:
     
@@ -544,7 +542,7 @@ class SelectedSteelSectionSummaryPage: UIViewController {
     
     let scrollViewMainTitleLeftMarginFromScreenEdge:CGFloat = 15
     
-    //There are 8 labels that fall either exactly underneath a main title or above a main title. These are (1) Depth of Section (2) Width of Section (3) Ratio for Web Local Buckling (4) Ratio for Flange Local Buckling (5) Section Detailing Dimensions Image (6) Notch n (7) Axis (8) Torsional Constant:
+    // There are 8 labels that fall either exactly underneath a main title or above a main title. These are (1) Depth of Section (2) Width of Section (3) Ratio for Web Local Buckling (4) Ratio for Flange Local Buckling (5) Section Detailing Dimensions Image (6) Notch n (7) Axis (8) Torsional Constant:
     
     let scrollViewVerticalSpacingForLabelUnderneathMainTitles: CGFloat = 20
     
@@ -568,7 +566,7 @@ class SelectedSteelSectionSummaryPage: UIViewController {
     
     lazy var scrollViewMinorSectionStructuralPropertiesLabelsValuesLeftMarginFromMainViewCenterX: CGFloat = ((self.view.frame.width - scrollViewSubLabelLeftMarginFromScreenEdgeOrCenterOfView - scrollViewSubLabelRightMarginFromScreenEdgeOrCenterOfView)/4) + scrollViewSectionStructuralPropertiesLabelsContainingValuesLeftMargin
     
-    // MARK: - Declaring section dimensions and properties UIScrollView:
+// MARK: - Declaring section dimensions and properties UIScrollView:
     
     lazy var sectionDimensionsAndPropertiesScrollView: UIScrollView = {
         
@@ -582,7 +580,7 @@ class SelectedSteelSectionSummaryPage: UIViewController {
         
     }()
     
-    // MARK: - ScrollView section dimensions and geometric properties labels:
+// MARK: - ScrollView section dimensions and geometric properties labels:
     
 //    lazy var scrollViewSectionDimensionalPropertiesTitleLabel: UILabel = {
 //
@@ -1409,24 +1407,12 @@ class SelectedSteelSectionSummaryPage: UIViewController {
 //    }()
     
     
-    // MARK: - viewDidLoad():
+// MARK: - viewDidLoad():
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        
-        print("Recevied sortBy variable from previous view controller is equal to \(self.sortBy)")
-        
-        print("Recevied isSearching variable from previous view controller is equal to \(self.isSearching)")
-        
-        print("Recevied filtersApplied variable from previous view controller is equal to \(self.filtersApplied)")
-        
-        print("Recevied userSelectedCollectionViewCellNumber variable from previous view controller is equal to \(self.userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController)")
-        
-        print("Recevied tableSectionNumber variable from previous view controller is equal to \(self.receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController)")
-        
-        print("Recevied tableRowNumber variable from previous view controller is equal to \(self.receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController)")
-        
+                        
         setupMoveBackTransitionToPreviousVC()
         
         // The below gesture is needed in order to enable the user to navigate to the previous viewController once a right swipe gesture gets detected:
@@ -1437,26 +1423,31 @@ class SelectedSteelSectionSummaryPage: UIViewController {
 
         view.addGestureRecognizer(rightGestureRecognizer)
         
-        // MARK: - Adding SubViews to the main View Controller:
+// MARK: - Adding SubViews to the main View Controller:
 
         view.addSubview(navigationBar)
 
         view.addSubview(steelSectionDrawingView)
         
-//        view.addSubview(sectionDimensionsAndPropertiesScrollView)
-                        
+        // Below code is required to add the needed core animation layers to draw the selected steel cross-section from the previous VC as well as its annotation and dimensioning lines inside the steel drawing area. Note that since the below layers have been added to the main's view subLayer rather than the steelDrawingArea's subLayer, the origin for all the layers used inside the drawing functions is located at the top left hand-side corner of the iPhone screen (i.e., equivalent to the origin location of this viewController):
+        
         view.layer.addSublayer(steelCrossSectionWithAnIorTProfileShapeLayer)
         
         view.layer.addSublayer(steelCrossSectionMajorAxisAnnotationHorizontalLineShapeLayer)
-        
+
         view.layer.addSublayer(steelCrossSectionMinorAxisAnnotationVerticalLineShapeLayer)
-        
-        view.layer.addSublayer(steelCrossSectionDimensioningAnnotationLinesAndDimensioningDashedLinesShapeLayer)
         
         view.layer.addSublayer(verticalAndHorizontalDashedLinesShapeLayerThatArePartOfTheDimensioningAnnotationLinesRequiredForTheWidthAndOverallHeightOfTheSteelCrossSectionDimension)
         
-        // MARK: - steelSectionDrawingView subViews:
+        view.layer.addSublayer(steelCrossSectionDimensioningAnnotationLinesAndDimensioningDashedLinesShapeLayer)
+
+// MARK: - steelSectionDrawingView subViews:
         
+        // Adding core animation layer needed to draw the selected steel cross-section along with its required annotation and dimensioning lines:
+        
+        
+        // Adding required annotation and dimensioning UILabels that are required to displayed inside the steel cross-section drawing area:
+
         steelSectionDrawingView.addSubview(steelSectionDrawingViewFlangeThicknessOfDrawnSteelCrossSectionDimensioningLabel)
         
         steelSectionDrawingView.addSubview(steelSectionDrawingViewRootRadiusOfDrawnSteelCrossSectionDimensioningLabel)
@@ -1556,13 +1547,20 @@ class SelectedSteelSectionSummaryPage: UIViewController {
         
     }
     
-    // MARK: - viewWillLayoutSubviews():
+// MARK: - viewWillAppear():
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
+        
+    }
+    
+// MARK: - viewWillLayoutSubviews():
     
     override func viewWillLayoutSubviews() {
         
         setupConstraints()
         
-        drawAnIorTSectionSteelProfile(drawingAreaMargins: 10, widthOfSteelSection: 314, totalHeightOfSteelSection: 1056, depthOfISectionBetweenFillets: 868.1, centreOfGravityInYDirectionFromTopOfSectionForTProfiles: 0, flangeThicknessOfSteelSection: 64, webThicknessOfSteelSection: 36, rootRadiusOfSteelSection: 30, drawingAreaUIView: steelSectionDrawingView)
+        drawAnIorTSectionSteelProfile(drawingAreaMargins: 10, widthOfSteelSection: Double(selectedSteelCrossSectionFromPreviousVCRelevantDataArray()["Width of Section [b] (mm)"]!)!, totalHeightOfSteelSection: Double(selectedSteelCrossSectionFromPreviousVCRelevantDataArray()["Depth of Section [h] (mm)"]!)!, depthOfISectionBetweenFillets: Double(selectedSteelCrossSectionFromPreviousVCRelevantDataArray()["Depth between Fillets [d] (mm)"]!)!, centreOfGravityInYDirectionFromTopOfSectionForTProfiles: 0, flangeThicknessOfSteelSection: Double(selectedSteelCrossSectionFromPreviousVCRelevantDataArray()["Flange Thickness [tf] (mm)"]!)!, webThicknessOfSteelSection: Double(selectedSteelCrossSectionFromPreviousVCRelevantDataArray()["Web Thickness [tw] (mm)"]!)!, rootRadiusOfSteelSection: Double(selectedSteelCrossSectionFromPreviousVCRelevantDataArray()["Root Radius [r1] (mm)"]!)!, drawingAreaUIView: steelSectionDrawingView)
         
         steelSectionDrawingViewFlangeThicknessOfDrawnSteelCrossSectionDimensioningLabel.layer.frame.origin = CGPoint(x: thicknessOfFlangeBottomVerticalDimensioningLineEndPointCoordinates.x - (steelSectionDrawingViewFlangeThicknessOfDrawnSteelCrossSectionDimensioningLabel.frame.width / 2), y: thicknessOfFlangeBottomVerticalDimensioningLineEndPointCoordinates.y)
         
@@ -1780,7 +1778,7 @@ class SelectedSteelSectionSummaryPage: UIViewController {
         
             // The below IF STATEMENT will be triggered for an I steel cross-section profile (i.e., UB, UC and UBP):
 
-        if userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 0 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 1 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 2 {
+        if userSelectedCollectionViewCellFromOpenRolledSteelSectionsCollectionViewController == 0 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsCollectionViewController == 1 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsCollectionViewController == 2 {
             
             combinedIAndTSteelCrossSectionUIBezierPaths.append(topRightQuarterBezierPathForAnISteelCrossSectionOrRightHandSideHalfBezierPathForTSteelCrossSection)
 
@@ -1788,7 +1786,7 @@ class SelectedSteelSectionSummaryPage: UIViewController {
         
             // The below IF STATEMENT will be triggered for a T steel cross-section profile (i.e., Tees split from UB or UC cross-sections), whereby we first continue tracing the UIBezierPath needed to trace the full right hand-side portion of a T steel cross-section, and lastly we add/append it to the overall UIBezierPath (i.e., combinedIAndTSteelCrossSectionUIBezierPaths) which will be used to draw the steel cross-section on the screen:
         
-        else if userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 6 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 7 {
+        else if userSelectedCollectionViewCellFromOpenRolledSteelSectionsCollectionViewController == 6 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsCollectionViewController == 7 {
             
             topRightQuarterBezierPathForAnISteelCrossSectionOrRightHandSideHalfBezierPathForTSteelCrossSection.addLine(to: CGPoint(x: pointSevenCoordinates.x, y: pointSevenCoordinates.y))
             
@@ -1802,7 +1800,7 @@ class SelectedSteelSectionSummaryPage: UIViewController {
         
         // The below IF STATEMENT will be triggered for an I steel cross-section profile (i.e., UB, UC and UBP):
         
-        if userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 0 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 1 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 2 {
+        if userSelectedCollectionViewCellFromOpenRolledSteelSectionsCollectionViewController == 0 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsCollectionViewController == 1 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsCollectionViewController == 2 {
             
             iSteelCrossSectionTopLeftQuarterBezierPath.append(topRightQuarterBezierPathForAnISteelCrossSectionOrRightHandSideHalfBezierPathForTSteelCrossSection)
             
@@ -1814,7 +1812,7 @@ class SelectedSteelSectionSummaryPage: UIViewController {
         
         // The below IF STATEMENT will be triggered for Tee sections split from either UB or UC cross sections. The code inside the below IF STATEMENT will first add to the previously defined empty UIBezierPath (i.e., tSteelCrossSectionReflectedLeftHandSideUIBezierPath) to the previously traced UIBezierPath (i.e., topRightQuarterBezierPathForAnISteelCrossSectionOrRightHandSideHalfBezierPathForTSteelCrossSection) and once added, we will apply to it the needed scaleMultiplier and Translation and finally we will add this to the overall UIBezierPath that will be used to draw the overall T steel cross-section:
         
-        else if userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 6 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 7 {
+        else if userSelectedCollectionViewCellFromOpenRolledSteelSectionsCollectionViewController == 6 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsCollectionViewController == 7 {
             
             tSteelCrossSectionReflectedLeftHandSideUIBezierPath.append(topRightQuarterBezierPathForAnISteelCrossSectionOrRightHandSideHalfBezierPathForTSteelCrossSection)
                         
@@ -1824,7 +1822,7 @@ class SelectedSteelSectionSummaryPage: UIViewController {
         
     // Step-04 For I steel cross-sections only, we now need to reflect the so far traced top half of the I section along a horizontal axis to obtain the lower half of the I section and finally add it to the overall UIBezierPath to obtain the full I steel cross-section profile:
         
-        if userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 0 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 1 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 2 {
+        if userSelectedCollectionViewCellFromOpenRolledSteelSectionsCollectionViewController == 0 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsCollectionViewController == 1 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsCollectionViewController == 2 {
             
             iSteelCrossSectionBottomHalfUIBezierPath.append(combinedIAndTSteelCrossSectionUIBezierPaths)
                         
@@ -1908,7 +1906,7 @@ class SelectedSteelSectionSummaryPage: UIViewController {
         
                 // The below IF STATEMENT will be executed for all I steel profile cross-sections (i.e., UB, UC and UBP) in order to figure out the needed points coordinates to trace the major axis annotation horizontal line:
         
-        if userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 0 ||  userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 1 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 2 {
+        if userSelectedCollectionViewCellFromOpenRolledSteelSectionsCollectionViewController == 0 ||  userSelectedCollectionViewCellFromOpenRolledSteelSectionsCollectionViewController == 1 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsCollectionViewController == 2 {
             
             rightStartingPointCoordinatesForMajorAxisAnnotationHorizontalLine = (x: pointTwoCoordinates.x + (CGFloat(majorAxisAnnotationLineHorizontalExtensionLengthsInMmBeyondDrawnSteelCrossSectionProfileWidth) * drawingScale), y: pointSixCoordinates.y)
             
@@ -1918,7 +1916,7 @@ class SelectedSteelSectionSummaryPage: UIViewController {
         
                 // The below IF STATEMENT will be executed for Tee steel cross-sections (i.e., Tees cut from UB or UC cross-sections). Since for T sections the major axis annotation line needs to pass their vertical centre of gravity point:
             
-        else if userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 6 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 7{
+        else if userSelectedCollectionViewCellFromOpenRolledSteelSectionsCollectionViewController == 6 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsCollectionViewController == 7{
             
             rightStartingPointCoordinatesForMajorAxisAnnotationHorizontalLine = (x: pointTwoCoordinates.x + (CGFloat(majorAxisAnnotationLineHorizontalExtensionLengthsInMmBeyondDrawnSteelCrossSectionProfileWidth) * drawingScale), y: pointOneCoordinates.y + (CGFloat(centreOfGravityInYDirectionFromTopOfSectionForTProfiles) * drawingScale))
             
@@ -1956,7 +1954,7 @@ class SelectedSteelSectionSummaryPage: UIViewController {
         
                 // The below IF STATEMENT will be triggered for I steel cross-sections such as UB, UC and UBP. The starting point for web thickness horizontal dimensioning annotation line is located at the right hand-side bottom portion of the I section. Specifically at mid-height between reflected pointFive coordinates and pointSix coordinates:
         
-        if userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 0 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 1 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 2 {
+        if userSelectedCollectionViewCellFromOpenRolledSteelSectionsCollectionViewController == 0 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsCollectionViewController == 1 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsCollectionViewController == 2 {
             
             rightHandSideWebThicknessHorizontalDimensioningAnnotationLineStartingPointCoordinates = (x: pointSixCoordinates.x + (drawnSteelCrossSectionUIBezierPathLineWidthWeight / 2), y: pointSixCoordinates.y + (CGFloat(depthOfISectionBetweenFillets / 4) * drawingScale))
             
@@ -1974,7 +1972,7 @@ class SelectedSteelSectionSummaryPage: UIViewController {
             
         }
         
-        else if userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 6 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController == 7 {
+        else if userSelectedCollectionViewCellFromOpenRolledSteelSectionsCollectionViewController == 6 || userSelectedCollectionViewCellFromOpenRolledSteelSectionsCollectionViewController == 7 {
             
             rightHandSideWebThicknessHorizontalDimensioningAnnotationLineStartingPointCoordinates = (x: pointSevenCoordinates.x + (drawnSteelCrossSectionUIBezierPathLineWidthWeight / 2), y: pointSevenCoordinates.y - (CGFloat(totalHeightOfSteelSection / 4) * drawingScale))
             
@@ -2301,6 +2299,352 @@ class SelectedSteelSectionSummaryPage: UIViewController {
         // The below code return the reflected UIBezierPath:
         
         return UIBezierPathToBeReflected
+        
+    }
+    
+// MARK: - METHOD - Extracting relevant data for the selected steel cross-section profile from the previous VC such as; flange thickness, depth of section, etc...:
+    
+    func selectedSteelCrossSectionFromPreviousVCRelevantDataArray() -> [String: String] {
+        
+        var fullSectionDesignationString: String
+        
+        var massPerMetre: String
+        
+        var depthOfSection: String
+        
+        var widthOfSection: String
+        
+        var sectionWebThickness: String
+        
+        var sectionFlangeThickness: String
+        
+        var sectionRootRadiusR1: String
+        
+        var depthOfSectionBetweenFillets: String
+        
+        var sectionRatioForLocalWebBuckling: String
+        
+        var sectionRatioForLocalFlangeBuckling: String
+        
+        var sectionEndClearanceDimensionC: String
+        
+        var sectionDetailingNotchNDimension: String
+        
+        var sectionDetailingNotchnDimension: String
+        
+        var sectionSurfaceAreaPerMetre: String
+        
+        var sectionSurfaceAreaPerTonne: String
+        
+        var sectionMajorSecondMomentOfArea: String
+        
+        var sectionMinorSecondMomentOfArea: String
+        
+        var sectionMajorRadiusOfGyration: String
+        
+        var sectionMinorRadiusOfGyration: String
+        
+        var sectionMajorElasticModulus: String
+        
+        var sectionMinorElasticModulus: String
+        
+        var sectionMajorPlasticModulus: String
+        
+        var sectionMinorPlasticModulus: String
+        
+        var sectionBucklingParameter: String
+        
+        var sectionTorsionalIndexParameter: String
+        
+        var sectionWarpingConstant: String
+        
+        var sectionTorsionalConstant: String
+        
+        var sectionArea: String
+        
+        if filtersApplied == false && isSearching == false && (sortBy == "None" || sortBy == "Sorted by: Section designation in ascending order" || sortBy == "Sorted by: Section designation in descending order") {
+            
+            fullSectionDesignationString = receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData.filter({ return $0.sectionSerialNumber == receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly[receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController]})[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].fullSectionDesignation
+            
+            massPerMetre = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData.filter({ return $0.sectionSerialNumber == receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly[receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController]})[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionMassPerMetre)
+            
+            depthOfSection = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData.filter({ return $0.sectionSerialNumber == receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly[receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController]})[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionTotalDepth)
+            
+            widthOfSection = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData.filter({ return $0.sectionSerialNumber == receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly[receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController]})[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionWidth)
+            
+            sectionWebThickness = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData.filter({ return $0.sectionSerialNumber == receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly[receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController]})[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionWebThickness)
+            
+            sectionFlangeThickness = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData.filter({ return $0.sectionSerialNumber == receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly[receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController]})[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionFlangeThickness)
+            
+            sectionRootRadiusR1 = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData.filter({ return $0.sectionSerialNumber == receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly[receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController]})[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionRootRadiusOne)
+            
+            depthOfSectionBetweenFillets = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData.filter({ return $0.sectionSerialNumber == receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly[receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController]})[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionDepthBetweenFillets)
+            
+            sectionRatioForLocalWebBuckling = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData.filter({ return $0.sectionSerialNumber == receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly[receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController]})[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionLocalWebBucklingRatio)
+            
+            sectionRatioForLocalFlangeBuckling = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData.filter({ return $0.sectionSerialNumber == receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly[receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController]})[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionFlangeThickness)
+            
+            sectionEndClearanceDimensionC = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData.filter({ return $0.sectionSerialNumber == receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly[receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController]})[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionEndClearanceDimensionForDetailing)
+            
+            sectionDetailingNotchNDimension = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData.filter({ return $0.sectionSerialNumber == receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly[receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController]})[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionNotchNdimensionForDetailing)
+            
+            sectionDetailingNotchnDimension = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData.filter({ return $0.sectionSerialNumber == receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly[receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController]})[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionNotchnDimensionForDetailing)
+            
+            sectionSurfaceAreaPerMetre = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData.filter({ return $0.sectionSerialNumber == receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly[receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController]})[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionSurfaceAreaPerMetre)
+            
+            sectionSurfaceAreaPerTonne = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData.filter({ return $0.sectionSerialNumber == receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly[receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController]})[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionSurfaceAreaPerTonne)
+            
+            sectionMajorSecondMomentOfArea = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData.filter({ return $0.sectionSerialNumber == receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly[receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController]})[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionMajorSecondMomentOfAreaAboutYYaxis)
+            
+            sectionMinorSecondMomentOfArea = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData.filter({ return $0.sectionSerialNumber == receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly[receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController]})[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionMinorSecondMomentOfAreaAboutZZaxis)
+            
+            sectionMajorRadiusOfGyration = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData.filter({ return $0.sectionSerialNumber == receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly[receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController]})[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionMajorRadiusOfGyrationAboutYYaxis)
+            
+            sectionMinorRadiusOfGyration = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData.filter({ return $0.sectionSerialNumber == receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly[receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController]})[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionMinorRadiusOfGyrationAboutZZaxis)
+            
+            sectionMajorElasticModulus = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData.filter({ return $0.sectionSerialNumber == receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly[receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController]})[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionMajorElasticModulusAboutYYaxis)
+            
+            sectionMinorElasticModulus = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData.filter({ return $0.sectionSerialNumber == receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly[receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController]})[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionMinorElasticModulusAboutZZaxis)
+            
+            sectionMajorPlasticModulus = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData.filter({ return $0.sectionSerialNumber == receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly[receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController]})[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionMajorPlasticModulusAboutYYaxis)
+            
+            sectionMinorPlasticModulus = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData.filter({ return $0.sectionSerialNumber == receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly[receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController]})[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionMinorPlasticModulusAboutZZaxis)
+            
+            sectionBucklingParameter = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData.filter({ return $0.sectionSerialNumber == receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly[receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController]})[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionBucklingParameterU)
+            
+            sectionTorsionalIndexParameter = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData.filter({ return $0.sectionSerialNumber == receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly[receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController]})[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionTorsionalIndexX)
+            
+            sectionWarpingConstant = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData.filter({ return $0.sectionSerialNumber == receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly[receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController]})[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionWarpingConstantIwInDm6)
+            
+            sectionTorsionalConstant = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData.filter({ return $0.sectionSerialNumber == receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly[receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController]})[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionTorsionalConstantIt)
+            
+            sectionArea = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData.filter({ return $0.sectionSerialNumber == receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly[receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController]})[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionArea)
+
+        } else {
+            
+            fullSectionDesignationString = receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].fullSectionDesignation
+            
+            massPerMetre = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionMassPerMetre)
+            
+            depthOfSection = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionTotalDepth)
+            
+            widthOfSection = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionWidth)
+            
+            sectionWebThickness = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionWebThickness)
+
+            sectionFlangeThickness = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionFlangeThickness)
+            
+            sectionRootRadiusR1 = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionRootRadiusOne)
+            
+            depthOfSectionBetweenFillets = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionDepthBetweenFillets)
+            
+            sectionRatioForLocalWebBuckling = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionLocalWebBucklingRatio)
+            
+            sectionRatioForLocalFlangeBuckling = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionLocalFlangeBucklingRatio)
+            
+            sectionEndClearanceDimensionC = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionEndClearanceDimensionForDetailing)
+            
+            sectionDetailingNotchNDimension = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionNotchNdimensionForDetailing)
+            
+            sectionDetailingNotchnDimension = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionNotchnDimensionForDetailing)
+            
+            sectionSurfaceAreaPerMetre = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionSurfaceAreaPerMetre)
+            
+            sectionSurfaceAreaPerTonne = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionSurfaceAreaPerTonne)
+
+            sectionMajorSecondMomentOfArea = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionMajorSecondMomentOfAreaAboutYYaxis)
+            
+            sectionMinorSecondMomentOfArea = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionMinorSecondMomentOfAreaAboutZZaxis)
+
+            sectionMajorRadiusOfGyration = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionMajorRadiusOfGyrationAboutYYaxis)
+
+            sectionMinorRadiusOfGyration = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionMinorRadiusOfGyrationAboutZZaxis)
+            
+            sectionMajorElasticModulus = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionMajorElasticModulusAboutYYaxis)
+            
+            sectionMinorElasticModulus = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionMinorElasticModulusAboutZZaxis)
+            
+            sectionMajorPlasticModulus = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionMajorPlasticModulusAboutYYaxis)
+            
+            sectionMinorPlasticModulus = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionMinorPlasticModulusAboutZZaxis)
+
+            sectionBucklingParameter = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionBucklingParameterU)
+
+            sectionTorsionalIndexParameter = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionTorsionalIndexX)
+            
+            sectionWarpingConstant = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionWarpingConstantIwInDm6)
+
+            sectionTorsionalConstant = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionTorsionalConstantIt)
+
+            sectionArea = String(receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData[receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController].sectionArea)
+
+        }
+        
+        var selectedSteelCrossSectionFromPreviousVCDictionary: [String: String] = [
+        
+            // Related to all:
+            
+            "Full Section Designation" : fullSectionDesignationString,
+            
+            "Cut from Universal Beams" : "",
+            
+            "Cut from Universal Columns" : "",
+            
+            // UB
+            
+            "Mass Per Metre (kg/m)" : massPerMetre,
+            
+            "Leg Length [h] (mm)" : "",
+            
+            // UB
+            
+            "Depth of Section [h] (mm)" : depthOfSection,
+            
+            // UB
+            
+            "Width of Section [b] (mm)" : widthOfSection,
+            
+            "Leg Thickness [t] (mm)" : "",
+            
+            // UB
+            
+            "Web Thickness [tw] (mm)" : sectionWebThickness,
+            
+            // UB
+            
+            "Flange Thickness [tf] (mm)" : sectionFlangeThickness,
+            
+            // UB
+            
+            "Root Radius [r1] (mm)" : sectionRootRadiusR1,
+            
+            "Toe Radius [r2] (mm)" : "",
+            
+            // UB
+            
+            "Depth between Fillets [d] (mm)" : depthOfSectionBetweenFillets,
+            
+            "Ratio for local Buckling [d/t]" : "",
+            
+            // UB
+            
+            "Ratio for Local Web Buckling [cw/tw] (mm)" : sectionRatioForLocalWebBuckling,
+            
+            // UB
+            
+            "Ratio for Local Flange Buckling [cf/tf] (mm)" : sectionRatioForLocalFlangeBuckling,
+            
+            "Shear Centre from Web Centreline [e0] (cm)" : "",
+            
+            "Centre of Gravity X-direction (cm)" : "",
+            
+            "Centre of Gravity y-direction (cm)" : "",
+            
+            // UB
+            
+            "End Clearance [C] (mm)" : sectionEndClearanceDimensionC,
+            
+            // UB
+            
+            "Dimension for Detailing Notch [N] (mm)" : sectionDetailingNotchNDimension,
+            
+            // UB
+            
+            "Dimension for Detailing Notch [n] (mm)" : sectionDetailingNotchnDimension,
+            
+            // UB
+            
+            "Surface Area per Metre (m2)" : sectionSurfaceAreaPerMetre,
+            
+            // UB
+            
+            "Surface Area per Tonne (m2)" : sectionSurfaceAreaPerTonne,
+            
+            // UB
+            
+            "Second Moment of Area yy axis Major [cm4]" : sectionMajorSecondMomentOfArea,
+            
+            // UB
+            
+            "Second Moment of Area zz axis Minor [cm4]" : sectionMinorSecondMomentOfArea,
+            
+            "Second Moment of Area uu axis  [cm4]" : "",
+            
+            "Second Moment of Area vv axis Minor [cm4]" : "",
+            
+            // UB
+            
+            "Radius of Gyration yy axis Major [cm]" : sectionMajorRadiusOfGyration,
+            
+            // UB
+            
+            "Radius of Gyration zz axis Minor [cm]" : sectionMinorRadiusOfGyration,
+            
+            "Radius of Gyration uu axis Major [cm]" : "",
+            
+            "Radius of Gyration vv axis Minor [cm]" : "",
+            
+            // UB
+            
+            "Elastic Modulus yy axis Major [cm3]" : sectionMajorElasticModulus,
+            
+            // UB
+            
+            "Elastic Modulus zz axis Minor [cm3]" : sectionMinorElasticModulus,
+            
+            "Elastic Modulus Flange yy axis Major [cm3]" : "",
+            
+            "Elastic Modulus Toe yy axis Major [cm3]" : "",
+            
+            "Elastic Modulus Toe zz axis Minor [cm3]" : "",
+            
+            // UB
+            
+            "Plastic Modulus yy axis Major [cm3]" : sectionMajorPlasticModulus,
+            
+            // UB
+            
+            "Plastic Modulus zz axis Minor [cm3]" : sectionMinorPlasticModulus,
+            
+            "Angle Axis yy to Axis uu Tanα" : "",
+            
+            // UB
+            
+            "Buckling Parameter (U)" : sectionBucklingParameter,
+            
+            // UB
+            
+            "Torsional Index (X)" : sectionTorsionalIndexParameter,
+            
+            // UB
+            
+            "Warping Constant (Iw) [dm6]" : sectionWarpingConstant,
+            
+            "Warping Constant (Iw) [cm6]" : "",
+            
+            // UB
+            
+            "Torsional Constant (IT) [cm4]" : sectionTorsionalConstant,
+            
+            "Torsional Constant (Wt) [cm3]" : "",
+            
+            "Equivalent Slenderness Coefficient (ϕa)" : "",
+            
+            "Equivalent Slenderness Coefficient Min.  (ϕa)" : "",
+            
+            "Equivalent Slenderness Coefficient Max.  (ϕa)" : "",
+            
+            "Mono-symmetry Index (ψa)" : "",
+            
+            "Mono-symmetry Index (ψ)" : "",
+            
+            // UB
+            
+            "Area of Section [cm2]" : sectionArea
+        
+        ]
+        
+        return selectedSteelCrossSectionFromPreviousVCDictionary
         
     }
     
@@ -2965,7 +3309,7 @@ class SelectedSteelSectionSummaryPage: UIViewController {
 //
 //    }
         
-    // MARK: - Declaring constraints:
+// MARK: - METHOD - Setting-up needed constraints:
     
     func setupConstraints() {
         
@@ -3279,7 +3623,7 @@ extension SelectedSteelSectionSummaryPage: UINavigationBarDelegate {
 
     @objc func navigationBarLeftButtonPressed(sender : UIButton) {
 
-        delegate?.dataToBePassedUsingProtocol(viewControllerDataIsSentFrom: "SelectedSteelSectionSummaryPage", filteringSlidersCleared: false, userLastSelectedCollectionViewCellNumber: self.userSelectedCollectionViewCellFromOpenRolledSteelSectionsColelctionViewController, configuredArrayContainingSteelSectionsData: receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData, configuredArrayContainingSteelSectionsSerialNumbersOnly: receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly, configuredSortByVariable: self.sortBy, configuredFiltersAppliedVariable: self.filtersApplied, configuredIsSearchingVariable: self.isSearching, exchangedUserSelectedTableCellSectionNumber: receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController, exchangedUserSelectedTableCellRowNumber: receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController)
+        delegate?.dataToBePassedUsingProtocol(viewControllerDataIsSentFrom: "SelectedSteelSectionSummaryPage", filteringSlidersCleared: false, userLastSelectedCollectionViewCellNumber: self.userSelectedCollectionViewCellFromOpenRolledSteelSectionsCollectionViewController, configuredArrayContainingSteelSectionsData: receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsData, configuredArrayContainingSteelSectionsSerialNumbersOnly: receivedArrayFromSteelSectionsTableViewControllerContainingSteelSectionsSerialNumbersOnly, configuredSortByVariable: self.sortBy, configuredFiltersAppliedVariable: self.filtersApplied, configuredIsSearchingVariable: self.isSearching, exchangedUserSelectedTableCellSectionNumber: receivedSelectedTableViewCellSectionNumberFromSteelSectionsTableViewController, exchangedUserSelectedTableCellRowNumber: receivedSelectedTableViewCellRowNumberFromSteelSectionsTableViewController)
         
         // In order not to instantiate a new instance of the first view controller once the user navigates back to the previous view controller, we should use present.viewController. Instead the second view controller should be dismissed. This is needed so that the user will be guided back to the previous view controller, specifically to the last location he was on inside the tableView (in terms of row and section):
         
